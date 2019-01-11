@@ -22,6 +22,7 @@ def square(list_arg):
 # square is here to have an example with arity 1.
 dict_op = {'+': (addition, 2), '*': (multiplication, 2),
            '^': (square, 1), '.': (scalar_multiplication, 2)}
+dict_const = {'1': 1, '2': 2, '3': 3}
 
 
 # check on some examples if apply_circuit is working
@@ -36,9 +37,12 @@ def test_apply_circuit():
     examples.append(("ef|*e+f.ef", [2, 3], 2 * (3 + (2 * 3))))
     examples.append(("a|" + "+a"*10 + "a", [1], 11))
     examples.append(("uvw|^+u+vw", [1, 2, 3], 36))
+    examples.append(("uv|+u+v3", [1, 2], 6))
+    examples.append(("|+1+23", [], 6))
+    examples.append(("a|+1*2a", [2], 5))
 
     for example in examples:
         if example[2] != apply_circuit(example[0], example[1]):
-            print("test fail with the following circuit" + example[0] + "\n")
+            print("test fail with the following circuit: " + example[0] + "\n")
             test_is_a_success = False
     return test_is_a_success

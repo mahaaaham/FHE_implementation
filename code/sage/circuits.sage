@@ -1,5 +1,5 @@
 # WARNING
-# dict_op has to be defined as a global variable.
+# dict_op dans dict_const has to be defined as a global variable.
 # See for example simple_circuits.sage
 # for an utilisation of apply_circuit
 
@@ -36,10 +36,10 @@ def rec_apply_circuit(circuit, dict_arg):
     if len(circuit) == 0:
         raise NameError("Circuit is the null string\n")
 
-    if circuit[0] not in dict_operations:
+    if circuit[0] not in dict_op:
         raise NameError("'" + circuit[0] + "' should be an operation")
     else:
-        (op, nb_arg) = dict_operations[circuit[0]]
+        (op, nb_arg) = dict_op[circuit[0]]
         circuit = circuit[1:]
 
         # will contains the nb_arg arguments of the operation op
@@ -48,9 +48,12 @@ def rec_apply_circuit(circuit, dict_arg):
         for i in range(nb_arg):
             # warning: if there is an operation called "a" and a variable
             # called "a", "a" will always be seen as an operation
-            if circuit[0] in dict_operations:
+            if circuit[0] in dict_op:
                 (circuit, new_arg) = rec_apply_circuit(circuit, dict_arg)
-            elif circuit[0].isalpha():
+            elif circuit[0] in dict_const:
+                new_arg = dict_const[circuit[0]]
+                circuit = circuit[1:]
+            elif circuit[0] in dict_arg:
                 new_arg = dict_arg[circuit[0]]
                 circuit = circuit[1:]
             else:
