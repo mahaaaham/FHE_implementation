@@ -29,15 +29,15 @@ dict_op = {'+': (addition, 2), '*': (multiplication, 2),
 def test_apply_circuit():
     test_is_a_success = true
     # format: list of (circuit, list of values of arguments, value of result)
-    good_examples = []
-    good_examples.append(("ab|+ab", [1, 2], 1+2))
-    good_examples.append(("uvw|+uv", [1, 2, 3], 1+2))
+    examples = []
+    examples.append(("ab|+ab", [1, 2], 1+2))
+    examples.append(("uvw|+uv", [1, 2, 3], 1+2))
     # here, '.' is the same that *
-    good_examples.append(("ef|*e+f.ef", [2, 3], 2 * (3 + (2 * 3))))
-    good_examples.append(("a|" + "+a"*10 + "a", [1], 11))
-    good_examples.append(("uvw|^+u+vw", [1, 2, 3], 36))
+    examples.append(("ef|*e+f.ef", [2, 3], 2 * (3 + (2 * 3))))
+    examples.append(("a|" + "+a"*10 + "a", [1], 11))
+    examples.append(("uvw|^+u+vw", [1, 2, 3], 36))
 
-    for example in good_examples:
+    for example in examples:
         if example[2] != apply_circuit(example[0], example[1]):
             print("test fail with the following circuit" + example[0] + "\n")
             test_is_a_success = False
