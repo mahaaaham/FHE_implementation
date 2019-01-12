@@ -38,6 +38,13 @@ def insert_column(mat, index, column): #insère column en index-1 ième colonne 
     return matrix(mat.columns()[:index]+[column]+mat.columns()[index:])
 
 
+def rand_matrix(ring, nb_row, nb_col, upper_bound):
+    A = []
+    for i in range(nb_col * nb_row):
+            A.append(ring(ZZ.random_element(0, upper_bound)))
+    return matrix(ring, nb_row, nb_col, A)
+
+
 def flatten(params, M): #M matrice de lignes à k*l éléments ou liste à k*l éléments
     Zq=params[4]
     l=params[5]

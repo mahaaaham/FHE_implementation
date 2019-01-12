@@ -14,18 +14,18 @@ load("internal_functions.sage")
 # creation of the setup parameters commonly used by the others functions
 def setup(Lambda, L):
     # k randomly chosen... TO DO
-    k = 15  
+    k = ZZ(15)
     pow = 2**k
     q = ZZ.random_element(pow, 2*pow)
     Zq = Integers(q)
     # n is randomly chosen here.. TO DO
-    n = 15 
-    proba = [1/q]*q 
+    n = ZZ(15)
+    proba = [1/q]*q
     #  Uniform distribution in {0, ..., q-1}
     distrib = GeneralDiscreteDistribution(proba)
-    m = 15 # m choisi au pif
+    m = ZZ(15) # m choisi au pif
     # L'article dit partie entière de log q, mais c'est k, non ?
-    l = k+1 
+    l = ZZ(k+1)
     N = (n+1)*l
     return [n, q, distrib, m, Zq, l, N]
 
@@ -37,16 +37,22 @@ def secret_key_gen(params):
     t = random_vector(Zq, n)
     key = [1]+list(t*(-1))
     v = powers_of_2(params, key)
-    return[key, v]
+    return [key, v]
 
 
 # creation of the public key with the setups parameters
 # created by the function setup and the secret key
 def public_key_gen(params, secret):
-    n, distrib, m = params[0], params[2], params[3]
-    B = random_matrix(Zq, m, n)
-    error = random_vector(Zq,m, distribution = distrib)
-    secret_key = secret[0].remove(secret[0][0])
+    n, q, distrib, m, Zq = params[0], params[1], params[2], params[3], params[4]
+    print("tes0")
+    B = rand_matrix(Zq, m, n, q)
+    print("tes3")
+    error=[]
+    for i in range(m):
+        error.append(Zq(distrib.get_random_element()))
+    error = vector(error)
+    secret_key = secret[0]
+    secret_key.remove(secret_key[0])
     t = vector(secret_key)*(-1)
     t = t.column()
     b = B*t+error.column()
@@ -61,16 +67,16 @@ def public_key_gen(params, secret):
 def encrypt(params, public, message):
     m, Zq, N = params[3], params[4], params[6]
     # creation of a random matrix of 0 and 1
-    random_matrix(Zq, N, m, x = 2)
+    rand_matrix(Zq, N, m, 2)
     Id = identity_matrix(Zq, N)
-    cipher = flatten(params, message * Id + bit_decomp(params, R * public))
+    cipher = flatten(params, Zq(message) * Id + bit_decomp(params, R * public))
     return cipher
 
 
 # the cipher has to be "small"
-def decrypt(params, secret, cipher): 
+def decrypt(params, secret, cipher):
     q, l = params[1], params[5]
-    [key, v] = secret
+    v = vector(secret)
     lim_inf  =  q/4
     for i in range(l):
         if (v[i] > lim_inf):
