@@ -17,8 +17,7 @@ def test_on_circuit(params, public_key, secret_key, circuit, dict_arg):
 
     if expected_result != obtained_result:
         return False
-    else:
-        return True
+    return True
 
 
 # an element of list_circuits is a tuple (circuit, dict_arg)

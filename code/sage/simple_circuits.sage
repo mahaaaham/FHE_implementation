@@ -25,9 +25,9 @@ dict_op = {'+': (addition, 2), '*': (multiplication, 2),
 dict_const = {'1': 1, '2': 2, '3': 3}
 
 
-# check on some examples if apply_circuit is working
+# check on some examples if evaluation_circuit is working
 # return a boolean true if all examples are working, false else.
-def test_apply_circuit():
+def test_evaluation_simple_circuit():
     test_is_a_success = true
     # format: list of (circuit, list of values of arguments, value of result)
     examples = []
@@ -42,7 +42,7 @@ def test_apply_circuit():
     examples.append(("a|+1*2a", [2], 5))
 
     for example in examples:
-        if example[2] != apply_circuit(example[0], example[1]):
+        if example[2] != evaluation_circuit(example[0], example[1]):
             print("test fail with the following circuit: " + example[0] + "\n")
             test_is_a_success = False
     return test_is_a_success
