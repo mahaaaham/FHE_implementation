@@ -12,18 +12,33 @@
 
 # 1 - Generals manipulations of matrix
 
-# insert a row ROW at index INDEX in MAT
+# insert a list ROW at index INDEX in MAT
 def insert_row(mat, index, row):
-    return matrix(mat.rows()[:index]+[row]+mat.rows()[index:])
+    ring = parent(mat[0][0])
+    row_ring = parent(row[0])
+
+    if ring != row_ring:
+        error = "insert_row: Elements of the row doesn't have the "
+        error += "same type than elements of the matrix"
+        raise NameError(error)
+    if mat.ncols() != len(row):
+        error = "insert_row: problem with the size of mat and row"
+        raise NameError(error)
+
+    mat_rows = mat.rows()
+    new_rows = mat_rows[:index] + [tuple(row)] + mat_rows[index:]
+    return matrix(ring, mat.nrows() + 1, mat.ncols(), new_rows)
 
 
 # insert a column COLUMN at index INDEX in MAT
 def insert_column(mat, index, column):
-    return matrix(mat.columns()[:index]+[column]+mat.columns()[index:])
+    mat = mat.transpose()
+    to_transpose = insert_row(mat, index, column)
+    return to_transpose.transpose()
 
 
-# ring can be ZZ or Integers(q) for some q, in this case, 
-# create a matrix of elements of ring 0 <= elt <= upper_bound 
+# ring can be ZZ or Integers(q) for some q, in this case,
+# create a matrix of elements of ring 0 <= elt < upper_bound
 def rand_matrix(ring, nb_row, nb_col, upper_bound):
     A = []
     for i in range(nb_col * nb_row):
@@ -35,7 +50,7 @@ def rand_matrix(ring, nb_row, nb_col, upper_bound):
 
 # a is a list of k elements of Zq (Z/Zq)
 def bit_decomp(a):
-    Zq = (a[0]).parent()
+    Zq = parent(a[0])
     q = Zq.characteristic()
     l = floor(log(q, 2)) + 1
 
@@ -50,9 +65,16 @@ def bit_decomp(a):
     return result
 
 
+# M is a matrix of k elements of Zq (Z/Zq)
+def mat_bit_decomp(M):
+    rows = M.rows()
+    rows = map(bit_decomp, rows)
+    return matrix(rows)
+
+
 # A is a list of k*l elements
 def bit_decomp_inv(A):
-    Zq = (A[0]).parent()
+    Zq = parent(A[0])
     q = Zq.characteristic()
     l = floor(log(q, 2)) + 1
     if len(A) % l != 0:
@@ -84,8 +106,13 @@ def mat_flatten(M):
 
 # B is a list of k elements
 def powers_of_2(B):
-    Zq = (B[0]).parent()
+    Zq = parent(B[0])
     q = Zq.characteristic()
+    if q == 0:
+        error = "powers_of_2 doesn't work "
+        error += "with a ring of characteristic 0"
+        raise NameError(error)
+
     l = floor(log(q, 2)) + 1
     k = len(B)
 
@@ -96,58 +123,3 @@ def powers_of_2(B):
             result[j+l*i] = pow * B[i]
             pow *= 2
     return result
-
-
-
-# test based on the identitie:
-# <bitdecomp(a),powersof2(b)> = <a,b>
-def test_scalar_one(q, k, nb_test):
-    Zq = Integers(q)
-
-    for i in range(nb_test):
-        a = random_vector(Zq, k)
-        b = random_vector(Zq, k)
-        aa = vector(Zq, bit_decomp(list(a)))
-        bb = vector(Zq, powers_of_2(list(b)))
-        if a*b != aa * bb:
-            return False
-    return True
-
-
-# test based on the identities:
-# <a ,powersof2(b)> = <bitdecompinv(a),b>
-# = <flatten(a), powerof2(b)>
-def test_scalar_two(q, k, nb_test):
-    l = floor(log(q, 2)) + 1
-    N = l*k
-
-    Zq = Integers(q)
-
-    for i in range(nb_test):
-        a = random_vector(Zq, N)
-        b = random_vector(Zq, k)
-
-        bit_inv_a = vector(bit_decomp_inv(list(a)))
-        flatten_a = vector(flatten(list(a)))
-        power_b = vector(powers_of_2(list(b)))
-
-        if ((a * power_b != bit_inv_a * b) or
-           (bit_inv_a * b != flatten_a * power_b)):
-            return False
-    return True
-
-
-# see if flatten is the same than mat_flatten
-def comparaison_flatten_mat_flatten(q, k, nb_row):
-    Zq = Integers(q)
-    l = floor(log(q, 2)) + 1
-    N = l*k
-    M = rand_matrix(Zq, nb_row, N, q)
-
-    M_rows = M.rows()
-    flatten_M_rows = (mat_flatten(M)).rows()
-
-    for i in range(nb_row):
-        if flatten(M_rows[i]) != list(flatten_M_rows[i]):
-            return False
-    return True

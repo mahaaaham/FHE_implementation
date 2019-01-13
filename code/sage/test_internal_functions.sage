@@ -53,3 +53,17 @@ def comparaison_flatten_mat_flatten(q, k, nb_row):
         if flatten(M_rows[i]) != list(flatten_M_rows[i]):
             return False
     return True
+
+
+# see if mat_bit_decomp is the same than bit_decomp
+def comparaison_bit_decomp_mat_bit_decomp(q, k, nb_row):
+    Zq = Integers(q)
+    M = rand_matrix(Zq, nb_row, k, q)
+
+    M_rows = M.rows()
+    decomp_M_rows = (mat_bit_decomp(M)).rows()
+
+    for i in range(nb_row):
+        if bit_decomp(M_rows[i]) != list(decomp_M_rows[i]):
+            return False
+    return True

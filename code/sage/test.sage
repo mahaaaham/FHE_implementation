@@ -1,24 +1,37 @@
 load("FHE_scheme.sage")
 
 
-def test_one_message(L, Lambda, message):
+# check if decrypt(encrypt(message)) = message
+def test_decrypt_is_inv_encrypt_one_message(L, Lambda, message):
     params = setup(Lambda, L)
     secret = secret_key_gen(params)
     public = public_key_gen(params, secret)
     cipher = encrypt(params, public, message)
-    result = decrypt(params, secret, cipher)
-    if (result == message):
+    decrypted_cipher = decrypt(params, secret, cipher)
+    if (decrypted_cipher == message):
         return true
     return false
 
 
-def test_several_messages(L, Lambda, messages):
-    nb_messages = len(messages)
-    result = true
-    final = true
+# check if decrypt(encrypt(message)) = message
+# for a random panel of messages, with the
+# same parameters, secret and public key.
+def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages):
+    (n, q, distrib, m) = setup(Lambda, L)
+    Zq = Integers(q)
+
+    secret = secret_key_gen(params)
+    public = public_key_gen(params, secret)
+
     for i in range(nb_messages):
-        result = test_one_message(L, Lambda, messages[i])
-        if not result:
-            print("Problem with message " + i)
-            final = false
-    return final
+        message = Zq.random_element()
+        cipher = encrypt(params, public, message)
+        decrypted_cipher = decrypt(params, secret, cipher)
+        if (decrypted_cipher != message):
+            return False
+    return True
+
+
+def test_main():
+    print("test_decrypt_is_inv_encrypt(10, 10, 50):\n")
+    test_decrypt_is_inv_encrypt(10, 10, 50)

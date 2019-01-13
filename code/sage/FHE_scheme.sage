@@ -13,77 +13,84 @@ load("internal_functions.sage")
 
 # creation of the setup parameters commonly used by the others functions
 def setup(Lambda, L):
-    # k randomly chosen... TO DO
-    k = ZZ(15)
+    # m,n and k randomly chosen, usually function of Lambda and L
+    n, k, m = 10, 11, 12
+
     pow = 2**k
-    q = ZZ.random_element(pow, 2*pow)
-    Zq = Integers(q)
-    # n is randomly chosen here.. TO DO
-    n = ZZ(15)
-    proba = [1/q]*q
-    #  Uniform distribution in {0, ..., q-1}
-    distrib = GeneralDiscreteDistribution(proba)
-    m = ZZ(15) # m choisi au pif
-    # L'article dit partie entière de log q, mais c'est k, non ?
-    l = ZZ(k+1)
-    N = (n+1)*l
-    return [n, q, distrib, m, Zq, l, N]
+    # q random of k bits
+    q = ZZ.random_element(2**(k-1), pow)
+
+    # Uniform distribution in {0, ..., q-1}
+    #  note that General... Automatically normalize the list
+    #  to make the sum equal to 1
+    distrib = GeneralDiscreteDistribution([1]*q)
+    return [n, q, distrib, m]
 
 
-# creation of the secret key with the setups parameters
+# creation of the lwe_key and secret key with the setups parameters
 # created by the function setup
 def secret_key_gen(params):
-    n, Zq = params[0], params[4]
-    t = random_vector(Zq, n)
-    key = [1]+list(t*(-1))
-    v = powers_of_2(params, key)
-    return [key, v]
+    (n, q, distrib, m) = params
+    Zq = Integers(q)
+
+    t = random_vector(Integers(q), n)
+    lwe_key = list(Sequence([1] + list(-t), Zq))
+    secret_key = powers_of_2(lwe_key)
+    return [lwe_key, secret_key]
 
 
 # creation of the public key with the setups parameters
 # created by the function setup and the secret key
-def public_key_gen(params, secret):
-    n, q, distrib, m, Zq = params[0], params[1], params[2], params[3], params[4]
-    print("tes0")
+def public_key_gen(params, secret_keys):
+    (n, q, distrib, m) = params
+    (lwe_key, secret_key) = secret_keys
+    Zq = Integers(q)
+
     B = rand_matrix(Zq, m, n, q)
-    print("tes3")
-    error=[]
-    for i in range(m):
-        error.append(Zq(distrib.get_random_element()))
-    error = vector(error)
-    secret_key = secret[0]
-    secret_key.remove(secret_key[0])
-    t = vector(secret_key)*(-1)
-    t = t.column()
-    b = B*t+error.column()
-    b = list(b.column(0))
-    public_key = insert_column(B,0,b)
+
+    error = [Zq(distrib.get_random_element()) for i in range(m)]
+
+    t = -vector(lwe_key[1:])
+    b = B * t + vector(error)
+    public_key = insert_column(B, 0, list(b))
+
     return public_key
 
 
 # encryption of a message with the setups parameters
 # created by the function setup, the public key, and the
-# message
-def encrypt(params, public, message):
-    m, Zq, N = params[3], params[4], params[6]
+# message is an integer or an integer modulo q
+def encrypt(params, public_key, message):
+    (n, q, distrib, m) = params
+    l = floor(log(q, 2)) + 1
+    N = (n+1)*l
+    Zq = Integers(q)
+
+    # to ensure m is an integer modulo q
+    message = Zq(message)
+
     # creation of a random matrix of 0 and 1
-    rand_matrix(Zq, N, m, 2)
+    R = rand_matrix(Zq, N, m, 2)
     Id = identity_matrix(Zq, N)
-    cipher = flatten(params, Zq(message) * Id + bit_decomp(params, R * public))
+
+    Term1 = message * Id
+    Term2 = mat_bit_decomp(R * public_key)
+    cipher = mat_flatten(Term1 + Term2)
     return cipher
 
 
 # the cipher has to be "small"
-def decrypt(params, secret, cipher):
-    q, l = params[1], params[5]
-    v = vector(secret)
-    lim_inf  =  q/4
-    for i in range(l):
-        if (v[i] > lim_inf):
-            v_i = v[i]
-            break
-    rows = C.rows()
-    C_i = rows(i)
-    x_i = C_i*v
-    approximation = x_i/v_i
-    return round(approximation)
+# the result is an element of Zq
+def decrypt(params, secret_key, cipher):
+    (n, q, distrib, m) = params
+    Zq = Integers(q)
+    secret_key = vector(secret_key)
+
+    # recuperation of a big enough secret_key[i]
+    lim_inf = q // 4
+    i = next(j for j in range(len(secret_key)) if lim_inf < ZZ(secret_key[j]))
+
+    cipher_i = (cipher.rows())[i]
+    x_i = cipher_i * secret_key
+
+    return Zq(round(ZZ(x_i)/ZZ(secret_key[i])))
