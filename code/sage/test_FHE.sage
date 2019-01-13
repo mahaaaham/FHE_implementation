@@ -1,3 +1,6 @@
+load("FHE_scheme.sage")
+
+
 # check if decrypt(encrypt(message)) = message
 def test_decrypt_is_inv_encrypt_one_message(L, Lambda, message):
     params = setup(Lambda, L)
