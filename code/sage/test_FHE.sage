@@ -19,7 +19,6 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
     params = setup(Lambda, L)
     q = params[1]
     Zq = Integers(q)
-    print "q is:", q
 
     secret = secret_key_gen(params)
     secret_key = secret[1]
@@ -30,7 +29,7 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
         cipher = encrypt(params, public, message)
         decrypted_cipher = decrypt(params, secret_key, cipher)
         if (decrypted_cipher != Zq(message)):
-            print(decrypted_cipher, message)
+            print(message, decrypted_cipher)
             return False
     return True
 

@@ -1,6 +1,21 @@
 load("internal_functions.sage")
 
 
+# check the function insert_row with NB_TEST random matrix
+# in Z/qZ of format NB_ROW * NB_COL
+def test_insert_row(nb_row, nb_col, q, nb_test):
+    ring = Integers(q)
+    for i in range(nb_test):
+        mat = rand_matrix(ring, nb_row, nb_col, q)
+        row = [ring.random_element() for i in range(nb_col)]
+        index = ZZ.random_element(nb_row)
+
+        new_mat = insert_row(mat, index, row)
+        if list(new_mat[index]) != row:
+            return False
+    return True
+
+
 # test based on the identity:
 # <bitdecomp(a),powersof2(b)> = <a,b>
 def test_scalar_one(q, k, nb_test):

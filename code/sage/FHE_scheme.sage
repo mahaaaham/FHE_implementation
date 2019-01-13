@@ -14,7 +14,7 @@ load("internal_functions.sage")
 # creation of the setup parameters commonly used by the others functions
 def setup(Lambda, L):
     # m,n and k randomly chosen, usually function of Lambda and L
-    n, k, m = 10, 11, 12
+    n, k, m = 20, 30, 16
 
     pow = 2**k
     # q random of k bits
@@ -54,6 +54,10 @@ def public_key_gen(params, secret_keys):
     b = B * t + vector(error)
     public_key = insert_column(B, 0, list(b))
 
+    if public_key * vector(lwe_key) != vector(error):
+        error = "We should have pk * lwe_key = error!"
+        raise NameError(error)
+
     return public_key
 
 
@@ -74,6 +78,7 @@ def encrypt(params, public_key, message):
     Id = identity_matrix(Zq, N)
 
     Term1 = message * Id
+    print ("Term1 is", Term1[0][0])
     Term2 = mat_bit_decomp(R * public_key)
     cipher = mat_flatten(Term1 + Term2)
     return cipher
@@ -87,8 +92,10 @@ def decrypt(params, secret_key, cipher):
     secret_key = vector(secret_key)
 
     # recuperation of a big enough secret_key[i]
-    lim_inf = q // 4
-    i = next(j for j in range(len(secret_key)) if lim_inf < ZZ(secret_key[j]))
+    lim_inf = q / 4
+    lim_sup = q / 2
+    i = next(j for j in range(len(secret_key)) if lim_inf < ZZ(secret_key[j]) <
+             lim_sup)
 
     cipher_i = (cipher.rows())[i]
     x_i = cipher_i * secret_key
