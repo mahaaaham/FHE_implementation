@@ -7,6 +7,7 @@
 load("internal_functions.sage")
 
 
+
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
 # de sécurité et une depth de L
 # lambda existe déjà dans sage, d'où la majuscule.
@@ -14,7 +15,7 @@ load("internal_functions.sage")
 # creation of the setup parameters commonly used by the others functions
 def setup(Lambda, L):
     # m,n and k randomly chosen, usually function of Lambda and L
-    n, k, m = 20, 30, 16
+    n, k, m = 10, 11, 12
 
     pow = 2**k
     # q random of k bits
@@ -23,7 +24,9 @@ def setup(Lambda, L):
     # Uniform distribution in {0, ..., q-1}
     #  note that General... Automatically normalize the list
     #  to make the sum equal to 1
-    distrib = GeneralDiscreteDistribution([1]*q)
+    # a bound for the distribution!
+    B = 5
+    distrib = GeneralDiscreteDistribution([1]*B + [0]*(q-B))
     return [n, q, distrib, m]
 
 
@@ -78,7 +81,6 @@ def encrypt(params, public_key, message):
     Id = identity_matrix(Zq, N)
 
     Term1 = message * Id
-    print ("Term1 is", Term1[0][0])
     Term2 = mat_bit_decomp(R * public_key)
     cipher = mat_flatten(Term1 + Term2)
     return cipher

@@ -70,5 +70,5 @@ def test_on_circuits(params, public_key, secret_key, list_circuits):
 
 
 def test_main():
-    print("test_decrypt_is_inv_encrypt(10, 10, 50):\n")
-    print(test_decrypt_is_inv_encrypt(10, 10, 1, 2))
+    print("test_decrypt_is_inv_encrypt(10, 10, 50, 2):\n")
+    print(test_decrypt_is_inv_encrypt(10, 10, 50, 2))
