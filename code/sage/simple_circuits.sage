@@ -17,11 +17,13 @@ def square(list_arg):
     return list_arg[0]^2
 
 
-# contains all the allowed operations, the second argument is the arity. The
-# name has to be of one character.
+# contains all the allowed operations, the second argument is a type of the
+# arguments. Here, it is 'i', for interger. Type aren't used here, only
+# the arity - the lenght of the list of types - is used.
+# The name has to be of one character.
 # square is here to have an example with arity 1.
-dict_op = {'+': (addition, 2), '*': (multiplication, 2),
-           '^': (square, 1), '.': (scalar_multiplication, 2)}
+dict_op = {'+': (addition, ['i']*2), '*': (multiplication, ['i']*2),
+           '^': (square, [i]), '.': (scalar_multiplication, ['i']*2)}
 dict_const = {'1': 1, '2': 2, '3': 3}
 
 
@@ -32,7 +34,7 @@ def test_evaluation_simple_circuit():
     # format: list of (circuit, list of values of arguments, value of result)
     examples = []
     examples.append(("ab|+ab", [1, 2], 1+2))
-    examples.append(("uvw|+uv", [1, 2, 3], 1+2))
+    examples.append(("uvw|+uw", [1, 2, 3], 1+3))
     # here, '.' is the same that *
     examples.append(("ef|*e+f.ef", [2, 3], 2 * (3 + (2 * 3))))
     examples.append(("a|" + "+a"*10 + "a", [1], 11))

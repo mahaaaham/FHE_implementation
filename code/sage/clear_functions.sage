@@ -40,8 +40,10 @@ def c_NAND(list_arg):
 # declarations of clear dictionaries used by evaluation_circuit
 
 
-c_dict_op = {'+': (c_addition, 3), '*': (c_multiplication, 3),
-        '.': (c_scalar, 3), '~': (c_NAND, 3)}
+c_dict_op = {'+': (c_addition, ['p', 'r', 'r']), 
+             '*': (c_multiplication, ['p', 'r', 'r']),
+             '.': (c_scalar, ['p', 'r', 's']),
+             '~': (c_NAND, ['p', 'r', 'r'])}
 c_dict_const = {}
 
 

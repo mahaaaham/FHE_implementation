@@ -21,7 +21,12 @@ def h_addition(list_arg):
 # the homomorphic multiplication by a scalar
 def h_scalar(list_arg):
     params, cipher, factor = list_arg
-    Id = identity_matrix(Zq, params[6])
+    (n, q, distrib, m) = params
+    Zq = Integers(q)
+    l = floor(log(q, 2)) + 1
+    N = (n+1)*l
+
+    Id = identity_matrix(Zq, N)
     M_alpha = mat_flatten(factor * Id)
     return mat_flatten(M_alpha * cipher)
 
@@ -36,7 +41,7 @@ def h_multiplication(list_arg):
 def h_NAND(list_arg):
     params, cipher1, cipher2 = list_arg
     n, q = params[0], params[1]
-    l = RR(log_b(q, 2)).integer_part() + 1
+    l = floor(log(q, 2)) + 1
     N = (n+1)*l
     Zq = parent(cipher1[0][0])
     Id = identity_matrix(Zq, N)
@@ -45,11 +50,14 @@ def h_NAND(list_arg):
 # declarations of dictionaries used by evaluation_circuit
 
 
-h_dict_op = {'+': (h_addition, 3), '*': (h_multiplication, 3),
-             '.': (h_scalar, 3), '~': (h_NAND, 3)}
+h_dict_op = {'+': (h_addition, ['p', 'r', 'r']),
+             '*': (h_multiplication, ['p', 'r', 'r']),
+             '.': (h_scalar, ['p', 'r', 's']),
+             '~': (h_NAND, ['p', 'r', 'r'])}
 h_dict_const = {}
 
 
+# the argument are encrypted, unless the params and scalars
 def homomorphic_evaluation_circuit(circuit, list_arg):
     global dict_op
     global dict_const

@@ -8,7 +8,7 @@ load("internal_functions.sage")
 
 # global parameters:
 # the proba is uniform with possibles values {0, .., Bound_proba - 1}
-Bound_proba = 2
+Bound_proba = 4
 # the values k and q of param. This make easier to switch to a power of 2 for
 # mp_decrypt
 global_k = 7
@@ -127,16 +127,14 @@ def mp_decrypt(params, secret_key, cipher):
     # the sum of the first bits of mess (begining by the lsb)
     # until having the complete message
     current_mess = 0
-    # the lsb of mess - current_mess
-    current_lsb = 0
 
     pow = 1
     inv_pow = 2^(l-2)
     current_mess = 0
     # it doesn't word.
-    # I only try to recover the first bits of the messages:
-    # at the end, I have 2^small_power * mess + small
-    #  and small can have an influence..
+    # I only try to recover the first bits of the messages:
+    # at the end, I have 2^small_power * mess + small
+    # and small can have an influence..
     for i in range(len(C)):
         term = ZZ(C[-1-i] - inv_pow * current_mess)
 
