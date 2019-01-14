@@ -48,20 +48,20 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
     return True
 
 
-# list_arg is contains the clear messages
+# list_arg contains the clear messages
 # don't forget that params has also to be in list_arg!
 # Example: "abp|+pab": here, p will be params
 def test_on_circuit(params, public_key, secret_key, circuit, list_arg):
-    homomorphic_evaluation_circuit(circuit, list_arg)
-
+    clear_evaluation_circuit(circuit, list_arg)
     # creation of the dictionary of ciphers
-    list_encrypted_arg = []
+    list_encrypted_arg = [list_arg[0]]
     for value in dict_arg:
-        list_encrypted_arg += [encrypt(params, public_key, value)]
+        if value != 'p':
+            list_encrypted_arg += [encrypt(params, public_key, dict_arg[value])]
 
     # application of the circuits and comparaison
     expected_result = clear_evaluation_circuit(circuit, list_arg)
-    homomorphic_eval = homomorphic_evaluation_circuit(circuit, list_arg)
+    homomorphic_eval = homomorphic_evaluation_circuit(circuit, list_encrypted_arg)
     obtained_result = decrypt(params, secret_key, homomorphic_eval)
 
     if expected_result != obtained_result:
@@ -77,6 +77,7 @@ def test_on_circuits(params, public_key, secret_key, list_circuits):
         current_result = test_on_circuit(params, public_key, secret_key,
                                          circuit, list_arg)
         if current_result is False:
+            print list_arg
             print("Problem with the following circuit: " + circuit + "\n")
             final_result = False
 
@@ -90,12 +91,12 @@ def make_list_circuits(params):
     result.append(("pab|+pab", [params, 2, 3]))
     # product
     result.append(("pab|*pab", [params, 0, 0]))
-    result.append(("pab|*pab", [params, 1, 0]))
+    result.append(("pab|*pab", [params, 0, 1]))
     result.append(("pab|*pab", [params, 2, 3]))
     # scalar product
-    result.append(("pab|.pab", [params, 0, 3]))
-    result.append(("pab|.pab", [params, 1, 2]))
-    result.append(("pab|.pab", [params, 2, 3]))
+    #result.append(("pab|.pab", [params, 0, 3]))
+    #result.append(("pab|.pab", [params, 1, 2]))
+    #result.append(("pab|.pab", [params, 2, 3]))
     # nand
     result.append(("pab|~pab", [params, 1, 0]))
     result.append(("pab|~pab", [params, 1, 1]))
@@ -103,7 +104,7 @@ def make_list_circuits(params):
     # more complex circuits
     result.append(("pabc|+pa*pbc", [params, 1, 2, 3]))
     result.append(("pabc|*pa*pbc", [params, 1, 2, 3]))
-    result.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
+    #result.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
     result.append(("pabc|~pa*pbc", [params, 1, 0, 1]))
     return result
 

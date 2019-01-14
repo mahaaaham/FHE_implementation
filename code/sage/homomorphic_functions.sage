@@ -17,28 +17,32 @@ load("circuits.sage")
 # the homomorphic addiction of two ciphers
 def h_addition(list_arg):
     params, cipher1, cipher2 = list_arg
-    return flatten(cipher1 + cipher2)
+    return mat_flatten(cipher1 + cipher2)
 
 
 # the homomorphic multiplication by a scalar
 def h_scalar(list_arg):
     params, cipher, factor = list_arg
-    Id=identity_matrix(Zq, params[6])
-    M_alpha=flatten(factor*Id)
-    return flatten(M_alpha*cipher)
+    Id = identity_matrix(Zq, params[6])
+    M_alpha = mat_flatten(factor*Id)
+    return mat_flatten(M_alpha*cipher)
 
 
 # the homomorphic multiplication of two ciphers
 def h_multiplication(list_arg):
     params, cipher1, cipher2 = list_arg
-    return flatten(cipher1*cipher2)
+    return mat_flatten(cipher1*cipher2)
 
 
 # the homomorphic NAND of to ciphers of messages in {0,1}
 def h_NAND(list_arg):
     params, cipher1, cipher2 = list_arg
-    Id=identity_matrix(Zq, params[6])
-    return flatten(Id - cipher1*cipher2)
+    n, q = params[0], params[1]
+    l = RR(log_b(q, 2)).integer_part() + 1
+    N = (n+1)*l
+    Zq = parent(cipher1[0][0])
+    Id=identity_matrix(Zq, N)
+    return mat_flatten(Id - cipher1*cipher2)
 
 # declarations of dictionaries used by evaluation_circuit
 

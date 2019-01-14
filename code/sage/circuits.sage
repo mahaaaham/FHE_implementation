@@ -16,7 +16,7 @@ def evaluation_circuit(circuit, list_arg):
         raise NameError("Separator '|' is missing")
     if circuit.index('|') != len(list_arg):
         raise NameError("Bad number of arguments\n")
-
+    global dict_arg
     dict_arg = {}
     for i in range(len(list_arg)):
         if not circuit[i].isalpha():
@@ -61,5 +61,4 @@ def rec_evaluation_circuit(circuit, dict_arg):
                                 " the operation" + str(op) + "\n")
 
             arg.append(new_arg)
-
         return circuit, op(arg)

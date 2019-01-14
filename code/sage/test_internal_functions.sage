@@ -55,7 +55,7 @@ def test_scalar_two(q, k, nb_test):
 
 
 # see if flatten is the same than mat_flatten
-def comparaison_flatten_mat_flatten(q, k, nb_row):
+def compare_flatten_mat_flatten(q, k, nb_row):
     Zq = Integers(q)
     l = floor(log(q, 2)) + 1
     N = l*k
@@ -71,7 +71,7 @@ def comparaison_flatten_mat_flatten(q, k, nb_row):
 
 
 # see if mat_bit_decomp is the same than bit_decomp
-def comparaison_bit_decomp_mat_bit_decomp(q, k, nb_row):
+def compare_bit_decomp_mat_bit_decomp(q, k, nb_row):
     Zq = Integers(q)
     M = rand_matrix(Zq, nb_row, k, q)
 

@@ -133,8 +133,8 @@ def mp_decrypt(params, secret_key, cipher):
     inv_pow = 2^(l-2)
     current_mess = 0
     # it doesn't word.
-    # I only try to recover the first bits of the messages: 
-    # at the end, I have 2^small_power * mess + small 
+    # I only try to recover the first bits of the messages:
+    # at the end, I have 2^small_power * mess + small
     #  and small can have an influence..
     for i in range(len(C)):
         term = ZZ(C[-1-i] - inv_pow * current_mess)
