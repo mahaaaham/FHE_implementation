@@ -1,20 +1,20 @@
 load("circuits.sage")
 
 
-def multiplication(list_arg):
-    return list_arg[0] * list_arg[1]
+def multiplication(a, b):
+    return a * b
 
 
-def addition(list_arg):
-    return list_arg[0] + list_arg[1]
+def addition(a, b):
+    return a + b
 
 
-def scalar_multiplication(list_arg):
-    return list_arg[0] * list_arg[1]
+def scalar_multiplication(a, b):
+    return a * b
 
 
-def square(list_arg):
-    return list_arg[0]^2
+def square(a):
+    return a^2
 
 
 # contains all the allowed operations, the second argument is a type of the

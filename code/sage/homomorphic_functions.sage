@@ -13,14 +13,12 @@ load("circuits.sage")
 
 
 # the homomorphic addiction of two ciphers
-def h_addition(list_arg):
-    params, cipher1, cipher2 = list_arg
+def h_addition(params, cipher1, cipher2):
     return mat_flatten(cipher1 + cipher2)
 
 
 # the homomorphic multiplication by a scalar
-def h_scalar(list_arg):
-    params, cipher, factor = list_arg
+def h_scalar(params, cipher, factor):
     (n, q, distrib, m) = params
     Zq = Integers(q)
     l = floor(log(q, 2)) + 1
@@ -32,14 +30,12 @@ def h_scalar(list_arg):
 
 
 # the homomorphic multiplication of two ciphers
-def h_multiplication(list_arg):
-    params, cipher1, cipher2 = list_arg
-    return mat_flatten(cipher1*cipher2)
+def h_multiplication(params, cipher1, cipher2):
+    return mat_flatten(cipher1 * cipher2)
 
 
 # the homomorphic NAND of to ciphers of messages in {0,1}
-def h_NAND(list_arg):
-    params, cipher1, cipher2 = list_arg
+def h_NAND(params, cipher1, cipher2):
     n, q = params[0], params[1]
     l = floor(log(q, 2)) + 1
     N = (n+1)*l

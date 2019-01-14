@@ -5,42 +5,38 @@ load("circuits.sage")
 # creation of the functions
 
 
-# mess1 and mess2 are integers modulo q 
-# params is here to have the same signature as 
+# mess1 and mess2 are integers modulo q
+# params is here to have the same signature as
 # h_multiplication
-def c_addition(list_arg):
-    params, mess1, mess2 = list_arg
+def c_addition(params, mess1, mess2):
     return mess1 + mess2
 
 
-# mess and factor are integers modulo q 
-# params is here to have the same signature as 
+# mess and factor are integers modulo q
+# params is here to have the same signature as
 # h_multiplication
-def c_scalar(list_arg):
-    params, mess, factor = list_arg
+def c_scalar(params, mess, factor):
     return factor * mess
 
 
-# mess1 and mess2 are integers modulo q 
-# params is here to have the same signature as 
+# mess1 and mess2 are integers modulo q
+# params is here to have the same signature as
 # h_multiplication
-def c_multiplication(list_arg):
-    params, mess1, mess2 = list_arg
+def c_multiplication(params, mess1, mess2):
     return mess1 * mess2
 
 
 # mess1 and mess2 have to be (0 mod q) or (1 mod q)
-# params is here to have the same signature as 
+# params is here to have the same signature as
 # h_multiplication
-def c_NAND(list_arg):
-    params, mess1, mess2 = list_arg
+def c_NAND(params, mess1, mess2):
     return 1 - mess1 * mess2
 
 
 # declarations of clear dictionaries used by evaluation_circuit
 
 
-c_dict_op = {'+': (c_addition, ['p', 'r', 'r']), 
+c_dict_op = {'+': (c_addition, ['p', 'r', 'r']),
              '*': (c_multiplication, ['p', 'r', 'r']),
              '.': (c_scalar, ['p', 'r', 's']),
              '~': (c_NAND, ['p', 'r', 'r'])}

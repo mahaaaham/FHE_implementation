@@ -64,7 +64,7 @@ def rec_evaluation_circuit(circuit, dict_arg):
                                 " the operation" + str(op) + "\n")
 
             arg.append(new_arg)
-        return circuit, op(arg)
+        return circuit, op(*arg)
 
 
 # return list_type, with: list_type[i] = the
