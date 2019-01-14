@@ -3,11 +3,14 @@
 
 nb_success = 0
 nb_tests = 0
-limit_size_mess = 60
+limit_size_mess = 70
 
-dict_color = {"red": "0;31;40", "green": "0;32;40", "purple": "1;35;40",
+dict_color = {"red": "0;31;40",
+              "green": "0;32;40",
+              "purple": "1;35;40",
               "dark_over_yellow": "0;30;43",
-              "dark_over_blue": "0;30;44"}
+              "dark_over_blue": "0;30;44",
+              "dark_over_white": "0;30;47"}
 
 
 # a string printed with colors

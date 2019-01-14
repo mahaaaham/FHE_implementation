@@ -1,10 +1,5 @@
-sage.repl.attach.load_attach_path(path="../", replace=True)
-
 load("test/framework_test.sage")
 load("internal_functions.sage")
-
-# here, 60 was not enough
-limit_size_mess = 70
 
 
 # check the function insert_row with NB_TEST random matrix

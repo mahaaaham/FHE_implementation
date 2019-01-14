@@ -1,5 +1,3 @@
-sage.repl.attach.load_attach_path(path="../", replace=True)
-
 load("test/framework_test.sage")
 load("internal_functions.sage")
 load("FHE_scheme.sage")

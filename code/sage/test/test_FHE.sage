@@ -1,5 +1,3 @@
-sage.repl.attach.load_attach_path(path="../", replace=True)
-
 load("test/framework_test.sage")
 load("internal_functions.sage")
 load("FHE_scheme.sage")
@@ -50,7 +48,7 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
 
 
 # test_mains_FOO: they launch the others tests with parameters
-def test_main_is_inv():
+def test_main_FHE():
     global decrypt
     global global_q
     global global_k
