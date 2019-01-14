@@ -16,8 +16,8 @@ def evaluation_circuit(circuit, list_arg):
         raise NameError("Separator '|' is missing")
     if circuit.index('|') != len(list_arg):
         raise NameError("Bad number of arguments\n")
-    global dict_arg
     dict_arg = {}
+    # global dict_arg
     for i in range(len(list_arg)):
         if not circuit[i].isalpha():
             raise NameError("Arguments of the circuit have to be letters\n")
@@ -27,7 +27,8 @@ def evaluation_circuit(circuit, list_arg):
 
     (has_to_be_null, result) = rec_evaluation_circuit(circuit, dict_arg)
     if has_to_be_null != "":
-        raise NameError("The final string of rec_evaluation_circuit should be NULL")
+        error = "The final string of rec_evaluation_circuit should be NULL"
+        raise NameError(error)
 
     return result
 

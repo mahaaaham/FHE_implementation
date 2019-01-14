@@ -9,8 +9,6 @@ load("circuits.sage")
 # just the usual evaluation with h_dict_FOO insteand of dict_FOO
 
 
-
-
 #  creation of the functions
 
 
@@ -24,8 +22,8 @@ def h_addition(list_arg):
 def h_scalar(list_arg):
     params, cipher, factor = list_arg
     Id = identity_matrix(Zq, params[6])
-    M_alpha = mat_flatten(factor*Id)
-    return mat_flatten(M_alpha*cipher)
+    M_alpha = mat_flatten(factor * Id)
+    return mat_flatten(M_alpha * cipher)
 
 
 # the homomorphic multiplication of two ciphers
@@ -41,7 +39,7 @@ def h_NAND(list_arg):
     l = RR(log_b(q, 2)).integer_part() + 1
     N = (n+1)*l
     Zq = parent(cipher1[0][0])
-    Id=identity_matrix(Zq, N)
+    Id = identity_matrix(Zq, N)
     return mat_flatten(Id - cipher1*cipher2)
 
 # declarations of dictionaries used by evaluation_circuit
