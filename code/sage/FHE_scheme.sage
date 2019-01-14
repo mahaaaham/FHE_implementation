@@ -6,6 +6,13 @@
 # A noter que ces trois ajouts se retrouvent avec les paramètres originaux.
 load("internal_functions.sage")
 
+# global parameters:
+# the proba is uniform with possibles values {0, .., Bound_proba - 1}
+Bound_proba = 2
+# the values k and q of param. This make easier to switch to a power of 2 for
+# mp_decrypt
+global_k = 11
+global_q = ZZ.random_element(2^(global_k-1), 2^(global_k))
 
 
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
@@ -15,17 +22,15 @@ load("internal_functions.sage")
 # creation of the setup parameters commonly used by the others functions
 def setup(Lambda, L):
     # m,n and k randomly chosen, usually function of Lambda and L
-    n, k, m = 10, 11, 12
+    n, m = 10, 12
 
-    pow = 2**k
-    # q random of k bits
-    q = ZZ.random_element(2**(k-1), pow)
+    q = global_q
 
     # Uniform distribution in {0, ..., q-1}
     #  note that General... Automatically normalize the list
     #  to make the sum equal to 1
     # a bound for the distribution!
-    B = 5
+    B = Bound_proba
     distrib = GeneralDiscreteDistribution([1]*B + [0]*(q-B))
     return [n, q, distrib, m]
 
@@ -88,7 +93,7 @@ def encrypt(params, public_key, message):
 
 # the cipher has to be "small"
 # the result is an element of Zq
-def decrypt(params, secret_key, cipher):
+def basic_decrypt(params, secret_key, cipher):
     (n, q, distrib, m) = params
     Zq = Integers(q)
     secret_key = vector(secret_key)
@@ -103,3 +108,43 @@ def decrypt(params, secret_key, cipher):
     x_i = cipher_i * secret_key
 
     return Zq(round(ZZ(x_i)/ZZ(secret_key[i])))
+
+
+# q has to be a power of 2
+def mp_decrypt(params, secret_key, cipher):
+    (n, q, distrib, m) = params
+    l = floor(log(q, 2)) + 1
+    Zq = Integers(q)
+
+    if q != 2^(l-1):
+        error = "mpdecrypt: q has to be a power of 2"
+        raise NameError(error)
+
+    C = cipher * vector(Zq, secret_key)
+    C = C[:l-1]
+
+    # the sum of the first bits of mess (begining by the lsb)
+    # until having the complete message
+    current_mess = 0
+    # the lsb of mess - current_mess
+    current_lsb = 0
+
+    pow = 1
+    inv_pow = 2^(l-2)
+    current_mess = 0
+    # it doesn't word.
+    # I only try to recover the first bits of the messages: 
+    # at the end, I have 2^small_power * mess + small 
+    #  and small can have an influence..
+    for i in range(len(C)):
+        term = ZZ(C[-1-i] - inv_pow * current_mess)
+
+        if term >= 2^(l-2):
+            bit = 1
+        else:
+            bit = 0
+        current_mess += bit * pow
+        inv_pow = inv_pow // 2
+        pow = pow * 2
+
+    return Zq(current_mess)
