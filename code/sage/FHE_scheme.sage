@@ -11,7 +11,7 @@ load("internal_functions.sage")
 Bound_proba = 2
 # the values k and q of param. This make easier to switch to a power of 2 for
 # mp_decrypt
-global_k = 10
+global_k = 7
 global_q = ZZ.random_element(2^(global_k-1), 2^(global_k))
 
 

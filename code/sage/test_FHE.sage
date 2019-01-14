@@ -54,8 +54,6 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
         decrypted_cipher = decrypt(params, secret_key, cipher)
         # decrypted_cipher = decrypt(params, secret_key, cipher)
         if (decrypted_cipher != Zq(message)):
-            print("message, decrypted cipher\n")
-            print(message, decrypted_cipher)
             return False
     return True
 
@@ -104,7 +102,7 @@ def test_on_circuits(params, public_key, secret_key, list_circuits):
             string += c_string("FAILED", "red")
             final_result = False
         else:
-            string += c_string("SUCCESS", "green")
+            string += c_string("SUCCEED", "green")
             nb_success += 1
         print(string)
 
@@ -140,6 +138,9 @@ def make_list_circuits(params):
     result.append(("pabcd|+pa*pb+pcd", [params, 1, 1, 0, 1]))
     result.append(("pabc|*pa*pbc", [params, 1, 2, 3]))
     result.append(("pabc|*pa*pbc", [params, 1, 2, 1]))
+    result.append(("pab|+pa" + "+pa"*3 + "b", [params, 0, 1]))
+    result.append(("pab|*pa" + "*pa"*3 + "b", [params, 0, 1]))
+    result.append(("pab|~pa" + "~pa"*3 + "b", [params, 0, 1]))
     # result.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
     result.append(("pabc|~pa*pbc", [params, 1, 0, 1]))
     return result
@@ -151,26 +152,49 @@ def test_main_is_inv():
     global global_q
     global global_k
 
-    # test basic_decrypt and mp_decrypt as inverses of encrypt on différents
-    # cases
+    # random q, basic_decrypt and message in {0,1}
     decrypt = basic_decrypt
     global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
-    print("with a random q and the basic_decrypt and message = 0 or 1\n")
-    print("test_decrypt_is_inv_encrypt(10, 10, 50, 2):\n")
-    # print(test_decrypt_is_inv_encrypt(10, 10, 50, 2))
 
+    string = "random q, basic_decrypt and message in {0,1}"
+    print(c_string(string, "dark_over_yellow"))
+
+    result = test_decrypt_is_inv_encrypt(10, 10, 50, 2)
+    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 2) "
+    if result is True:
+        string += c_string("SUCCEED", "green")
+    else:
+        string += c_string("FAILED", "red")
+    print(string)
+
+    # random q, basic_decrypt and all possibles message
     decrypt = basic_decrypt
-    global_q = 2^(global_k)
-    print("with q = 2^k and the basic_decrypt and all possibles message\n")
-    print("EXPECTED TO FAIL:\n")
-    print("test_decrypt_is_inv_encrypt(10, 10, 50, 0):\n")
-    print(test_decrypt_is_inv_encrypt(10, 10, 50, 0))
+    global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
+    string = "random q, basic_decrypt and all possibles message"
+    string += ", expected to fail"
+    print(c_string(string, "dark_over_yellow"))
 
+    result = test_decrypt_is_inv_encrypt(10, 10, 50, 0)
+    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 0) "
+    if result is True:
+        string += c_string("SUCCEED", "green")
+    else:
+        string += c_string("FAILED", "red")
+    print(string)
+
+    # random q, mp_decrypt and all possibles message
     decrypt = mp_decrypt
     global_q = 2^(global_k)
-    print("with q = 2^k and the mp_decrypt and all possibles message\n")
-    print("test_decrypt_is_inv_encrypt(10, 10, 50, 0):\n")
-    print(test_decrypt_is_inv_encrypt(10, 10, 50, 0))
+    string = "q = 2^k, mp_decrypt and all possibles message "
+    print(c_string(string, "dark_over_yellow"))
+
+    result = test_decrypt_is_inv_encrypt(10, 10, 50, 0)
+    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 0) "
+    if result is True:
+        string += c_string("SUCCEED", "green")
+    else:
+        string += c_string("FAILED", "red")
+    print(string)
 
 
 # test some circuits
