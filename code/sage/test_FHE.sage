@@ -1,4 +1,6 @@
 load("FHE_scheme.sage")
+load("homomorphic_functions.sage")
+load("clear_functions.sage")
 
 # global variable used in the algorithms
 decrypt = basic_decrypt
@@ -46,20 +48,20 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
     return True
 
 
-# dict_arg is contains the clear messages
-# don't forget that params has also to be in dict_arg!
+# list_arg is contains the clear messages
+# don't forget that params has also to be in list_arg!
 # Example: "abp|+pab": here, p will be params
-def test_on_circuit(params, public_key, secret_key, circuit, dict_arg):
-    homomorphic_evaluation_circuit(circuit, dict_arg)
+def test_on_circuit(params, public_key, secret_key, circuit, list_arg):
+    homomorphic_evaluation_circuit(circuit, list_arg)
 
     # creation of the dictionary of ciphers
-    dict_encrypted_arg = {}
-    for name in dict_arg:
-        dict_encrypted_arg[name] = encrypt(params, public_key, dict_arg[name])
+    list_encrypted_arg = []
+    for value in dict_arg:
+        list_encrypted_arg += [encrypt(params, public_key, value)]
 
     # application of the circuits and comparaison
-    expected_result = clear_evaluation_circuit(circuit, dict_arg)
-    homomorphic_eval = homomorphic_evaluation_circuit(circuit, dict_arg)
+    expected_result = clear_evaluation_circuit(circuit, list_arg)
+    homomorphic_eval = homomorphic_evaluation_circuit(circuit, list_arg)
     obtained_result = decrypt(params, secret_key, homomorphic_eval)
 
     if expected_result != obtained_result:
@@ -67,25 +69,53 @@ def test_on_circuit(params, public_key, secret_key, circuit, dict_arg):
     return True
 
 
-# an element of list_circuits is a tuple (circuit, dict_arg)
+# an element of list_circuits is a tuple (circuit, list_arg)
 def test_on_circuits(params, public_key, secret_key, list_circuits):
     final_result = True
 
-    for circuit, dict_arg in list_circuits:
+    for circuit, list_arg in list_circuits:
         current_result = test_on_circuit(params, public_key, secret_key,
-                                         circuit, dict_arg)
+                                         circuit, list_arg)
         if current_result is False:
             print("Problem with the following circuit: " + circuit + "\n")
             final_result = False
 
     return final_result
 
+def make_list_circuits(params):
+    result = []
+    # sum
+    result.append(("pab|+pab", [params, 0, 1]))
+    result.append(("pab|+pab", [params, 1, 1]))
+    result.append(("pab|+pab", [params, 2, 3]))
+    # product
+    result.append(("pab|*pab", [params, 0, 0]))
+    result.append(("pab|*pab", [params, 1, 0]))
+    result.append(("pab|*pab", [params, 2, 3]))
+    # scalar product
+    result.append(("pab|.pab", [params, 0, 3]))
+    result.append(("pab|.pab", [params, 1, 2]))
+    result.append(("pab|.pab", [params, 2, 3]))
+    # nand
+    result.append(("pab|~pab", [params, 1, 0]))
+    result.append(("pab|~pab", [params, 1, 1]))
+    result.append(("pab|~pab", [params, 0, 0]))
+    # more complex circuits
+    result.append(("pabc|+pa*pbc", [params, 1, 2, 3]))
+    result.append(("pabc|*pa*pbc", [params, 1, 2, 3]))
+    result.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
+    result.append(("pabc|~pa*pbc", [params, 1, 0, 1]))
+    return result
 
-def test_main():
+
+# test_mains_FOO: they launch the others tests with parameters
+def test_main_is_inv():
     global decrypt
     global global_q
     global global_k
 
+    # test basic_decrypt and mp_decrypt as inverses of encrypt on différents
+    # cases
     decrypt = basic_decrypt
     global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
     print("with a random q and the basic_decrypt and message = 0 or 1\n")
@@ -104,3 +134,14 @@ def test_main():
     print("with q = 2^k and the mp_decrypt and all possibles message\n")
     print("test_decrypt_is_inv_encrypt(10, 10, 50, 0):\n")
     print(test_decrypt_is_inv_encrypt(10, 10, 50, 0))
+
+
+def test_main_circuits():
+    # test some circuits
+    params = setup(2, 3)
+    secret = secret_key_gen(params)
+    public_key = public_key_gen(params, secret)
+    secret_key = secret[1]
+
+    list_circuits = make_list_circuits(params)
+    test_on_circuits(params, public_key, secret_key, list_circuits)

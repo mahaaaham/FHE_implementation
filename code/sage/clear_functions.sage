@@ -1,25 +1,8 @@
 # Clear version of the functions
+load("circuits.sage")
 
 
-# 1 - declarations of clear dictionaries used by evaluation_circuit
-
-
-c_dict_op = {'+': (c_addition, 3), '*': (c_multiplication, 3),
-        '.': (c_scalar, 3), '~': (c_NAND, 3)}
-c_dict_const = {}
-
-
-# 2 - just the usual evaluation with c_dict_FOO insteand of dict_FOO
-
-
-def clear_evaluation_circuit(circuit, dict_arg):
-    dict_op = c_dict_op
-    dict_const = c_dict_const
-    result = evaluation_circuit(circuit, dict_arg)
-    return result
- 
-
-# 3 - creation of the functions
+# creation of the functions
 
 
 # mess1 and mess2 are integers modulo q 
@@ -52,3 +35,24 @@ def c_multiplication(list_arg):
 def c_NAND(list_arg):
     params, mess1, mess2 = list_arg
     return 1 - mess1 * mess2
+
+
+# declarations of clear dictionaries used by evaluation_circuit
+
+
+c_dict_op = {'+': (c_addition, 3), '*': (c_multiplication, 3),
+        '.': (c_scalar, 3), '~': (c_NAND, 3)}
+c_dict_const = {}
+
+
+# just the usual evaluation with c_dict_FOO insteand of dict_FOO
+
+
+def clear_evaluation_circuit(circuit, list_arg):
+    global dict_op
+    global dict_const
+    dict_op = c_dict_op
+    dict_const = c_dict_const
+    result = evaluation_circuit(circuit, list_arg)
+    return result
+ 
