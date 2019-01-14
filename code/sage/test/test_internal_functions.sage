@@ -1,4 +1,10 @@
+sage.repl.attach.load_attach_path(path="../", replace=True)
+
+load("test/framework_test.sage")
 load("internal_functions.sage")
+
+# here, 60 was not enough
+limit_size_mess = 70
 
 
 # check the function insert_row with NB_TEST random matrix
@@ -82,3 +88,27 @@ def compare_bit_decomp_mat_bit_decomp(q, k, nb_row):
         if bit_decomp(M_rows[i]) != list(decomp_M_rows[i]):
             return False
     return True
+
+
+def test_main_internal():
+    nb_col = 20
+    nb_row = 20
+    k = ZZ.random_element(5, 10)
+    q = ZZ.random_element(2^(k-1), 2^k)
+    nb_test = 20
+
+    test_reset()
+    transition_message("Test of some auxiliary functions:")
+    one_test(compare_bit_decomp_mat_bit_decomp, [q, k, nb_row],
+             "is mat_bit_decomp doing bit_decomp row by row?")
+    one_test(compare_flatten_mat_flatten, [q, k, nb_row],
+             "is mat_flatten doing flatten row by row?")
+    one_test(test_insert_row, [nb_row, nb_col, q, nb_test],
+             "test of insert_row")
+    one_test(test_scalar_one, [q, k, nb_test],
+             "<bitdecomp(a),powersof2(b)> = <a,b> ?")
+    string = "<a ,powersof2(b)> = <bitdecompinv(a),b> = "
+    string += "<flatten(a), powerof2(b)> ?"
+    one_test(test_scalar_two, [q, k, nb_test], string)
+    conclusion_message("")
+    return

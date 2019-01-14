@@ -1,5 +1,8 @@
+sage.repl.attach.load_attach_path(path="../", replace=True)
+
+load("test/framework_test.sage")
+load("internal_functions.sage")
 load("FHE_scheme.sage")
-load("framework_test.sage")
 
 # global variable used in the algorithms
 decrypt = basic_decrypt
@@ -46,54 +49,38 @@ def test_decrypt_is_inv_encrypt(L, Lambda, nb_messages, upper_bound):
     return True
 
 
-
-
 # test_mains_FOO: they launch the others tests with parameters
 def test_main_is_inv():
     global decrypt
     global global_q
     global global_k
 
+    test_reset()
+
     # random q, basic_decrypt and message in {0,1}
     decrypt = basic_decrypt
     global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
 
-    string = "random q, basic_decrypt and message in {0,1}"
-    print(c_string(string, "dark_over_yellow"))
-
-    result = test_decrypt_is_inv_encrypt(10, 10, 50, 2)
-    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 2) "
-    if result is True:
-        string += c_string("SUCCEED", "green")
-    else:
-        string += c_string("FAILED", "red")
-    print(string)
+    transition_message("random q, basic_decrypt and message in {0,1}")
+    one_test(test_decrypt_is_inv_encrypt, [10, 10, 50, 2],
+             "test_decrypt_is_inv_encrypt(10, 10, 50, 2)")
 
     # random q, basic_decrypt and all possibles message
     decrypt = basic_decrypt
     global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
+
     string = "random q, basic_decrypt and all possibles message"
     string += ", expected to fail"
-    print(c_string(string, "dark_over_yellow"))
-
-    result = test_decrypt_is_inv_encrypt(10, 10, 50, 0)
-    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 0) "
-    if result is True:
-        string += c_string("SUCCEED", "green")
-    else:
-        string += c_string("FAILED", "red")
-    print(string)
+    transition_message(string)
+    one_test(test_decrypt_is_inv_encrypt, [10, 10, 50, 0],
+             "test_decrypt_is_inv_encrypt(10, 10, 50, 0)")
 
     # random q, mp_decrypt and all possibles message
     decrypt = mp_decrypt
     global_q = 2^(global_k)
-    string = "q = 2^k, mp_decrypt and all possibles message "
-    print(c_string(string, "dark_over_yellow"))
 
-    result = test_decrypt_is_inv_encrypt(10, 10, 50, 0)
-    string = "test_decrypt_is_inv_encrypt(10, 10, 50, 0) "
-    if result is True:
-        string += c_string("SUCCEED", "green")
-    else:
-        string += c_string("FAILED", "red")
-    print(string)
+    transition_message("q = 2^k, mp_decrypt and all possibles message")
+    one_test(test_decrypt_is_inv_encrypt, [10, 10, 50, 0],
+             "test_decrypt_is_inv_encrypt(10, 10, 50, 0)")
+    conclusion_message("")
+    return

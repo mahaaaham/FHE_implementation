@@ -32,7 +32,7 @@ def setup(Lambda, L):
     # a bound for the distribution!
     B = Bound_proba
     distrib = GeneralDiscreteDistribution([1]*B + [0]*(q-B))
-    return [n, q, distrib, m]
+    return (n, q, distrib, m)
 
 
 # creation of the lwe_key and secret key with the setups parameters
