@@ -10,6 +10,51 @@ load("clear_functions.sage")
 # global variable used in the algorithms
 decrypt = basic_decrypt
 
+# For now, return nothing. May later return the maximum length instead of
+# just printing it
+def test_possible_length_one_var(operator, Lambda, L):
+    if operator not in ['+', '*', '~']:
+        raise NameError("operator should be +, * or ~")
+    global decrypt
+    decrypt = mp_decrypt
+    global global_k
+    global global_q
+    global_q = 2^(global_k-1)
+    params = setup(Lambda, L)
+    secret = secret_key_gen(params)
+    public_key = public_key_gen(params, secret)
+    secret_key = secret[1]
+    (n, q, distrib, m) = params
+    l = floor(log(q, 2)) + 1
+
+    message = ZZ.random_element(0, q)
+    circuit = ("pab|", [params, message, message])
+
+    string2 = "a"
+    jump = 10
+    iterator = -jump
+    result = true
+    #reach limit
+    while(result):
+        string1 = string2
+        string2 = (operator + "pa")*jump + string1
+        result = test_one_circuit(params, public_key, secret_key, circuit[0] + string2, circuit[1])
+        iterator += jump
+        print iterator
+
+    #search precise limit
+    string2 = string1
+    result = true
+    for i in range(jump-1):
+        string2 = operator + "pa" + string2
+        result = test_one_circuit(params, public_key, secret_key, string2, circuit[1])
+        if not result:
+            print ("Maximum length = " + str(iterator + i))
+            return
+    print ("Maximum length = " + str(iterator + jump-1))
+    return
+
+
 
 def make_lists_circuits(params):
     basic_circuits = []
@@ -119,7 +164,7 @@ def test_main_circuit():
     test_circuits(params, basic_circuits, basic_decrypt)
     test_circuits(params, composed_circuits, basic_decrypt)
 
-    global_q = 2^(global_k)
+    global_q = 2^(global_k-1)
     params = setup(2, 2)
     basic_circuits, composed_circuits = make_lists_circuits(params)
     test_circuits(params, basic_circuits, mp_decrypt)
