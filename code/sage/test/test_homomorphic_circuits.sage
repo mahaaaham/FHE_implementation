@@ -35,7 +35,7 @@ def test_possible_length_one_var(operator, Lambda, L):
 
     string = "a"
     jump = 100
-    iterator = 1
+    iterator = 0
     result = true
     #reach limit
     while(result):
