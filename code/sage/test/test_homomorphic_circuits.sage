@@ -28,26 +28,40 @@ def test_possible_length_one_var(operator, Lambda, L):
     l = floor(log(q, 2)) + 1
 
     message = ZZ.random_element(0, q)
-    circuit = ("pab|", [params, message, message])
+    circuit = "pba|"
+    list_arg = [params, message, message]
+    cipher = encrypt(params, public_key, message)
+    list_encrypted_arg = [params, cipher, cipher]
 
-    string2 = "a"
-    jump = 10
-    iterator = -jump
+    string = "a"
+    jump = 100
+    iterator = 1
     result = true
     #reach limit
     while(result):
-        string1 = string2
-        string2 = (operator + "pa")*jump + string1
-        result = test_one_circuit(params, public_key, secret_key, circuit[0] + string2, circuit[1])
         iterator += jump
-        print iterator
+        string = (operator + "pa")*jump + "b"
+
+        expected_result = clear_evaluation_circuit(circuit + string, list_arg)
+        homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
+                                                  list_encrypted_arg)
+        obtained_result = decrypt(params, secret_key, homomorphic_eval)
+        if (obtained_result == expected_result):
+            list_arg[1] = expected_result
+            list_encrypted_arg[1] = homomorphic_eval
+            print iterator
+        else:
+            result = false
 
     #search precise limit
-    string2 = string1
+    iterator -= jump
+    string = "b"
     result = true
     for i in range(jump-1):
-        string2 = operator + "pa" + string2
-        result = test_one_circuit(params, public_key, secret_key, string2, circuit[1])
+        string = operator + "pa" + string
+
+        result = test_one_circuit(params, public_key, secret_key, string, list_arg)
+
         if not result:
             print ("Maximum length = " + str(iterator + i))
             return
