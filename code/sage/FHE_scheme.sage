@@ -33,6 +33,10 @@ def setup(Lambda, L):
     else:
         q = ZZ.random_element(2^(global_k-1), 2^global_k)
 
+    # pm_all_q_decrypt need some auxiliary data
+    if decrypt == mp_all_q_decrypt:
+        init_mp_all_q_decrypt(q)
+
     # Uniform distribution in {0, ..., q-1}
     #  note that General... Automatically normalize the list
     #  to make the sum equal to 1

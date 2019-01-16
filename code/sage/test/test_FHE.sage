@@ -7,13 +7,13 @@ decrypt = basic_decrypt
 
 
 # check if decrypt(encrypt(message)) = message
+# setup has to be launched with decrypt == the decrypt used
+# before use
 def test_decrypt_is_inv_encrypt_one_message(params, message):
     global decrypt
     secret = secret_key_gen(params)
     public = public_key_gen(params, secret)
     secret_key = secret[1]
-    if decrypt == mp_all_q_decrypt:
-        init_mp_all_q_decrypt(params[1])
 
     cipher = encrypt(params, public, message)
     decrypted_cipher = decrypt(params, secret_key, cipher)
@@ -27,6 +27,8 @@ def test_decrypt_is_inv_encrypt_one_message(params, message):
 # same parameters, secret and public key.
 # if upper_bound is 0, all the elements of Z/qZ can
 # be messages
+# setup has to be launched with decrypt == the decrypt used
+# before use
 def test_decrypt_is_inv_encrypt(params, nb_messages, upper_bound):
     q = params[1]
     Zq = Integers(q)
@@ -34,8 +36,6 @@ def test_decrypt_is_inv_encrypt(params, nb_messages, upper_bound):
     secret = secret_key_gen(params)
     secret_key = secret[1]
     public = public_key_gen(params, secret)
-    if decrypt == mp_all_q_decrypt:
-        init_mp_all_q_decrypt(params[1])
 
     for i in range(nb_messages):
         if (upper_bound != 0):

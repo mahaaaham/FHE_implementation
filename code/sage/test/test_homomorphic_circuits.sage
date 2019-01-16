@@ -107,6 +107,8 @@ def make_lists_circuits(params):
 # list_arg contains the clear messages
 # don't forget that params has also to be in list_arg!
 # Example: "abp|+pab": here, p will be params
+# setup has to be launched with decrypt == the decrypt used
+# before use
 def test_one_circuit(params, public_key, secret_key, circuit, list_arg):
     clear_evaluation_circuit(circuit, list_arg)
 
@@ -142,6 +144,8 @@ def test_one_circuit(params, public_key, secret_key, circuit, list_arg):
 # with arguments
 # encrypted with params PARAMS using the decryption algorithm
 # DECRYPT_ALGO()
+# setup has to be launched with decrypt == the decrypt used
+# before use
 def test_circuits(params, list_circuits_name, decrypt_algo):
     (n, q, distrib, m) = params
     l = floor(log(q, 2)) + 1
@@ -150,12 +154,9 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
 
     global decrypt
     decrypt = decrypt_algo
-    if decrypt_algo == mp_all_q_decrypt:
-        init_mp_all_q_decrypt(q)
 
     test_reset()
     transition_message(name + ":")
-
 
     secret = secret_key_gen(params)
     public_key = public_key_gen(params, secret)

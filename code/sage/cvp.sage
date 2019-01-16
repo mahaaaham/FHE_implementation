@@ -99,6 +99,7 @@ def init_mp_all_q_decrypt(q):
 # have be launched with the right q before
 # Retrieve a vector near to C
 # of the lattice Lambda(g^t) = q (Lambda^T(g^t))*
+# She is used by setup (in FHE_scheme) if decrypt == mp_all_q_decrypt
 def mp_all_svp(C):
     global S_mp_all_decrypt
     return babai_nearest_plane(S_mp_all_decrypt, C)
