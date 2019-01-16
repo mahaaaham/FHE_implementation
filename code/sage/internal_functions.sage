@@ -48,6 +48,14 @@ def rand_matrix(ring, nb_row, nb_col, upper_bound):
 
 # 2 - Auxiliary functions used by the FHE algorithms
 
+# input: a in Z/qZ, output: representant in ]-q/2, q/2]
+def centered_ZZ(a, q):
+    a = ZZ(a)
+    if a > q/2:
+        return a - q
+    return a
+
+
 # a is a list of k elements of Zq (Z/Zq)
 def bit_decomp(a):
     Zq = parent(a[0])

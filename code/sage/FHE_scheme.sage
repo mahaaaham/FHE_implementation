@@ -5,15 +5,16 @@
 # ainsi que l et N afin de ne pas les recalculer à chaque fois.
 # A noter que ces trois ajouts se retrouvent avec les paramètres originaux.
 load("internal_functions.sage")
-# for mp_all_q_decrypt 
+# for mp_all_q_decrypt
 load("cvp.sage")
 
 # global parameters:
-# the proba is uniform with possibles values {0, .., Bound_proba - 1}
+# the proba is uniform with possibles values the x such that |x| < Bound_proba
+# We need Bound_proba > 0
 Bound_proba = 3
 # the values k param. This make easier to switch to a power of 2 for
 # mp_decrypt
-global_k = 12
+global_k = 15
 
 
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
@@ -22,7 +23,7 @@ global_k = 12
 
 # creation of the setup parameters commonly used by the others functions
 # WARNING: q depends on the choosen decryption algorithm
-# it is a power of 2 if decrypt = mp_decrypt 
+# it is a power of 2 if decrypt = mp_decrypt
 def setup(Lambda, L):
     global decrypt
     # m,n and k randomly chosen, usually function of Lambda and L
@@ -37,12 +38,15 @@ def setup(Lambda, L):
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
 
-    # Uniform distribution in {0, ..., q-1}
+    # Uniform distribution with support = x in [0,p] such that
+    # |x| < B where |x| is the magnitude of the représentant
+    #  of x in ]-q/2, q/2] for the relation (mod q)
     #  note that General... Automatically normalize the list
     #  to make the sum equal to 1
     # a bound for the distribution!
     B = Bound_proba
-    distrib = GeneralDiscreteDistribution([1]*B + [0]*(q-B))
+    probas = [1]*B + [0]*(q-2*B+1) + [1]*(B-1)
+    distrib = GeneralDiscreteDistribution(probas)
     return (n, q, distrib, m)
 
 
@@ -68,7 +72,6 @@ def public_key_gen(params, secret_keys):
     B = rand_matrix(Zq, m, n, q)
 
     error = [Zq(distrib.get_random_element()) for i in range(m)]
-    error = [0] * m
 
     t = -vector(lwe_key[1:])
     b = B * t + vector(error)
@@ -111,15 +114,12 @@ def basic_decrypt(params, secret_key, cipher):
     secret_key = vector(secret_key)
 
     # recuperation of a big enough secret_key[i]
-    lim_inf = q / 4
-    lim_sup = q / 2
-    i = next(j for j in range(len(secret_key)) if lim_inf < ZZ(secret_key[j]) <
-             lim_sup)
+    i = next(j for j in range(len(secret_key)) if
+             centered_ZZ(secret_key[j], q) > (q / 4))
 
     cipher_i = (cipher.rows())[i]
     x_i = cipher_i * secret_key
-
-    return Zq(round(ZZ(x_i)/ZZ(secret_key[i])))
+    return Zq(round(centered_ZZ(x_i, q)/centered_ZZ(secret_key[i], q)))
 
 
 # q has to be a power of 2
@@ -147,9 +147,10 @@ def mp_decrypt(params, secret_key, cipher):
     # at the end, I have 2^small_power * mess + small
     # and small can have an influence..
     for i in range(len(C)):
-        term = ZZ(C[-1-i] - inv_pow * current_mess)
+        term = centered_ZZ(C[-1-i] - inv_pow * current_mess, q)
 
-        if term >= 2^(l-2):
+        # 1 if term near of 2^(l-2) than 0 or q
+        if abs(term) >= 2^(l-3):
             bit = 1
         else:
             bit = 0
@@ -160,9 +161,9 @@ def mp_decrypt(params, secret_key, cipher):
     return Zq(current_mess)
 
 
-# WARNING: the function init_mp_all_q_decrypt(q) 
-# of the file cvp.sage must 
-# have be launched with the right q before 
+# WARNING: the function init_mp_all_q_decrypt(q)
+# of the file cvp.sage must
+# have be launched with the right q before
 # using this function
 def mp_all_q_decrypt(params, secret_key, cipher):
     (n, q, distrib, m) = params
@@ -174,7 +175,7 @@ def mp_all_q_decrypt(params, secret_key, cipher):
 
     element_of_lattice = mp_all_svp(C)
 
-    # element_of_lattice should be of  
-    # the form message * [1 2 ... 2^(l-2)]
+    # element_of_lattice should be of
+    # the form message * [1 2 ... 2^(l-1)]
     message = element_of_lattice[0]
     return Zq(message)

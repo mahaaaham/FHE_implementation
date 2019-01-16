@@ -76,19 +76,22 @@ def test_possible_length_one_var(operator, Lambda, L, decrypt_alg):
 
 # output circuits and their names
 def make_lists_circuits(params):
+    q = params[1]
     basic_circuits = []
     # sum
     basic_circuits.append(("pab|+pab", [params, 0, 1]))
-    basic_circuits.append(("pab|+pab", [params, 1, 1]))
-    basic_circuits.append(("pab|+pab", [params, 2, 3]))
+    basic_circuits.append(("pab|+pab", [params, ZZ.random_element(q // 2),
+                                        ZZ.random_element(q // 2)]))
     # product
-    basic_circuits.append(("pab|*pab", [params, 0, 0]))
     basic_circuits.append(("pab|*pab", [params, 0, 1]))
-    basic_circuits.append(("pab|*pab", [params, 2, 3]))
+    basic_circuits.append(("pab|*pab", [params,
+                                        ZZ.random_element(ceil(sqrt(q))),
+                                        ZZ.random_element(ceil(sqrt(q)))]))
     # scalar product
-    basic_circuits.append(("pab|.pab", [params, 0, (3)]))
-    basic_circuits.append(("pab|.pab", [params, 1, (2)]))
-    basic_circuits.append(("pab|.pab", [params, 2, (3)]))
+    basic_circuits.append(("pab|.pab", [params, 1, 1]))
+    basic_circuits.append(("pab|.pab", [params,
+                                        ZZ.random_element(ceil(sqrt(q))),
+                                        ZZ.random_element(ceil(sqrt(q)))]))
     # nand
     basic_circuits.append(("pab|~pab", [params, 1, 0]))
     basic_circuits.append(("pab|~pab", [params, 1, 1]))
@@ -96,16 +99,26 @@ def make_lists_circuits(params):
 
     # more complex circuits
     composed_circuits = []
-    composed_circuits.append(("pabc|+pa*pbc", [params, 1, 2, 3]))
-    composed_circuits.append(("pabcd|+pa*pb+pcd", [params, 1, 1, 0, 1]))
-    composed_circuits.append(("pabc|*pa*pbc", [params, 1, 2, 3]))
-    composed_circuits.append(("pabc|*pa*pbc", [params, 1, 2, 1]))
+    composed_circuits.append(("pab|+pa+pa" + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|*pa*pa" + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|~pa~pa" + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|+pa" + "+pa"*2 + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|*pa" + "*pa"*2 + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|~pa" + "~pa"*2 + "b", [params, 0, 1]))
+    composed_circuits.append(("pab|+pa" + "+pa"*2 + "b",
+                             [params, ZZ.random_element(q // 2),
+                              ZZ.random_element(q // 2)]))
+    composed_circuits.append(("pab|*pa" + "*pa"*2 + "b",
+                              [params, ZZ.random_element(ceil(sqrt(q))),
+                               ZZ.random_element(ceil(sqrt(q)))]))
     composed_circuits.append(("pab|+pa" + "+pa"*3 + "b", [params, 0, 1]))
     composed_circuits.append(("pab|*pa" + "*pa"*3 + "b", [params, 0, 1]))
     composed_circuits.append(("pab|~pa" + "~pa"*3 + "b", [params, 0, 1]))
-    composed_circuits.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
-    composed_circuits.append(("pabc|~pa*pbc", [params, 1, 0, 1]))
-    return ((basic_circuits, "basic circuits"), 
+    composed_circuits.append(("pabc|*pa*pbc", [params, 1, 2, 4]))
+    composed_circuits.append(("pabc|+pa*pbc", [params, 1, 22, 3]))
+    composed_circuits.append(("pabcd|+pa*pb+pcd", [params, 1, 1, 0, 1]))
+    composed_circuits.append(("pabcd|+pa*pb+pcd", [params, 1, 30, 100, 1]))
+    return ((basic_circuits, "basic circuits"),
             (composed_circuits, "composed circuits"))
 
 

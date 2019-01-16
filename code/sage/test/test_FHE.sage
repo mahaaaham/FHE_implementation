@@ -71,7 +71,7 @@ def test_main_FHE():
 
     big_transition_message("Lambda = " + str(Lambda) +
                            ", L = " + str(L) +
-                           " nb_test = " + str(nb_test))
+                           ", nb_test = " + str(nb_test))
 
     for i in range(len(algorithms)):
         decrypt = algorithms[i]

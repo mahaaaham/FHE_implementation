@@ -53,4 +53,3 @@ def clear_evaluation_circuit(circuit, list_arg):
     dict_const = c_dict_const
     result = evaluation_circuit(circuit, list_arg)
     return result
- 

@@ -96,10 +96,10 @@ def test_main_internal():
     test_reset()
 
     big_transition_message("nb_col = " + str(nb_col) +
-                           ", nb_row =" + str(nb_row) +
+                           ", nb_row = " + str(nb_row) +
                            ", k = " + str(k) +
                            ", q = " + str(q) +
-                           ", nb_test = 20")
+                           ", nb_test =" + str(nb_test))
     transition_message("Test of some auxiliary functions:")
     one_test(compare_bit_decomp_mat_bit_decomp, [q, k, nb_row],
              "is mat_bit_decomp doing bit_decomp row by row?")
