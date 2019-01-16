@@ -69,7 +69,7 @@ def test_possible_length_one_var(operator, Lambda, L):
     return
 
 
-
+# output circuits and their names
 def make_lists_circuits(params):
     basic_circuits = []
     # sum
@@ -100,7 +100,8 @@ def make_lists_circuits(params):
     composed_circuits.append(("pab|~pa" + "~pa"*3 + "b", [params, 0, 1]))
     composed_circuits.append(("pabc|*pa.pbc", [params, 1, 2, 3]))
     composed_circuits.append(("pabc|~pa*pbc", [params, 1, 0, 1]))
-    return basic_circuits, composed_circuits
+    return ((basic_circuits, "basic circuits"), 
+            (composed_circuits, "composed circuits"))
 
 
 # list_arg contains the clear messages
@@ -136,26 +137,29 @@ def test_one_circuit(params, public_key, secret_key, circuit, list_arg):
     return True
 
 
-# test of a list of circuits LIST_CIRCUITS with arguments
+# test of a list of circuits 
+# LIST_CIRCUITS_NAME = (the list of circuits, name of the list)
+# with arguments
 # encrypted with params PARAMS using the decryption algorithm
 # DECRYPT_ALGO()
-def test_circuits(params, list_circuits, decrypt_algo):
+def test_circuits(params, list_circuits_name, decrypt_algo):
+    (n, q, distrib, m) = params
+    l = floor(log(q, 2)) + 1
+
+    list_circuits, name = list_circuits_name
+
     global decrypt
-    global global_q
-    global global_k
+    decrypt = decrypt_algo
+    if decrypt_algo == mp_all_q_decrypt:
+        init_mp_all_q_decrypt(q)
 
     test_reset()
-    transition_message("With " + decrypt_algo.func_name + ":")
+    transition_message(name + ":")
 
-    decrypt = decrypt_algo
 
     secret = secret_key_gen(params)
     public_key = public_key_gen(params, secret)
     secret_key = secret[1]
-
-    (n, q, distrib, m) = params
-    l = floor(log(q, 2)) + 1
-
     for circuit, list_arg in list_circuits:
         message = "circuit: " + circuit + "    "
         message += "arguments: " + str(list_arg[1:]) + "    "
@@ -172,14 +176,15 @@ def test_circuits(params, list_circuits, decrypt_algo):
 # the main test function here: launch the others tests
 def test_main_circuit():
     global global_q
-    global_q = ZZ.random_element(2^(global_k-1), 2^global_k)
-    params = setup(2, 2)
-    basic_circuits, composed_circuits = make_lists_circuits(params)
-    test_circuits(params, basic_circuits, basic_decrypt)
-    test_circuits(params, composed_circuits, basic_decrypt)
+    global decrypt
+    algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
+    Lambda, L = 2, 2
 
-    global_q = 2^(global_k-1)
-    params = setup(2, 2)
-    basic_circuits, composed_circuits = make_lists_circuits(params)
-    test_circuits(params, basic_circuits, mp_decrypt)
-    test_circuits(params, composed_circuits, mp_decrypt)
+    for alg in algorithms:
+        decrypt = alg
+        big_transition_message("With the algorithm of decryption " +
+                               alg.__name__ + ":\n" )
+        params = setup(Lambda, L)
+        basic_circuits, composed_circuits = make_lists_circuits(params)
+        test_circuits(params, basic_circuits, alg)
+        test_circuits(params, composed_circuits, alg)

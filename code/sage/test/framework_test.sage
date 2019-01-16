@@ -35,17 +35,25 @@ def transition_message(message):
     print(c_string(message, "dark_over_yellow"))
     return
 
+# to write a "transition message" between series of 
+# blocs of tests
+# for example the title of a series of tests.
+# do not reset nb_success and nb_tests
+def big_transition_message(message):
+    print(c_string(message, "dark_over_white"))
+    return
+
 
 # write a conclusion message with an indication
 # of the number of succeed tests
 # A reset is also done
 def conclusion_message(message):
     global nb_success
-    resume = c_string("Conclusion:", "dark_over_blue")
+    resume = c_string("Conclusion:\n", "dark_over_blue")
     resume += " "*4 + str(nb_success) + "/" + str(nb_tests)
     resume += " success "
     if message != "":
-        resume += "with: " + c_string(message, "purple")
+        resume += "with: " + c_string(message, "purple") + "\n"
     print(resume)
     test_reset()
     return
@@ -62,10 +70,10 @@ def one_test(test, list_arg, message):
 
     message += " "*(limit_size_mess - len(message))
     if test(*list_arg) is True:
-        message += c_string("SUCCEED", "green")
+        message += "[" + c_string("SUCCEED", "green") + "]"
         nb_success += 1
     else:
-        message += c_string("FAILED", "red")
+        message += "[" + c_string("FAILED", "red") + "]"
     print(message)
     nb_tests += 1
     return
