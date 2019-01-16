@@ -10,6 +10,7 @@ load("clear_functions.sage")
 # global variable used in the algorithms
 decrypt = basic_decrypt
 
+
 # For now, return nothing. May later return the maximum length instead of
 # just printing it
 def test_possible_length_one_var(operator, Lambda, L):
@@ -37,7 +38,7 @@ def test_possible_length_one_var(operator, Lambda, L):
     jump = 500
     iterator = 0
     result = true
-    #reach limit
+    # reach limit
     print message
     while(result):
         iterator += jump
@@ -55,7 +56,7 @@ def test_possible_length_one_var(operator, Lambda, L):
         else:
             result = false
 
-    #search precise limit
+    # search precise limit
     iterator -= jump
     string = operator + "pab"
     result = true
