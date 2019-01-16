@@ -34,10 +34,11 @@ def test_possible_length_one_var(operator, Lambda, L):
     list_encrypted_arg = [params, cipher, cipher]
 
     string = "a"
-    jump = 100
+    jump = 500
     iterator = 0
     result = true
     #reach limit
+    print message
     while(result):
         iterator += jump
         string = (operator + "pa")*jump + "b"
@@ -49,20 +50,24 @@ def test_possible_length_one_var(operator, Lambda, L):
         if (obtained_result == expected_result):
             list_arg[1] = expected_result
             list_encrypted_arg[1] = homomorphic_eval
+            print expected_result
             print iterator
         else:
             result = false
 
     #search precise limit
     iterator -= jump
-    string = "b"
+    string = operator + "pab"
     result = true
     for i in range(jump-1):
-        string = operator + "pa" + string
-
-        result = test_one_circuit(params, public_key, secret_key, string, list_arg)
-
-        if not result:
+        expected_result = clear_evaluation_circuit(circuit + string, list_arg)
+        homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
+                                                  list_encrypted_arg)
+        obtained_result = decrypt(params, secret_key, homomorphic_eval)
+        if (obtained_result == expected_result):
+            list_arg[1] = expected_result
+            list_encrypted_arg[1] = homomorphic_eval
+        else:
             print ("Maximum length = " + str(iterator + i))
             return
     print ("Maximum length = " + str(iterator + jump-1))
