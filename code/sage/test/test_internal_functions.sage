@@ -86,13 +86,20 @@ def compare_bit_decomp_mat_bit_decomp(q, k, nb_row):
 
 
 def test_main_internal():
+
     nb_col = 20
     nb_row = 20
-    k = ZZ.random_element(5, 10)
+    k = ZZ.random_element(5, 20)
     q = ZZ.random_element(2^(k-1), 2^k)
     nb_test = 20
 
     test_reset()
+
+    big_transition_message("nb_col = " + str(nb_col) +
+                           ", nb_row =" + str(nb_row) +
+                           ", k = " + str(k) +
+                           ", q = " + str(q) +
+                           ", nb_test = 20")
     transition_message("Test of some auxiliary functions:")
     one_test(compare_bit_decomp_mat_bit_decomp, [q, k, nb_row],
              "is mat_bit_decomp doing bit_decomp row by row?")

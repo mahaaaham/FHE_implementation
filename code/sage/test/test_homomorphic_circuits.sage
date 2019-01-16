@@ -13,20 +13,19 @@ decrypt = basic_decrypt
 
 # For now, return nothing. May later return the maximum length instead of
 # just printing it
-def test_possible_length_one_var(operator, Lambda, L):
+def test_possible_length_one_var(operator, Lambda, L, decrypt_alg):
+    global decrypt
+    decrypt = decrypt_alg
+
     if operator not in ['+', '*', '~']:
         raise NameError("operator should be +, * or ~")
-    global decrypt
-    decrypt = mp_decrypt
-    global global_k
-    global global_q
-    global_q = 2^(global_k-1)
+
     params = setup(Lambda, L)
+
     secret = secret_key_gen(params)
     public_key = public_key_gen(params, secret)
     secret_key = secret[1]
     (n, q, distrib, m) = params
-    l = floor(log(q, 2)) + 1
 
     message = ZZ.random_element(0, q)
     circuit = "pba|"
@@ -39,20 +38,20 @@ def test_possible_length_one_var(operator, Lambda, L):
     iterator = 0
     result = true
     # reach limit
-    print message
-    while(result):
+    print(message)
+
+    while result:
         iterator += jump
         string = (operator + "pa")*jump + "b"
 
         expected_result = clear_evaluation_circuit(circuit + string, list_arg)
         homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
-                                                  list_encrypted_arg)
+                                                          list_encrypted_arg)
         obtained_result = decrypt(params, secret_key, homomorphic_eval)
         if (obtained_result == expected_result):
             list_arg[1] = expected_result
             list_encrypted_arg[1] = homomorphic_eval
-            print expected_result
-            print iterator
+            print(expected_result, iterator)
         else:
             result = false
 
@@ -63,15 +62,15 @@ def test_possible_length_one_var(operator, Lambda, L):
     for i in range(jump-1):
         expected_result = clear_evaluation_circuit(circuit + string, list_arg)
         homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
-                                                  list_encrypted_arg)
+                                                          list_encrypted_arg)
         obtained_result = decrypt(params, secret_key, homomorphic_eval)
         if (obtained_result == expected_result):
             list_arg[1] = expected_result
             list_encrypted_arg[1] = homomorphic_eval
         else:
-            print ("Maximum length = " + str(iterator + i))
+            print("Maximum length = " + str(iterator + i))
             return
-    print ("Maximum length = " + str(iterator + jump-1))
+    print("Maximum length = " + str(iterator + jump-1))
     return
 
 
@@ -182,15 +181,19 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
 
 # the main test function here: launch the others tests
 def test_main_circuit():
-    global global_q
     global decrypt
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
     Lambda, L = 2, 2
 
+    test_reset()
+
+    big_transition_message("Lambda = " + str(Lambda) +
+                           ", L = " + str(L))
+
     for alg in algorithms:
         decrypt = alg
         big_transition_message("With the algorithm of decryption " +
-                               alg.__name__ + ":\n" )
+                               alg.__name__ + ":\n")
         params = setup(Lambda, L)
         basic_circuits, composed_circuits = make_lists_circuits(params)
         test_circuits(params, basic_circuits, alg)

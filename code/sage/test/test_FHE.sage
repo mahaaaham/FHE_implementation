@@ -54,24 +54,31 @@ def test_decrypt_is_inv_encrypt(params, nb_messages, upper_bound):
 def test_main_FHE():
     global decrypt
     Lambda, L = 2, 2
+    nb_test = 50
 
     # setup of algorithms, transition messages and parameters
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
     list_mess = ["random q, basic_decrypt and message in {0,1}",
-                 "q power of 2, " + decrypt.__name__ +  " and all possibles messages",
-                 "random q, " + decrypt.__name__ +  " and all possibles messages"]
-    begin_arg = [10, 10, 50]
+                 "q power of 2, " + decrypt.__name__ +
+                 " and all possibles messages",
+                 "random q, " + decrypt.__name__ +
+                 " and all possibles messages"]
     # params has to be added
-    list_arguments = [[50, 2]] + [[50, 0]] * 2
+    list_arguments = [[nb_test, 2]] + [[nb_test, 0]] * 2
 
     # beginning the tests
     test_reset()
+
+    big_transition_message("Lambda = " + str(Lambda) +
+                           ", L = " + str(L) +
+                           " nb_test = " + str(nb_test))
+
     for i in range(len(algorithms)):
         decrypt = algorithms[i]
         params = setup(Lambda, L)
 
         transition_message(list_mess[i])
-        arguments = [params]+ list_arguments[i]
+        arguments = [params] + list_arguments[i]
         one_test(test_decrypt_is_inv_encrypt, arguments,
                  "test_decrypt_is_inv_encrypt")
     conclusion_message("with Lambda = " + str(Lambda) + ", L = " + str(L))
