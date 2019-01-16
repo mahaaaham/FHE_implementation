@@ -14,7 +14,7 @@ load("cvp.sage")
 Bound_proba = 3
 # the values k param. This make easier to switch to a power of 2 for
 # mp_decrypt
-global_k = 15
+global_k = 12
 
 
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda

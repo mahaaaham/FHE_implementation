@@ -30,43 +30,6 @@ def babai_nearest_plane(B, v):
     return list(x)
 
 
-# generate a random lattice L , x in L
-# a little error e, and test if
-# babai_nearest_plane output x from x+e
-# WARNING: if e is "too big", the test
-# can fail! It is possible to make it
-# better!
-def test_babai_nearest_plane():
-    dimension = ZZ.random_element(1, 20)
-
-    # generation of a random invertible matrix
-    det = 0
-    while(det == 0):
-        det = ZZ.random_element()
-    B = random_matrix(ZZ, dimension, algorithm='unimodular')
-    B = det * B
-
-    # x is a random element of the lattice generated
-    # by B
-    x = random_vector(ZZ, dimension)
-    x = B*x
-    x = list(x)
-
-    gram_B, not_used = B.transpose().gram_schmidt(orthonormal=False)
-
-    # e will be a error vector, in P_1/2(gram_B)
-    # here, e is with coordinatees -1/2 <= e_i <= 1/2
-    e = vector([QQ.random_element(1, 100)/2 for i in range(dimension)])
-    gram_B = gram_B.transpose()
-    e = gram_B * e
-
-    v = [x[i] + e[i] for i in range(dimension)]
-
-    if x == babai_nearest_plane(B, v):
-        return True
-    return False
-
-
 # for g_t = [1, 2, ..., 2^ (l-1)]
 # where l is the (binary) size of q
 # using than Lambda(g_t) = q (Lambda^T(g_t))*
