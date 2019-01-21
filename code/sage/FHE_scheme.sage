@@ -11,10 +11,11 @@ load("cvp.sage")
 # global parameters:
 # the proba is uniform with possibles values the x such that |x| < Bound_proba
 # We need Bound_proba > 0
-Bound_proba = 3
+Bound_proba = 2
 # the values k param. This make easier to switch to a power of 2 for
 # mp_decrypt
-global_k = 12
+# name maybe global_l
+global_k = 24
 
 
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
@@ -173,7 +174,7 @@ def mp_all_q_decrypt(params, secret_key, cipher):
     C = cipher * vector(Zq, secret_key)
     C = Sequence(C[:l], ZZ)
 
-    element_of_lattice = mp_all_svp(C)
+    element_of_lattice = mp_all_cvp(C)
 
     # element_of_lattice should be of
     # the form message * [1 2 ... 2^(l-1)]
