@@ -13,6 +13,12 @@
   \usepackage{tikz}
   \usetikzlibrary{graphs, graphs.standard, quotes}% quotes library is for the [""] edges
 
+  \newtheorem{definition}{Définition}
+  \newtheorem{thm}{Théorème}
+  \newtheorem{lemme}{Lemme}
+  \newtheorem{prop}{Proposition}
+
+
   % for double brackets \llbracket \rrbracket
   \usepackage{stmaryrd}
 
@@ -26,6 +32,12 @@
   \definecolor{dbluecolor}{rgb}{0.01,0.02,0.7}
   \definecolor{dgreencolor}{rgb}{0.2,0.4,0.0}
   \definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
+  
+  % used defined commands
+  \newcommand{\LWE}{\text{LWE}_{n,q,\chi}}
+  \newcommand{\ZZ}{\mathbb{Z}}
+  \newcommand{\ZZq}{\mathbb{Z}_q}
+  \newcommand{\EE}{\mathbb{E}}
 
 \input{latex_config/lstlisting.tex}
 
@@ -33,8 +45,20 @@
 \author{Lucas Roux  et Eric Sageloli}
 
 \graphicspath{{pictures/}}
+% to make an entry for the bibliography in the table of contents
+\usepackage[nottoc, notlof, notlot]{tocbibind}
 
 \begin{document}
 \maketitle
 \tableofcontents{}
+
+\input{notations.tex}
+\input{introduction.tex}
+\input{presentation_cryptosysteme.tex}
+\input{analyse_cryptosysteme.tex}
+\input{implementation.tex}
+\input{conclusion.tex}
+
+\bibliographystyle{plain}
+\bibliography{biblio}
 \end{document}

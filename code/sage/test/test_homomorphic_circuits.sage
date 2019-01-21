@@ -157,7 +157,7 @@ def test_one_circuit(params, public_key, secret_key, circuit, list_arg):
     return True
 
 
-# test of a list of circuits 
+# test of a list of circuits
 # LIST_CIRCUITS_NAME = (the list of circuits, name of the list)
 # with arguments
 # encrypted with params PARAMS using the decryption algorithm

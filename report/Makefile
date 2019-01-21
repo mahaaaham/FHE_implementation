@@ -1,7 +1,7 @@
 all: build clean
 	
-build: rapport.tex
-	pdflatex rapport.tex
+build: report.tex
+	pdflatex report.tex
 
 clean:
 	rm -f *.fls *.log *.gz *latexmk *.aux

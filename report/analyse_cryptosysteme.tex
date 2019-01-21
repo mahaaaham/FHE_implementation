@@ -1,0 +1,103 @@
+\begin{section}{Analyse du cryptosystème: sécurité, profondeur des circuits}
+	\begin{subsection}{Sécurité du cryptosystème}
+	\begin{definition}{Distance statistique}
+	Soit $X$ et $Y$ deux variables aléatoires supportée par
+	un ensemble $\mathcal{V}$ et à valeur 
+	dans un groupe abélien $G$. On définit la distance 
+	statistique entre $X$ et $Y$, notée $\text{SD}(X,Y)$, 
+	comme étant la somme:
+	\[ \frac{1}{2} \sum_{v \in \mathcal{V}} |\mathbb{P}(X = v) -
+	\mathbb{P}(Y = v)| \]
+
+	\end{definition}
+	\begin{prop}
+	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
+	$\mathcal{F} \subset (g_1, \ldots, g_r) \in G^r$, on
+	note
+	 $s_\mathcal{F}$ la distribution aléatoire qui à un aléa
+	 fait correspondre la somme $\sum_{i\in X} g_i$ pour un
+	 sous-ensemble choisi de façon uniforme  $X\subset \llbracket
+	 1, r \rrbracket$. 
+	 Considérons alors le n-uplet $S_\mathcal{F} = (X_1, \ldots, X_r)$ où 
+	 les $X_i$ sont indépendants de même loi
+	 $s_\mathcal{F}$.
+	 D'autre part, on considère la distribution uniforme
+	 $U$ sur $G^r$
+	 Alors, on a: 
+	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leq 
+	   \sqrt{r^2\frac{|G|}{2^r}}\]
+	 Notamment, 
+	 \[\mathbb{P}\left(SD(s_\mathcal{F},U) \geq
+		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}} \right) \leq
+		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}}
+	 \]
+	\end{prop}
+	\begin{proof}
+	\end{proof}
+	\begin{prop}
+		Supposons avoir pris des paramètres $(n, q, \chi, m)$
+	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\epsilon>0$
+	et $m > (1+\epsilon)(n+1)\log(q)$, la distribution jointe 
+	$(A, RA)$ est calculatoirement indistinguable de la
+	distribution uniforme sur $\ZZq^{m \times (n+1)} \times \ZZq^{N
+	\times (n+1)}$
+	\end{prop}
+	\begin{proof}
+		On voit qu'il suffit de montrer que la distribution $D_{ra} = (A, RA)$ 
+		est indistinguable de de la distribution $D_{u} = (A, U)$ où $U$ est
+		uniforme car, par hypothèse, la distribution $A$ ne peut être distinguée de 
+		la distribution uniforme. 
+
+		Supposons donc par absurde qu'il existe un automate $\mathcal{A}$
+		poly-probabiliste distinguant ces deux distributions. On va
+		alors créer un automate $\mathcal{B}$ distinguant  $A_{,\chi}$
+
+		Notons $p_{u}(\mathcal{A})$ (resp. $p_{ra}$) la probabilité que $\mathcal{A}$
+		estime qu'une entrée $(A,U)$ provienne bien de $D_{u}$ (resp.
+		qu'une entrée $(A, RA)$ provienne bien de $D_{ra}$).
+
+		Par hypothèse, il existe un entier $c > 0$ tel que:
+		\begin{equation} |p_u - p_{ra}| > \frac{1}{n^c}\label{eq:sec1}\end{equation}
+
+		Notons de plus, pour un secret $s$,  $p_{u}(s)$ la probabilité
+		que $\mathcal{A}$ estime qu'une entrée $(A,U)$ créée avec le
+		secret $s$ provienne bien de $D_{u}$ (resp.\ estime qu'une
+		entrée $(A,RA)$ créée  avec le secret $s$ provienne bien de 
+		$D_{ra}$).
+
+		On constate que \[\EE_s(p_u(s)) = p_u(s), \quad \EE_s(p_{ra}(s))
+				  = p_{ra}(s) \]
+		Ainsi, on déduit de l'équation~\eqref{eq:sec1} qu'il existe 
+		au moins une fraction $\frac{1}{2n^c}$ de secrets dans
+		l'ensemble:
+		\[ Y = \{ s : \:|p_u(s)) - p_{ra}(s)| \geq \frac{1}{2n^c}\} \]
+	
+		Comme $\frac{1}{2n^c}$ n'est pas négligeable, on voit qu'il
+		suffit de créer un distingueur entre $D_{u}$ et $D_{ra}$ 
+		restreints aux secrets $s\in Y$. En effet, si un tel
+		distingueur $Z_{Y}$ existe, il suffit de l'utiliser pour 
+		tout échantillon, même ceux crées à partir d'un $s \not\in Y$.
+		Notant \og e = R \fg l'évènement signifiant
+		que l'échantillon deviné provenait de la distribution $R$, on
+		a:
+		On aura alors:
+
+
+
+	\end{proof}
+	\begin{thm}
+	Sous les hypothèses de la proposition précédente, le
+	cryptosystème est IND-CPA.
+	\end{thm}
+	% la preuve de sécurité, sans trop évoquer les paramètres (le
+	% minimum)
+	\end{subsection}
+	\begin{subsection}{Choix de paramètres, deux visions}
+		% asymptotique vs concret
+	\end{subsection}
+	\begin{subsection}{Analyse asymptotique de la profondeur des circuits}
+		% la preuve de sécurité
+	\end{subsection}
+	\begin{subsection}{Mise en place du Bootstrapping avec DEC}
+	\end{subsection}
+\end{section}

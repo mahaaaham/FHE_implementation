@@ -23,8 +23,8 @@ def test_babai_nearest_plane(max_dim):
     gram_B, not_used = B.transpose().gram_schmidt(orthonormal=False)
 
     # e will be a error vector, in P_1/2(gram_B)
-    # here, e is with coordinatees -1/2 <= e_i <= 1/2
-    e = vector([QQ.random_element(1, 100)/2 for i in range(dimension)])
+    # here, e is with coordinatees -1/3 <= e_i <= 1/3
+    e = vector([QQ.random_element(1, 100)/3 for i in range(dimension)])
     gram_B = gram_B.transpose()
     e = gram_B * e
 
@@ -33,6 +33,7 @@ def test_babai_nearest_plane(max_dim):
     if x == babai_nearest_plane(B, v):
         return True
     return False
+
 
 def test_multiple_babai(max_dim, nb_test):
     for i in range(nb_test):
