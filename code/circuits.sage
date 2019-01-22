@@ -27,7 +27,8 @@ def evaluation_circuit(circuit, list_arg):
 
     (has_to_be_null, result) = rec_evaluation_circuit(circuit, dict_arg)
     if has_to_be_null != "":
-        error = "The final string of rec_evaluation_circuit should be NULL"
+        error = "The final string of rec_evaluation_circuit should be NULL: "
+        error += has_to_be_null
         raise NameError(error)
 
     return result

@@ -1,7 +1,7 @@
 load("test/framework_test.sage")
 load("internal_functions.sage")
-load("FHE_scheme.sage")
 
+load("FHE_scheme.sage")
 load("circuits.sage")
 load("homomorphic_functions.sage")
 load("clear_functions.sage")
@@ -9,69 +9,6 @@ load("clear_functions.sage")
 
 # global variable used in the algorithms
 decrypt = basic_decrypt
-
-
-# For now, return nothing. May later return the maximum length instead of
-# just printing it
-def test_possible_length_one_var(operator, Lambda, L, decrypt_alg):
-    global decrypt
-    decrypt = decrypt_alg
-
-    if operator not in ['+', '*', '~']:
-        raise NameError("operator should be +, * or ~")
-
-    params = setup(Lambda, L)
-
-    secret = secret_key_gen(params)
-    public_key = public_key_gen(params, secret)
-    secret_key = secret[1]
-    (n, q, distrib, m) = params
-
-    message = ZZ.random_element(0, q)
-    circuit = "pba|"
-    list_arg = [params, message, message]
-    cipher = encrypt(params, public_key, message)
-    list_encrypted_arg = [params, cipher, cipher]
-
-    string = "a"
-    jump = 500
-    iterator = 0
-    result = true
-    # reach limit
-    print(message)
-
-    while result:
-        iterator += jump
-        string = (operator + "pa")*jump + "b"
-
-        expected_result = clear_evaluation_circuit(circuit + string, list_arg)
-        homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
-                                                          list_encrypted_arg)
-        obtained_result = decrypt(params, secret_key, homomorphic_eval)
-        if (obtained_result == expected_result):
-            list_arg[1] = expected_result
-            list_encrypted_arg[1] = homomorphic_eval
-            print(expected_result, iterator)
-        else:
-            result = false
-
-    # search precise limit
-    iterator -= jump
-    string = operator + "pab"
-    result = true
-    for i in range(jump-1):
-        expected_result = clear_evaluation_circuit(circuit + string, list_arg)
-        homomorphic_eval = homomorphic_evaluation_circuit(circuit + string,
-                                                          list_encrypted_arg)
-        obtained_result = decrypt(params, secret_key, homomorphic_eval)
-        if (obtained_result == expected_result):
-            list_arg[1] = expected_result
-            list_encrypted_arg[1] = homomorphic_eval
-        else:
-            print("Maximum length = " + str(iterator + i))
-            return
-    print("Maximum length = " + str(iterator + jump-1))
-    return
 
 
 # output circuits and their names

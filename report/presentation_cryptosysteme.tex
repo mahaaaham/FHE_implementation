@@ -3,7 +3,59 @@
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
 	\begin{subsection}{LWE : Un bref survol}
-		% on le définit, sans trop en dire sur les paramètres 
+	Voici la définition du LWE, telle que donnée dans
+	\cite{C:GenSahWat13} 
+
+	\begin{definition}{Learning with Errors (LWE), version décisionnelle}
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
+	des entiers et $\chi = \chi(\lambda)$ une
+	distribution sur $\ZZ$.
+	Le problème $\LWE$ concisite à devoir distinguer 
+	deux distributions sur $\ZZq^{n+1}$ à partir 
+	de $m = m(\lambda)$ valeurs qu'une des deux à produite.
+	La première distribution crée des vecteurs $(\vec{a}_i,b_i) \in
+	\ZZq^{n+1}$ uniforme.
+	La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré uniformément et 
+	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
+		\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
+	où $e_i$ est crée obtenue par $\chi$.
+	\end{definition}
+
+
+	On peut aussi définir ce problème sous une forme matricielle, les 
+	deux définitions étant équivalentes.
+
+	\begin{definition}{Learning with Errors (LWE), version decisionnelle matricielle}
+	En prenant les paramètres de la précédente définition
+	Le problème $\LWE$ concisite à décider 
+	si une matrice $A \in \ZZq^{m \times (n+1)}$ 
+	est uniforme ou bien si il existe un vecteur $\vec{v} = (1
+	-\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq{m}$ est 
+	crée à partir de $\chi^m$. Autrement dit, si les lignes 
+	de $A$ sont de la forme $(\langle a, \vec{s} \rangle + e \vec{a})$ 
+	pour $e$ créé avec $\chi$.
+	\end{definition}
+
+	Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est
+	possible de réduire le problème LWE à des problèmes sur des réseaux.
+
+	Voyons ici informellement comment réduire LWE à un problème de type 
+	SVP\footnote{short vector problem}. 
+
+	Nous allons ici considérer le problème LWE calculatoire, dans lequel il
+	faut trouver le vecteur $\vec{s}$ tel que:
+
+	\[ A\cdot s = \vec{e} \mod q \]
+	où les coordonnées de $\vec{e}$ sont créées par $\chi$.
+
+	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{s})$ tel
+	que:
+	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
+	   \begin{bmatrix}* \\ \vec{s} \end{bmatrix} =
+	   \begin{bmatrix} \vec{e} \\ \vec{s} \end{bmatrix} \]
+	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on à
+	alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
+	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
 		% on le définit, sans trop en dire sur les paramètres 

@@ -1,3 +1,4 @@
+from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
 # See the article TRUC for an explanation of the notations
 
 # params sont les paramètres généraux du système (n,q,distrib,m).
@@ -15,7 +16,9 @@ Bound_proba = 2
 # the values k param. This make easier to switch to a power of 2 for
 # mp_decrypt
 # name maybe global_l
-global_k = 24
+global_k = 14
+
+decrypt = ""
 
 
 # Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
@@ -28,26 +31,20 @@ global_k = 24
 def setup(Lambda, L):
     global decrypt
     # m,n and k randomly chosen, usually function of Lambda and L
-    n, m = 10, 12
+
+    epsilon = 1.2
+    n, alpha, q = Param.Regev(16)
+    alpha = alpha / 150
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+    # the modulo q will be applied when used, in FHE_scheme.sage
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
 
     if decrypt == mp_decrypt:
-        q = 2^(global_k - 1)
-    else:
-        q = ZZ.random_element(2^(global_k-1), 2^global_k)
+        q = 2^floor(log(q, 2))
 
     # pm_all_q_decrypt need some auxiliary data
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
-
-    # Uniform distribution with support = x in [0,p] such that
-    # |x| < B where |x| is the magnitude of the représentant
-    #  of x in ]-q/2, q/2] for the relation (mod q)
-    #  note that General... Automatically normalize the list
-    #  to make the sum equal to 1
-    # a bound for the distribution!
-    B = Bound_proba
-    probas = [1]*B + [0]*(q-2*B+1) + [1]*(B-1)
-    distrib = GeneralDiscreteDistribution(probas)
     return (n, q, distrib, m)
 
 
@@ -72,7 +69,7 @@ def public_key_gen(params, secret_keys):
 
     B = rand_matrix(Zq, m, n, q)
 
-    error = [Zq(distrib.get_random_element()) for i in range(m)]
+    error = [Zq(distrib()) for i in range(m)]
 
     t = -vector(lwe_key[1:])
     b = B * t + vector(error)
