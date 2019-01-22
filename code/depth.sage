@@ -6,6 +6,7 @@ load("clear_functions.sage")
 # where we put the graphics
 path_pictures = "../report/pictures/"
 
+decrypt = basic_decrypt
 
 # just to create parameters with an n
 def naive_params(n):
@@ -16,7 +17,7 @@ def naive_params(n):
     else:
         q = ZZ.random_element(2^(global_k-1), 2^global_k)
 
-    m = 2 * n * log(q, 2)
+    m = round(2 * n * log(q, 2))
 
     # pm_all_q_decrypt need some auxiliary data
     if decrypt == mp_all_q_decrypt:
@@ -55,13 +56,13 @@ def max_depth(params, operator, decrypt_alg):
     list_encrypted_arg = [params, cipher, cipher]
 
     string = "a"
-    jump = 500
+    jump = 3
     iterator = 0
     result = true
     # reach limit
-    print(message)
 
     while result:
+        print iterator
         iterator += jump
         string = (operator + "pa")*jump + "b"
 
@@ -100,6 +101,8 @@ def graph_max_depth(list_params, operator, decrypt_alg, name_file, legend):
         n = params[0]
         depht = max_depth(params, operator, decrypt_alg)
         array += [(n, depht)]
+        print array
+    print
     g = plot(line(array,
                   legend_label=legend,
                   rgbcolor='blue'))
@@ -110,5 +113,5 @@ def graph_max_depth(list_params, operator, decrypt_alg, name_file, legend):
 def test_graph():
     list_params = [naive_params(n) for n in [4, 8, 16, 32, 64]]
     graph_max_depth(list_params, "~", basic_decrypt, "test_graph",
-                    "légende de test")
+                    "legende de test")
     return

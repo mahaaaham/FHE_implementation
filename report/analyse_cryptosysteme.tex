@@ -107,13 +107,48 @@
 	supposer que $R\cdot A$ est uniforme, et que le chiffrement est donc
 	un one-time pad.
 
-	On en déduit qu'il n'echiste pas d'automate polynomial probabiliste
+	On en déduit qu'il n'existe pas d'automate polynomial probabiliste
 	$\mathcal{A}$ permettant de déchiffrer efficacement les chiffrés de ce cryptosystème.
 	\end{proof}
 	
 	\end{subsection}
 	\begin{subsection}{Choix de paramètres, deux visions}
-		% asymptotique vs concret
+	Le choix des paramètres du système est une étape cruciale de la mise en place de celui-ci,
+	car ce sont eux qui détermineront les degrés de sécurités et la profondeur des circuits calculables.
+	Pour savoir quels paramètres choisir, il existe deux méthodes :
+	
+	Tout d'abord, l'on peut et l'on doit étudier le sujet sur le plan théorique afin de déterminer
+	l'ordre de grandeur des paramètres.
+	
+	Ensuite, l'on peut étudier un certain choix précis de paramètres en essayant de l'attaquer afin
+	d'estimer sa résistance concrète aux attaques.
+	
+	\begin{subsubsection}{lwe\_estimator : une estimation "concrète"}
+	
+	lwe\_estimator est un module de sagemath destiné à estimer la résistance de paramètres précis pour
+	le problème de learning with error. Il permet de facilement construire des paramètres suivant les
+	deux modèles les plus courants, le modèle de Regev et le modèle de LindnerPeikert.
+	
+	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
+	plusieurs attaques. Pour cela, on utilise la fonction estimate\_lwe.
+	
+	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q et rend plusieurs
+	résultats dont le sens n'est pas forcément évident. En fait, il retourne tout un ensemble de
+	variables pour chaque attaque vérifiée. Le module contient 6 attaques différentes, mais n'en testera
+	que trois par defaut. Cela peut être modifié lorsque l'on appelle la fonction estimate_lwe.
+	
+	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
+	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem".
+	
+	"rop" est une estimation du nombre d'opérations à effectuer dans l'anneau afin de résoudre ce cas
+	de LWE avec cette attaque.
+	
+	"mem" est une estimation de la mémoire qui sera exploitée.
+	
+	"m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
+	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
+	lorsqu'on appelle estimate\_lwe.
+	\end{subsubsection}
 	\end{subsection}
 	\begin{subsection}{Analyse asymptotique de la profondeur des circuits}
 		% la preuve de sécurité
