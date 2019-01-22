@@ -4,13 +4,20 @@
 	Soit $X$ et $Y$ deux variables aléatoires supportée par
 	un ensemble $\mathcal{V}$ et à valeur 
 	dans un groupe abélien $G$. On définit la distance 
-	statistique entre $X$ et $Y$, notée $\text{SD}(X,Y)$, 
+	statistique entre $X$ et $Y$, notée $\SD(X,Y)$, 
 	comme étant la somme:
 	\[ \frac{1}{2} \sum_{v \in \mathcal{V}} |\mathbb{P}(X = v) -
 	\mathbb{P}(Y = v)| \]
 
+	% \begin{prop}
+	% Pour $X$ et $Y$ définies comme précédemment, on a:
+	% \[\SD(X,Y) = \max_{\mathcal{W}\subset\mathcal{V}} | \PP(X\in\mathcal{W}) - \PP(Y\in\mathcal{W})| \]
+	% \end{prop}
+	% \begin{proof}
+	% \end{proof}
+
 	\end{definition}
-	\begin{prop}
+	\begin{lemme}
 	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
 	$\mathcal{F} \subset (g_1, \ldots, g_r) \in G^r$, on
 	note
@@ -31,66 +38,79 @@
 		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}} \right) \leq
 		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}}
 	 \]
-	\end{prop}
+	\end{lemme}
 	\begin{proof}
 	\end{proof}
 	\begin{prop}
-		Supposons avoir pris des paramètres $(n, q, \chi, m)$
+	Supposons avoir pris des paramètres $(n, q, \chi, m)$
 	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\epsilon>0$
-	et $m > (1+\epsilon)(n+1)\log(q)$, la distribution jointe 
+	et $m > (1+\epsilon)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe 
 	$(A, RA)$ est calculatoirement indistinguable de la
 	distribution uniforme sur $\ZZq^{m \times (n+1)} \times \ZZq^{N
 	\times (n+1)}$
 	\end{prop}
 	\begin{proof}
-		On voit qu'il suffit de montrer que la distribution $D_{ra} = (A, RA)$ 
-		est indistinguable de de la distribution $D_{u} = (A, U)$ où $U$ est
-		uniforme car, par hypothèse, la distribution $A$ ne peut être distinguée de 
-		la distribution uniforme. 
+	On peut deja voir que comme $A$ est calculatoirement
+	indistinguable de $U$, $(A, RA)$ l'est de $(U,RU)$ car on 
+	peut facilement créer $(A, RA)$ (resp. $(U, RU)$) à partir de
+	$A$ (resp. $U$).
 
-		Supposons donc par absurde qu'il existe un automate $\mathcal{A}$
-		poly-probabiliste distinguant ces deux distributions. On va
-		alors créer un automate $\mathcal{B}$ distinguant  $A_{,\chi}$
-
-		Notons $p_{u}(\mathcal{A})$ (resp. $p_{ra}$) la probabilité que $\mathcal{A}$
-		estime qu'une entrée $(A,U)$ provienne bien de $D_{u}$ (resp.
-		qu'une entrée $(A, RA)$ provienne bien de $D_{ra}$).
-
-		Par hypothèse, il existe un entier $c > 0$ tel que:
-		\begin{equation} |p_u - p_{ra}| > \frac{1}{n^c}\label{eq:sec1}\end{equation}
-
-		Notons de plus, pour un secret $s$,  $p_{u}(s)$ la probabilité
-		que $\mathcal{A}$ estime qu'une entrée $(A,U)$ créée avec le
-		secret $s$ provienne bien de $D_{u}$ (resp.\ estime qu'une
-		entrée $(A,RA)$ créée  avec le secret $s$ provienne bien de 
-		$D_{ra}$).
-
-		On constate que \[\EE_s(p_u(s)) = p_u(s), \quad \EE_s(p_{ra}(s))
-				  = p_{ra}(s) \]
-		Ainsi, on déduit de l'équation~\eqref{eq:sec1} qu'il existe 
-		au moins une fraction $\frac{1}{2n^c}$ de secrets dans
-		l'ensemble:
-		\[ Y = \{ s : \:|p_u(s)) - p_{ra}(s)| \geq \frac{1}{2n^c}\} \]
+	Il nous faut donc monter que $\mathcal{D}_1 = (U, RU)$ est calculatoirement
+	indistinguable de $\mathcal{D}_2 = (U, V)$ où $V$ est uniforme.
 	
-		Comme $\frac{1}{2n^c}$ n'est pas négligeable, on voit qu'il
-		suffit de créer un distingueur entre $D_{u}$ et $D_{ra}$ 
-		restreints aux secrets $s\in Y$. En effet, si un tel
-		distingueur $Z_{Y}$ existe, il suffit de l'utiliser pour 
-		tout échantillon, même ceux crées à partir d'un $s \not\in Y$.
-		Notant \og e = R \fg l'évènement signifiant
-		que l'échantillon deviné provenait de la distribution $R$, on
-		a:
-		On aura alors:
+	On peut alors utiliser le lemme précédent avec $G = \ZZq^{n+1}$
+	et $r = m$ afin de voir qu'il echiste une constante $\lambda > 0$
+	telle que:
+	\[\mathbb{E}_{\mathcal{U}\subset \ZZq^{m\times n+1}}(SD(RU,V)) \leq 
+		\sqrt{m^2\frac{q^{n+1}}{2^m}}\leq \lambda
+	n\log(q)\sqrt{\frac{1}{q^{\epsilon(n+1)}}}=: f(n) \]
+	Et, notant $Y = \{ U: \SD(RU,V) \geq \sqrt{f(n)}\}$, on obtient:
+	\[\PP(U \in Y) \leq \sqrt{f(n)} \]
+	où $f$ est négligeable en $n$. 
 
 
 
+	
+	Soit $(x,y)\in \ZZq^{m \times (n+1)} \times \ZZq^{m \times (n+1)}$
+	\begin{align*}
+	&\left|\PP(D_1 = (x,y)) - \PP(D_2 = (x,y))\right| \\ &\leq \PP(x\in Y)\:
+	\Big|\PP(D_1 
+	= (x,y)| x\in Y) - \PP(D_2 = (x,y)|x\in Y)\Big| + \PP(x \not\in Y)  \\
+	&\leq |\PP(D_1 = (x,y) | x \in Y) - \PP(D_2 = (x,y)|x \in Y)| + \sqrt{f(n)} \\
+	&\leq 2\sqrt{f(n)} 
+	\end{align*}
+	
+	Ainsi, il n'est pas possible qu'un automate $\mathcal{A}$
+	polynomial probabiliste puisse distinguer 
+	$\mathcal{D}_1$ de $\mathcal{D}_2$ car il devrait distinguer
+	des valeurs exponentiellement proches. (A PRECISER)
 	\end{proof}
+
 	\begin{thm}
 	Sous les hypothèses de la proposition précédente, le
-	cryptosystème est IND-CPA.
+	cryptosysteme est IND-CPA.
 	\end{thm}
-	% la preuve de sécurité, sans trop évoquer les paramètres (le
-	% minimum)
+	\begin{proof}
+	Comme un automate polynomial probabiliste ne peut pas distinguer
+	$A_{s, \chi}$ de la distribution uniforme, on peut supposer que la
+	clef publique $A$ est uniforme.
+
+	Considérons alors un chiffré 
+	\[C = \flatten\left(\mu \cdot \id_N + \bitdecomp(R\cdot A)\right) \in
+	\ZZq^{N\times N}\]
+
+	On a:
+	\[ \bitdecomp^{-1}(C) = \mu * \bitdecomp(\id_N) + R\cdot A\]
+
+	Par la proposition précédente, un automate polynomial probabiliste $\mathcal{A}$
+	ne peut pas distinguer $R\cdot A$ d'une matrice uniforme. On peut donc
+	supposer que $R\cdot A$ est uniforme, et que le chiffrement est donc
+	un one-time pad.
+
+	On en déduit qu'il n'echiste pas d'automate polynomial probabiliste
+	$\mathcal{A}$ permettant de déchiffrer efficacement les chiffrés de ce cryptosystème.
+	\end{proof}
+	
 	\end{subsection}
 	\begin{subsection}{Choix de paramètres, deux visions}
 		% asymptotique vs concret
