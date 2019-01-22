@@ -3,6 +3,36 @@ load("circuits.sage")
 load("homomorphic_functions.sage")
 load("clear_functions.sage")
 
+# where we put the graphics
+path_pictures = "../report/pictures/"
+
+
+# just to create parameters with an n
+def naive_params(n):
+    global decrypt
+
+    if decrypt == mp_decrypt:
+        q = 2^(global_k - 1)
+    else:
+        q = ZZ.random_element(2^(global_k-1), 2^global_k)
+
+    m = 2 * n * log(q, 2)
+
+    # pm_all_q_decrypt need some auxiliary data
+    if decrypt == mp_all_q_decrypt:
+        init_mp_all_q_decrypt(q)
+
+    # Uniform distribution with support = x in [0,p] such that
+    # |x| < B where |x| is the magnitude of the représentant
+    #  of x in ]-q/2, q/2] for the relation (mod q)
+    #  note that General... Automatically normalize the list
+    #  to make the sum equal to 1
+    # a bound for the distribution!
+    B = Bound_proba
+    probas = [1]*B + [0]*(q-2*B+1) + [1]*(B-1)
+    distrib = GeneralDiscreteDistribution(probas)
+    return (n, q, distrib, m)
+
 
 # For now, return nothing. May later return the maximum length instead of
 # just printing it
@@ -73,34 +103,8 @@ def graph_max_depth(list_params, operator, decrypt_alg, name_file, legend):
     g = plot(line(array,
                   legend_label=legend,
                   rgbcolor='blue'))
-    g.save("data/" + name_file + ".png")
+    g.save(path_pictures + name_file + ".png")
     return
-
-
-def naive_params(n):
-    global decrypt
-
-    if decrypt == mp_decrypt:
-        q = 2^(global_k - 1)
-    else:
-        q = ZZ.random_element(2^(global_k-1), 2^global_k)
-
-    m = 2 * n * log(q, 2)
-
-    # pm_all_q_decrypt need some auxiliary data
-    if decrypt == mp_all_q_decrypt:
-        init_mp_all_q_decrypt(q)
-
-    # Uniform distribution with support = x in [0,p] such that
-    # |x| < B where |x| is the magnitude of the représentant
-    #  of x in ]-q/2, q/2] for the relation (mod q)
-    #  note that General... Automatically normalize the list
-    #  to make the sum equal to 1
-    # a bound for the distribution!
-    B = Bound_proba
-    probas = [1]*B + [0]*(q-2*B+1) + [1]*(B-1)
-    distrib = GeneralDiscreteDistribution(probas)
-    return (n, q, distrib, m)
 
 
 def test_graph():
