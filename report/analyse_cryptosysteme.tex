@@ -120,43 +120,73 @@
 	Tout d'abord, l'on peut et l'on doit étudier le sujet sur le plan théorique afin de déterminer
 	l'ordre de grandeur des paramètres.
 	
-	Ensuite, l'on peut étudier un certain choix précis de paramètres en essayant de l'attaquer afin
+	Cependant, cette analyse asymptotique est insuffisante pour les cas concrets. Pour palier à ce
+	problème, l'on peut étudier un certain choix précis de paramètres en essayant de l'attaquer afin
 	d'estimer sa résistance concrète aux attaques.
+	
+	\begin{subsubsubsection}{quelques choix de paramètres}
+	 Sachant que sagemath met à disposition des familles de paramètres,
+	dont ceux de Regev et ceux de LindnerPeikert, ce qui évite d'avoir à les calculer soi même.
+		regev, proposé dans machin DIRE QUE C T PAS SI PRECIS , il vaut
+		ci: VALEUR PRECISE
+		linderpeikert:
+	\end{subsubsubsection}
 	
 	\begin{subsubsection}{lwe\_estimator : une estimation "concrète"}
 	
-	lwe\_estimator est un module de sagemath destiné à estimer la
-	résistance face à diverses attaques de paramètres précis pour
-	le problème de learning with error. De plus, il propose aussi des
-	familles de paramètres, dont ceux de Regev et de LindnerPeikert.
+	\path{lwe\_estimator} (SITE WEB https://bitbucket.org/malb/lwe-estimator) est un module de sagemath
+	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
+	le problème de learning with error.
 	
-	\begin{subsubsubsection}{quelques choix de paramètres}
-		regev, proposé dans machin DIRE QUE C T PAS SI PRECIS , il vaut
-		ci: VALEUR PRECISE
-		linderpeikert: 
+	
 	\end{subsubsection}
 	\begin{subsubsubsection}{estimate\_lwe}
 	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
-	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe}.
+	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe} :
 	
-	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q et rend plusieurs
-	résultats dont le sens n'est pas forcément évident. En fait, il retourne tout un ensemble de
-	variables pour chaque attaque vérifiée. Le module contient 6 attaques différentes, mais n'en testera
-	que trois par defaut. Cela peut être modifié lorsque l'on appelle la fonction estimate_lwe.
+	\flushleft
 	
-	METTRE UN LSTLISTING OU TU COPIES UNE SORTIE AVEC UTILISATION
+	\begin{lstlisting}
+estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
+             reduction_cost_model=reduction_default_cost,
+             skip=("mitm", "arora-gb", "bkw"))
+        \end{lstlisting}
+	
+	\flushleft
+	
+	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que
+	d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
+	En fait, elle retourne tout un ensemble de variables pour chaque attaque vérifiée. Le module
+	contient 6 attaques différentes, mais n'en testera que trois par defaut. Cela peut être modifié
+	lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
+	
+	\flushleft
+	
+	\begin{lstlisting}[mathescape=true]
+sage: n, alpha, q = Param.Regev(128)
+sage: costs = estimate_lwe(n, alpha, q)
+usvp: rop: 2^57.7, red: 2^57.7, $\delta$_0: 1.009214, $\beta$: 102, d: 357, m: 228
+ dec: rop: 2^61.5, m: 229, red: 2^61.5, $\delta$_0: 1.009595, $\beta$: 93, d: 357,
+     babai: 2^46.8, babai_op: 2^61.9, repeat: 293, $\epsilon$: 0.015625
+dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 376,
+     |v|: 736.521, repeat: 2^19.0, $\epsilon$: 0.003906
+	\end{lstlisting}
+
+	\flushleft
+	
 	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
-	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem".
+	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem" :
 	
-	FAIRE UN ITEMIZE
-	"rop" est une estimation du nombre d'opérations à effectuer dans l'anneau afin de résoudre ce cas
-	de LWE avec cette attaque.
+	\begin{itemize}
+	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre
+	ce cas de LWE avec cette attaque.
 	
-	"mem" est une estimation de la mémoire qui sera exploitée.
+	\item "mem" (memory) est une estimation de la mémoire qui sera exploitée.
 	
-	"m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
+	\item "m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
 	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
-	lorsqu'on appelle estimate\_lwe.
+	lorsqu'on appelle \path{estimate_lwe}.
+	\end{itemize}
 	\end{subsubsubsection}
 
 
