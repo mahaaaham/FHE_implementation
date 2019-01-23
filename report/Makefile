@@ -2,6 +2,8 @@ all: build clean
 	
 build: report.tex
 	pdflatex report.tex
+	bibtex report
+	pdflatex report.tex
 
 clean:
 	rm -f *.fls *.log *.gz *latexmk *.aux

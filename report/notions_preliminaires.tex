@@ -1,0 +1,101 @@
+\begin{section}{Notions préliminaires}
+	\begin{subsection}{LWE et DLWE}
+	Nous présentons ici les définitions du Learning with Error
+	(LWE) dans leur version décisionnelle et calculatoire.
+	
+	\begin{definition}{Decisional learning with Errors (DLWE), version décisionnelle}
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
+	des entiers et $\chi = \chi(\lambda)$ une
+	distribution sur $\ZZ$.
+	Le problème $\DLWE$ consiste à devoir distinguer 
+	deux distributions sur $\ZZq^{n+1}$ à partir d'un nombre polynomial
+	de $m = m(\lambda)$ d'échantillons qu'une des deux à produite.
+	La première distribution crée des vecteurs $(\vec{a}_i,b_i) \in
+	\ZZq^{n+1}$ uniforme.
+	La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré uniformément et 
+	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
+	où $e_i$ est crée obtenue par $\chi$.
+	\end{definition}
+
+	\begin{definition}{learning with Errors (LWE), version décisionnelle}
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
+	des entiers et $\chi = \chi(\lambda)$ une
+	distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément 
+	et on considère la distribution qui  
+	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
+		\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
+	où $e_i$ est crée obtenue par $\chi$.
+
+	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre
+	polynomial $m = m(\lambda)$ d'échantillons.
+	\end{definition}
+
+	Ces deux problèmes sont en fait \og équivalents \fg. Plus précisément, 
+	le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à
+	DLWE à LWE sous certaines hypothèses lorsque $q$ est premier, et 
+	le théorème 3.1 de \cite{EPRINT:MicPei11} lorsque $q$ est un produit 
+	de petit premier, comme ce sera le cas lorsque nous considèrerons 
+	$q = 2^k$.
+
+	
+	Pour analyser la sécurité du cryptosystème, nous utiliserons le
+	problème $DLWE$. 
+	Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est
+	possible de réduire le problème LWE à des problèmes sur des réseaux.
+
+
+	Indiquons ici de façon informelle comment passer du problème LWE à un 
+	problème de type SVP (short vector problem).
+	Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme
+	matricielle:
+
+	\begin{definition}{versions matricielles de DLWE et LWE}
+	En prenant les paramètres de la précédente définition
+
+	Le problème $\DLWE$ concisite à décider 
+	si une matrice $A \in \ZZq^{m \times (n+1)}$ 
+	est uniforme ou bien si il existe un vecteur $\vec{v} = (1
+	-\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq{m}$ est 
+	crée à partir de $\chi^m$. Autrement dit, si les lignes 
+	de $A$ sont de la forme $(\langle a, \vec{s} \rangle + e \vec{a})$ 
+	pour $e$ créé avec $\chi$.
+
+	Le problème $\LWE$ consiste lui à trouver $\vec{v}$ à partir de $A$.
+	\end{definition}
+
+
+
+	Nous allons ici considérer le problème LWE calculatoire, dans lequel il
+	faut trouver le vecteur $\vec{s}$ tel que:
+
+	\[ A\cdot s = \vec{e} \mod q \]
+	où les coordonnées de $\vec{e}$ sont créées par $\chi$.
+
+	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{s})$ tel
+	que:
+	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
+	   \begin{bmatrix}* \\ \vec{s} \end{bmatrix} =
+	   \begin{bmatrix} \vec{e} \\ \vec{s} \end{bmatrix} \]
+	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on à
+	alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
+	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
+	\end{subsection}
+	\begin{subsection}{La gaussienne discrète}
+	Nous définitions la gaussienne discrète
+	$D_\alpha$ comme l'unique distribution sur $\ZZ$ dont la loi de probabilité 
+	est proportionnelle à :
+	\[ f(k) = e^{-\pi {\left(\frac{k}{\alpha}\right)}^2}\]
+
+	De même, pour $B > 0$, 
+	Nous définitions la gaussienne discrète $B$-bornée $D_{\alpha,B}$ comme l'unique distribution sur $\ZZ$ dont la loi de probabilité 
+	est proportionnelle à :
+	\[ f(k) = \begin{cases}e^{-\pi {\left(\frac{k}{\alpha}\right)}^2}
+	\quad\text{si}\:\: |k| < B \\ 0 \quad \text{sinon}\end{cases}\]
+
+	Pour un entier $q > 0$,  
+	Nous définissions enfin la gaussienne discrète $D^q_{\alpha}$ (resp. discrète
+	$B$-bornée $D^q_{\alpha,B},\: B < q$) modulo un entier $q > 0$ comme la
+	composition de $D_\alpha$ 
+	(resp. $D_{\alpha,B}$) avec la projection sur $\ZZq$.
+	\end{subsection}
+\end{section}

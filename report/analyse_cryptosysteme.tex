@@ -1,5 +1,6 @@
 \begin{section}{Analyse du cryptosystème: sécurité, profondeur des circuits}
 	\begin{subsection}{Sécurité du cryptosystème}
+
 	\begin{definition}{Distance statistique}
 	Soit $X$ et $Y$ deux variables aléatoires supportée par
 	un ensemble $\mathcal{V}$ et à valeur 
@@ -125,58 +126,43 @@
 	d'estimer sa résistance concrète aux attaques.
 	
 	\begin{subsubsection}{Quelques choix de paramètres}
+
 	le module \path{sage.crypto.lwe} contient des choix de paramètres pour
 	le problème LWE, dont deux qui utilisent la gaussienne discrète
 	\footnote{un autre utilise la distribution uniforme}
-	et que nous allons présenter ici.
+	et que nous allons présenter ici. Notons que nous avons pour cela 
+	regardé les codes 
+	sources des fonctions sage, disponibles dans leur github (\cite{sage}).
 
 	\paragraph{}
-	\textbf{Les paramètres de Regev:}
-
+	\textbf{Les paramètres de Regev}
 	\paragraph{}
-		La fonction Regev permet, à partir d'un paramètre $n$, de 
-		créer des paramètres $n, q, \chi$ suivant les recommandations  
-		faites dans \cite{STOC:Regev05} où le théorème~1.1 explique 
-		qu'alors, $\LWE$ se réduit à un problème de réseaux réputé 
-		difficile.
 
-		Plus précisément, pour $n$ donné, il retourne
-		\[q = \text{NextPrime}(n^2), \alpha = \frac{s}{/\sqrt{2*pi.n}} \text{où } s=\frac{1}{\sqrt{n} \log(n)} \]
+	La fonction Regev permet, à partir d'un paramètre $n$, de 
+	créer des paramètres $n, q, \chi$ suivant les recommandations  
+	faites dans \cite{STOC:Regev05} où le théorème~1.1 explique 
+	qu'alors, $\LWE$ se réduit à un problème de réseaux réputé 
+	difficile.
+
+	Plus précisément, pour $n$ donné, il retourne
+	\[q = \text{NextPrime}(n^2), \chi = D^q_\alpha\quad\text{où}\quad \alpha \frac{1}{q\sqrt{n} \log(n)^2}\]
 
 	\begin{lstlisting}
-	Construct LWE instance parameterised by security parameter ``n`` where
-	the modulus ``q`` and the ``stddev`` of the noise are chosen as in
-	[Reg09]_.
-	INPUT:
-	- ``n`` - security parameter (integer > 0)
-	- ``secret_dist`` - distribution of the secret. See documentation of :class:`LWE`
-	  for details (default='uniform')
-	- ``m`` - number of allowed samples or ``None`` if no such limit exists
-	  (default: ``None``)
-	EXAMPLES::
-	    sage: from sage.crypto.lwe import Regev
-	    sage: Regev(n=20)
-	    LWE(20, 401, Discrete Gaussian sampler over the Integers with sigma = 1.915069 and c = 401, 'uniform', None)
-	"""
 	q = ZZ(next_prime(n**2))
 	s = RR(1/(RR(n).sqrt() * log(n, 2)**2) * q)
 	D = DiscreteGaussianDistributionIntegerSampler(s/sqrt(2*pi.n()), q)
 	\end{lstlisting}
 
 	\paragraph{}
-	\textbf{Les paramètres de Lindner et Peiker}
-
+	\textbf{Les parametres de Lindner et Peiker}
 	\paragraph{}
-	\cite{LinPei10a}
-	\begin{lstlisting}
+	Il sont définis dans  \cite{EPRINT:LinPei10a} et on peut voir dans 
+	le listing suivant la façon dont sage crée ces paramètres.
+	\begin{lstlisting}{}
 	- ``n`` - security parameter (integer > 0)
 	- ``delta`` - error probability per symbol (default: 0.01)
 	- ``m`` - number of allowed samples or ``None`` in which case ``m=2*n +
 	  128`` as in [LP2011]_ (default: ``None``)
-	EXAMPLES::
-	    sage: from sage.crypto.lwe import LindnerPeikert
-	    sage: LindnerPeikert(n=20)
-	    LWE(20, 2053, Discrete Gaussian sampler over the Integers with sigma = 3.600954 and c = 0, 'noise', 168)
 	"""
 	if m is None:
 	    m = 2*n + 128
@@ -192,7 +178,8 @@
 	c = find_root(2*n*log(c)+n*(1-c**2) + 40*log(2) == 0, 1, 10)
 	# Upper bound on s**2/t
 	s_t_bound = (sqrt(2) * pi / c / sqrt(2*n*log(2/delta))).n()
-	# Interpretation of "choose q just large enough to allow for a Gaussian parameter s>=8" in [LP2011]_
+	# Interpretation of "choose q just large enough to allow 
+	# for a Gaussian parameter s>=8" in [LP2011]_
 	q = next_prime(floor(2**round(log(256 / s_t_bound, 2))))
 	# Gaussian parameter as defined in [LP2011]_
 	s = sqrt(s_t_bound*floor(q/4))
@@ -201,11 +188,15 @@
 	D   = DiscreteGaussianDistributionIntegerSampler(stddev)
 	LWE.__init__(self, n=n, q=q, D=D, secret_dist='noise', m=m)
 	\end{lstlisting}
+
 	\end{subsubsection}
 
 	\begin{subsubsection}{lwe\_estimator : une estimation "concrète"}
 	
-	\path{lwe\_estimator} (SITE WEB https://bitbucket.org/malb/lwe-estimator) est un module de sagemath
+		Initialement utilisé dans l'article
+		\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
+		(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
+	Martin Albrecht et 
 	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
 	le problème de learning with error.
 	
