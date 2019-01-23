@@ -19,7 +19,9 @@ The following distributions for the secret are supported:
 # Imports
 from collections import OrderedDict
 from functools import partial
-from sage.arith.srange import srange
+# WARNING: we remove this module that wasn't installed in our
+# workspace
+# from sage.arith.srange import srange
 from sage.calculus.var import var
 from sage.functions.log import exp, log
 from sage.functions.other import ceil, sqrt, floor, binomial
@@ -2934,8 +2936,10 @@ def arora_gb(n, alpha, q, secret_distribution=True, m=oo, success_probability=0.
     t = ceil(t/3)
     best = None
     stuck = 0
-    for t in srange(t, n):
-        d = 2*t + 1
+    # WARNING, we replaced srange(t,n) by range(t,n) and 
+    # a conversion of t to sage intergers (ZZ(t))
+    for t in range(t, n):
+        d = 2*ZZ(t) + 1
         C = RR(t/stddev)
         if C < 1:  # if C is too small, we ignore it
             continue

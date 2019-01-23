@@ -125,21 +125,30 @@
 	
 	\begin{subsubsection}{lwe\_estimator : une estimation "concrète"}
 	
-	lwe\_estimator est un module de sagemath destiné à estimer la résistance de paramètres précis pour
-	le problème de learning with error. Il permet de facilement construire des paramètres suivant les
-	deux modèles les plus courants, le modèle de Regev et le modèle de LindnerPeikert.
+	lwe\_estimator est un module de sagemath destiné à estimer la
+	résistance face à diverses attaques de paramètres précis pour
+	le problème de learning with error. De plus, il propose aussi des
+	familles de paramètres, dont ceux de Regev et de LindnerPeikert.
 	
+	\begin{subsubsubsection}{quelques choix de paramètres}
+		regev, proposé dans machin DIRE QUE C T PAS SI PRECIS , il vaut
+		ci: VALEUR PRECISE
+		linderpeikert: 
+	\end{subsubsection}
+	\begin{subsubsubsection}{estimate\_lwe}
 	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
-	plusieurs attaques. Pour cela, on utilise la fonction estimate\_lwe.
+	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe}.
 	
 	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q et rend plusieurs
 	résultats dont le sens n'est pas forcément évident. En fait, il retourne tout un ensemble de
 	variables pour chaque attaque vérifiée. Le module contient 6 attaques différentes, mais n'en testera
 	que trois par defaut. Cela peut être modifié lorsque l'on appelle la fonction estimate_lwe.
 	
+	METTRE UN LSTLISTING OU TU COPIES UNE SORTIE AVEC UTILISATION
 	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
 	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem".
 	
+	FAIRE UN ITEMIZE
 	"rop" est une estimation du nombre d'opérations à effectuer dans l'anneau afin de résoudre ce cas
 	de LWE avec cette attaque.
 	
@@ -148,7 +157,9 @@
 	"m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
 	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
 	lorsqu'on appelle estimate\_lwe.
-	\end{subsubsection}
+	\end{subsubsubsection}
+
+
 	\end{subsection}
 	\begin{subsection}{Analyse asymptotique de la profondeur des circuits}
 		% la preuve de sécurité

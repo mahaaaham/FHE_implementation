@@ -70,6 +70,7 @@ def public_key_gen(params, secret_keys):
     B = rand_matrix(Zq, m, n, q)
 
     error = [Zq(distrib()) for i in range(m)]
+    print(error)
 
     t = -vector(lwe_key[1:])
     b = B * t + vector(error)

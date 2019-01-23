@@ -12,33 +12,6 @@ path_pictures = "../report/pictures/"
 decrypt = basic_decrypt
 
 
-# just to create parameters with an n
-def naive_params(n):
-    global decrypt
-
-    if decrypt == mp_decrypt:
-        q = 2^(global_k - 1)
-    else:
-        q = ZZ.random_element(2^(global_k-1), 2^global_k)
-
-    m = round(2 * n * log(q, 2))
-
-    # pm_all_q_decrypt need some auxiliary data
-    if decrypt == mp_all_q_decrypt:
-        init_mp_all_q_decrypt(q)
-
-    # Uniform distribution with support = x in [0,p] such that
-    # |x| < B where |x| is the magnitude of the représentant
-    #  of x in ]-q/2, q/2] for the relation (mod q)
-    #  note that General... Automatically normalize the list
-    #  to make the sum equal to 1
-    # a bound for the distribution!
-    B = Bound_proba
-    probas = [1]*B + [0]*(q-2*B+1) + [1]*(B-1)
-    distrib = GeneralDiscreteDistribution(probas)
-    return (n, q, distrib, m)
-
-
 def regev_params(n):
     global decrypt
     epsilon = 1.2
@@ -195,21 +168,21 @@ def graph_max_depth(list_params, operator, decrypt_alg, name_file, legend):
     return
 
 
-# max_power is the max k such that n = 2^k
+# max_power is the max k such that n = 2*k
 # typically, parameter_maker = regev_params or lindnerpeikert_params
-def make_graph(min_power, max_power, parameter_maker, decrypt_alg):
+def make_graph(min_value, max_value, parameter_maker, decrypt_alg):
     global decrypt
     decrypt = decrypt_alg
 
     print("Creation of the list of parameters")
-    list_params = [parameter_maker(n) for n in [4*k for k in
-                                                range(min_power, max_power+1)]]
+    list_params = [parameter_maker(n) for n in [2*k for k in
+                                                range(min_value, max_value+1)]]
 
     print("Creation of the graph")
     legend = "Parameters made by" + parameter_maker.__name__
     legend += ", decrypt alg is " + decrypt_alg.__name__
     graph_max_depth(list_params, "~", decrypt_alg,
-                    parameter_maker.__name__ + str(max_power),
+                    parameter_maker.__name__ + str(max_value),
                     legend)
     return
 
