@@ -20,6 +20,30 @@ params_maker = lambda k: baby_version(regev, k)
 
 # different type of parameters generators
 # from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on `sigma_is_stddev`
+
+
+def seal(k):
+    n = 2048
+    q = 2^60 - 2^14 + 1
+    q = (2^60 - 2^14 + 1)^2
+    sigma = 1 / (sqrt(2 * pi))
+    epsilon = 1
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
+    return (n, q, distrib, m)
+
+
+# TESLA, unless for the m
+def tesla(k):
+    n = 804
+    q = 2^31 - 19
+    sigma = 57
+    epsilon = 1
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
+    return (n, q, distrib, m)
+
+
 def regev(k):
     global decrypt
     n = 2^k

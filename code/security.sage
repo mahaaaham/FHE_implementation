@@ -10,7 +10,7 @@ def convert_params(params_maker, n):
 
 
 def all_estimate_lwe(n):
-    for params_maker in [regev, lindnerpeikert, regev_q_is_n_big_power,
+    for params_maker in [seal, tesla, regev, lindnerpeikert, regev_q_is_n_big_power,
                          regev_q_is_n_low_power]:
         string = "--------------    "
         string += "dimension parameter n = " + str(n) + "    params = "
@@ -20,4 +20,6 @@ def all_estimate_lwe(n):
         n, alpha, q, m = convert_params(params_maker, n)
         estimate_lwe(n, alpha, q)
         print("")
+
+    frodo
     return

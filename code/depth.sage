@@ -131,12 +131,16 @@ def lenght_circuit(k, params_maker):
     N = (n+1) * (floor(log(q)) + 1)
     sigma = D.sigma
     B = 10*sigma
+    print(RR(log(q,2)))
+    print(RR(log(B,2)))
+    print(RR(log(N+1,2)))
     L = RR((log(q, 2) - log(B, 2)) / (8 * log(N+1, 2)))
     return floor(L)
 
 
 def all_lenght_circuit(k):
-    for params_maker in [regev, lindnerpeikert, regev_q_is_n_big_power,
+    for params_maker in [seal, tesla, regev, lindnerpeikert,
+                         regev_q_is_n_big_power,
                          regev_q_is_n_low_power]:
         L = lenght_circuit(k, params_maker)
         string = "security parameter k = " + str(k) + "    params = "
