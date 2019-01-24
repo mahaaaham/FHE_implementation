@@ -53,8 +53,8 @@ def test_decrypt_is_inv_encrypt(params, nb_messages, upper_bound):
 # decrypt algorithms
 def test_main_FHE():
     global decrypt
-    Lambda, L = 2, 2
-    nb_test = 50
+    Lambda, L = 5, 2
+    nb_test = 5
 
     # setup of algorithms, transition messages and parameters
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]

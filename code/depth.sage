@@ -1,10 +1,7 @@
-from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
-
 load("FHE_scheme.sage")
 load("circuits.sage")
 load("homomorphic_functions.sage")
 load("clear_functions.sage")
-load("lwe_estimator/estimator.py")
 
 # where we put the graphics
 path_pictures = "../report/pictures/"
@@ -12,65 +9,6 @@ path_pictures = "../report/pictures/"
 decrypt = basic_decrypt
 
 
-def regev_params(n):
-    global decrypt
-    epsilon = 1.2
-    n, alpha, q = Param.Regev(n)
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    # the modulo q will be applied when used, in FHE_scheme.sage
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-
-    else:
-        q = ZZ.random_element(2^(global_k-1), 2^global_k)
-    return (n, q, distrib, m)
-
-
-def big_alpha_regev_params(n):
-    epsilon = 1.2
-    n, alpha, q = Param.Regev(n)
-    alpha = 50 * alpha  # DEBUG
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-
-    # the modulo q will be applied when used, in FHE_scheme.sage
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
-    return (n, q, distrib, m)
-
-
-def medium_alpha_regev_params(n):
-    epsilon = 1.2
-    n, alpha, q = Param.Regev(n)
-    alpha = 19 * alpha  # DEBUG
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-
-    # the modulo q will be applied when used, in FHE_scheme.sage
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
-    return (n, q, distrib, m)
-
-
-def lindnerpeikert_params(n):
-    epsilon = 1.2
-    n, alpha, q = Param.LindnerPeikert(n)
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    # the modulo q will be applied when used, in FHE_scheme.sage
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
-    return (n, q, distrib, m)
-
-
-# For now, return nothing. May later return the maximum length instead of
-# just printing it
 def max_depth(params, operator, decrypt_alg):
     global decrypt
     decrypt = decrypt_alg
@@ -175,8 +113,8 @@ def make_graph(min_value, max_value, parameter_maker, decrypt_alg):
     decrypt = decrypt_alg
 
     print("Creation of the list of parameters")
-    list_params = [parameter_maker(n) for n in [2*k for k in
-                                                range(min_value, max_value+1)]]
+    list_params = [parameter_maker(n) for n in
+                   range(min_value, max_value+1)]
 
     print("Creation of the graph")
     legend = "Parameters made by" + parameter_maker.__name__
@@ -187,8 +125,23 @@ def make_graph(min_value, max_value, parameter_maker, decrypt_alg):
     return
 
 
-def test_graph():
-    list_params = [naive_params(n) for n in [4, 8, 16, 32, 64]]
-    graph_max_depth(list_params, "~", basic_decrypt, "test_graph",
-                    "legende de test")
+# we approximate B by 10 sigma
+def lenght_circuit(k, params_maker):
+    (n, q, D, m) = params_maker(k)
+    N = (n+1) * (floor(log(q)) + 1)
+    sigma = D.sigma
+    B = 10*sigma
+    L = RR((log(q, 2) - log(B, 2)) / (8 * log(N+1, 2)))
+    return floor(L)
+
+
+def all_lenght_circuit(k):
+    for params_maker in [regev, lindnerpeikert, regev_q_is_n_big_power,
+                         regev_q_is_n_low_power]:
+        L = lenght_circuit(k, params_maker)
+        string = "security parameter k = " + str(k) + "    params = "
+        string += params_maker.__name__
+        string += "\nL is: " + str(L)
+        print(string)
+        print("")
     return

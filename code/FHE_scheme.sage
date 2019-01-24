@@ -1,5 +1,7 @@
 from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
-# See the article TRUC for an explanation of the notations
+from sage.crypto.lwe import LindnerPeikert
+from sage.crypto.lwe import Regev
+# See the article TRUC for an explanation of the notations
 
 # params sont les paramètres généraux du système (n,q,distrib,m).
 # On y ajoute Zq afin de ne pas devoir le reconstruire tout le temps
@@ -10,39 +12,103 @@ load("internal_functions.sage")
 load("cvp.sage")
 
 # global parameters:
-# the proba is uniform with possibles values the x such that |x| < Bound_proba
-# We need Bound_proba > 0
-Bound_proba = 2
-# the values k param. This make easier to switch to a power of 2 for
-# mp_decrypt
-# name maybe global_l
-global_k = 14
-
-decrypt = ""
+# I initialise decrypt to a function to avoid an error
+# with some decrypt.__name__ used in some tests
+decrypt = lambda k: None
+params_maker = lambda k: baby_version(regev, k)
 
 
-# Il faut trouver comment définir k, n, distrib et m pour atteindre 2^Lambda
-# de sécurité et une depth de L
-# lambda existe déjà dans sage, d'où la majuscule.
-
-# creation of the setup parameters commonly used by the others functions
-# WARNING: q depends on the choosen decryption algorithm
-# it is a power of 2 if decrypt = mp_decrypt
-def setup(Lambda, L):
+# different type of parameters generators
+# from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on `sigma_is_stddev`
+def regev(k):
     global decrypt
-    # m,n and k randomly chosen, usually function of Lambda and L
-
+    n = 2^k
     epsilon = 1.2
-    n, alpha, q = Param.Regev(16)
-    alpha = alpha / 150
+    regev_obj = Regev(n)
+    distrib = regev_obj.D
+    q = regev_obj.K.characteristic()
     m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    # the modulo q will be applied when used, in FHE_scheme.sage
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma=alpha)
 
     if decrypt == mp_decrypt:
         q = 2^floor(log(q, 2))
+    return (n, q, distrib, m)
 
-    # pm_all_q_decrypt need some auxiliary data
+
+def baby_version(param_maker, k):
+    global decrypt
+    (n, q, distrib, m) = param_maker(k)
+    sigma = distrib.sigma / 100
+    # I follow the "sage convention" to center in q instead of 0
+    # it doesn't change anything
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
+    return (n, q, distrib, m)
+
+
+def regev_q_is_n_big_power(k):
+    global decrypt
+    L = 100
+    n = 2^k
+    q = n^L
+    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
+    epsilon = 1.2
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+
+    if decrypt == mp_decrypt:
+        q = 2^floor(log(q, 2))
+    return (n, q, distrib, m)
+
+
+def regev_q_is_n_low_power(k):
+    global decrypt
+    L = 0.6
+    (n, q, distrib, m) = regev(k)
+    q = floor(n^L)
+    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
+    epsilon = 1.2
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+
+    if decrypt == mp_decrypt:
+        q = 2^floor(log(q, 2))
+    return (n, q, distrib, m)
+
+
+def regev_low_sigma(k):
+    global decrypt
+    L = 50
+    (n, q, distrib, m) = regev(k)
+    q = floor(n^L)
+    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
+    sigma = sigma / n^L
+    epsilon = 1.2
+    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+
+    if decrypt == mp_decrypt:
+        q = 2^floor(log(q, 2))
+    return (n, q, distrib, m)
+
+
+def lindnerpeikert(k):
+    global decrypt
+    n = 2^k
+    epsilon = 1.2
+    lindner_obj = LindnerPeikert(n)
+    distrib = lindner_obj.D
+    q = lindner_obj.K.characteristic()
+
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+
+    if decrypt == mp_decrypt:
+        q = 2^floor(log(q, 2))
+    return (n, q, distrib, m)
+
+
+# creation of the setup parameters commonly used by the others
+# functions, L is not used
+def setup(Lambda, L):
+    (n, q, distrib, m) = params_maker(Lambda)
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
     return (n, q, distrib, m)
@@ -70,7 +136,6 @@ def public_key_gen(params, secret_keys):
     B = rand_matrix(Zq, m, n, q)
 
     error = [Zq(distrib()) for i in range(m)]
-    print(error)
 
     t = -vector(lwe_key[1:])
     b = B * t + vector(error)

@@ -133,7 +133,7 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
 def test_main_circuit():
     global decrypt
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
-    Lambda, L = 2, 2
+    Lambda, L = 5, 2
 
     test_reset()
 
