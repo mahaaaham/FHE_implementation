@@ -17,7 +17,7 @@
 	où $e_i$ est crée obtenue par $\chi$.
 	\end{definition}
 
-	\begin{definition}{learning with Errors (LWE), version décisionnelle}
+	\begin{definition}{learning with Errors (LWE)}
 	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
 	des entiers et $\chi = \chi(\lambda)$ une
 	distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément 
@@ -30,7 +30,8 @@
 	polynomial $m = m(\lambda)$ d'échantillons.
 	\end{definition}
 
-	Ces deux problèmes sont en fait \og équivalents \fg. Plus précisément, 
+	Ces deux problèmes sont en fait \og équivalents \fg. Cela semble facile
+		de LWE vers DLWE. De plus,
 	le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à
 	DLWE à LWE sous certaines hypothèses lorsque $q$ est premier, et 
 	le théorème 3.1 de \cite{EPRINT:MicPei11} lorsque $q$ est un produit 
@@ -54,11 +55,11 @@
 
 	Le problème $\DLWE$ concisite à décider 
 	si une matrice $A \in \ZZq^{m \times (n+1)}$ 
-	est uniforme ou bien si il existe un vecteur $\vec{v} = (1
-	-\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq{m}$ est 
-	crée à partir de $\chi^m$. Autrement dit, si les lignes 
-	de $A$ sont de la forme $(\langle a, \vec{s} \rangle + e \vec{a})$ 
-	pour $e$ créé avec $\chi$.
+	est uniforme ou bien si il existe un vecteur $\vec{v} = (1\quad
+	-\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq^{m}$ est 
+	crée à partir de $\chi^m$. Autrement dit, avec les notations de 
+	la formulation classique de LWE, si les lignes de $A$ sont de la forme
+		$(b_i, \vec{a}_i)$. 
 
 	Le problème $\LWE$ consiste lui à trouver $\vec{v}$ à partir de $A$.
 	\end{definition}
@@ -66,16 +67,16 @@
 
 
 	Nous allons ici considérer le problème LWE calculatoire, dans lequel il
-	faut trouver le vecteur $\vec{s}$ tel que:
+	faut trouver le vecteur $\vec{v}$ tel que:
 
-	\[ A\cdot s = \vec{e} \mod q \]
+	\[ A\cdot \vec{v} = \vec{e} \mod q \]
 	où les coordonnées de $\vec{e}$ sont créées par $\chi$.
 
-	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{s})$ tel
+	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{v})$ tel
 	que:
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
-	   \begin{bmatrix}* \\ \vec{s} \end{bmatrix} =
-	   \begin{bmatrix} \vec{e} \\ \vec{s} \end{bmatrix} \]
+	   \begin{bmatrix}* \\ \vec{v} \end{bmatrix} =
+	   \begin{bmatrix} \vec{e} \\ \vec{v} \end{bmatrix} \]
 	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on à
 	alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]

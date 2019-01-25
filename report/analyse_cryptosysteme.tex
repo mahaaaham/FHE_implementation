@@ -146,7 +146,7 @@
 
 	Plus précisément, pour $n$ donné, il retourne
 	\[q = \text{NextPrime}(n^2), \chi = D^q_\sigma\quad\text{où}\quad
-		\sigma \frac{q}{\sqrt{2 \pi n} \log(n)^2}\]
+		\sigma = \frac{q}{\sqrt{2 \pi n} \log(n)^2}\]
 
 	\begin{lstlisting}
 	q = ZZ(next_prime(n**2))
@@ -257,12 +257,6 @@ dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 3
 	\end{subsection}
 	\begin{subsection}{Analyse asymptotique de la profondeur des circuits}
 
-\begin{align*}
-
-	q/B > 8{(N + 1)}^L &\Leftrightarrow L < \frac{\log(q) - \log(B)}{3 +
-\	log(N+1)} \\
-	\Leftrightarrow  L < \frac{\log(q) - log(10) + log()}
-\end{align*}
 		% la preuve de sécurité
 	\end{subsection}
 	\begin{subsection}{Mise en place du Bootstrapping avec DEC}

@@ -22,10 +22,9 @@ params_maker = lambda k: baby_version(regev, k)
 # from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on `sigma_is_stddev`
 
 
-def seal(k):
+def seal(n):
     n = 2048
     q = 2^60 - 2^14 + 1
-    q = (2^60 - 2^14 + 1)^2
     sigma = 1 / (sqrt(2 * pi))
     epsilon = 1
     m = ceil((1 + epsilon)*(n+1)*log(q, 2))
@@ -34,7 +33,7 @@ def seal(k):
 
 
 # TESLA, unless for the m
-def tesla(k):
+def tesla(n):
     n = 804
     q = 2^31 - 19
     sigma = 57
@@ -44,9 +43,8 @@ def tesla(k):
     return (n, q, distrib, m)
 
 
-def regev(k):
+def regev(n):
     global decrypt
-    n = 2^k
     epsilon = 1.2
     regev_obj = Regev(n)
     distrib = regev_obj.D
@@ -58,9 +56,9 @@ def regev(k):
     return (n, q, distrib, m)
 
 
-def baby_version(param_maker, k):
+def baby_version(param_maker, n):
     global decrypt
-    (n, q, distrib, m) = param_maker(k)
+    (n, q, distrib, m) = param_maker(n)
     sigma = distrib.sigma / 100
     # I follow the "sage convention" to center in q instead of 0
     # it doesn't change anything
@@ -68,10 +66,9 @@ def baby_version(param_maker, k):
     return (n, q, distrib, m)
 
 
-def regev_q_is_n_big_power(k):
+def regev_q_is_n_big_power(n):
     global decrypt
     L = 100
-    n = 2^k
     q = n^L
     sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
     epsilon = 1.2
@@ -83,10 +80,10 @@ def regev_q_is_n_big_power(k):
     return (n, q, distrib, m)
 
 
-def regev_q_is_n_low_power(k):
+def regev_q_is_n_low_power(n):
     global decrypt
     L = 0.6
-    (n, q, distrib, m) = regev(k)
+    (n, q, distrib, m) = regev(n)
     q = floor(n^L)
     sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
     epsilon = 1.2
@@ -98,10 +95,10 @@ def regev_q_is_n_low_power(k):
     return (n, q, distrib, m)
 
 
-def regev_low_sigma(k):
+def regev_low_sigma(n):
     global decrypt
-    L = 50
-    (n, q, distrib, m) = regev(k)
+    L = 30
+    (n, q, distrib, m) = regev(n)
     q = floor(n^L)
     sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
     sigma = sigma / n^L
@@ -114,9 +111,8 @@ def regev_low_sigma(k):
     return (n, q, distrib, m)
 
 
-def lindnerpeikert(k):
+def lindnerpeikert(n):
     global decrypt
-    n = 2^k
     epsilon = 1.2
     lindner_obj = LindnerPeikert(n)
     distrib = lindner_obj.D

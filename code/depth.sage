@@ -126,24 +126,24 @@ def make_graph(min_value, max_value, parameter_maker, decrypt_alg):
 
 
 # we approximate B by 10 sigma
-def lenght_circuit(k, params_maker):
-    (n, q, D, m) = params_maker(k)
+def lenght_circuit(n, params_maker):
+    (n, q, D, m) = params_maker(n)
     N = (n+1) * (floor(log(q)) + 1)
     sigma = D.sigma
     B = 10*sigma
-    print(RR(log(q,2)))
-    print(RR(log(B,2)))
-    print(RR(log(N+1,2)))
-    L = RR((log(q, 2) - log(B, 2)) / (8 * log(N+1, 2)))
+    print(RR(log(q, 2)))
+    print(RR(log(B, 2)))
+    print(RR(log(N+1, 2)))
+    L = RR((log(q, 2) - log(B, 2) - 3) / (log(N+1, 2)))
     return floor(L)
 
 
-def all_lenght_circuit(k):
+def all_lenght_circuit(n):
     for params_maker in [seal, tesla, regev, lindnerpeikert,
                          regev_q_is_n_big_power,
                          regev_q_is_n_low_power]:
-        L = lenght_circuit(k, params_maker)
-        string = "security parameter k = " + str(k) + "    params = "
+        L = lenght_circuit(n, params_maker)
+        string = "security parameter k = " + str(n) + "    params = "
         string += params_maker.__name__
         string += "\nL is: " + str(L)
         print(string)
