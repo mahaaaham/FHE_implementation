@@ -1,0 +1,82 @@
+Somewhat_practical...
+@Misc{EPRINT:FanVer12,
+  author =       "Junfeng Fan and
+                  Frederik Vercauteren",
+  title =        "Somewhat Practical Fully Homomorphic Encryption",
+  year =         2012,
+  howpublished = "Cryptology ePrint Archive, Report 2012/144",
+  note =         "\url{http://eprint.iacr.org/2012/144}",
+}
+
+Il contient les notions de bases sur les FHE ainsi que la présentation d'un FHE
+de seconde génération.
+Il contient des infos sur la façon de faire un algo de déchiffrement homomorphiquement
+
+@InProceedings{STOC:Regev05,
+  author =       "Oded Regev",
+  title =        "On lattices, learning with errors, random linear codes, and cryptography",
+  pages =        "84--93",
+  editor =       stoc05ed,
+  booktitle =    stoc05name,
+  address =      stoc05addr,
+  month =        stoc05month,
+  publisher =    stocpub,
+  year =         2005,
+  doi =          "10.1145/1060590.1060603",
+}
+
+Un des articles "de base" sur le LWE. Il explique des réductions quantiques du LWE vers des 
+problèmes de réseaux. Il contient aussi un cryptosystème symétrique basé sur le LWE 
+avec une démonstration détaillée pour le déchiffrement. Notamment, on y trouve 
+un lemme interessant sur l'impossibilité de distinguer statistiquement une matrice 
+U uniforme d'une matrice RV avec R uniforme dans {0,1} (sauf pour un nombre négligeable de 
+V) (je le dis sous une forme différence que celle qu'il indique,
+Il contient aussi des démos de réduction entre LWE et DLWE (version décisionnelle)
+et des tonnes d'autres choses !
+
+
+How to use a short basis 
+@InProceedings{STOC:GenPeiVai08,
+  author =       "Craig Gentry and
+                  Chris Peikert and
+                  Vinod Vaikuntanathan",
+  title =        "Trapdoors for hard lattices and new cryptographic constructions",
+  pages =        "197--206",
+  editor =       stoc08ed,
+  booktitle =    stoc08name,
+  address =      stoc08addr,
+  month =        stoc08month,
+  publisher =    stocpub,
+  year =         2008,
+  doi =          "10.1145/1374376.1374407",
+}
+
+Informations sur le samplage d'une gaussienne discrete (rejection sampling) 
+Informations sur un choix interessant de borne B pour que qu'une famille de gaussienne 
+soit B bornée.
+
+
+trapdoors for lattices
+@Misc{EPRINT:MicPei11,
+  author =       "Daniele Micciancio and
+                  Chris Peikert",
+  title =        "Trapdoors for Lattices: Simpler, Tighter, Faster, Smaller",
+  year =         2011,
+  howpublished = "Cryptology ePrint Archive, Report 2011/501",
+  note =         "\url{http://eprint.iacr.org/2011/501}",
+}
+Utilisé pour parler de réseaux primitifs, bases sur les réseaux bien expliquées, 
+on y a vu comment faire l'algorithme de décryptage pour tous codés et tous q.
+
+
+on_the_asymptotics..
+@misc{cryptoeprint:2019:009,
+    author = {Qian Guo and Thomas Johansson and Erik Mårtensson and Paul Stankovski Wagner},
+    title = {On the Asymptotics of Solving the LWE Problem Using Coded-BKW with Sieving},
+    howpublished = {Cryptology ePrint Archive, Report 2019/009},
+    year = {2019},
+    note = {\url{https://eprint.iacr.org/2019/009}},
+}
+Ils évoquent en intro les familles d'attaques connues contre LWE, 
+on y a aussi vu que les paramètres de Regev semblent encore 
+utilisés: ils font leurs tests dessus.
