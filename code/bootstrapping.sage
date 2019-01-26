@@ -1,31 +1,66 @@
+load("homomorphic_functions.sage")
+
 # a left shift of SHIFT to the left,
 # the new element of the right are
 # encrypts of 0
 # bonus idea: do not create error vector
 # for the encrypt of the 0 that are
 # added
-def left_shift(list_bit, shift):
+def left_shift(params, public_key, list_bit, shift):
+    list_used = copy(list_bit)
+    for i in range(shift):
+        list_used.append(encrypt(params, public_key, 0))
+        list_used.remove(list_used[0])
+    return list_used
 
 
-# a right shift of SHIFT to the left,
-# the new element of the left are 
-# encrypts of 0 
+# a right shift of SHIFT to the right,
+# the new element of the left are
+# encrypts of 0
 # bonus idea: do not create error vector
 # for the encrypt of the 0 that are
 # added
-def right_shift(list_bit, shift):
+def right_shift(params, public_key, list_bit, shift):
+    list_used = copy(list_bit)
+    for i in range(shift):
+        list_used.insert(0, encrypt(params, public_key, 0))
+        list_used.pop()
+    return list_used
 
-# input: a, b lists of encryptions of 0 and 1, 
-# same size
+
+# input: a, b lists of encryptions of 0 and 1
+# of same size
 # output: the homomorphic sum (modulo 2^(len(a))))
-# commentary: 
+# commentary:
 # It is the classic sum of 2 elements,
 # in the form of list of encrypted 0
 # and 1
-# We ignore any carry propagation beyond the 
-# lenght of a (we need to havelen(a) == len(b))
+# We ignore any carry propagation beyond the
+# lenght of a (we need to have len(a) == len(b))
 # (so it is modulo 2^(len(a))
-def bit_sum(a, b)
+def bit_sum(params, a, b):
+    length = len(a)
+    if (length == 1):
+        return [h_XOR(params, a[0], b[0])]
+    result =[]
+    for i in range(length):
+        # 8 NAND
+        if i == 0:
+            carry1 = h_AND(params, a[length-1], b[length-1])
+            result.insert(0, h_XOR(params, a[length-1], b[length-1]))
+        # 12 NAND
+        elif i == length-1:
+            temp = h_XOR(params, a[0], b[0])
+            result.insert(0, h_XOR(params, temp, carry1))
+        # 19 NAND
+        else:
+            carry2 = h_AND(params, a[length-(i+1)], b[length-(i+1)])
+            temp = h_XOR(params, a[length-(i+1)], b[length-(i+1)])
+            carry3 = h_AND(params, temp, carry1)
+            result.insert(0, h_XOR(params, temp, carry1))
+            carry1 = h_OR(params, carry2, carry3)
+    return result
+
 
 
 # input: a, b, c lists of encryptions of 0 and 1
@@ -34,11 +69,37 @@ def bit_sum(a, b)
 # of same size than a, such that
 # considering the clears decimals values cu, cv, ca..
 # cu + cv = ca + cb + cc mod 2^(len(a))
-def reduction_sum(a, b, c):
+def reduction_sum(params, public_key, a, b, c):
+    length = len(a)
+    if (length == 1):
+        return [h_XOR(params, a[0], b[0])], [c[0]]
+    list1 = []
+    list2 = []
+    for i in range(length):
+        # 12 NAND
+        if i == 0:
+            list2.insert(0, encrypt(params, public_key, 0))
+            xor = h_XOR(params, b[length-1], c[length-1])
+            list1.insert(0, h_XOR(params, a[length-1], xor))
+        # 37 NAND
+        else:
+            xor = h_XOR(params, b[length-(i+1)], c[length-(i+1)])
+            list1.insert(0, h_XOR(params, a[length-(i+1)], xor))
+            temp1 = h_OR(params, a[length-i], b[length-i])
+            temp1 = h_NO(params, temp1)
+            temp2 = h_OR(params, b[length-i], c[length-i])
+            temp2 = h_NO(params, temp2)
+            temp3 = h_OR(params, a[length-i], c[length-i])
+            temp3 = h_NO(params, temp3)
+            xor = h_XOR(params, temp1, temp2)
+            negation = h_XOR(params, xor, temp3)
+            list2.insert(0, h_NO(params, negation))
+    return list1, list2
 
 
-# input: a is a list of encrypted 0 or 1 
-# k is an integer  
+# input: a is a list of encrypted 0 or 1
+# k is an integer
 # output: round(ca / 2^k)
 # where ca is the decimal clear value of a
-def round_division(a, k): 
+def round_division(params, a, k):
+    return

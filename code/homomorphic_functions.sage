@@ -66,7 +66,7 @@ def h_OR(params, cipher1, cipher2):
 def h_XOR(params, cipher1, cipher2):
     inter1 = h_NAND(params, cipher1, cipher2)
     inter2 = h_OR(params, cipher1, cipher2)
-    return h_AND(inter1, inter2)
+    return h_AND(params, inter1, inter2)
 
 
 # declarations of dictionaries used by evaluation_circuit

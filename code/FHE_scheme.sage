@@ -128,6 +128,8 @@ def lindnerpeikert(n):
 # creation of the setup parameters commonly used by the others
 # functions, L is not used
 def setup(Lambda, L):
+    global decrypt
+    decrypt = basic_decrypt
     (n, q, distrib, m) = params_maker(Lambda)
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
