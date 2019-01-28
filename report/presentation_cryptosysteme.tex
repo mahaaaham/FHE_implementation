@@ -1,5 +1,63 @@
 \begin{section}{Présentation du cryptosystème}
 	\begin{subsection}{L'idée générale}
+	L'idée de ce cryptosystme consiste à prendre pour secret un
+	certain vecteur $\vec{v} \in \ZZq^N$ pour certains paramètres
+	$q, N \in \NN$, puis à chiffrer un message $m \in \ZZq$ à
+	l'aide d'une matrice $C \in \ZZq^{N \times N}$ ayant $m$ pour valeur propre 
+	associée au vecteur propre $\vec{v}$. Autrement dit, avec:
+	\[C \cdot \vec{v} = m \vec{v}\: \mod q \]
+
+	De là, il est facile de voir que pour $\lambda \in \ZZ$ et  $C_1$ et $C_2$ 
+	chiffrés de $m_1$ et $m_2$, on a:
+	\begin{align*}
+	& (C_1 + C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} \\
+	& (C_1 \times C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} \\
+	& (\lambda  C_2) \cdot \vec{v} = (\lambda m_1) \vec{v} 
+	\end{align*}
+
+	Toutefois, un tel système n'est pas sécurisé car $C$ n'a qu'un nombre
+	fini de valeurs propres, et il sembledonc facile de 
+	retrouver le secret $\vec{v}$.
+
+	La solution consiste alors à ajouter du bruit au chiffré, c'est à dire
+	à chiffrer $m\in \ZZq$ par une matrice $C \in \ZZ^{N \times N}$
+	telle que:
+	\[ C \vec{v} = m \vec{v} + \vec{e} \]
+	pour une \og petite \fg erreur $\vec{e}$. Si le vecteur
+	$\vec{v}$ contient un grand coefficient $v_i$, on voit alors qu'il 
+	reste possible de retrouver $m$ avec
+	\begin{align*}
+	\frac{{(C \vec{v})}_i}{v_i} = \frac{m + e_i}{v_i}
+	\end{align*}
+	
+		Nous verrons que pour de bons
+	choix de paramètres, déchiffrer un tel message permet de
+	résoudre une instance de LWE.
+
+	Toutefois, l'ajout d'une erreur comporte ses inconvénients. Si nous
+	revenons aux équations précdentes, en introduisant les erreurs 
+	$\vec{e}_i$ pour chiffrer  $m_i$ ($i\in \{1,2\}$), on obtient:
+
+	\begin{align*}
+	& (C_1 + C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} + (\vec{e}_1 + \vec{e}_2)\\
+		& (C_1 \times C_2) \cdot \vec{v} = (m_1 * m_2) \vec{v} + C_1
+		\vec{e}_2 + \vec{e}_1 \\
+	& (\lambda  C_2) \cdot \vec{v} = (\lambda m_1) + \lambda e_i\vec{v} 
+	\end{align*}
+
+	Notamment, on voit que le terme $C_1 * \vec{e}_2$ peut être très grand 
+	mêmê pour un petit $\vec{e}_2$. Nous verrons par la suite comment
+	choisir nos paramètres, et notamment $\vec{v}$, afin de 
+	toujours pouvoir se ramener à des chiffrés $C \in \{0,1\}^{N
+	\times N}$. De cette façon, on aura:
+
+	
+	
+	
+
+
+
+
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}

@@ -10,14 +10,25 @@
 	\[ \frac{1}{2} \sum_{v \in \mathcal{V}} |\mathbb{P}(X = v) -
 	\mathbb{P}(Y = v)| \]
 
+	De plus, on dira que deux familles ${\{X_i\}}_{i \in \NN}$, ${\{Y_i\}}_{i \in \NN}$
+	de distributions sont statistiquement indistinguables si 
+	la fonction 
+	\[ i \longrightarrow \SD(X_i, Y_i) \]
+	est négligeable.
+
 	% \begin{prop}
 	% Pour $X$ et $Y$ définies comme précédemment, on a:
 	% \[\SD(X,Y) = \max_{\mathcal{W}\subset\mathcal{V}} | \PP(X\in\mathcal{W}) - \PP(Y\in\mathcal{W})| \]
 	% \end{prop}
 	% \begin{proof}
 	% \end{proof}
-
 	\end{definition}
+	\begin{prop}
+	Si deux familles de distributions sont statistiquement
+	indistinguables, elles sont calculatoirement indistinguables.
+	\end{prop}
+
+	Le lemme suivant est une légère modification du Claim 5.2 présent dans~\cite{STOC:Regev05}.
 	\begin{lemme}
 	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
 	$\mathcal{F} \subset (g_1, \ldots, g_r) \in G^r$, on
@@ -260,5 +271,13 @@ dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 3
 		% la preuve de sécurité
 	\end{subsection}
 	\begin{subsection}{Mise en place du Bootstrapping avec DEC}
+	Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de
+	déchiffrement \path{dec}, nous allons avoir besoin de
+	l'exprimer uniquement à partir d'opérations \path{NAND} sur des 
+	$0$ et des $1$. 
+
+	Pour cela, nous considèrerons la décomposition binaire du secret.
+
+
 	\end{subsection}
 \end{section}

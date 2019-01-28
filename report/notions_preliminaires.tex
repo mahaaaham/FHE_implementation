@@ -16,6 +16,8 @@
 	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
 	où $e_i$ est crée obtenue par $\chi$.
 	\end{definition}
+	Notons qu'alors, $n = O(P(\lambda), \log(q) = O(P(\lambda))$ 
+	Pour un polynome $P$.
 
 	\begin{definition}{learning with Errors (LWE)}
 	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
@@ -31,14 +33,49 @@
 	\end{definition}
 
 	Ces deux problèmes sont en fait \og équivalents \fg. Cela semble facile
-		de LWE vers DLWE. De plus,
+	de LWE vers DLWE. De plus, 
 	le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à
-	DLWE à LWE sous certaines hypothèses lorsque $q$ est premier, et 
+	DLWE à LWE sous certaines hypothèses lorsque $q$ est premier,
+	$q = O(\text{poly}(n))$, plus
+	polynomial en $n$ , et 
 	le théorème 3.1 de \cite{EPRINT:MicPei11} lorsque $q$ est un produit 
-	de petit premier, comme ce sera le cas lorsque nous considèrerons 
+	de premiers $p_i \in O(\text{poly}(n))$, comme ce sera le cas lorsque 
+	nous considèrerons 
 	$q = 2^k$.
 
-	
+	Voyons par exemple le cas (plus facile) où $q$ est premier:
+
+	\begin{prop}{DWLE vers LWE}
+	Soit $n \geq 1$ un entier, $2 \leq q \leq \text{poly}(n)$ un
+	nombre premier et $\chi$ une distribution sur $\ZZq$.
+	Supposons avoir accés à un automate $\mathcal{W}$ qui accepte 
+	avec une probabilité exponentiellement proche de 1 les 
+	distributions $A_{s, \xi}$ et rejete avec une probabilité
+	exponentiellement proche de 1 la distributions uniforme $U$.
+
+	Il existe alors un automate $\mathcal{W}$ qui, étant donné 
+	des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$,
+	retrouve $s$ avec une probabilité exponentiellement proche de $1$.
+	\end{prop}
+	\begin{proof}
+	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}
+	L'automate $W'$ va trouver $s$ coordoonée par coordonnée.  
+	Montrons comment $W'$ obtient la première coordonnée $s_1$.
+
+	Pour $k \in \ZZq$, on considère la fonction:
+	\[f_k: (a,b) \mapsto (a + (l, 0, \cdots, 0), b + l \cdot k) \]
+	pour $l\in \ZZq$ échantilloné uniformément sur $\ZZq$.
+
+	$f_k$ appliqué à un échantillon uniforme donne un échantillon 
+	uniforme tandis qu'appliqué à un échantillon de $A_{s, \chi}$,
+	il donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme 
+	sinon.
+
+	On peut faire une recherche exhaustive sur les $k \in \ZZq$ 
+	jusqu'à en trouver un accepté par $W$. Ce qui se fait 
+	en temps polynomial car $p < \text{poly}(n)$
+	\end{proof}
+
 	Pour analyser la sécurité du cryptosystème, nous utiliserons le
 	problème $DLWE$. 
 	Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est
@@ -81,22 +118,35 @@
 	alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 	\end{subsection}
-	\begin{subsection}{La gaussienne discrète}
-	Nous définitions la gaussienne discrète
-	$D_\alpha$ comme l'unique distribution sur $\ZZ$ dont la loi de probabilité 
-	est proportionnelle à :
-	\[ f(k) = e^{-\pi {\left(\frac{k}{\alpha}\right)}^2}\]
 
-	De même, pour $B > 0$, 
-	Nous définitions la gaussienne discrète $B$-bornée $D_{\alpha,B}$ comme l'unique distribution sur $\ZZ$ dont la loi de probabilité 
-	est proportionnelle à :
-	\[ f(k) = \begin{cases}e^{-\pi {\left(\frac{k}{\alpha}\right)}^2}
-	\quad\text{si}\:\: |k| < B \\ 0 \quad \text{sinon}\end{cases}\]
+	\begin{subsection}{La gaussienne discrète}
+	Nous reprenons ici \cite{STOC:GenPeiVai08}
+	Soit un entier $n > 0$  et $\sigma > 0$. On définit la densité
+	gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$
+	attribue:
+
+	\[\rho_{s,c}(x) = e^{\phi * {\frac{||x-c||}{s}}^2} \]
+
+	Puis, pour un réseau $\Lambda \in \RR^n$ Nous définissons la gaussienne discrète
+	$D_\alpha$ comme la distribution de support $\Lambda$ de loi de
+	probabilité: 	
+	\[ D_{\Lambda, s, c}(x) = \frac{\rho_{s,c}(x)}{\sum_{l\in \Lambda}\rho_{s,c}(l)}\]
+	
+
 
 	Pour un entier $q > 0$,  
-	Nous définissions enfin la gaussienne discrète $D^q_{\alpha}$ (resp. discrète
-	$B$-bornée $D^q_{\alpha,B},\: B < q$) modulo un entier $q > 0$ comme la
-	composition de $D_\alpha$ 
-	(resp. $D_{\alpha,B}$) avec la projection sur $\ZZq$.
+	Nous définissions enfin la gaussienne discrète $D^q_{\alpha}$ modulo un entier $q > 0$ comme la
+		composition la fonction qui a $x \in \ZZq$ attribue   
+		\[ D_{\ZZ, s, c}(\pi^{-1}(x)) \]
+	où $\pi$ est la projection $\ZZ \rightarrow \ZZq$.
+
+	Le lemme 4.2 de \cite{STOC:GenPeiVai08}:
+	\begin{prop}
+	Pour tout $\epsilon > 0$ , $s \geq \eta_{\epsilon}(\ZZ)$ et tout
+	$t>0$:
+	\[ \PP\left(|x-c| \geq t\cdot s\right) \leq 2 e^{-\pi t^2}
+	\cdot \frac{1+\epsilon}{1-\epsilon} \]
+	Notamment, pour $0 < \epsilon  < 1/2$ et $t \geq \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
+	\end{prop}
 	\end{subsection}
 \end{section}
