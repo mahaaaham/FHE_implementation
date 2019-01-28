@@ -94,6 +94,35 @@ def reduction_sum(params, public_key, a, b, c):
     return list1, list2
 
 
+# a clear reduction_sum
+def clear_reduction_sum(params, public_key, a, b, c):
+    length = len(a)
+    if (length == 1):
+        return [c_XOR(params, a[0], b[0])], [c[0]]
+    list1 = []
+    list2 = []
+    for i in range(length):
+        # 12 NAND
+        if i == 0:
+            list2.insert(0, encrypt(params, public_key, 0))
+            xor = c_XOR(params, b[length-1], c[length-1])
+            list1.insert(0, c_XOR(params, a[length-1], xor))
+        # 37 NAND
+        else:
+            xor = c_XOR(params, b[length-(i+1)], c[length-(i+1)])
+            list1.insert(0, c_XOR(params, a[length-(i+1)], xor))
+            temp1 = c_OR(params, a[length-i], b[length-i])
+            temp1 = c_NO(params, temp1)
+            temp2 = c_OR(params, b[length-i], c[length-i])
+            temp2 = c_NO(params, temp2)
+            temp3 = c_OR(params, a[length-i], c[length-i])
+            temp3 = c_NO(params, temp3)
+            xor = c_XOR(params, temp1, temp2)
+            negation = c_XOR(params, xor, temp3)
+            list2.insert(0, c_NO(params, negation))
+    return list1, list2
+
+
 # input: a is a list of encrypted 0 or 1
 # k is an integer
 # output: round(ca / 2^k)
