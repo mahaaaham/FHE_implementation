@@ -19,7 +19,8 @@ def left_shift(params, public_key, list_bit, shift):
 # for the encrypt of the 0 that are
 # added
 def right_shift(params, public_key, list_bit, shift):
-    return [encrypt(params, public_key, 0) for i in range(shift)] + list_bit[:-shift]
+    return [encrypt(params, public_key, 0)
+            for i in range(shift)] + list_bit[:-shift]
 
 
 # input: a, b lists of encryptions of 0 and 1
@@ -121,11 +122,3 @@ def clear_reduction_sum(params, public_key, a, b, c):
             negation = c_XOR(params, xor, temp3)
             list2.insert(0, c_NO(params, negation))
     return list1, list2
-
-
-# input: a is a list of encrypted 0 or 1
-# k is an integer
-# output: round(ca / 2^k)
-# where ca is the decimal clear value of a
-def round_division(params, a, k):
-    return
