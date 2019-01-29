@@ -36,12 +36,22 @@ def h_multiplication(params, cipher1, cipher2):
 
 # the homomorphic NAND of two ciphers of messages in {0,1}
 def h_NAND(params, cipher1, cipher2):
+    global actual_nb_op
     n, q = params[0], params[1]
     l = floor(log(q, 2)) + 1
     N = (n+1)*l
-    Zq = parent(cipher1[0][0])
+    Zq = Integers(q)
     Id = identity_matrix(Zq, N)
-    return mat_flatten(Id - cipher1*cipher2)
+    C = mat_flatten(Id - cipher1*cipher2)
+
+    # ACTUELLEMENT CA POSE UN PB CAR LE BOOTSTRAPPING
+    # UTILISE DES NANDS
+    # if with_bootstrapping is True:
+    #     if actual_nb_op < nb_op_before_bootstraping:
+    #         actual_nb_op += 1
+    #     else:
+    #         C = bootstrapping(C)
+    return C
 
 
 # the homomorphic NO of a cipher of message in {0,1}
