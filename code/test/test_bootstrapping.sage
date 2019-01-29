@@ -94,7 +94,7 @@ def test_h_reduction_sum(nb_test, len_test):
         # the clear values with the expected result
         clear_list = [[ZZ.random_element(0, 2) for i in range(len_test)]
                       for j in range(3)]
-        expected_result = sum([ZZ(clear_list[j], 2) for j in range(3)])
+        expected_result = mod(sum([ZZ(clear_list[j], 2) for j in range(3)]), 2^len_test)
 
         # the encrypt values with reduction_sum, that we decrypt
         # to see if the sum give the expected result
@@ -109,7 +109,8 @@ def test_h_reduction_sum(nb_test, len_test):
                       for elt in reduced1]
         c_reduced2 = [basic_decrypt(params, secret_key, elt)
                       for elt in reduced2]
-        result = ZZ(c_reduced1, 2) + ZZ(c_reduced2, 2)
+        result = mod(ZZ(c_reduced1, 2) + ZZ(c_reduced2, 2), 2^len_test)
+
         if result != expected_result:
             return False
     return True
