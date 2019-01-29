@@ -115,7 +115,6 @@ def h_right_shift(params, public_key, list_bit, shift):
 # lenght of a (we need to have len(a) == len(b))
 # (so it is modulo 2^(len(a))
 def h_bit_sum(params, a, b):
-    print("h_bit_sum")
     d_XOR = lambda u, v: h_XOR(params, u, v)
     d_NAND = lambda u, v: h_NAND(params, u, v)
     d_AND = lambda u, v: h_AND(params, u, v)
