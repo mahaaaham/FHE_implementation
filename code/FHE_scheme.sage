@@ -24,8 +24,8 @@ bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
-bs_lambda = 5
-bs_sum_algo = lambda list_to_sum: h_naive_classic_list_sum(list_to_sum)
+bs_lambda = 7
+bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators
 # from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on
@@ -53,7 +53,7 @@ def tesla(n):
 
 
 def no_error(n):
-    q = 2*n
+    q = 2^(floor(log(2*n, 2)))
     epsilon = 1
     m = ceil((1 + epsilon)*(n+1)*log(q, 2))
     distrib = DiscreteGaussianDistributionIntegerSampler(10^(-20), q)
@@ -143,9 +143,9 @@ def lindnerpeikert(n):
 
 
 # creation of the setup parameters commonly used by the others
-# functions, L is not used
+# functions
 # also: modify bs_params
-def setup(Lambda, L):
+def setup(Lambda):
     global decrypt
     global bs_params
     (n, q, distrib, m) = params_maker(Lambda)

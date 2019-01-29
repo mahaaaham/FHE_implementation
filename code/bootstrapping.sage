@@ -2,6 +2,10 @@ load("homomorphic_functions.sage")
 load("FHE_scheme.sage")
 load("internal_functions.sage")
 
+# WARNING: for the bootstrapping, q
+# has to be a power of 2, and
+# the decrypt algorithm
+# is basic_decrypt
 
 # create new params:
 # the global variables bs_params
@@ -10,13 +14,15 @@ load("internal_functions.sage")
 # also, the secret_key of the previous params
 # is coded using these news params.
 # input: the lwe_key of the previous params
+# output encrypted_sk, in the format:
+# [[size l], [size l] ...]
 def setup_bootstrapping(lwe_key):
     global bs_params
     global bs_pk
     global bs_sk
     global bs_lk
 
-    bs_params = setup(bs_lambda, 3)
+    bs_params = setup(bs_lambda)
 
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
@@ -34,10 +40,10 @@ def setup_bootstrapping(lwe_key):
     # using the encrypted_lwe_key, we create the encrypted_sk
     # that consist of N elements, and each element is a list
     # of size l
-    encrypted_sk = []
-    for elt in encrypted_lwe_key:
-        encrypted_sk += [h_left_shift(bs_params, bs_pk, elt, k) for k in
-                         range(l)]
+    encrypted_sk = [h_right_shift(bs_params, bs_pk, elt, k)
+                    for elt in encrypted_lwe_key
+                    for k in range(l)]
+
     if (len(encrypted_sk) != N) or (len(encrypted_sk[0]) != l):
         error = "setup_bootstraping: wrong size of encrypted_sk"
         raise NameError(error)
@@ -65,19 +71,12 @@ def bootstrapping(cipher):
                    centered_ZZ(2^j, q) > (q / 4))
 
     bin_ci = bit_decomp(cipher[i_index])
-
-    # bad idea for memory reasons, but easy to understand
-    # and also easier to try different algorithms to make the
-    # sum
-
     # list_to_sum contains the s_k[j]2^u such that the uth term of
     # the binary decomposition of ci[j] is 1
-    print("before list to sum")
-    list_to_sum = [h_left_shift(bs_params, bs_pk, encrypted_sk[i], u)
-                   for i in range(N)
-                   for u in range(l) if bin_ci[l*i + u] == 1]
+    list_to_sum = [h_right_shift(bs_params, bs_pk, encrypted_sk[i], u)
+                   for i in range(N) for u in range(l)
+                   if bin_ci[l*i + u] == 1]
 
-    print("before scalar product")
     scalar_product = bs_sum_algo(list_to_sum)
     return scalar_product[i_index]
 
@@ -89,6 +88,8 @@ def bootstrapping(cipher):
 # for the encrypt of the 0 that are
 # added
 def h_left_shift(params, public_key, list_bit, shift):
+    if shift == 0:
+        return list_bit
     return list_bit[shift:] + [encrypt(params, public_key, 0) for i in
                                range(shift)]
 
@@ -100,6 +101,8 @@ def h_left_shift(params, public_key, list_bit, shift):
 # for the encrypt of the 0 that are
 # added
 def h_right_shift(params, public_key, list_bit, shift):
+    if shift == 0:
+        return list_bit
     return [encrypt(params, public_key, 0)
             for i in range(shift)] + list_bit[:-shift]
 
@@ -123,6 +126,10 @@ def h_bit_sum(params, a, b):
     if len(a) != len(b):
         error = "h_bit_sum: a and b should have the same length"
         raise NameError(error)
+    if len(a) == 0:
+        error = "h_bit_sum: a and b shouldn't be empty"
+        raise NameError(error)
+
     lenght = len(a)
 
     result = []
@@ -176,35 +183,6 @@ def h_reduction_sum(params, public_key, a, b, c):
     return list1, list2
 
 
-# a clear reduction_sum
-def c_reduction_sum(params, public_key, a, b, c):
-    length = len(a)
-    if (length == 1):
-        return [c_XOR(params, a[0], b[0])], [c[0]]
-    list1 = []
-    list2 = []
-    for i in range(length):
-        # 12 NAND
-        if i == 0:
-            list2.append(encrypt(params, public_key, 0))
-            xor = c_XOR(params, b[0], c[0])
-            list1.append(c_XOR(params, a[0], xor))
-        # 37 NAND
-        else:
-            xor = c_XOR(params, b[i], c[i])
-            list1.append(c_XOR(params, a[i], xor))
-            temp1 = c_OR(params, a[i-1], b[i-1])
-            temp1 = c_NO(params, temp1)
-            temp2 = c_OR(params, b[i-1], c[i-1])
-            temp2 = c_NO(params, temp2)
-            temp3 = c_OR(params, a[i-1], c[i-1])
-            temp3 = c_NO(params, temp3)
-            xor = c_XOR(params, temp1, temp2)
-            negation = c_XOR(params, xor, temp3)
-            list2.append(c_NO(params, negation))
-    return list1, list2
-
-
 def h_naive_classic_list_sum(list_to_sum):
     print("len of list_to_sum = " + str(len(list_to_sum)))
     if len(list_to_sum) == 0:
@@ -219,11 +197,11 @@ def h_naive_classic_list_sum(list_to_sum):
     for elt in list_to_sum[1:]:
         result = h_bit_sum(bs_params, result, elt)
         cpt += 1
-        print(str(cpt))
     return result
 
 
 def h_naive_reduction_list_sum(list_to_sum):
+    print("len of list_to_sum = " + str(len(list_to_sum)))
     if len(list_to_sum) == 0:
         (n, q, distrib, m) = bs_params
         l = floor(log(q, 2)) + 1
@@ -238,6 +216,7 @@ def h_naive_reduction_list_sum(list_to_sum):
 
 
 def h_balanced_classic_list_sum(list_to_sum):
+    print("len of list_to_sum = " + str(len(list_to_sum)))
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
 
@@ -248,11 +227,9 @@ def h_balanced_classic_list_sum(list_to_sum):
         return list_to_sum[0]
     elif len(list_to_sum) == 2:
         if list_to_sum[0] == -1:
-            print("-1!")
             # this can be -1
             return list_to_sum[1]
         elif list_to_sum[1] == -1:
-            print("-1!")
             return list_to_sum[0]
         else:
             return h_bit_sum(bs_params, list_to_sum[0], list_to_sum[1])
@@ -261,7 +238,6 @@ def h_balanced_classic_list_sum(list_to_sum):
     to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
     list_to_sum += [-1]*to_fill
 
-    print(len(list_to_sum))
     # we end if there is only two elements on the filled list
     lenght_list = len(list_to_sum)
     first_list = list_to_sum[:lenght_list//2]

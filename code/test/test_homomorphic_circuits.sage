@@ -208,18 +208,17 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
 def test_main_circuit():
     global decrypt
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
-    Lambda, L = 5, 2
+    Lambda = 5
 
     test_reset()
 
-    big_transition_message("Lambda = " + str(Lambda) +
-                           ", L = " + str(L))
+    big_transition_message("Lambda = " + str(Lambda))
 
     for alg in algorithms:
         decrypt = alg
         big_transition_message("With the algorithm of decryption " +
                                alg.__name__ + ":\n")
-        params = setup(Lambda, L)
+        params = setup(Lambda)
         basic_circuits, composed_circuits = make_lists_circuits(params)
         test_circuits(params, basic_circuits, alg)
         test_circuits(params, composed_circuits, alg)
