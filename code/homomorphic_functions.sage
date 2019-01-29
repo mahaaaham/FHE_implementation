@@ -61,8 +61,8 @@ def h_NO(params, cipher):
 
 # the homomorphic AND of two ciphers of messages in {0,1}
 def h_AND(params, cipher1, cipher2):
-    negation = h_NAND(params, cipher1, cipher2)
-    return h_NO(params, negation)
+    hnand = h_NAND(params, cipher1, cipher2)
+    return h_NO(params, hnand)
 
 
 # the homomorphic OR of two ciphers of messages in {0,1}
@@ -74,9 +74,9 @@ def h_OR(params, cipher1, cipher2):
 
 # the homomorphic XOR of two ciphers of messages in {0,1}
 def h_XOR(params, cipher1, cipher2):
-    inter1 = h_NAND(params, cipher1, cipher2)
-    inter2 = h_OR(params, cipher1, cipher2)
-    return h_AND(params, inter1, inter2)
+    hnand = h_NAND(params, cipher1, cipher2)
+    hor = h_OR(params, cipher1, cipher2)
+    return h_AND(params, hor, hnand)
 
 
 # declarations of dictionaries used by evaluation_circuit

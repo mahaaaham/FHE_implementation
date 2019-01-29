@@ -24,7 +24,7 @@ bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
-bs_lambda = 7
+bs_lambda = 5
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators

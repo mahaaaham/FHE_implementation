@@ -248,4 +248,4 @@ def h_balanced_classic_list_sum(list_to_sum):
 
 def bootstrapping_arguments(list_cipher):
     encrypted_sk = encrypt_secret_key(bs_lk)
-    return [h_basic_decrypt(encrypted_sk, cipher) for cipher in list_cipher]
+    return [h_basic_decrypt(encrypted_sk, c) for c in list_cipher]
