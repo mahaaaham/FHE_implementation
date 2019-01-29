@@ -56,7 +56,7 @@ def centered_ZZ(a, q):
     return a
 
 
-# a is a list of k elements of Zq (Z/Zq)
+# a is a list of elements of Zq (Z/Zq)
 def bit_decomp(a):
     Zq = parent(a[0])
     q = Zq.characteristic()

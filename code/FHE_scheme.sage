@@ -1,7 +1,7 @@
 from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
 from sage.crypto.lwe import LindnerPeikert
 from sage.crypto.lwe import Regev
-# See the article TRUC for an explanation of the notations
+# See the article TRUC for an explanation of the notations
 
 # params sont les paramètres généraux du système (n,q,distrib,m).
 # On y ajoute Zq afin de ne pas devoir le reconstruire tout le temps
@@ -14,13 +14,22 @@ load("cvp.sage")
 # global parameters:
 # I initialise decrypt to a function to avoid an error
 # with some decrypt.__name__ used in some tests
-decrypt = lambda k: None
-params_maker = lambda k: baby_version(regev, k)
+decrypt = lambda n: None
+params_maker = lambda n: no_error(n)
+with_bootstrapping = False
+nb_op_before_bootstraping = 1
+actual_nb_op = 0
 
+bs_params = None
+bs_pk = None
+bs_sk = None
+bs_lk = None
+bs_lambda = 2
+bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators
-# from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on `sigma_is_stddev`
-
+# from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on
+# `sigma_is_stddev`
 
 def seal(n):
     n = 2048
@@ -43,6 +52,15 @@ def tesla(n):
     return (n, q, distrib, m)
 
 
+def no_error(n):
+    n = 10
+    q = n^2
+    epsilon = 1
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+    distrib = DiscreteGaussianDistributionIntegerSampler(0.000000001, q)
+    return (n, q, distrib, m)
+
+
 def regev(n):
     global decrypt
     epsilon = 1.2
@@ -59,7 +77,7 @@ def regev(n):
 def baby_version(param_maker, n):
     global decrypt
     (n, q, distrib, m) = param_maker(n)
-    sigma = distrib.sigma / 100
+    sigma = distrib.sigma / 100000
     # I follow the "sage convention" to center in q instead of 0
     # it doesn't change anything
     distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
@@ -127,30 +145,40 @@ def lindnerpeikert(n):
 
 # creation of the setup parameters commonly used by the others
 # functions, L is not used
+# also: modify bs_params
 def setup(Lambda, L):
     global decrypt
-    decrypt = basic_decrypt
+    global bs_params
     (n, q, distrib, m) = params_maker(Lambda)
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
-    return (n, q, distrib, m)
+    bs_params = (n, q, distrib, m)
+    return bs_params
 
 
 # creation of the lwe_key and secret key with the setups parameters
 # created by the function setup
+# also: modify bs_lk and bs_sk
 def secret_key_gen(params):
+    global bs_sk
+    global bs_lk
+
     (n, q, distrib, m) = params
     Zq = Integers(q)
 
     t = random_vector(Integers(q), n)
     lwe_key = list(Sequence([1] + list(-t), Zq))
     secret_key = powers_of_2(lwe_key)
+
+    bs_lk, bs_sk = lwe_key, secret_key
     return [lwe_key, secret_key]
 
 
 # creation of the public key with the setups parameters
 # created by the function setup and the secret key
+# also: modify bs_pk
 def public_key_gen(params, secret_keys):
+    global bs_pk
     (n, q, distrib, m) = params
     (lwe_key, secret_key) = secret_keys
     Zq = Integers(q)
@@ -167,6 +195,7 @@ def public_key_gen(params, secret_keys):
         error = "We should have pk * lwe_key = error!"
         raise NameError(error)
 
+    bs_pk = public_key
     return public_key
 
 
