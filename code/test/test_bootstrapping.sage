@@ -150,5 +150,5 @@ def test_main_bootstrapping():
         result = test_bootstrapping()
         if result is False:
             return False
-    conclusion_message("with Lambda = " + str(Lambda) + ", L = " + str(L))
+    conclusion_message("with Lambda = " + str(bs_lambda) + ", L = " + str(L))
     return True
