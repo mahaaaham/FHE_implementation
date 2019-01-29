@@ -116,6 +116,32 @@ def test_h_reduction_sum(nb_test, len_test):
     return True
 
 
+# test to make the binary sum of NB_ELT elements
+# of binary size BIN_SIZE with the algorithm algo
+def test_sum_list(nb_elt, bin_size, algo):
+    params = setup(bs_lambda, 0)
+    Zq = Integers(params[1])
+    secret_keys = secret_key_gen(params)
+    secret_key = secret_keys[1]
+    public_key = public_key_gen(params, secret_keys)
+
+    clear_list = [[ZZ.random_element(0, 2) for i in range(bin_size)]
+                  for j in range(nb_elt)]
+    clear_sum = sum([ZZ(clear_list[i], 2) for i in range(nb_elt)])
+    clear_sum %= 2^(bin_size)
+
+    crypted_list = [[encrypt(params, public_key, clear_list[j][i])
+                     for i in range(bin_size)] for j in range(nb_elt)]
+    crypted_sum = algo(crypted_list)
+    decrypted_sum = [basic_decrypt(params, secret_key, elt)
+                     for elt in crypted_sum]
+    decrypted_sum = ZZ(decrypted_sum, 2)
+
+    if clear_sum != decrypted_sum:
+        return False
+    return True
+
+
 def test_bootstrapping():
     setup(bs_lambda, 0)
     (n, q, distrib, m) = bs_params
