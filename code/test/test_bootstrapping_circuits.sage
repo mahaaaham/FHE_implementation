@@ -12,8 +12,7 @@ def first_circuit():
     public_key_gen(bs_params, [bs_lk, bs_sk])
 
     d_NAND = lambda a, b: h_NAND(bs_params, a, b)
-    nand = lambda a, b: not (a and b)
-    xor = lambda a, b: (a and (not b)) or ((not a) and b)
+    nand = lambda a, b: (not (a and b))
 
     mess0 = ZZ.random_element(2)
     mess1 = ZZ.random_element(2)

@@ -142,7 +142,7 @@ def test_sum_list(nb_elt, bin_size, algo):
     return True
 
 
-def test_bootstrapping():
+def test_h_basic_decrypt():
     setup(bs_lambda)
     (n, q, distrib, m) = bs_params
     secret_key_gen(bs_params)
@@ -155,7 +155,8 @@ def test_bootstrapping():
     m = ZZ.random_element(2)
 
     cipher = encrypt(bs_params, bs_pk, m)
-    new_cipher = bootstrapping(cipher)
+    encrypted_sk = encrypt_secret_key(bs_lk)
+    new_cipher = h_basic_decrypt(encrypted_sk, cipher)
     decrypt_m = basic_decrypt(bs_params, bs_sk, new_cipher)
 
     if m != decrypt_m:
@@ -163,7 +164,7 @@ def test_bootstrapping():
     return True
 
 
-def test_setup_bootstrapping():
+def test_encrypt_secret_key():
     global bs_params
 
     # we pick some params
@@ -176,8 +177,8 @@ def test_setup_bootstrapping():
     l = floor(log(q, 2)) + 1
     N = (n+1)*l
 
-    # we encrypt the old_lwe_key with new params, using setup_bootstraping
-    encrypted_sk = setup_bootstrapping(old_lwe_key)
+    # we encrypt the old_lwe_key with new params, using setup_bootstrapping
+    encrypted_sk = encrypt_secret_key(old_lwe_key)
 
     # we try to recover the old_lwe key
     bin_decrypted_sk = [[basic_decrypt(bs_params, bs_sk, bit) for bit in elt]
@@ -209,12 +210,12 @@ def test_main_bootstrapping():
     # test_setup_bootstrapping
     transition_message("We test test_setup_bootstrapping: ")
     for i in range(nb_test):
-        one_test(test_setup_bootstrapping, [], "test_setup_bootstrapping:")
+        one_test(test_encrypt_secret_key, [], "test_setup_bootstrapping:")
 
     # test_bootstrapping
     transition_message("We test test_bootstrapping: ")
     for i in range(nb_test):
-        one_test(test_bootstrapping, [], "test_bootstrapping:")
+        one_test(test_h_basic_decrypt, [], "test_bootstrapping:")
 
     conclusion_message("with Lambda = " + str(bs_lambda))
     return True

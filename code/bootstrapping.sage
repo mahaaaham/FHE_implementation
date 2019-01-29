@@ -15,8 +15,8 @@ load("internal_functions.sage")
 # is coded using these news params.
 # input: the lwe_key of the previous params
 # output encrypted_sk, in the format:
-# [[size l], [size l] ...]
-def setup_bootstrapping(lwe_key):
+# [[size l], [size l] ...]
+def encrypt_secret_key(lwe_key):
     global bs_params
     global bs_pk
     global bs_sk
@@ -45,7 +45,7 @@ def setup_bootstrapping(lwe_key):
                     for k in range(l)]
 
     if (len(encrypted_sk) != N) or (len(encrypted_sk[0]) != l):
-        error = "setup_bootstraping: wrong size of encrypted_sk"
+        error = "encrypt_secret_key: wrong size of encrypted_sk"
         raise NameError(error)
     return encrypted_sk
 
@@ -54,7 +54,7 @@ def setup_bootstrapping(lwe_key):
 # apply homomorphicaly the dec algorithm with the
 # bs_params, the bs_public_key and the encrypt of
 # the secret_key with the new keys.
-def bootstrapping(cipher):
+def h_basic_decrypt(encrypted_sk, cipher):
     global bs_params
     global bs_pk
     global bs_sk
@@ -63,8 +63,6 @@ def bootstrapping(cipher):
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
     N = (n+1)*l
-
-    encrypted_sk = setup_bootstrapping(bs_lk)
 
     # index such that q/4 <v[i_index] < q/8
     i_index = next(j for j in range(l) if
@@ -184,7 +182,6 @@ def h_reduction_sum(params, public_key, a, b, c):
 
 
 def h_naive_classic_list_sum(list_to_sum):
-    print("len of list_to_sum = " + str(len(list_to_sum)))
     if len(list_to_sum) == 0:
         (n, q, distrib, m) = bs_params
         l = floor(log(q, 2)) + 1
@@ -201,7 +198,6 @@ def h_naive_classic_list_sum(list_to_sum):
 
 
 def h_naive_reduction_list_sum(list_to_sum):
-    print("len of list_to_sum = " + str(len(list_to_sum)))
     if len(list_to_sum) == 0:
         (n, q, distrib, m) = bs_params
         l = floor(log(q, 2)) + 1
@@ -216,7 +212,6 @@ def h_naive_reduction_list_sum(list_to_sum):
 
 
 def h_balanced_classic_list_sum(list_to_sum):
-    print("len of list_to_sum = " + str(len(list_to_sum)))
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
 
@@ -249,3 +244,8 @@ def h_balanced_classic_list_sum(list_to_sum):
     elif second_term == -1:
         return first_term
     return h_bit_sum(bs_params, first_term, second_term)
+
+
+def bootstrapping_arguments(list_cipher):
+    encrypted_sk = encrypt_secret_key(bs_lk)
+    return [h_basic_decrypt(encrypted_sk, cipher) for cipher in list_cipher]
