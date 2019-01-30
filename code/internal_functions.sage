@@ -49,7 +49,7 @@ def rand_matrix(ring, nb_row, nb_col, upper_bound):
 # 2 - Auxiliary functions used by the FHE algorithms
 
 # input: a in Z/qZ, output: representant in ]-q/2, q/2]
-def centered_ZZ(a, q):
+def ZZ_centered(a, q):
     a = ZZ(a)
     if a > q/2:
         return a - q
