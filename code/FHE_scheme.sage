@@ -16,7 +16,7 @@ load("cvp.sage")
 # with some decrypt.__name__ used in some tests
 decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
 # params_maker = lambda n: no_error(n)
-params_maker = lambda n: baby_version(regev, n)
+params_maker = lambda n: no_error(n)
 with_bootstrapping = False
 nb_op_before_bootstraping = 1
 actual_nb_op = 0
@@ -25,7 +25,7 @@ bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
-bs_lambda = 4
+bs_lambda = 3
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators
