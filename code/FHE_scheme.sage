@@ -15,7 +15,8 @@ load("cvp.sage")
 # I initialise decrypt to a function to avoid an error
 # with some decrypt.__name__ used in some tests
 decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
-params_maker = lambda n: no_error(n)
+# params_maker = lambda n: no_error(n)
+params_maker = lambda n: baby_version(regev, n)
 with_bootstrapping = False
 nb_op_before_bootstraping = 1
 actual_nb_op = 0
@@ -24,7 +25,7 @@ bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
-bs_lambda = 2
+bs_lambda = 4
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators
@@ -229,11 +230,11 @@ def basic_decrypt(params, secret_key, cipher):
 
     # recuperation of a big enough secret_key[i]
     i = next(j for j in range(len(secret_key)) if
-             centered_ZZ(secret_key[j], q) > (q / 4))
+             ZZ_centered(secret_key[j], q) > (q / 4))
 
     cipher_i = (cipher.rows())[i]
     x_i = cipher_i * secret_key
-    return Zq(round(centered_ZZ(x_i, q)/centered_ZZ(secret_key[i], q)))
+    return Zq(round(ZZ_centered(x_i, q)/ZZ_centered(secret_key[i], q)))
 
 
 # q has to be a power of 2
@@ -261,7 +262,7 @@ def mp_decrypt(params, secret_key, cipher):
     # at the end, I have 2^small_power * mess + small
     # and small can have an influence..
     for i in range(len(C)):
-        term = centered_ZZ(C[-1-i] - inv_pow * current_mess, q)
+        term = ZZ_centered(C[-1-i] - inv_pow * current_mess, q)
 
         # 1 if term near of 2^(l-2) than 0 or q
         if abs(term) >= 2^(l-3):

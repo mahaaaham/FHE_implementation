@@ -7,6 +7,49 @@ load("internal_functions.sage")
 # the decrypt algorithm
 # is basic_decrypt
 
+
+# input: a value in binary, on l bits.
+# output: the absolute value of a representant modulo q=2^(l-1) of the
+# input value, in [-q/2, q/2] in binary (list of l elements),
+# all of this done
+# homomorphically (we dont care of the last bit b_(l-1)
+# that correspond to q...)
+# for this, let bit_cipher be the
+# encryption of m = [b_1, ..., b_(l-1)].
+# we want
+# - A [b_0,...,b_(l-2), 0] if b_(l-2) is 0
+# - B = bin([not(b_0), ..., not(b_(l-2), 0] + 1)
+#       with the last bit put to 0
+# if b_(l-2) is 1
+# so, the ith bit of the result will be:
+# ((not b_l-2) and A_i) or (b_l-2 and B_i)
+# warning: len(bit_cipher) has to be > 2
+def h_abs_ZZ_centered(params, bit_cipher):
+    d_NO = lambda cipher: h_NO(params, cipher)
+    d_AND = lambda a, b: h_AND(params, a, b)
+    d_OR = lambda a, b: h_OR(params, a, b)
+    d_formula = lambda a, b, c: d_OR(d_AND(d_NO(c), a), d_AND(c, b))
+
+    (n, q, distrib, m) = params
+    Zq = Integers(q)
+    l = floor(log(q, 2)) + 1
+    N = (n+1)*l
+    lenght = len(bit_cipher)
+    if lenght <= 1:
+        error = "h_ZZ_centered: bit_cipher should have lenght > 1"
+        raise NameError(error)
+
+    encrypt_zero = zero_matrix(Zq, N)
+
+    A = bit_cipher[:-1] + [encrypt_zero]
+
+    B = h_complementary_two(params, bit_cipher)
+    B[-1] = encrypt_zero
+
+    result = [d_formula(A[i], B[i], bit_cipher[l-2]) for i in range(lenght)]
+    return result
+
+
 # create new params:
 # the global variables bs_params
 # bs_public_key, bs_lwe_key and bs_secret_key
@@ -53,7 +96,6 @@ def encrypt_secret_key(lwe_key):
     return encrypted_sk
 
 
-# first do
 # apply homomorphicaly the dec algorithm with the
 # bs_params, the bs_public_key and the encrypt of
 # the secret_key with the new keys.
@@ -70,7 +112,7 @@ def h_basic_decrypt_positives_error(encrypted_sk, cipher):
 
     # index such that q/4 <v[i_index] < q/8
     i_index = next(j for j in range(l) if
-                   centered_ZZ(2^j, q) > (q / 4))
+                   ZZ_centered(2^j, q) > (q / 4))
 
     bin_ci = bit_decomp(cipher[i_index])
     # list_to_sum contains the s_k[j]2^u such that the uth term of
@@ -96,6 +138,10 @@ def h_left_shift(params, public_key, list_bit, shift):
                                range(shift)]
 
 
+# apply homomorphicaly the dec algorithm with the
+# bs_params, the bs_public_key and the encrypt of
+# the secret_key with the new keys.
+# doesn't work with "negative errors", i.e: q-e with little e
 def h_basic_decrypt(encrypted_sk, cipher):
     global bs_params
     global bs_pk
@@ -108,7 +154,7 @@ def h_basic_decrypt(encrypted_sk, cipher):
 
     # index such that q/4 <v[i_index] < q/8
     i_index = next(j for j in range(l) if
-                   centered_ZZ(2^j, q) > (q / 4))
+                   ZZ_centered(2^j, q) > (q / 4))
 
     bin_ci = bit_decomp(cipher[i_index])
     # list_to_sum contains the s_k[j]2^u such that the uth term of
@@ -119,18 +165,8 @@ def h_basic_decrypt(encrypted_sk, cipher):
 
     scalar_product = bs_sum_algo(list_to_sum)
 
-
-    # and now, we take care of the division by v_i..
-    # we need to center the value, i.e to bring it in ]-q/2, q/2]
-    # 1) if it is < q/2, nothing to do
-    #    [something, 0, ?] (to be less thant q/8)
-    #    (we don't care of ? because we are in modulo q and 
-    #     q = [0, ..., 0, 1])
-    # 2) else, we take the complementary of two
-
-    h_wich_case
-    return scalar_product[i_index]
-
+    abs_centered_scalar_product = h_abs_ZZ_centered(bs_params, scalar_product)
+    return abs_centered_scalar_product[i_index]
 
 # a left shift of SHIFT to the left,
 # the new element of the right are
@@ -326,43 +362,43 @@ def h_complementary_two(params, bit_cipher):
     return bit_sum
 
 
-# input: a value in binary, on l bits.
-#
-# output: the representant modulo q=2^(l-1) of this value
-# in [-q/2, q/2], in binary, all of this done
-# homomorphically (we dont care of the last bit b_(l-1)
-# that correspond to q...)
-# for this, let bit_cipher be the
-# encryption of m = [b_1, ..., b_(l-1)].
-# we want 
-# - A [b_0,...,b_(l-2), 0] if b_(l-2) is 0
-# - B = bin([not(b_0), ..., not(b_(l-2), 0] + 1)
-#         with the last bit put to 0 
-# if b_(l-2) is 1
-# so, the ith bit of the result will be:
-# ((not b_l-2) and A_i) or (b_l-2 and B_i)
-# warning: len(bit_cipher) has to be > 2
-def h_ZZ_centered(params, bit_cipher):
-    d_NO = lambda cipher: h_NO(params, cipher)
-    d_AND = lambda cipher: h_AND(params, cipher)
-    d_OR = lambda cipher: h_OR(params, cipher)
-    d_formula = lambda a, b, c: d_OR(d_AND(d_NO(c), a), d_AND(c, b))
+# apply homomorphicaly the dec algorithm with the
+# bs_params, the bs_public_key and the encrypt of
+# the secret_key with the new keys.
+# doesn't work with "negative errors", i.e: q-e with little e
+def h_basic_decrypt_positives_error(encrypted_sk, cipher):
+    global bs_params
+    global bs_pk
+    global bs_sk
+    global bs_lk
 
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
+    (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
     N = (n+1)*l
-    lenght = len(bit_cipher)
-    if lenght <= 1:
-        error = "h_ZZ_centered: bit_cipher should have lenght > 1"
-        raise NameError(error)
 
-    encrypt_zero = zero_matrix(Zq, N)
+    # index such that q/4 <v[i_index] < q/8
+    i_index = next(j for j in range(l) if
+                   centered_ZZ(2^j, q) > (q / 4))
 
-    A = bit_cipher[:-1] + [encrypt_zero]
+    bin_ci = bit_decomp(cipher[i_index])
+    # list_to_sum contains the s_k[j]2^u such that the uth term of
+    # the binary decomposition of ci[j] is 1
+    list_to_sum = [h_right_shift(bs_params, bs_pk, encrypted_sk[i], u)
+                   for i in range(N) for u in range(l)
+                   if bin_ci[l*i + u] == 1]
 
-    B = h_complementary_two(params, cipher)
-    B[-1] = encrypt_zero
+    scalar_product = bs_sum_algo(list_to_sum)
+    return scalar_product[i_index]
 
-    result = [d_formula(A[i], B[i], bit_cipher[l-2]) for i in range(lenght)]
-    return result
+
+# a left shift of SHIFT to the left,
+# the new element of the right are
+# tncrypts of 0
+# bonus idea: do not create error vector
+# for the encrypt of the 0 that are
+# added
+def h_left_shift(params, public_key, list_bit, shift):
+    if shift == 0:
+        return list_bit
+    return list_bit[shift:] + [encrypt(params, public_key, 0) for i in
+                               range(shift)]

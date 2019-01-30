@@ -1,6 +1,9 @@
 load("bootstrapping.sage")
 load("FHE_scheme.sage")
 
+#for the test of h_abs_ZZ_centered
+load("internal_functions.sage")
+
 load("test/framework_test.sage")
 
 
@@ -35,6 +38,39 @@ def test_complementary_two(nb_test, bin_size):
             return False
     return True
 
+
+def test_h_abs_ZZ_centered(nb_test, bin_size):
+    params = setup(bs_lambda)
+    (n, q, distrib, m) = params
+
+    l = floor(log(q, 2)) + 1
+    if l-1 != log(q, 2):
+        error = "test_h_abs_ZZ_centered: q should be a power of 2"
+        raise NameError(error)
+
+    Zq = Integers(q)
+    N = (n+1)*l
+    
+    Zq = Integers(params[1])
+    secret_keys = secret_key_gen(params)
+    secret_key = secret_keys[1]
+    public_key = public_key_gen(params, secret_keys)
+
+    for test in range(nb_test):
+        # easiest to test with a 0 at the end..
+        clear_bit = [ZZ.random_element(2) for i in range(l)]
+        crypted_bit = [encrypt(params, public_key, m) for m in clear_bit]
+        abs_ZZ_crypted_bit =h_abs_ZZ_centered(params, crypted_bit)
+
+        decrypted_abs_ZZ = [decrypt(params, secret_key, c) for c in abs_ZZ_crypted_bit]
+        decrypted_value = ZZ(decrypted_abs_ZZ, 2)
+    
+        clear_value = Zq(ZZ(clear_bit, 2))
+        clear_value = abs(ZZ_centered(clear_value, q))
+
+        if clear_value != decrypted_value:
+            return False
+    return True
 
 
 
