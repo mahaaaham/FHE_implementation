@@ -272,7 +272,7 @@ def test_main_bootstrapping():
     bin_size = 10
     nb_elt = 15
     for algo in [h_naive_classic_list_sum, h_naive_reduction_list_sum,
-                 h_balanced_classic_list_sum]:
+                 h_balanced_classic_list_sum]: # h_balanced_reduction_list_sum
         one_test(test_sum_list, [nb_elt, bin_size, algo],
                  "algo is: " + algo.__name__)
         one_test(test_sum_list, [nb_elt, bin_size, algo],

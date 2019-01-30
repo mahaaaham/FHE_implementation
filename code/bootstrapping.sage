@@ -242,7 +242,16 @@ def h_bit_sum(params, a, b):
 # of same size than a, such that
 # considering the clears decimals values cu, cv, ca..
 # cu + cv = ca + cb + cc mod 2^(len(a))
+# we also tread the case where an elemnet is "-1". 
+# In this case: the result are 2 elemnets with sum the 
+# sum of all elements that aren't "-1".
+# If there is only "-1", and error occurs.
+# instead of a list. It is used in h_balanced_reduction_list_sum
 def h_reduction_sum(params, public_key, a, b, c):
+    if (a == -1 and b == -1 and c == -1):
+        error = "h_reduction_sum: all the arguments are -1"
+        raise NameError(error)
+
     length = len(a)
     if (length == 1):
         return [h_XOR(params, a[0], b[0])], [c[0]]
@@ -300,6 +309,9 @@ def h_naive_reduction_list_sum(list_to_sum):
     return h_bit_sum(bs_params, a, b)
 
 
+# here, we complete by a power of 2,
+# it can be better to complete by a multiple of 2,
+# following the method used for h_balanced_reduction_list_sum
 def h_balanced_classic_list_sum(list_to_sum):
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
@@ -318,21 +330,59 @@ def h_balanced_classic_list_sum(list_to_sum):
         else:
             return h_bit_sum(bs_params, list_to_sum[0], list_to_sum[1])
 
-    # we pad with encrypts of 0 to have a list of 2^something elements
-    to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
-    list_to_sum += [-1]*to_fill
 
-    # we end if there is only two elements on the filled list
-    lenght_list = len(list_to_sum)
-    first_list = list_to_sum[:lenght_list//2]
-    first_term = h_balanced_classic_list_sum(first_list)
-    second_list = list_to_sum[lenght_list//2:]
-    second_term = h_balanced_classic_list_sum(second_list)
-    if first_term == -1:
-        return second_term
-    elif second_term == -1:
-        return first_term
-    return h_bit_sum(bs_params, first_term, second_term)
+# The balanced version of reduction_sum to make
+# the homomorphic sum of a list of elements.
+# Call the recurrently rec_bal_red_list_sum 
+# to be in a case where list_to_sum have 6 elements,
+# and finish the algorithm for this case
+def h_balanced_reduction_list_sum(list_to_sum):
+    # we recover a list of same sum with 6 elements,
+    # and possibly some -1
+    list_to_sum = rec_balanced_reduction(list_to_sum)
+    # we treat directly the case "6 elements"
+    a, b = h_reduction_sum(list_to_sum[0],
+                           list_to_sum[1],
+                           list_to_sum[2])
+    c, d = h_reduction_sum(list_to_sum[3],
+                           list_to_sum[4],
+                           list_to_sum[5])
+    sum_with_d = h_reduction_sum(a, b, c)
+    return h_bit_sum(bs_params, sum_with_d, d)
+
+
+#  Used by h_balanced_reduction_list_sum. 
+# input: a list_to_sum
+# output: if len(list_to_sum) > 6: 
+#         a strictly less list 
+#         of elements with the same sum
+#         else:
+#         the same list with a padding of "-1" to have 
+#         a size 6
+def rec_bal_red_list_sum(list_to_sum):
+    three_multiple = (len(list_to_sum) // 3) + 1
+    list_to_sum = list_to_sum + [-1]*(3*three_multiple - len(list_to_sum))
+    if len(list_to_sum) % 3 != 0:
+        error = "h_balanced_reduction_list_sum: problem of size of list_to_sum"
+        raise NameError(error)
+    if three_multiple <= 2:
+        return list_to_sum
+    else:
+        new_list = []
+        for i in range(three_multiple):
+            left, right = h_reduction_sum(list_to_sum[3 * three_multiple],
+                                          list_to_sum[3 * three_multiple + 1],
+                                          list_to_sum[3 * three_multiple + 2])
+            new_list += [left, right]
+        if len(new_list) <= 2:
+            return new_list
+        else:
+            return rec_bal_red_list_sum(new_list)
+    # the last return should be never used
+    if len(list_to_sum) % 3 != 0:
+        error = "rec_bal_red_list_sum shouldn't end with the last return"
+        raise NameError(error)
+    return None
 
 
 def bootstrapping_arguments(list_cipher):
