@@ -4,7 +4,7 @@ load("test/test_cvp.sage")
 load("test/test_FHE.sage")
 load("test/test_homomorphic_circuits.sage")
 load("test/test_bootstrapping.sage")
-load("test/test_main_bootstrapping_circuits")
+load("test/test_bootstrapping_circuits.sage")
 
 
 # just do all the test_main_FOO tests

@@ -330,6 +330,22 @@ def h_balanced_classic_list_sum(list_to_sum):
         else:
             return h_bit_sum(bs_params, list_to_sum[0], list_to_sum[1])
 
+    # we pad with encrypts of 0 to have a list of 2^something elements
+    to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
+    list_to_sum += [-1]*to_fill
+
+    # we end if there is only two elements on the filled list
+    lenght_list = len(list_to_sum)
+    first_list = list_to_sum[:lenght_list // 2]
+    first_term = h_balanced_classic_list_sum(first_list)
+    second_list = list_to_sum[lenght_list // 2:]
+    second_term = h_balanced_classic_list_sum(second_list)
+    if first_term == -1:
+        return second_term
+    elif second_term == -1:
+        return first_term
+    return h_bit_sum(bs_params, first_term, second_term)
+
 
 # The balanced version of reduction_sum to make
 # the homomorphic sum of a list of elements.
