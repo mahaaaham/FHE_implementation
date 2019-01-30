@@ -16,7 +16,7 @@
 	\end{align*}
 
 	Toutefois, un tel système n'est pas sécurisé car $C$ n'a qu'un nombre
-	fini de valeurs propres, et il sembledonc facile de 
+	fini de valeurs propres, et il semble donc facile de 
 	retrouver le secret $\vec{v}$.
 
 	La solution consiste alors à ajouter du bruit au chiffré, c'est à dire
@@ -35,18 +35,18 @@
 	résoudre une instance de LWE.
 
 	Toutefois, l'ajout d'une erreur comporte ses inconvénients. Si nous
-	revenons aux équations précdentes, en introduisant les erreurs 
-	$\vec{e}_i$ pour chiffrer  $m_i$ ($i\in \{1,2\}$), on obtient:
+	revenons aux équations précédentes, en introduisant les erreurs 
+	$\vec{e}_i$ pour chiffrer  $m_i$ ($i\in \{1,2\}$), on obtient :
 
 	\begin{align*}
 	& (C_1 + C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} + (\vec{e}_1 + \vec{e}_2)\\
 		& (C_1 \times C_2) \cdot \vec{v} = (m_1 * m_2) \vec{v} + C_1
-		\vec{e}_2 + \vec{e}_1 \\
+		\vec{e}_2 + m_2\vec{e}_1 \\
 	& (\lambda  C_2) \cdot \vec{v} = (\lambda m_1) + \lambda e_i\vec{v} 
 	\end{align*}
 
 	Notamment, on voit que le terme $C_1 * \vec{e}_2$ peut être très grand 
-	mêmê pour un petit $\vec{e}_2$. Nous verrons par la suite comment
+	même pour un petit $\vec{e}_2$. Nous verrons par la suite comment
 	choisir nos paramètres, et notamment $\vec{v}$, afin de 
 	toujours pouvoir se ramener à des chiffrés $C \in \{0,1\}^{N
 	\times N}$. De cette façon, on aura:
@@ -61,6 +61,16 @@
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
-		% on le définit, sans trop en dire sur les paramètres 
+		% on le définit, sans trop en dire sur les paramètres
+		
+	\begin{itemize}
+	\item \textbf{Setup} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur. \\
+	Cette fonction définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et toujours pouvoir le déchiffrer correctemment et assurant qu'un adversaire attaquant le système doivent effectuer au moins $2^\lambda$ opération, quelle que soit l'attaque qu'il choisisse. La façon de déterminée ces paramètres n'est pas définie afin de pouvoir l'addapter suivant l'evolution des attaques. \\
+	On rappelle que les paramètres du système définis içi sont : le paramètre de dimension $n$, le modulus $q$, un modèle de distribution de l'erreur ainsi que $m$, qui, tout comme $n$ influera la taille des matrices manipulées. \\
+	On note $l = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l$.
+	\item \textbf{SecretKeyGen} : Cet algorithme n'a besoin en entrée que des paramètres donnés par la fonction \textbf{Setup}. \\
+	Cette fonction génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. Elle renvoie la clé secrète $\vec{s} = (1, -t_1, ..., -t_n)$. \\
+	On note $\vec{v} = $ \textbf{PowersOf2}$(\vec{s})$.
+	\end{itemize} 
 	\end{subsection}
 \end{section}

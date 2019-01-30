@@ -207,8 +207,8 @@ def h_naive_reduction_list_sum(list_to_sum):
 
     a, b = list_to_sum[0], list_to_sum[1]
     for elt in list_to_sum[2:]:
-        a, b = h_reduction_sum(bs_params, a, b, elt)
-    return h_bit_sum(a, b)
+        a, b = h_reduction_sum(bs_params, bs_pk, a, b, elt)
+    return h_bit_sum(bs_params, a, b)
 
 
 def h_balanced_classic_list_sum(list_to_sum):
