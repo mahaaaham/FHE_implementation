@@ -60,17 +60,69 @@
 
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
+	\begin{subsection}{Fonctions utiles}
+	Plusieurs algorithmes seront utiles pour pouvoir bien définir le système FHE :
+	
+	\paragraph{}
+	\textbf{BitDecomp}
+	\flushleft
+
+	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_1, ..., a_k) \in \ZZq^{k}$. \\
+	\textbf{Sortie} : Cet algorithme retourne la décomposition binaire des éléments de $\vec{a}$ sous la forme d'un vecteur. \\
+	\textbf{Algo} : Pour chaque $a_i$, on détermine sa représentation binaire avec les bits de faibles puissance à gauche et non à droite. On retourne la concaténation de ces représentations binaires sous la forme d'un vecteur.
+	
+	\paragraph{}
+	\textbf{BitDecomp}$^{-1}$
+	\flushleft
+
+	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
+	\textbf{Sortie} : Cet algorithme renvoie ($\sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{k,i})$. \\
+	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algo inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l-1}$.
+	
+	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
-		% on le définit, sans trop en dire sur les paramètres
-		
-	\begin{itemize}
-	\item \textbf{Setup} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur. \\
-	Cette fonction définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et toujours pouvoir le déchiffrer correctemment et assurant qu'un adversaire attaquant le système doivent effectuer au moins $2^\lambda$ opération, quelle que soit l'attaque qu'il choisisse. La façon de déterminée ces paramètres n'est pas définie afin de pouvoir l'addapter suivant l'evolution des attaques. \\
-	On rappelle que les paramètres du système définis içi sont : le paramètre de dimension $n$, le modulus $q$, un modèle de distribution de l'erreur ainsi que $m$, qui, tout comme $n$ influera la taille des matrices manipulées. \\
+	On rappelle que les paramètres du système défini ici sont : le paramètre de dimension $n$, le modulus $q$, un modèle de distribution de l'erreur $\chi$ ainsi que $m$, qui, tout comme $n$ influera la taille des matrices manipulées. \\
 	On note $l = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l$.
-	\item \textbf{SecretKeyGen} : Cet algorithme n'a besoin en entrée que des paramètres donnés par la fonction \textbf{Setup}. \\
-	Cette fonction génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. Elle renvoie la clé secrète $\vec{s} = (1, -t_1, ..., -t_n)$. \\
+		
+	\paragraph{}
+	\textbf{Setup}
+	\flushleft
+
+	\textbf{Entrée} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur. \\
+	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi, m$ du système. \\
+	\textbf{Algo} : On définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et de toujours pouvoir le déchiffrer correctemment tout en assurant qu'un adversaire attaquant le système doive effectuer au moins $2^\lambda$ opérations, quelle que soit l'attaque qu'il choisisse. La façon de déterminer ces paramètres n'est pas définie afin de pouvoir l'adapter suivant l'evolution des attaques. \\
+	
+	\paragraph{}
+	\textbf{SecretKeyGen}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup}. \\
+	\textbf{Sortie} : Cet algorithme retourne la clé secrète $\vec{s} \in \ZZq^{n+1}$. \\
+	\textbf{Algo} : On génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. On définit la clé secrète comme $\vec{s} = (1, -t_1, ..., -t_n)$. \\
 	On note $\vec{v} = $ \textbf{PowersOf2}$(\vec{s})$.
-	\end{itemize} 
+	
+	\paragraph{}
+	\textbf{PublicKeyGen}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup} et d'une clé secrète construite avec ces mêmes paramètres. \\
+	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{n+1 \times m}$.\\
+	\textbf{Algo} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \cdot \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
+	
+	\paragraph{}
+	\textbf{Encrypt}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé publique et un message $\mu \in \ZZq$. \\
+	\textbf{Sortie} : Cet algorithme retourne le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.\\
+	\textbf{Algo} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \cdot I_N + $\textbf{BitDecomp}$(R \cdot A))$.
+	
+	\paragraph{}
+	\textbf{Dec}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et le chiffré d'un message $\mu \in \{ 0,1\} $. \\
+	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
+	\textbf{Algo} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\nint{\frac{x_i}{v_i}}$.
 	\end{subsection}
 \end{section}
