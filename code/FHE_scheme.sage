@@ -14,7 +14,7 @@ load("cvp.sage")
 # global parameters:
 # I initialise decrypt to a function to avoid an error
 # with some decrypt.__name__ used in some tests
-decrypt = lambda n: None
+decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
 params_maker = lambda n: no_error(n)
 with_bootstrapping = False
 nb_op_before_bootstraping = 1
@@ -24,7 +24,7 @@ bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
-bs_lambda = 5
+bs_lambda = 2
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
 # different type of parameters generators

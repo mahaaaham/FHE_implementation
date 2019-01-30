@@ -4,6 +4,41 @@ load("FHE_scheme.sage")
 load("test/framework_test.sage")
 
 
+# test NB_TEST times  the fonction 
+# test_complementary_two with 
+# list of 0 and 1 of size bin_size
+# since we don't care of the m.s.b, we look modulo 2^(bin_size-1)
+def test_complementary_two(nb_test, bin_size):
+    params = setup(bs_lambda)
+    Zq = Integers(params[1])
+    secret_keys = secret_key_gen(params)
+    secret_key = secret_keys[1]
+    public_key = public_key_gen(params, secret_keys)
+
+    for test in range(nb_test):
+        # easiest to test with a 0 at the end..
+        clear_bit = [ZZ.random_element(2) for i in range(bin_size - 1)] + [0]
+        crypted_bit = [encrypt(params, public_key, m) for m in clear_bit]
+        crypted_complement = h_complementary_two(params, crypted_bit)
+        decrypted_complement = [decrypt(params, secret_key, c) for c in crypted_complement]
+        decrypted_value = ZZ(decrypted_complement, 2)
+
+        Zq = Integers(2^(bin_size-1))
+
+        decrypted_value = Zq(decrypted_value)
+
+        temp_value = Zq(ZZ([1]*(bin_size-1) + [0], 2))
+        clear_value = Zq(ZZ(clear_bit, 2))
+        clear_complement_value = temp_value - clear_value + Zq(1)
+
+        if clear_complement_value != decrypted_value:
+            return False
+    return True
+
+
+
+
+
 # Test the h_left_shift function nb_test times
 # on len_test long lists
 def test_h_left (nb_test, len_test):
