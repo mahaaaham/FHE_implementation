@@ -8,7 +8,7 @@
 	\[C \cdot \vec{v} = m \vec{v}\: \mod q \]
 
 	De là, il est facile de voir que pour $\lambda \in \ZZ$ et  $C_1$ et $C_2$ 
-	chiffrés de $m_1$ et $m_2$, on a:
+	chiffrés de $m_1$ et $m_2$, on a :
 	\begin{align*}
 	& (C_1 + C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} \\
 	& (C_1 \times C_2) \cdot \vec{v} = (m_1 + m_2) \vec{v} \\
@@ -96,18 +96,36 @@
 	
 	\begin{prop}
 	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$.
-	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \langle\vec{a},\vec{b} \rangle$.
+	$\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle = \langle\vec{a},\vec{b} \rangle$.
 	\end{prop}
 	\begin{proof}
-	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \sum\limits_{i,j} a_{i,j} \times (2^{j} \times b_i) = \sum\limits_{i,j} (a_{i,j} \times 2^{j}) \times b_i \sum\limits_{i} a_i \times b_i = \langle\vec{a},\vec{b} \rangle$.
+	\begin{align*}
+	\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i,j} a_{i,j} \times (2^{j} \times b_i) \\
+	&= \sum\limits_{i,j} (a_{i,j} \times 2^{j}) \times b_i \\
+	&= \sum\limits_{i} a_i \times b_i \\
+	&= \langle\vec{a},\vec{b} \rangle.
+	\end{align*}
 	\end{proof}
 	
 	\begin{prop}
 	Soient $\vec{a}$ dans $\ZZq^{k \times l}$ et $\vec{b}$ dans $\ZZq^{k}$.
-	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \langle \vec{a},\vec{b} \rangle$. \\
+	$\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle = \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle = \langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle$. \\
 	\end{prop}
 	\begin{proof}
-	
+	\begin{align*}
+	\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i,j} a_{j+li} \times (2^{j} \times b_i) \\
+	&= \sum\limits_{i,j} (a_{j+li} \times 2^{j}) \times b_i \\
+	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
+	\end{align*}
+	Soit $c = \textbf{BitDecomp}^{-1}(\vec{a})$.
+	\begin{align*}
+	\langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle &= \langle \textbf{BitDecomp}(\vec{c}),\textbf{PowersOf2}(\vec{b}) \rangle \\
+	&= \sum\limits_{i,j} c_{i,j} \times (2^{j} \times b_i) \\
+	&= \sum\limits_{i,j} (c_{i,j} \times 2^{j}) \times b_i \\
+	&= \sum\limits_{i} c_{i} \times b_i) \\
+	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
+	&= \langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle
+	\end{align*}
 	\end{proof}
 	
 	\end{subsection}
