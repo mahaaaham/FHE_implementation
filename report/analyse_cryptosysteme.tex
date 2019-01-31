@@ -124,8 +124,9 @@
 	\end{proof}
 	
 	\end{subsection}
-	\begin{subsection}{Choix de paramètres, deux visions}
-	Le choix des paramètres du système est une étape cruciale de la mise en place de celui-ci,
+
+	\begin{subsection}{Contraintes asymptotiques pour les choix de paramètres} 
+		Le choix des paramètres du système est une étape cruciale de la mise en place de celui-ci,
 	car ce sont eux qui détermineront les degrés de sécurités et la profondeur des circuits calculables.
 	Pour savoir quels paramètres choisir, il existe deux méthodes :
 	
@@ -135,8 +136,74 @@
 	Cependant, cette analyse asymptotique est insuffisante pour les cas concrets. Pour palier à ce
 	problème, l'on peut étudier un certain choix précis de paramètres en essayant de l'attaquer afin
 	d'estimer sa résistance concrète aux attaques.
+	\begin{subsubsection}{Analyse asymptotique de la profondeur des circuits}
+		% la preuve de sécurité
+	\end{subsubsection}
+	\begin{subsubsection}{Résumé des contraintes sur les paramètres}
+	\end{subsubsection}
+	\end{subsection} % sécurité asymptotique
+
+	\begin{subsection}{Choix concrets de paramètres}
+	\begin{subsubsection}{Présentation de lwe\_estimator}
 	
-	\begin{subsubsection}{Quelques choix de paramètres}
+		Initialement utilisé dans l'article
+		\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
+		(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
+	Martin Albrecht et 
+	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
+	le problème de learning with error.
+	
+	
+	\paragraph{}
+	\textbf{estimate\_lwe :}
+
+	\paragraph{}
+	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
+	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe} :
+	
+	\flushleft
+	
+	\begin{lstlisting}
+estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
+             reduction_cost_model=reduction_default_cost,
+             skip=("mitm", "arora-gb", "bkw"))
+        \end{lstlisting}
+	
+	\flushleft
+	
+	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que
+	d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
+	En fait, elle retourne tout un ensemble de variables pour chaque attaque vérifiée. Le module
+	contient 6 attaques différentes, mais n'en testera que trois par defaut. Cela peut être modifié
+	lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
+	
+	\flushleft
+	
+	\begin{lstlisting}[mathescape=true]
+sage: n, alpha, q = Param.Regev(128)
+sage: costs = estimate_lwe(n, alpha, q)
+usvp: rop: 2^57.7, red: 2^57.7, $\delta$_0: 1.009214, $\beta$: 102, d: 357, m: 228
+ dec: rop: 2^61.5, m: 229, red: 2^61.5, $\delta$_0: 1.009595, $\beta$: 93, d: 357,
+     babai: 2^46.8, babai_op: 2^61.9, repeat: 293, $\epsilon$: 0.015625
+dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 376,
+     |v|: 736.521, repeat: 2^19.0, $\epsilon$: 0.003906
+	\end{lstlisting}
+
+	\flushleft
+	
+	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
+	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem" :
+	
+	\begin{itemize}
+	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre
+	ce cas de LWE avec cette attaque.
+	
+	\item "mem" (memory) est une estimation de la mémoire qui sera exploitée.
+	
+	\item "m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
+	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
+	lorsqu'on appelle \path{estimate_lwe}.
+	\end{itemize}
 
 	le module \path{sage.crypto.lwe} contient des choix de paramètres pour
 	le problème LWE, dont deux qui utilisent la gaussienne discrète
@@ -200,84 +267,10 @@
 	D   = DiscreteGaussianDistributionIntegerSampler(stddev)
 	LWE.__init__(self, n=n, q=q, D=D, secret_dist='noise', m=m)
 	\end{lstlisting}
-
 	\end{subsubsection}
 
-	\begin{subsubsection}{lwe\_estimator : une estimation "concrète"}
-	
-		Initialement utilisé dans l'article
-		\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
-		(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
-	Martin Albrecht et 
-	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
-	le problème de learning with error.
-	
-	
-	\paragraph{}
-	\textbf{estimate\_lwe :}
-
-	\paragraph{}
-	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
-	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe} :
-	
-	\flushleft
-	
-	\begin{lstlisting}
-estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
-             reduction_cost_model=reduction_default_cost,
-             skip=("mitm", "arora-gb", "bkw"))
-        \end{lstlisting}
-	
-	\flushleft
-	
-	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que
-	d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
-	En fait, elle retourne tout un ensemble de variables pour chaque attaque vérifiée. Le module
-	contient 6 attaques différentes, mais n'en testera que trois par defaut. Cela peut être modifié
-	lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
-	
-	\flushleft
-	
-	\begin{lstlisting}[mathescape=true]
-sage: n, alpha, q = Param.Regev(128)
-sage: costs = estimate_lwe(n, alpha, q)
-usvp: rop: 2^57.7, red: 2^57.7, $\delta$_0: 1.009214, $\beta$: 102, d: 357, m: 228
- dec: rop: 2^61.5, m: 229, red: 2^61.5, $\delta$_0: 1.009595, $\beta$: 93, d: 357,
-     babai: 2^46.8, babai_op: 2^61.9, repeat: 293, $\epsilon$: 0.015625
-dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 376,
-     |v|: 736.521, repeat: 2^19.0, $\epsilon$: 0.003906
-	\end{lstlisting}
-
-	\flushleft
-	
-	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
-	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem" :
-	
-	\begin{itemize}
-	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre
-	ce cas de LWE avec cette attaque.
-	
-	\item "mem" (memory) est une estimation de la mémoire qui sera exploitée.
-	
-	\item "m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
-	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
-	lorsqu'on appelle \path{estimate_lwe}.
-	\end{itemize}
-
+	\begin{subsubsection}{Proposition de choix sécurité pour très faible profondeur}
 	\end{subsubsection}
-	\end{subsection}
-	\begin{subsection}{Analyse asymptotique de la profondeur des circuits}
-
-		% la preuve de sécurité
-	\end{subsection}
-	\begin{subsection}{Mise en place du Bootstrapping avec DEC}
-	Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de
-	déchiffrement \path{dec}, nous allons avoir besoin de
-	l'exprimer uniquement à partir d'opérations \path{NAND} sur des 
-	$0$ et des $1$. 
-
-	Pour cela, nous considèrerons la décomposition binaire du secret.
-
 
 	\end{subsection}
 \end{section}
