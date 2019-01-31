@@ -78,6 +78,37 @@
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
 	\textbf{Sortie} : Cet algorithme renvoie ($\sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{k,i})$. \\
 	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algo inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l-1}$.
+
+	\paragraph{}
+	\textbf{Flatten}
+	\flushleft
+
+	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
+	\textbf{Sortie} : Cet algorithme retourne un vecteur $\vec{b} = (b_{1,0}, ..., b_{1,l-1}, b_{2,0}, ..., b_{k,l-1})$ dont les éléments sont tous dans $\{ 0,1\} $. \\
+	\textbf{Algo} : On calcule \textbf{BitDecomp}$^{-1}(\vec{a})$ et on obtient un vecteur $\vec{z} \in \ZZq^{k}$. On applique ensuite \textbf{BitDecomp} à $\vec{z}$ et l'on renvoie le résultat obtenu.
+	
+	\paragraph{}
+	\textbf{PowersOf2}
+	\flushleft
+
+	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_1, ..., a_k) \in \ZZq^{k}$. \\
+	\textbf{Sortie} : Cet algorithme renvoie ($a_1, 2\times a_1, 2^{2} \times a_1, ..., 2^{l-1} \times a_1, a_2, ..., 2^{l-1} \times a_k)$. \\
+	
+	\begin{prop}
+	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$.
+	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \langle\vec{a},\vec{b} \rangle$.
+	\end{prop}
+	\begin{proof}
+	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \sum\limits_{i,j} a_{i,j} \times (2^{j} \times b_i) = \sum\limits_{i,j} (a_{i,j} \times 2^{j}) \times b_i \sum\limits_{i} a_i \times b_i = \langle\vec{a},\vec{b} \rangle$.
+	\end{proof}
+	
+	\begin{prop}
+	Soient $\vec{a}$ dans $\ZZq^{k \times l}$ et $\vec{b}$ dans $\ZZq^{k}$.
+	$\langle $\textbf{BitDecomp}$(\vec{a}),$ \textbf{PowersOf2}$(\vec{b}) \rangle = \langle \vec{a},\vec{b} \rangle$. \\
+	\end{prop}
+	\begin{proof}
+	
+	\end{proof}
 	
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
@@ -123,6 +154,6 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et le chiffré d'un message $\mu \in \{ 0,1\} $. \\
 	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
-	\textbf{Algo} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\nint{\frac{x_i}{v_i}}$.
+	\textbf{Algo} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
 	\end{subsection}
 \end{section}

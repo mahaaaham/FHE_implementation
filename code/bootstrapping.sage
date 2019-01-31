@@ -205,6 +205,11 @@ def h_right_shift(params, public_key, list_bit, shift):
 # lenght of a (we need to have len(a) == len(b))
 # (so it is modulo 2^(len(a))
 def h_bit_sum(params, a, b):
+    if a == -1:
+        return b
+    if b == -1:
+        return a
+
     d_XOR = lambda u, v: h_XOR(params, u, v)
     d_NAND = lambda u, v: h_NAND(params, u, v)
     d_AND = lambda u, v: h_AND(params, u, v)
@@ -242,15 +247,16 @@ def h_bit_sum(params, a, b):
 # of same size than a, such that
 # considering the clears decimals values cu, cv, ca..
 # cu + cv = ca + cb + cc mod 2^(len(a))
-# we also tread the case where an elemnet is "-1". 
-# In this case: the result are 2 elemnets with sum the 
+# we also tread the case where an elemnet is "-1".
+# In this case: the result are 2 elemnets with sum the
 # sum of all elements that aren't "-1".
 # If there is only "-1", and error occurs.
 # instead of a list. It is used in h_balanced_reduction_list_sum
 def h_reduction_sum(params, public_key, a, b, c):
-    if (a == -1 and b == -1 and c == -1):
-        error = "h_reduction_sum: all the arguments are -1"
-        raise NameError(error)
+    if [a, b, c].count(-1) != 0:
+        result = [a, b, c]
+        result.remove(-1)
+        return result[0], result[1]
 
     length = len(a)
     if (length == 1):
@@ -349,7 +355,7 @@ def h_balanced_classic_list_sum(list_to_sum):
 
 # The balanced version of reduction_sum to make
 # the homomorphic sum of a list of elements.
-# Call the recurrently rec_bal_red_list_sum 
+# Call the recurrently rec_bal_red_list_sum
 # to be in a case where list_to_sum have 6 elements,
 # and finish the algorithm for this case
 def h_balanced_reduction_list_sum(list_to_sum):
@@ -364,16 +370,20 @@ def h_balanced_reduction_list_sum(list_to_sum):
                            list_to_sum[4],
                            list_to_sum[5])
     sum_with_d = h_reduction_sum(a, b, c)
+
+    if (sum_with_d == -1 and d == -1):
+        error = "final result shouldn't be -1"
+        raise NameError(error)
     return h_bit_sum(bs_params, sum_with_d, d)
 
 
-#  Used by h_balanced_reduction_list_sum. 
+#  Used by h_balanced_reduction_list_sum.
 # input: a list_to_sum
-# output: if len(list_to_sum) > 6: 
-#         a strictly less list 
+# output: if len(list_to_sum) > 6:
+#         a strictly less list
 #         of elements with the same sum
 #         else:
-#         the same list with a padding of "-1" to have 
+#         the same list with a padding of "-1" to have
 #         a size 6
 def rec_bal_red_list_sum(list_to_sum):
     three_multiple = (len(list_to_sum) // 3) + 1
@@ -408,7 +418,7 @@ def bootstrapping_arguments(list_cipher):
 
 # input: a list of ciphers of 0 or 1 [encrypt(b_i)]
 # output: the encrypt of the complementary of 2 of
-# entry, unless the most significant bit whose 
+# entry, unless the most significant bit whose
 # result is a encrypt of 0 without error
 def h_complementary_two(params, bit_cipher):
     (n, q, distrib, m) = params
@@ -455,16 +465,3 @@ def h_basic_decrypt_positives_error(encrypted_sk, cipher):
 
     scalar_product = bs_sum_algo(list_to_sum)
     return scalar_product[i_index]
-
-
-# a left shift of SHIFT to the left,
-# the new element of the right are
-# tncrypts of 0
-# bonus idea: do not create error vector
-# for the encrypt of the 0 that are
-# added
-def h_left_shift(params, public_key, list_bit, shift):
-    if shift == 0:
-        return list_bit
-    return list_bit[shift:] + [encrypt(params, public_key, 0) for i in
-                               range(shift)]
