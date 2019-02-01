@@ -95,8 +95,8 @@
 	\textbf{Sortie} : Cet algorithme renvoie ($a_1, 2\times a_1, 2^{2} \times a_1, ..., 2^{l-1} \times a_1, a_2, ..., 2^{l-1} \times a_k)$. \\
 	
 	\begin{prop}
-	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$.
-	$\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle = \langle\vec{a},\vec{b} \rangle$.
+	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$. \\
+	On a $\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle = \langle\vec{a},\vec{b} \rangle$.
 	\end{prop}
 	\begin{proof}
 	\begin{align*}
@@ -108,8 +108,8 @@
 	\end{proof}
 	
 	\begin{prop}
-	Soient $\vec{a}$ dans $\ZZq^{k \times l}$ et $\vec{b}$ dans $\ZZq^{k}$.
-	$\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle = \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle = \langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle$. \\
+	Soient $\vec{a}$ dans $\ZZq^{k \times l}$ et $\vec{b}$ dans $\ZZq^{k}$. \\
+	On a $\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle = \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle = \langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle$. \\
 	\end{prop}
 	\begin{proof}
 	\begin{align*}
@@ -176,6 +176,7 @@
 	\end{subsection}
 	
 	\begin{subsection}{Opérations homomorphes}
+	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et que donc $\textbf{Flatten}(A) \cdot \vec{v} = A \cdot \vec{v}$ pour tout $A$.
 	
 	\paragraph{}
 	\textbf{MultConst}
@@ -185,7 +186,6 @@
 	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\alpha \cdot \mu$.\\
 	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \cdot I_N)$ puis l'on renvoie $\textbf{Flatten}(M_{\alpha} \cdot C)$.
 	\begin{proof}
-	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$. On en déduit :
 	\begin{align*}
 	\textbf{MultConst}(C, \alpha) \cdot \vec{v} &= M_{\alpha} \cdot C \cdot \vec{v} \\
 	&= M_{\alpha} \cdot (\mu \cdot \vec{v} + \vec{e}) \\
