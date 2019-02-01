@@ -1,8 +1,8 @@
-load("FHE_scheme/bootstrapping.sage")
-load("FHE_scheme/FHE_scheme.sage")
-load("FHE_scheme/internal_functions.sage")
+load("GSW_scheme/bootstrapping.sage")
+load("GSW_scheme/GSW_scheme.sage")
+load("GSW_scheme/auxilliary_functions.sage")
 
-#for the test of h_abs_ZZ_centered
+# for the test of h_abs_ZZ_centered
 
 load("unitary_tests/framework_test.sage")
 

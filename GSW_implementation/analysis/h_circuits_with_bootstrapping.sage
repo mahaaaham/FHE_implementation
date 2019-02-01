@@ -1,5 +1,5 @@
-load("FHE_scheme/bootstrapping.sage")
-load("FHE_scheme/FHE_scheme.sage")
+load("GSW_scheme/bootstrapping.sage")
+load("GSW_scheme/GSW_scheme.sage")
 
 load("unitary_tests/framework_test.sage")
 

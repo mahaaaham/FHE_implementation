@@ -1,13 +1,9 @@
-# params sont les paramètres généraux du système (n,q,distrib,m).
-# On y ajoute Zq afin de ne pas devoir le reconstruire tout le temps
-# ainsi que l et N afin de ne pas les recalculer à chaque fois.
-# A noter que ces trois ajouts se retrouvent avec les paramètres originaux.
-
 # convention: we choose to encode a vector by a list. In consequence,
 # there is no vector at input or output of these functions.
 # Summary:
 # 1 - Generals manipulations of matrix
-# 2 - Auxiliary  functions used by the FHE algorithms
+# 2 - Auxiliary functions used by the GWS algorithms
+# 3 - Babai nearest plane algorithm used by mp_decrypt_all_q
 
 
 # 1 - Generals manipulations of matrix
@@ -133,8 +129,8 @@ def powers_of_2(B):
     return result
 
 
-# the babai nearest plane algorithm,
-# used by mp_all_q_decrypt
+# 3 - the babai nearest plane algorithm, used by mp_all_q_decrypt.
+
 # B is a matrix m*n, it is the base of a lattice:
 # the columns generate the lattice
 # v is a vector of ZZ^n
@@ -161,43 +157,3 @@ def babai_nearest_plane(B, v):
         raise NameError("babai_nearest_plane: x+e != v")
 
     return list(x)
-
-
-# for g_t = [1, 2, ..., 2^ (l-1)]
-# where l is the (binary) size of q
-# using than Lambda(g_t) = q (Lambda^T(g_t))*
-# we see the global variable S_mp_all_decrypt to:
-# q*(S^-1^t) where S_l is a basis of Lambda(g_t)
-# define in the article trapdoor for lattices by Peikert
-# and Micciano at page 9
-def init_mp_all_q_decrypt(q):
-    global S_mp_all_decrypt
-
-    l = floor(log(q, 2)) + 1
-    bin_q = q.digits(base=2, padto=l-1)
-    size_matrix = l
-
-    S = zero_matrix(ZZ, size_matrix)
-    for i in range(size_matrix - 1):
-        S[i, i] = 2
-        S[i+1, i] = -1
-
-    for i in range(size_matrix):
-        S[i, size_matrix-1] = bin_q[i]
-
-    S = S.inverse()
-    S = S.transpose()
-    S = q * S
-    S_mp_all_decrypt = S
-    return
-
-
-# WARNING: the function init_mp_all_q_decrypt(q)
-# of the file cvp.sage must
-# have be launched with the right q before
-# Retrieve a vector near to C
-# of the lattice Lambda(g^t) = q (Lambda^T(g^t))*
-# She is used by setup (in FHE_scheme) if decrypt == mp_all_q_decrypt
-def mp_all_cvp(C):
-    global S_mp_all_decrypt
-    return babai_nearest_plane(S_mp_all_decrypt, C)

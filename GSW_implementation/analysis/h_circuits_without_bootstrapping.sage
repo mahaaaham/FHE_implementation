@@ -1,15 +1,16 @@
-load("FHE_scheme/FHE_scheme.sage")
-load("FHE_scheme/homomorphic_functions.sage")
-load("FHE_scheme/internal_functions.sage")
-
 load("analysis/circuits.sage")
 load("analysis/clear_functions.sage")
+
+load("GSW_scheme/GSW_scheme.sage")
+load("GSW_scheme/homomorphic_functions.sage")
+load("GSW_scheme/auxilliary_functions.sage")
 
 load("unitary_tests/framework_test.sage")
 
 
 # global variable used in the algorithms
 decrypt = basic_decrypt
+
 
 def test_no(params, public_key, secret_key, nb_tests):
     (n, q, distrib, m) = params

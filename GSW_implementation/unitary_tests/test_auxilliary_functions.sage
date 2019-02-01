@@ -1,4 +1,4 @@
-load("FHE_scheme/internal_functions.sage")
+load("GSW_scheme/auxilliary_functions.sage")
 
 load("unitary_tests/framework_test.sage")
 
@@ -143,7 +143,7 @@ def test_main_cvp():
     conclusion_message("")
 
 
-def test_main_internal():
+def test_main_auxilliary():
 
     nb_col = 20
     nb_row = 20

@@ -1,5 +1,5 @@
-load("FHE_scheme/internal_functions.sage")
-load("FHE_scheme/params_maker.sage")
+load("GSW_scheme/auxilliary_functions.sage")
+load("GSW_scheme/params_maker.sage")
 
 
 # global parameters:
@@ -155,11 +155,39 @@ def mp_decrypt(params, secret_key, cipher):
     return Zq(current_mess)
 
 
-# WARNING: the function init_mp_all_q_decrypt(q)
-# of the file cvp.sage must
-# have be launched with the right q before
-# using this function
+# for g_t = [1, 2, ..., 2^ (l-1)]
+# where l is the (binary) size of q
+# using than Lambda(g_t) = q (Lambda^T(g_t))*
+# we see the global variable S_mp_all_decrypt to:
+# q*(S^-1^t) where S_l is a basis of Lambda(g_t)
+# define in the article trapdoor for lattices by Peikert
+# and Micciano at page 9
+def init_mp_all_q_decrypt(q):
+    global S_mp_all_decrypt
+
+    l = floor(log(q, 2)) + 1
+    bin_q = q.digits(base=2, padto=l-1)
+    size_matrix = l
+
+    S = zero_matrix(ZZ, size_matrix)
+    for i in range(size_matrix - 1):
+        S[i, i] = 2
+        S[i+1, i] = -1
+
+    for i in range(size_matrix):
+        S[i, size_matrix-1] = bin_q[i]
+
+    S = S.inverse()
+    S = S.transpose()
+    S = q * S
+    S_mp_all_decrypt = S
+    return
+
+
+# WARNING: the function init_mp_all_q_decrypt(q) must
+# have be launched with the right q before using this function
 def mp_all_q_decrypt(params, secret_key, cipher):
+    global S_mp_all_decrypt
     (n, q, distrib, m) = params
     l = floor(log(q, 2)) + 1
     Zq = Integers(q)
@@ -167,7 +195,7 @@ def mp_all_q_decrypt(params, secret_key, cipher):
     C = cipher * vector(Zq, secret_key)
     C = Sequence(C[:l], ZZ)
 
-    element_of_lattice = mp_all_cvp(C)
+    element_of_lattice = babai_nearest_plane(S_mp_all_decrypt, C)
 
     # element_of_lattice should be of
     # the form message * [1 2 ... 2^(l-1)]

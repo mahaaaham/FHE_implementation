@@ -6,8 +6,9 @@
 # of clear functions;
 # Clear version of the functions
 
-load("FHE_scheme/homomorphic_functions.sage")
 load("analysis/circuits.sage")
+
+load("GSW_scheme/homomorphic_functions.sage")
 
 
 # ---- creation of the dictionaries of homomorphic operations

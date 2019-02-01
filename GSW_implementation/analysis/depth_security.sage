@@ -1,8 +1,9 @@
-load("FHE_scheme/FHE_scheme.sage")
-load("FHE_scheme/homomorphic_functions.sage")
-
 load("analysis/circuits.sage")
 load("analysis/clear_functions.sage")
+
+load("GSW_scheme/GSW_scheme.sage")
+load("GSW_scheme/homomorphic_functions.sage")
+
 load("lwe_estimator/estimator.py")
 
 # where we put the graphics

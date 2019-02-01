@@ -1,14 +1,4 @@
-# params sont les paramètres généraux du système (n,q,distrib,m).
-# On y ajoute Zq afin de ne pas devoir le reconstruire tout le temps
-# ainsi que l et N afin de ne pas les recalculer à chaque fois.
-# A noter que ces trois ajouts se retrouvent avec les paramètres originaux.
-load("FHE_scheme/internal_functions.sage")
-
-
-# just the usual evaluation with h_dict_FOO insteand of dict_FOO
-
-
-#  creation of the functions
+load("GSW_scheme/auxilliary_functions.sage")
 
 
 # the homomorphic addiction of two ciphers

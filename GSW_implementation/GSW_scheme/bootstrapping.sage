@@ -1,6 +1,6 @@
-load("FHE_scheme/FHE_scheme.sage")
-load("FHE_scheme/homomorphic_functions.sage")
-load("FHE_scheme/internal_functions.sage")
+load("GSW_scheme/GSW_scheme.sage")
+load("GSW_scheme/homomorphic_functions.sage")
+load("GSW_scheme/auxilliary_functions.sage")
 
 # WARNING: for the bootstrapping, q
 # has to be a power of 2, and

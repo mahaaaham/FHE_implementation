@@ -3,6 +3,7 @@ from sage.crypto.lwe import LindnerPeikert
 from sage.crypto.lwe import Regev
 
 # different type of parameters generators
+# used for the setup function of the GWS_scheme.
 # from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on
 # `sigma_is_stddev`
 
