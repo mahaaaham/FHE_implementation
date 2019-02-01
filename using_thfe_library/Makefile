@@ -4,7 +4,6 @@ CFLAGS = -std=c11 -Wall -Wextra
 CPPFLAGS = -I$(INCLUDE)
 DEBUGFLAGS = -g
 TFHEFLAG  = -ltfhe-spqlios-fma
-EXE = test
 
 # Disable implicit rules
 .SUFFIXES:
