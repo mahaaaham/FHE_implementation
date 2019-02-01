@@ -1,11 +1,34 @@
 
-\begin{section}{Des libraries C/C++ pour du FHE}
+\begin{section}{Des libraries pour du FHE}
+Plusieurs librairies open-sources implémentant divers FHE sont disponibles. 
+On peut notamment en trouver une liste sur HomomorphicEncryption.org \cite{homencrypt.org}, 
+qui se décrit comme \og an open consortium of industry, government and academia to 
+standardize homomorphic encryption \fg.
+
+Nous proposons ici d'en évoquer deux:
+\begin{itemize}
+\item The Simple Encrypted Arithmetic Library (SEAL) \cite{seal}, dont nous avons tiré des paramètres  
+\og réalistes \fg\footnote{Pas forcément pour nos machines et avec notre implémentation}
+sécurisés et autorisant une profondeur de NAND non null (même si irréaliste: seulement 3);
+\item The Gate Bootstrapping API \cite{TFHE} qui implémente une variation du cryptosystème GSW;
+\end{itemize}
+
 \begin{subsection}{The Simple Encrypted Arithmetic Library (SEAL)}
-Acronyme de Simple Encrypted Arithmetic Library, SEAL est une librairie
-écrite en C++ sous licence MIT. Elle propose :
+Acronyme de Simple Encrypted Arithmetic Library, SEAL (voir \cite{seal}) 
+est une librairie écrite par le \og cryptography research group \fg de Microsoft, en C++ sous 
+licence MIT. Elle se propose d'implémenter deux FHE de seconde génération: 
+BVS \cite{EPRINT:FanVer12} et CKKS \cite{AC:CKKS17}.
+
+Son installation est facile\footnote{Sur Linux debian 4.9.0-8-amd64, nous avons dû
+utilister les backports debians pour avoir une version de cmake suffisament récente}
+et il est directement possible de compiler un executable permettant de tester 
+diverses fonctionnalitées de la librarie. De plus, la documentation
+\cite{seal_manual_231},
+malheureusement non à jour, indique quelques points théoriques autant du point 
+de vue mathématique que des choix de représentation des données.
 \end{subsection}
+
 \begin{subsection}{The Gate Bootstrapping API}
-\end{subsection}
 Notre présentation s'appuie sur celle donnée dans la page officielle (voir \cite{TFHE})
  qui est claire et bien documentée.
 
@@ -14,7 +37,8 @@ s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M
 (voir \cite{cryptoeprint:2017:430} et  \cite{cryptoeprint:2016:870}). 
 
 Elle utilise une version modifiée du cryptosysteme GSW (\cite{C:GenSahWat13})
-étudié dans notre rapport, et permettant aussi bien du LHE que du FHE. 
+étudié dans notre rapport, et permettant aussi bien du LHE que du FHE. C'est
+pourquoi nous allons parler plus en détail de celle-ci.
 
 Ses performances sont interessantes; il est notamment indiqué dans la sous-section
 4.2 de \cite{cryptoeprint:2016:870} que pour un ordinateur 64-bit simple coeur 
@@ -24,4 +48,10 @@ de clée de bootstrapping d'environ 24MO.
 Pour arriver à de tels résultats, de nombreuses modifications et optimisations dans le codes 
 ont été faites. Notamment, le problème sur lequel s'appuie le cryptosystème n'est plus 
 LWE mais TFHE, présenté dans les librairies suscitées.
+
+\begin{subsubsection}{Le problème TFHE}
+\end{subsubsection} % Le problème TFHE
+\begin{subsubsection}{Un exemple simple fourni par leur tutorial}
+\end{subsubsection} % un exemple simple fourni par leur tutorial
+\end{subsection} % TFHE
 \end{section}
