@@ -1,15 +1,6 @@
-from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
-from sage.crypto.lwe import LindnerPeikert
-from sage.crypto.lwe import Regev
-# See the article TRUC for an explanation of the notations
+load("FHE_scheme/internal_functions.sage")
+load("FHE_scheme/params_maker.sage")
 
-# params sont les paramètres généraux du système (n,q,distrib,m).
-# On y ajoute Zq afin de ne pas devoir le reconstruire tout le temps
-# ainsi que l et N afin de ne pas les recalculer à chaque fois.
-# A noter que ces trois ajouts se retrouvent avec les paramètres originaux.
-load("internal_functions.sage")
-# for mp_all_q_decrypt
-load("cvp.sage")
 
 # global parameters:
 # I initialise decrypt to a function to avoid an error
@@ -28,120 +19,8 @@ bs_sk = None
 bs_lk = None
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
-# different type of parameters generators
-# from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on
-# `sigma_is_stddev`
-
-def seal(n):
-    n = 2048
-    q = 2^60 - 2^14 + 1
-    sigma = 1 / (sqrt(2 * pi))
-    epsilon = 1
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
-    return (n, q, distrib, m)
-
-
-# TESLA, unless for the m
-def tesla(n):
-    n = 804
-    q = 2^31 - 19
-    sigma = 57
-    epsilon = 1
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
-    return (n, q, distrib, m)
-
-
-def no_error(n):
-    q = 2^(floor(log(2*n, 2)))
-    epsilon = 1
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-    distrib = DiscreteGaussianDistributionIntegerSampler(10^(-20), q)
-    return (n, q, distrib, m)
-
-
-def regev(n):
-    global decrypt
-    epsilon = 1.2
-    regev_obj = Regev(n)
-    distrib = regev_obj.D
-    q = regev_obj.K.characteristic()
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-    return (n, q, distrib, m)
-
-
-def baby_version(param_maker, n):
-    global decrypt
-    (n, q, distrib, m) = param_maker(n)
-    sigma = distrib.sigma / 100000
-    # I follow the "sage convention" to center in q instead of 0
-    # it doesn't change anything
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma, q)
-    return (n, q, distrib, m)
-
-
-def regev_q_is_n_big_power(n):
-    global decrypt
-    L = 100
-    q = n^L
-    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
-    epsilon = 1.2
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-    return (n, q, distrib, m)
-
-
-def regev_q_is_n_low_power(n):
-    global decrypt
-    L = 0.6
-    (n, q, distrib, m) = regev(n)
-    q = floor(n^L)
-    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
-    epsilon = 1.2
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-    return (n, q, distrib, m)
-
-
-def regev_low_sigma(n):
-    global decrypt
-    L = 30
-    (n, q, distrib, m) = regev(n)
-    q = floor(n^L)
-    sigma = RR(n^2 / (sqrt(2 * pi * n) * log(n, 2)^2))
-    sigma = sigma / n^L
-    epsilon = 1.2
-    distrib = DiscreteGaussianDistributionIntegerSampler(sigma)
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-    return (n, q, distrib, m)
-
-
-def lindnerpeikert(n):
-    global decrypt
-    epsilon = 1.2
-    lindner_obj = LindnerPeikert(n)
-    distrib = lindner_obj.D
-    q = lindner_obj.K.characteristic()
-
-    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
-
-    if decrypt == mp_decrypt:
-        q = 2^floor(log(q, 2))
-    return (n, q, distrib, m)
-
+# a matrix used when mp_all_q_decrypt is used.
+S_mp_all_decrypt = 0
 
 # creation of the setup parameters commonly used by the others
 # functions

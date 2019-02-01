@@ -1,5 +1,5 @@
 # some functions to make less ugly the presentations
-# of our tests.
+# of our tests and analysis
 
 nb_success = 0
 nb_tests = 0

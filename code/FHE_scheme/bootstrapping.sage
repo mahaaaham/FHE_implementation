@@ -1,6 +1,6 @@
-load("homomorphic_functions.sage")
-load("FHE_scheme.sage")
-load("internal_functions.sage")
+load("FHE_scheme/FHE_scheme.sage")
+load("FHE_scheme/homomorphic_functions.sage")
+load("FHE_scheme/internal_functions.sage")
 
 # WARNING: for the bootstrapping, q
 # has to be a power of 2, and
@@ -361,20 +361,23 @@ def h_balanced_classic_list_sum(list_to_sum):
 def h_balanced_reduction_list_sum(list_to_sum):
     # we recover a list of same sum with 6 elements,
     # and possibly some -1
-    list_to_sum = rec_balanced_reduction(list_to_sum)
+    list_to_sum = rec_bal_red_list_sum(list_to_sum)
     # we treat directly the case "6 elements"
-    a, b = h_reduction_sum(list_to_sum[0],
+    a, b = h_reduction_sum(bs_params, bs_pk,
+                           list_to_sum[0],
                            list_to_sum[1],
                            list_to_sum[2])
-    c, d = h_reduction_sum(list_to_sum[3],
+    c, d = h_reduction_sum(bs_params, bs_pk,
+                           list_to_sum[3],
                            list_to_sum[4],
                            list_to_sum[5])
-    sum_with_d = h_reduction_sum(a, b, c)
-
-    if (sum_with_d == -1 and d == -1):
+    e, f = h_reduction_sum(bs_params, bs_pk, a, b, c)
+    g, h = h_reduction_sum(bs_params, bs_pk, e, f, d)
+    result = h_bit_sum(bs_params, g, h)
+    if result == -1:
         error = "final result shouldn't be -1"
         raise NameError(error)
-    return h_bit_sum(bs_params, sum_with_d, d)
+    return result
 
 
 #  Used by h_balanced_reduction_list_sum.
@@ -396,11 +399,12 @@ def rec_bal_red_list_sum(list_to_sum):
     else:
         new_list = []
         for i in range(three_multiple):
-            left, right = h_reduction_sum(list_to_sum[3 * three_multiple],
-                                          list_to_sum[3 * three_multiple + 1],
-                                          list_to_sum[3 * three_multiple + 2])
+            left, right = h_reduction_sum(bs_params, bs_pk,
+                                          list_to_sum[3 * i],
+                                          list_to_sum[3 * i + 1],
+                                          list_to_sum[3 * i + 2])
             new_list += [left, right]
-        if len(new_list) <= 2:
+        if len(new_list) <= 6:
             return new_list
         else:
             return rec_bal_red_list_sum(new_list)

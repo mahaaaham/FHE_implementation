@@ -1,14 +1,14 @@
-load("bootstrapping.sage")
-load("FHE_scheme.sage")
+load("FHE_scheme/bootstrapping.sage")
+load("FHE_scheme/FHE_scheme.sage")
+load("FHE_scheme/internal_functions.sage")
 
 #for the test of h_abs_ZZ_centered
-load("internal_functions.sage")
 
-load("test/framework_test.sage")
+load("unitary_tests/framework_test.sage")
 
 
-# test NB_TEST times  the fonction 
-# test_complementary_two with 
+# test NB_TEST times  the fonction
+# test_complementary_two with
 # list of 0 and 1 of size bin_size
 # since we don't care of the m.s.b, we look modulo 2^(bin_size-1)
 def test_complementary_two(nb_test, bin_size):
@@ -87,7 +87,7 @@ def test_h_left (nb_test, len_test):
         crypted_list = []
         clear_list = []
         for j in range(len_test):
-            clear_list.append(ZZ.random_element(0,2))
+            clear_list.append(ZZ.random_element(0, 2))
             crypted_list.append(encrypt(params, public_key, clear_list[j]))
         print "clear_list = " + str(clear_list)
         crypted_list = h_left_shift(params, public_key, crypted_list, len_test//2)
@@ -271,8 +271,10 @@ def test_main_bootstrapping():
     transition_message("We test the differents sum list algorithms: ")
     bin_size = 10
     nb_elt = 15
-    for algo in [h_naive_classic_list_sum, h_naive_reduction_list_sum,
-                 h_balanced_classic_list_sum]: # h_balanced_reduction_list_sum
+    for algo in [h_naive_classic_list_sum ,
+                 h_balanced_classic_list_sum,
+                 h_naive_reduction_list_sum,
+                 h_balanced_reduction_list_sum]:
         one_test(test_sum_list, [nb_elt, bin_size, algo],
                  "algo is: " + algo.__name__)
         one_test(test_sum_list, [nb_elt, bin_size, algo],

@@ -1,10 +1,11 @@
-load("test/framework_test.sage")
-load("internal_functions.sage")
+load("FHE_scheme/FHE_scheme.sage")
+load("FHE_scheme/homomorphic_functions.sage")
+load("FHE_scheme/internal_functions.sage")
 
-load("FHE_scheme.sage")
-load("circuits.sage")
-load("homomorphic_functions.sage")
-load("clear_functions.sage")
+load("analysis/circuits.sage")
+load("analysis/clear_functions.sage")
+
+load("unitary_tests/framework_test.sage")
 
 
 # global variable used in the algorithms

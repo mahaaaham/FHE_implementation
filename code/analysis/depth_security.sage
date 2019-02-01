@@ -1,7 +1,9 @@
-load("FHE_scheme.sage")
-load("circuits.sage")
-load("homomorphic_functions.sage")
-load("clear_functions.sage")
+load("FHE_scheme/FHE_scheme.sage")
+load("FHE_scheme/homomorphic_functions.sage")
+
+load("analysis/circuits.sage")
+load("analysis/clear_functions.sage")
+load("lwe_estimator/estimator.py")
 
 # where we put the graphics
 path_pictures = "../report/pictures/"
@@ -125,7 +127,9 @@ def make_graph(min_value, max_value, parameter_maker, decrypt_alg):
     return
 
 
-# we approximate B by 10 sigma
+# we approximate B by 10 sigma, and say what is
+# the maximum depth of NAND possible according
+# to the chosen n and params_maker
 def lenght_circuit(n, params_maker):
     (n, q, D, m) = params_maker(n)
     N = (n+1) * (floor(log(q)) + 1)
@@ -147,5 +151,29 @@ def all_lenght_circuit(n):
         string += params_maker.__name__
         string += "\nL is: " + str(L)
         print(string)
+        print("")
+    return
+
+
+# conversion of parameters to be compatibles with
+# lwe_estimator
+def convert_params(params_maker, n):
+    n, q, distrib, m = params_maker(n)
+    alpha = alphaf(distrib.sigma, q, sigma_is_stddev=False)
+    return n, alpha, q, m
+
+
+# the lwe_estimation of some param_makers
+def all_estimate_lwe(n):
+    nn = n
+    for params_maker in [regev, lindnerpeikert, regev_q_is_n_big_power,
+                         regev_q_is_n_low_power]:
+        string = "--------------    "
+        string += "dimension parameter n = " + str(nn) + "    params = "
+        string += params_maker.__name__
+        string += "    --------------"
+        print(string)
+        n, alpha, q, m = convert_params(params_maker, nn)
+        estimate_lwe(nn, alpha, q)
         print("")
     return

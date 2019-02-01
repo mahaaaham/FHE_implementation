@@ -1,7 +1,7 @@
-load("bootstrapping.sage")
-load("FHE_scheme.sage")
+load("FHE_scheme/bootstrapping.sage")
+load("FHE_scheme/FHE_scheme.sage")
 
-load("test/framework_test.sage")
+load("unitary_tests/framework_test.sage")
 
 
 def id_circuit():
