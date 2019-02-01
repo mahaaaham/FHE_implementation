@@ -69,7 +69,7 @@
 
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_1, ..., a_k) \in \ZZq^{k}$. \\
 	\textbf{Sortie} : Cet algorithme retourne la décomposition binaire des éléments de $\vec{a}$ sous la forme d'un vecteur. \\
-	\textbf{Algo} : Pour chaque $a_i$, on détermine sa représentation binaire avec les bits de faibles puissance à gauche et non à droite. On retourne la concaténation de ces représentations binaires sous la forme d'un vecteur.
+	\textbf{Algorithme} : Pour chaque $a_i$, on détermine sa représentation binaire avec les bits de faibles puissance à gauche et non à droite. On retourne la concaténation de ces représentations binaires sous la forme d'un vecteur.
 	
 	\paragraph{}
 	\textbf{BitDecomp}$^{-1}$
@@ -77,7 +77,7 @@
 
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
 	\textbf{Sortie} : Cet algorithme renvoie ($\sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{k,i})$. \\
-	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algo inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l-1}$.
+	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algorithme inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l-1}$.
 
 	\paragraph{}
 	\textbf{Flatten}
@@ -85,7 +85,7 @@
 
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
 	\textbf{Sortie} : Cet algorithme retourne un vecteur $\vec{b} = (b_{1,0}, ..., b_{1,l-1}, b_{2,0}, ..., b_{k,l-1})$ dont les éléments sont tous dans $\{ 0,1\} $. \\
-	\textbf{Algo} : On calcule \textbf{BitDecomp}$^{-1}(\vec{a})$ et on obtient un vecteur $\vec{z} \in \ZZq^{k}$. On applique ensuite \textbf{BitDecomp} à $\vec{z}$ et l'on renvoie le résultat obtenu.
+	\textbf{Algorithme} : On calcule \textbf{BitDecomp}$^{-1}(\vec{a})$ et on obtient un vecteur $\vec{z} \in \ZZq^{k}$. On applique ensuite \textbf{BitDecomp} à $\vec{z}$ et l'on renvoie le résultat obtenu.
 	
 	\paragraph{}
 	\textbf{PowersOf2}
@@ -139,7 +139,7 @@
 
 	\textbf{Entrée} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur. \\
 	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi, m$ du système. \\
-	\textbf{Algo} : On définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et de toujours pouvoir le déchiffrer correctemment tout en assurant qu'un adversaire attaquant le système doive effectuer au moins $2^\lambda$ opérations, quelle que soit l'attaque qu'il choisisse. La façon de déterminer ces paramètres n'est pas définie afin de pouvoir l'adapter suivant l'evolution des attaques. \\
+	\textbf{Algorithme} : On définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et de toujours pouvoir le déchiffrer correctemment tout en assurant qu'un adversaire attaquant le système doive effectuer au moins $2^\lambda$ opérations, quelle que soit l'attaque qu'il choisisse. La façon de déterminer ces paramètres n'est pas définie afin de pouvoir l'adapter suivant l'evolution des attaques. \\
 	
 	\paragraph{}
 	\textbf{SecretKeyGen}
@@ -147,7 +147,7 @@
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup}. \\
 	\textbf{Sortie} : Cet algorithme retourne la clé secrète $\vec{s} \in \ZZq^{n+1}$. \\
-	\textbf{Algo} : On génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. On définit la clé secrète comme $\vec{s} = (1, -t_1, ..., -t_n)$. \\
+	\textbf{Algorithme} : On génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. On définit la clé secrète comme $\vec{s} = (1, -t_1, ..., -t_n)$. \\
 	On note $\vec{v} = $ \textbf{PowersOf2}$(\vec{s})$.
 	
 	\paragraph{}
@@ -156,7 +156,7 @@
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup} et d'une clé secrète construite avec ces mêmes paramètres. \\
 	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{n+1 \times m}$.\\
-	\textbf{Algo} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \cdot \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
+	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \cdot \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
 	
 	\paragraph{}
 	\textbf{Encrypt}
@@ -164,14 +164,83 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé publique et un message $\mu \in \ZZq$. \\
 	\textbf{Sortie} : Cet algorithme retourne le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.\\
-	\textbf{Algo} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \cdot I_N + $\textbf{BitDecomp}$(R \cdot A))$.
+	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \cdot I_N + $\textbf{BitDecomp}$(R \cdot A))$.
 	
 	\paragraph{}
 	\textbf{Dec}
 	\flushleft
 	
-	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et le chiffré d'un message $\mu \in \{ 0,1\} $. \\
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et un chiffré d'un message $\mu \in \{ 0,1\} $. \\
 	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
-	\textbf{Algo} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
+	\textbf{Algorithme} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
+	\end{subsection}
+	
+	\begin{subsection}{Opérations homomorphes}
+	
+	\paragraph{}
+	\textbf{MultConst}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, un chiffré $C \in \ZZq^{N \times N}$ d'un message $\mu$ et une constante $\alpha \in \ZZq$. \\
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\alpha \cdot \mu$.\\
+	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \cdot I_N)$ puis l'on renvoie $\textbf{Flatten}(M_{\alpha} \cdot C)$.
+	\begin{proof}
+	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$. On en déduit :
+	\begin{align*}
+	\textbf{MultConst}(C, \alpha) \cdot \vec{v} &= M_{\alpha} \cdot C \cdot \vec{v} \\
+	&= M_{\alpha} \cdot (\mu \cdot \vec{v} + \vec{e}) \\
+	&= M_{\alpha} \cdot \mu \cdot \vec{v} + M_{\alpha} \cdot \vec{e} \\
+	&= \alpha \cdot \mu \cdot \vec{v} + M_{\alpha} \cdot \vec{e}
+	\end{align*}
+	\end{proof}
+	
+	\paragraph{}
+	\textbf{Add}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \ZZq$.\\
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 + \mu_2$.\\
+	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 + C_2)$.
+	\begin{proof}
+	\begin{align*}
+	\textbf{Add}(C_1, C_2) \cdot \vec{v} &= (C_1 + C_2) \cdot \vec{v} \\
+	&= (\mu_1 \cdot \vec{v} + \vec{e_1}) + (\mu_2 \cdot \vec{v} + \vec{e_2}) \\
+	&= (\mu_1 + \mu_2) \cdot \vec{v} + \vec{e_1} + \vec{e_2}
+	\end{align*}
+	\end{proof}
+	
+	\paragraph{}
+	\textbf{Mult}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \ZZq$.\\
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 \times \mu_2$. \\
+	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 \cdot C_2)$.
+	\begin{proof}
+	\begin{align*}
+	\textbf{Mult}(C_1, C_2) \cdot \vec{v} &= (C_1 \cdot C_2) \cdot \vec{v} \\
+	&= C_1 \cdot (\mu_2 \cdot \vec{v} + \vec{e_2}) \\
+	&= C_1 \cdot \mu_2 \cdot \vec{v} + C_1 \cdot \vec{e_2} \\
+	&= \mu_2 \cdot (\mu_1 \cdot \vec{v} + \vec{e_1}) + C_1 \cdot \vec{e_2} \\
+	&= (\mu_1 \cdot \mu_2) \cdot \vec{v} + \mu_2 \cdot \vec{e_1} + C_1 \cdot \vec{e_2}
+	\end{align*}
+	\end{proof}
+	
+	\paragraph{}
+	\textbf{NAND}
+	\flushleft
+	
+	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \{ 0,1\}$.\\
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\overline{(\mu_1 \land \mu_2)} = 1 - \mu_1 \cdot \mu_2$. \\
+	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(I_N - C_1 \cdot C_2)$.
+	\begin{proof}
+	\begin{align*}
+	\textbf{NAND}(C_1, C_2) \cdot \vec{v} &= (I_N - C_1 \cdot C_2) \cdot \vec{v}\\
+	&= \vec{v} - \textbf{Mult}(C_1, C_2) \\
+	&= \vec{v} - (\mu_1 \cdot \mu_2) \cdot \vec{v} - \mu_2 \cdot \vec{e_1} - C_1 \cdot \vec{e_2} \\
+	&= (1 - \mu_1 \cdot \mu_2) \cdot \vec{v} - \mu_2 \cdot \vec{e_1} - C_1 \cdot \vec{e_2} \\
+	\end{align*}
+	\end{proof}
+	
 	\end{subsection}
 \end{section}
