@@ -172,7 +172,7 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et un chiffré d'un message $\mu \in \{ 0,1\} $. \\
 	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
-	\textbf{Algorithme} : On rappelle que les $l$ premiers coeffitiens de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
+	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
 	\end{subsection}
 	
 	\begin{subsection}{Opérations homomorphes}
