@@ -1,9 +1,9 @@
-#include <example_communication.h>
 #include <alice.h>
 #include <cloud.h>
 #include <homomorphic_functions.h>
 
 #include <stdlib.h>
+
 
 #define DIR_SECRET_KEY "data/secret.key"
 #define DIR_CLOUD_KEY "data/cloud.data"
@@ -11,6 +11,8 @@
 #define DIR_ENCRYPTED_OUTPUT "data/encrypted_result.data"
 #define DIR_DECRYPTED_OUTPUT "data/decrypted_output.data"
 
+
+/* ---- Global variables ---- */
 /* 2 functions are disponibles: sum and minimum, 
    see homomorphic_functions.h */
 void (*h_function)(LweSample*, const LweSample*, const LweSample*, 
@@ -18,6 +20,7 @@ void (*h_function)(LweSample*, const LweSample*, const LweSample*,
 /* The 2 arguments that are encrypted and used by h_function */
 const int16_t arg1 = 4321;
 const int16_t arg2 = 1001;
+
 
 int 
 main()
