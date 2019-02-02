@@ -60,7 +60,7 @@
 
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
-	\begin{subsection}{Fonctions utiles}
+	\begin{subsection}{Fonctions utilisées}
 	Plusieurs algorithmes seront utiles pour pouvoir bien définir le système FHE :
 	
 	\paragraph{}
@@ -76,8 +76,8 @@
 	\flushleft
 
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$. \\
-	\textbf{Sortie} : Cet algorithme renvoie ($\sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} \cdot a_{k,i})$. \\
-	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algorithme inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l-1}$.
+	\textbf{Sortie} : Cet algorithme renvoie ($\sum\limits_{i=0}^{l-1} 2^{i} a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} a_{k,i})$. \\
+	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algorithme inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l}$.
 
 	\paragraph{}
 	\textbf{Flatten}
@@ -92,7 +92,7 @@
 	\flushleft
 
 	\textbf{Entrée} : Cet algorithme prends en entrée un vecteur $\vec{a} = (a_1, ..., a_k) \in \ZZq^{k}$. \\
-	\textbf{Sortie} : Cet algorithme renvoie ($a_1, 2\times a_1, 2^{2} \times a_1, ..., 2^{l-1} \times a_1, a_2, ..., 2^{l-1} \times a_k)$. \\
+	\textbf{Sortie} : Cet algorithme renvoie ($a_1, 2 a_1, 2^{2} a_1, ..., 2^{l-1} a_1, a_2, ..., 2^{l-1} a_k)$. \\
 	
 	\begin{prop}
 	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$. \\
@@ -100,9 +100,9 @@
 	\end{prop}
 	\begin{proof}
 	\begin{align*}
-	\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i,j} a_{i,j} \times (2^{j} \times b_i) \\
-	&= \sum\limits_{i,j} (a_{i,j} \times 2^{j}) \times b_i \\
-	&= \sum\limits_{i} a_i \times b_i \\
+	\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} a_{i,j} * (2^{j} * b_i) \\
+	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (a_{i,j} * 2^{j}) \\
+	&= \sum\limits_{i=1}^{k} b_i * a_i \\
 	&= \langle\vec{a},\vec{b} \rangle.
 	\end{align*}
 	\end{proof}
@@ -113,16 +113,16 @@
 	\end{prop}
 	\begin{proof}
 	\begin{align*}
-	\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i,j} a_{j+li} \times (2^{j} \times b_i) \\
-	&= \sum\limits_{i,j} (a_{j+li} \times 2^{j}) \times b_i \\
+	\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} a_{j+li} * (2^{j} * b_i) \\
+	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (a_{j+li} * 2^{j}) \\
 	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
 	\end{align*}
 	Soit $c = \textbf{BitDecomp}^{-1}(\vec{a})$.
 	\begin{align*}
 	\langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle &= \langle \textbf{BitDecomp}(\vec{c}),\textbf{PowersOf2}(\vec{b}) \rangle \\
-	&= \sum\limits_{i,j} c_{i,j} \times (2^{j} \times b_i) \\
-	&= \sum\limits_{i,j} (c_{i,j} \times 2^{j}) \times b_i \\
-	&= \sum\limits_{i} c_{i} \times b_i) \\
+	&= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} c_{i,j} * (2^{j} * b_i) \\
+	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (c_{i,j} * 2^{j}) \\
+	&= \sum\limits_{i=1}^{k} b_i * c_i \\
 	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
 	&= \langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle
 	\end{align*}
@@ -155,8 +155,8 @@
 	\flushleft
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup} et d'une clé secrète construite avec ces mêmes paramètres. \\
-	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{n+1 \times m}$.\\
-	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \cdot \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
+	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{m \times n}$.\\
+	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
 	
 	\paragraph{}
 	\textbf{Encrypt}
@@ -164,7 +164,7 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé publique et un message $\mu \in \ZZq$. \\
 	\textbf{Sortie} : Cet algorithme retourne le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.\\
-	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \cdot I_N + $\textbf{BitDecomp}$(R \cdot A))$.
+	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \times I_N + $\textbf{BitDecomp}$(R \times A))$.
 	
 	\paragraph{}
 	\textbf{Dec}
@@ -176,7 +176,7 @@
 	\end{subsection}
 	
 	\begin{subsection}{Opérations homomorphes}
-	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et que donc $\textbf{Flatten}(A) \cdot \vec{v} = A \cdot \vec{v}$ pour tout $A$.
+	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et que donc $\textbf{Flatten}(A) \cdot \vec{v} = A \times \vec{v}$ pour tout $A$.
 	
 	\paragraph{}
 	\textbf{MultConst}
@@ -184,15 +184,16 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, un chiffré $C \in \ZZq^{N \times N}$ d'un message $\mu$ et une constante $\alpha \in \ZZq$. \\
 	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\alpha \cdot \mu$.\\
-	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \cdot I_N)$ puis l'on renvoie $\textbf{Flatten}(M_{\alpha} \cdot C)$.
+	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \times I_N)$ puis l'on renvoie $\textbf{Flatten}(M_{\alpha} \times C)$.
 	\begin{proof}
 	\begin{align*}
-	\textbf{MultConst}(C, \alpha) \cdot \vec{v} &= M_{\alpha} \cdot C \cdot \vec{v} \\
-	&= M_{\alpha} \cdot (\mu \cdot \vec{v} + \vec{e}) \\
-	&= M_{\alpha} \cdot \mu \cdot \vec{v} + M_{\alpha} \cdot \vec{e} \\
-	&= \alpha \cdot \mu \cdot \vec{v} + M_{\alpha} \cdot \vec{e}
+	\textbf{MultConst}(C, \alpha) \times \vec{v} &= M_{\alpha} \times C \times \vec{v} \\
+	&= M_{\alpha} \cdot (\mu * \vec{v} + \vec{e}) \\
+	&= M_{\alpha} \times \mu * \vec{v} + M_{\alpha} \times \vec{e} \\
+	&= \alpha * \mu * \vec{v} + M_{\alpha} \times \vec{e}
 	\end{align*}
 	\end{proof}
+	\textbf{Erreur} : Le chiffré à une erreur de $M_\alpha \times \vec{e}$. L'impact de celle-ci sur le déchiffrement sera donc au maximum de $N$ fois l'impact de $\vec{e}$ quel que soi $\alpha$.
 	
 	\paragraph{}
 	\textbf{Add}
@@ -203,44 +204,47 @@
 	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 + C_2)$.
 	\begin{proof}
 	\begin{align*}
-	\textbf{Add}(C_1, C_2) \cdot \vec{v} &= (C_1 + C_2) \cdot \vec{v} \\
-	&= (\mu_1 \cdot \vec{v} + \vec{e_1}) + (\mu_2 \cdot \vec{v} + \vec{e_2}) \\
-	&= (\mu_1 + \mu_2) \cdot \vec{v} + \vec{e_1} + \vec{e_2}
+	\textbf{Add}(C_1, C_2) \times \vec{v} &= (C_1 + C_2) \times \vec{v} \\
+	&= (\mu_1 * \vec{v} + \vec{e_1}) + (\mu_2 * \vec{v} + \vec{e_2}) \\
+	&= (\mu_1 + \mu_2) * \vec{v} + \vec{e_1} + \vec{e_2}
 	\end{align*}
 	\end{proof}
+	\textbf{Erreur} : Le chiffré à une erreur de $\vec{e_1} + \vec{e_2}$. L'impact de celle-ci sur le déchiffrement sera donc au maximum de la somme de l'impact de $\vec{e_1}$ et de l'impact de $\vec{e_2}$.
 	
 	\paragraph{}
 	\textbf{Mult}
 	\flushleft
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \ZZq$.\\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 \times \mu_2$. \\
-	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 \cdot C_2)$.
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 * \mu_2$. \\
+	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 \times C_2)$.
 	\begin{proof}
 	\begin{align*}
-	\textbf{Mult}(C_1, C_2) \cdot \vec{v} &= (C_1 \cdot C_2) \cdot \vec{v} \\
-	&= C_1 \cdot (\mu_2 \cdot \vec{v} + \vec{e_2}) \\
-	&= C_1 \cdot \mu_2 \cdot \vec{v} + C_1 \cdot \vec{e_2} \\
-	&= \mu_2 \cdot (\mu_1 \cdot \vec{v} + \vec{e_1}) + C_1 \cdot \vec{e_2} \\
-	&= (\mu_1 \cdot \mu_2) \cdot \vec{v} + \mu_2 \cdot \vec{e_1} + C_1 \cdot \vec{e_2}
+	\textbf{Mult}(C_1, C_2) \times \vec{v} &= (C_1 \times C_2) \times \vec{v} \\
+	&= C_1 \times (\mu_2 * \vec{v} + \vec{e_2}) \\
+	&= \mu_2 * C_1 \times \vec{v} + C_1 \times \vec{e_2} \\
+	&= \mu_2 * (\mu_1 * \vec{v} + \vec{e_1}) + C_1 \times \vec{e_2} \\
+	&= (\mu_1 * \mu_2) * \vec{v} + \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}
 	\end{align*}
 	\end{proof}
+	\textbf{Erreur} : Le chiffré à une erreur de $\mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. $C_1 \times \vec{e_2}$ a donc un impact sur le déchiffrement d'au maximum $N$ fois l'impact de $\vec{e_1}$. $\mu_2 * \vec{e_1}$ n'a pas ce genre de contrainte et son impact maximum ne peut guère être limité qu'en limitant les valeurs des messages.
 	
 	\paragraph{}
 	\textbf{NAND}
 	\flushleft
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \{ 0,1\}$.\\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\overline{(\mu_1 \land \mu_2)} = 1 - \mu_1 \cdot \mu_2$. \\
+	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\overline{(\mu_1 \land \mu_2)} = 1 - \mu_1 * \mu_2$. \\
 	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(I_N - C_1 \cdot C_2)$.
 	\begin{proof}
 	\begin{align*}
-	\textbf{NAND}(C_1, C_2) \cdot \vec{v} &= (I_N - C_1 \cdot C_2) \cdot \vec{v}\\
+	\textbf{NAND}(C_1, C_2) \times \vec{v} &= (I_N - C_1 \times C_2) \times \vec{v} \\
 	&= \vec{v} - \textbf{Mult}(C_1, C_2) \\
-	&= \vec{v} - (\mu_1 \cdot \mu_2) \cdot \vec{v} - \mu_2 \cdot \vec{e_1} - C_1 \cdot \vec{e_2} \\
-	&= (1 - \mu_1 \cdot \mu_2) \cdot \vec{v} - \mu_2 \cdot \vec{e_1} - C_1 \cdot \vec{e_2} \\
+	&= \vec{v} - (\mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} + C_1 \times \vec{e_2} \\
+	&= (1 - \mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} - C_1 \times \vec{e_2}
 	\end{align*}
 	\end{proof}
+	\textbf{Erreur} : Le chiffré à une erreur de $-(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. Son impact sur le déchiffrement est donc équivalent à celui d'une opération $\textbf{Mult}(C_1, C_2)$. Cependant, $\mu_2$ étant ici égal à 0 ou 1, on obtient un impact inférieur ou égal à l'impact de $\vec{e_1}$ plus $N$ fois celui de $\vec{e_2}$.
 	
 	\end{subsection}
 \end{section}
