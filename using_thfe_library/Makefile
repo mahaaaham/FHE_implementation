@@ -1,29 +1,29 @@
-# Compilation flags.
-CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra
-CPPFLAGS = -I$(INCLUDE)
-DEBUGFLAGS = -g
-TFHEFLAG  = -ltfhe-spqlios-fma
+INCLUDE = include
+SRC = src
+EXE = test
 
-# Disable implicit rules
+# Disable built-in rules
 .SUFFIXES:
 
-# Special rules and targets.
-.PHONY: all clean help
+# Special rules and targets
+.PHONY: all build clean help
 
-# Rules and targets.
-all: test
+# Rules and targets
+all: build
 
-test: generating_saving_params.c 
-	$(CC) $(CFLAGS) -o $@ $^ $(TFHEFLAG)
+build:
+	$(MAKE) -C $(SRC) all
+	mv $(SRC)/test .
 
 clean:
-	rm -f *.o test *~
+	rm -f $(EXE) 
+	rm -f *~
+	cd $(INCLUDE) && rm -f *~
+	$(MAKE) -C $(SRC) clean
 
 help:
 	@echo "Usage:"
-	@echo -e "  make [all]\t\tRun the target test"
-	@echo -e "  make aes\t\tBuild executable test"
+	@echo -e "  make [all]\t\tRun the target build"
+	@echo -e "  make build\t\tBuild executable"
 	@echo -e "  make clean\t\tRemove all files produced by the compilation"
 	@echo -e "  make help\t\tDisplay this help"
-
