@@ -17,21 +17,21 @@ TFHEFLAG  = -ltfhe-spqlios-fma
 all: example_communication
 
 example_communication: example_communication.o alice.o cloud.o homomorphic_functions.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(TFHEFLAG)
+	$(CC) $(CFLAGS) -o $@ $^ $(TFHEFLAG)
 
 example_communication.o: example_communication.c $(INCLUDE)/example_communication.h\
 			 $(INCLUDE)/alice.h $(INCLUDE)/cloud.h\
 			 $(INCLUDE)/homomorphic_functions.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(TFHEFLAG)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ $(TFHEFLAG)
 
 alice.o: alice.c $(INCLUDE)/alice.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(TFHEFLAG)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ $(TFHEFLAG)
 
 cloud.o: cloud.c $(INCLUDE)/cloud.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(TFHEFLAG)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ $(TFHEFLAG)
 
 homomorphic_functions.o: homomorphic_functions.c $(INCLUDE)/homomorphic_functions.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(TFHEFLAG)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ $(TFHEFLAG)
 						
 clean:
 	rm -f *.o test *~

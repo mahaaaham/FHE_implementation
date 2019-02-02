@@ -5,59 +5,52 @@
 
 #include <stdlib.h>
 
-#define DIR_SECRET_KEY "../data/secret.key"
-#define DIR_CLOUD_KEY "../data/cloud.data"
-#define DIR_ENCRYPTED_INPUT "../data/encrypted_arg.data"
-#define DIR_ENCRYPTED_OUTPUT "../data/encrypted_result.data"
-#define DIR_DECRYPTED_OUTPUT "../data/decrypted_output.data"
+#define DIR_SECRET_KEY "data/secret.key"
+#define DIR_CLOUD_KEY "data/cloud.data"
+#define DIR_ENCRYPTED_INPUT "data/encrypted_arg.data"
+#define DIR_ENCRYPTED_OUTPUT "data/encrypted_result.data"
+#define DIR_DECRYPTED_OUTPUT "data/decrypted_output.data"
+
+/* 2 functions are disponibles: sum and minimum, 
+   see homomorphic_functions.h */
+void (*h_function)(LweSample*, const LweSample*, const LweSample*, 
+		   const TFheGateBootstrappingCloudKeySet*) = sum;
+/* The 2 arguments that are encrypted and used by h_function */
+const int16_t arg1 = 4321;
+const int16_t arg2 = 1001;
 
 int 
 main()
 {
-    /* Alice encrypt the arguments in DIR_ENCRYPTED_INPUT */
-    FILE *secret_key = NULL;  
-    FILE *cloud_key = NULL; 
-    FILE *encrypted_input = NULL; 
-    FILE *encrypted_output = NULL;
-    FILE *decrypted_output = NULL;
+  /* Alice */
+  printf("Alice's turn:\n");
+  printf("She creates parameters and puts in data/crypted.data the encryption\n"
+	 "of the following plaintexts: %d, %d\n", 
+	 arg1, arg2);
+  generate_keys(DIR_SECRET_KEY, DIR_CLOUD_KEY);
+  encrypt(DIR_SECRET_KEY, arg1, arg2, DIR_ENCRYPTED_INPUT);
 
+  /* Cloud */
+  printf("\nCloud's turn:\n");
+  printf("It applies homomorphically a function on the 2 ciphers.\n");
+  apply_h_function(DIR_CLOUD_KEY, DIR_ENCRYPTED_INPUT, DIR_ENCRYPTED_OUTPUT, 
+		   h_function);
 
-     secret_key = fopen(DIR_SECRET_KEY, "wb");
-     cloud_key = fopen(DIR_CLOUD_KEY, "wb");
-     encrypted_input = fopen(DIR_CLOUD_KEY, "wb");
+  /* Alice */
+  printf("\nAlice's turn:\n");
+  printf("She decrypts the result of the operation and writes it \nin %s.\n",
+	 DIR_DECRYPTED_OUTPUT);
+  decrypt(DIR_SECRET_KEY, DIR_ENCRYPTED_OUTPUT, DIR_DECRYPTED_OUTPUT); 
 
-    int16_t plaintext1 = 1;
-    int16_t plaintext2 = 100;
+  /* We print the content of the file that contains the decrypted result */
+  printf("\nThe result is: ");
+  FILE* result = fopen(DIR_DECRYPTED_OUTPUT, "rt");
+  char temp_char;
+  while((temp_char = fgetc(result)) != EOF)
+    {
+      printf("%c", temp_char);
+    }
+  fclose(result);
 
-    generate_keys(secret_key, cloud_key);
-    encrypt(secret_key, plaintext1, plaintext2, encrypted_input);
-
-    fclose(secret_key);
-    fclose(cloud_key);
-    fclose(encrypted_input);
-
-    /* The cloud takes the encrypted arguments, apply a circuit  */
-    /* and write the encrypted result in DIR_ENCRYPTED_OUTPUT */
-
-    encrypted_input = fopen(DIR_ENCRYPTED_INPUT, "rb");
-    cloud_key = fopen(DIR_CLOUD_KEY, "rb");
-
-    apply_h_function(cloud_key, encrypted_input, encrypted_output, minimum);
-
-    fclose(cloud_key);
-    fclose(encrypted_input);
-
-
-    /* Alice takes the encrypted_output, decrypts it en write the result in */ 
-    /* decrypted_output */
-
-    encrypted_output = fopen(DIR_ENCRYPTED_OUTPUT, "rb");
-    decrypted_output = fopen(DIR_DECRYPTED_OUTPUT, "wb");
-
-    decrypt(secret_key, encrypted_output, decrypted_output); 
-
-    fclose(encrypted_output);
-    fclose(decrypted_output);
-
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

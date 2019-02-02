@@ -4,6 +4,9 @@
 #include <tfhe/tfhe.h>
 #include <tfhe/tfhe_io.h>
 
-void minimum(LweSample* result, const LweSample* a, const LweSample* b, const TFheGateBootstrappingCloudKeySet* bk); 
+void minimum(LweSample* result, const LweSample* a, const LweSample* b, 
+	     const TFheGateBootstrappingCloudKeySet* bk); 
+void sum(LweSample* result, const LweSample* a, const LweSample* b, 
+	 const TFheGateBootstrappingCloudKeySet* bk);
 
 #endif /* HOMOMORPHIC_FUNCTIONS_H */

@@ -4,8 +4,11 @@
 
 
 void
-generate_keys(FILE* secret_key, FILE* cloud_key) 
+generate_keys(char* dir_secret_key, char* dir_cloud_key) 
 {
+    FILE* secret_key = fopen(dir_secret_key, "wb");
+    FILE* cloud_key = fopen(dir_cloud_key, "wb");
+
     //generate a keyset
     const int minimum_lambda = 110;
     TFheGateBootstrappingParameterSet* params = new_default_gate_bootstrapping_parameters(minimum_lambda);
@@ -17,21 +20,27 @@ generate_keys(FILE* secret_key, FILE* cloud_key)
 
     //export the secret key to file for later use
     export_tfheGateBootstrappingSecretKeySet_toFile(secret_key, key);
-    fclose(secret_key);
 
     //export the cloud key to a file (for the cloud)
     export_tfheGateBootstrappingCloudKeySet_toFile(cloud_key, &key->cloud);
+
+    // close all files
+    fclose(secret_key);
     fclose(cloud_key);
    
     //clean up all pointers
-    delete_gate_bootstrapping_secret_keyset(key);
+    delete_gate_bootstrapping_parameters(params);
+
     return;
 }
 
 
 void 
-encrypt(FILE* secret_key, int16_t plaintext1, int16_t plaintext2, FILE* encrypted_data) 
+encrypt(char* dir_secret_key, int16_t plaintext1, int16_t plaintext2, char* dir_encrypted_data) 
 {
+    FILE* secret_key = fopen(dir_secret_key, "rb");
+    FILE* encrypted_data = fopen(dir_encrypted_data, "wb");
+
     // recuperation of the key in data/secret.key
     TFheGateBootstrappingSecretKeySet* key = new_tfheGateBootstrappingSecretKeySet_fromFile(secret_key);
 
@@ -51,13 +60,15 @@ encrypt(FILE* secret_key, int16_t plaintext1, int16_t plaintext2, FILE* encrypte
         bootsSymEncrypt(&ciphertext2[i], (plaintext2>>i)&1, key);
     }
 
-    printf("We put in data/crypted.data the encrypt of the following plaintexts: %d, %d\n", plaintext1, plaintext2);
-    
     //export the 2x16 ciphertexts to a file (for the cloud)
     for (int i=0; i<16; i++) 
         export_gate_bootstrapping_ciphertext_toFile(encrypted_data, &ciphertext1[i], params);
     for (int i=0; i<16; i++) 
         export_gate_bootstrapping_ciphertext_toFile(encrypted_data, &ciphertext2[i], params);
+
+    //close open files
+    fclose(encrypted_data);
+    fclose(secret_key);
 
     //clean up all pointers
     delete_gate_bootstrapping_secret_keyset(key);
@@ -68,8 +79,12 @@ encrypt(FILE* secret_key, int16_t plaintext1, int16_t plaintext2, FILE* encrypte
 
 
 void
-decrypt(FILE* secret_key, FILE* encrypted_data, FILE* decrypted_data) 
+decrypt(char* dir_secret_key, char* dir_encrypted_data, char* dir_decrypted_data) 
 {
+    FILE* secret_key = fopen(dir_secret_key, "rb");
+    FILE* encrypted_data = fopen(dir_encrypted_data, "rb");
+    FILE* decrypted_data = fopen(dir_decrypted_data, "wb");
+
     //reads the cloud key from file
     TFheGateBootstrappingSecretKeySet* key = new_tfheGateBootstrappingSecretKeySet_fromFile(secret_key);
  
@@ -92,6 +107,10 @@ decrypt(FILE* secret_key, FILE* encrypted_data, FILE* decrypted_data)
 
     //print the decryption on decrypted_data
     fprintf(decrypted_data, "%d\n", int_decrypted);
+
+    fclose(encrypted_data);
+    fclose(decrypted_data);
+    fclose(secret_key);
 
     //clean up all pointers
     delete_gate_bootstrapping_ciphertext_array(16, to_decrypt);

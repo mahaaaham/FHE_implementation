@@ -2,11 +2,14 @@
 
 
 void
-apply_h_function(FILE* cloud_key, FILE* input_data, FILE* output_data,
+apply_h_function(char* dir_cloud_key, char* dir_input_data, char* dir_output_data,
 	         void (*circuit)(LweSample*, const LweSample*, const LweSample*, 
 		  	         const TFheGateBootstrappingCloudKeySet*))
 {
-    
+    FILE* cloud_key = fopen(dir_cloud_key, "rb");
+    FILE* input_data = fopen(dir_input_data, "rb");
+    FILE* output_data = fopen(dir_output_data, "wb");
+
     //reads the cloud key from file
     TFheGateBootstrappingCloudKeySet* bk = new_tfheGateBootstrappingCloudKeySet_fromFile(cloud_key);
  
@@ -27,6 +30,11 @@ apply_h_function(FILE* cloud_key, FILE* input_data, FILE* output_data,
 
     //export the result 16 ciphertexts to a file (for the cloud)
     for (int i=0; i<16; i++) export_gate_bootstrapping_ciphertext_toFile(output_data, &result[i], params);
+
+    // close open files
+    fclose(cloud_key);
+    fclose(input_data);
+    fclose(output_data);
 
     //clean up all pointers
     delete_gate_bootstrapping_ciphertext_array(16, result);

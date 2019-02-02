@@ -1,6 +1,7 @@
+DATA = data
 INCLUDE = include
 SRC = src
-EXE = test
+EXE = example_communication
 
 # Disable built-in rules
 .SUFFIXES:
@@ -13,12 +14,13 @@ all: build
 
 build:
 	$(MAKE) -C $(SRC) all
-	mv $(SRC)/test .
+	mv $(SRC)/$(EXE) .
 
 clean:
 	rm -f $(EXE) 
 	rm -f *~
 	cd $(INCLUDE) && rm -f *~
+	cd $(DATA) && rm -f *.data *.key *~
 	$(MAKE) -C $(SRC) clean
 
 help:
