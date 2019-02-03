@@ -19,9 +19,8 @@ all: example_communication
 example_communication: example_communication.o alice.o cloud.o homomorphic_functions.o
 	$(CC) $(CFLAGS) -o $@ $^ $(TFHEFLAG)
 
-example_communication.o: example_communication.c $(INCLUDE)/example_communication.h\
-			 $(INCLUDE)/alice.h $(INCLUDE)/cloud.h\
-			 $(INCLUDE)/homomorphic_functions.h
+example_communication.o: example_communication.c $(INCLUDE)/alice.h\
+			 $(INCLUDE)/cloud.h $(INCLUDE)/homomorphic_functions.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ $(TFHEFLAG)
 
 alice.o: alice.c $(INCLUDE)/alice.h
