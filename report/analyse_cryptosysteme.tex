@@ -23,13 +23,99 @@
 	% \begin{proof}
 	% \end{proof}
 	\end{definition}
+	\begin{prop} \label{sd_add}
+	Soit ${(X_i)}_{1\leq i \leq n}$ et resp .${(Y_i)}_{1\leq i\leq n}$
+	deux n-uplets de distributions indépendantes.
+	\[ \SD\left((X_1,\cdots,X_n), (Y_1, \cdots, Y_n)\right) \leq \sum_{i=1}^n \SD(X_i,Y_i) \]
+	\end{prop}
+	\begin{proof}
+	Montrons le pour $n = 2$, la suite se déduisant par récurrence.
+	On a:
+	\begin{align*}
+		&\SD\left((X_1,X_2),(Y_1,Y_2)\right) \\
+		&= \frac{1}{2} \sum_{(u,v)}\left| \PP(X_1=u)\PP(X_2=v) -
+		\PP(Y_1=u)\PP(Y_2=v) \right| \\ 
+		&\leq 
+		\frac{1}{2} \sum_{(u,v)}\left| \PP(X_1=u)\left(\PP(X_2=v) - \PP(Y_2 = v)\right)
+		- (\PP(X_1 = u) - \PP(Y_1=u))\PP(Y_2=v) \right| \\
+		&\leq
+		\frac{1}{2} \sum_{(u,v)} \PP(X_1 = u)
+		\left|\left(\PP(X_2=v) - \PP(Y_2 = v)\right) \right| + 
+		\frac{1}{2} \sum_{(u,v)}\PP(Y_2=v)\left|(\PP(X_1 = u) - \PP(Y_1=u)) \right| \\
+		&= \SD(X_1, Y_1) + \SD(X_2, Y_2)
+	\end{align*}
+	\end{proof}
 	\begin{prop}
 	Si deux familles de distributions sont statistiquement
 	indistinguables, elles sont calculatoirement indistinguables.
-	\end{prop}
+	\end{prop} 
 
-	Le lemme suivant est une légère modification du Claim 5.2 présent dans~\cite{STOC:Regev05}.
+	Le lemme suivant correspond au Claim 5.2 présent dans~\cite{STOC:Regev05}
+	et nous sera utile pour la suite.
+
 	\begin{lemme}
+	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
+	$\mathcal{F} \subset (g_1, \ldots, g_r) \in G^r$, on
+	note
+	 $s_\mathcal{F}$ la distribution aléatoire qui à un aléa
+	 fait correspondre la somme $\sum_{i\in X} g_i$ pour un
+	 sous-ensemble choisi de façon uniforme  $X\subset \llbracket
+	 1, r \rrbracket$. 
+	 D'autre part, on considère la distribution uniforme
+	 $U$ sur $G$
+	 Alors, on a: 
+	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leq 
+	   \sqrt{\frac{|G|}{2^r}}\]
+	 Notamment, 
+	 \[\mathbb{P}\left(SD(s_\mathcal{F},U) \geq
+		 \sqrt[\leftroot{-3}\uproot{8}4\:]{\frac{|G|}{2^r}} \right) \leq
+		 \sqrt[\leftroot{-3}\uproot{8}4\:]{\frac{|G|}{2^r}}
+	 \]
+	\end{lemme}
+	\begin{proof}
+		Remarquons que:
+	\begin{align*}
+		\sum_{h\in G} {\PP(s_F = h)}^2 &= 
+		\PP\left(\sum_i b_i g_i = \sum_i b'_i g_i\right) \\
+		& \leq \frac{1}{2^l} + \PP
+		\left( \sum_i b_i g_i = \sum_i b'_i g_i |\:\: (b_i)_i \neq
+		(b'_i)_i \right)
+	\end{align*}
+	Or, pour $(b_i)_i \neq (b'_i)_i$, 
+		\[ \PP\left((g_i)_i\: :\: \sum_i b_i g_i = \sum_i b'_i
+		g_i\right) = \frac{1}{|G|}\]
+	D'où on déduit que:
+	\[\mathbb{E}_\mathcal{F}\left(\sum_h {\PP(s_{\mathcal{F}} =
+	h)}^2\right) \leq \frac{1}{2^l} + \frac{1}{|G|} \]
+
+	Ce qui implique que:
+
+\begin{align*}
+\mathbb{E}_\mathcal{F}\left[ \sum_h\Big| \PP(s_F = h) - 1/|G|\Big| \right] 
+&\leq
+\mathbb{E}_\mathcal{F}
+\left[ 
+	{|G|}^{1/2}
+	{ \left( \sum_h {\left(\PP(s_F = h) - 1/|G|\right)}^2
+	\right)}^{1/2}
+\right] 
+\\
+&= \sqrt{|G|} \:\:
+\mathbb{E}_\mathcal{F}
+	\left[ 
+	{\left( \sum_h {\PP(s_F = h)}^2 - 1/|G|\right)}^{1/2} 
+	\right] \\
+&\leq \sqrt{|G|} \:\:
+{\left( 
+	\mathbb{E}_\mathcal{F}\left[ \sum_h  {\PP(s_F = h)}^2  \right]
+- \frac{1}{|G|}
+\right)}^{1/2} \\
+	&\leq \sqrt{\frac{|G|}{2^l}}
+\end{align*}
+
+\end{proof}
+
+	\begin{cor}
 	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
 	$\mathcal{F} \subset (g_1, \ldots, g_r) \in G^r$, on
 	note
@@ -50,13 +136,16 @@
 		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}} \right) \leq
 		 \sqrt[\leftroot{-3}\uproot{8}4\:]{r^2\frac{|G|}{2^r}}
 	 \]
-	\end{lemme}
+	\end{cor}
 	\begin{proof}
+		Découle directement de la proposition précédente ainsi que de
+		la proposition \ref{sd_add}
 	\end{proof}
+
 	\begin{prop}
 	Supposons avoir pris des paramètres $(n, q, \chi, m)$
 	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\epsilon>0$
-	et $m > (1+\epsilon)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe 
+	et $m > (1+\epsilon)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe
 	$(A, RA)$ est calculatoirement indistinguable de la
 	distribution uniforme sur $\ZZq^{m \times (n+1)} \times \ZZq^{N
 	\times (n+1)}$
@@ -94,10 +183,9 @@
 	
 	Ainsi, il n'est pas possible qu'un automate $\mathcal{A}$
 	polynomial probabiliste puisse distinguer 
-	$\mathcal{D}_1$ de $\mathcal{D}_2$ car il devrait distinguer
-	des valeurs exponentiellement proches. (A PRECISER)
+	$\mathcal{D}_1$ de $\mathcal{D}_2$ car elle sont statistiquement 
+	indistinguables.
 	\end{proof}
-
 	\begin{thm}
 	Sous les hypothèses de la proposition précédente, le
 	cryptosysteme est IND-CPA.

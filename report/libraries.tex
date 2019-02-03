@@ -51,6 +51,39 @@ LWE mais TFHE, présenté dans les librairies suscitées.
 \begin{subsubsection}{Le problème TFHE}
 \end{subsubsection} % Le problème TFHE
 \begin{subsubsection}{Un exemple simple fourni par leur tutorial}
+En plus d'une présentation de leur API, leur site de présentation
+contient un tutorial sous forme de 3 fichiers de codes simples 
+permettant de simuler une \fg communication chiffrée\fg entre Alice et le cloud:
+\begin{itemize}
+\item Alice génère des clés, chiffre des données et les envoies ainsi
+	que la clé de bootstrapping au cloud;
+\item Le cloud applique homomorphiquement une fonction, le minimum
+	entre deux nombres, aux données et les renvoie à Alice;
+\item Alice déchiffre le résultat;
+\end{itemize}
+Afin de manipuler la librairie, nous avons \og mis en forme \fg ces fichiers
+en y ajoutant quelques modifications. Le tout est situé dans 
+\path{using_tfhe_library} et il suffit de faire \path{make} 
+pour compiler l'executable, sous couvert d'avoir la librairie tfhe installée.
+	
+Les fichiers sources ainsi que les hearders contiennent normalement assez de
+commentaire pour être lisibles. Nous proposons donc ici de résumer brièvement 
+le rôle de chaque fichier source:
+\begin{itemize}
+\item \path{alice.c} contient des fonctions permettant de générer
+clés, chiffrer et déchiffrer;
+\item \path{homomorphic_functions.c} contient deux exemples de fonctions 
+appliquables homomorphiquement: le minimum de deux nombres (déjà 
+présent dans le tutorial) et leur somme;
+\item \path{cloud.c} contient une fonction permetant d'appliquer 
+homomorphiquement une des fonctions de \path{homomorphic_functions.c}
+sur des chiffrés puis d'enregistrer le résultat;
+\item enfin, \path{example_communication.c} utilise les fichiers précédents
+	pour simuler une communication entre Alice et le cloud.
+\end{itemize}
+
+
+	
 \end{subsubsection} % un exemple simple fourni par leur tutorial
 \end{subsection} % TFHE
 \end{section}
