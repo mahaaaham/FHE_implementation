@@ -216,18 +216,38 @@
 	\begin{subsection}{Contraintes asymptotiques pour les choix de paramètres} 
 		Le choix des paramètres du système est une étape cruciale de la mise en place de celui-ci,
 	car ce sont eux qui détermineront les degrés de sécurités et la profondeur des circuits calculables.
-	Pour savoir quels paramètres choisir, il existe deux méthodes :
 	
-	Tout d'abord, l'on peut et l'on doit étudier le sujet sur le plan théorique afin de déterminer
-	l'ordre de grandeur des paramètres.
-	
-	Cependant, cette analyse asymptotique est insuffisante pour les cas concrets. Pour palier à ce
-	problème, l'on peut étudier un certain choix précis de paramètres en essayant de l'attaquer afin
-	d'estimer sa résistance concrète aux attaques.
-	\begin{subsubsection}{Analyse asymptotique de la profondeur des circuits}
-		% la preuve de sécurité
+	Sur ce point, deux approches sont possibles: une étude asymptotique ou
+	bien une étude \og concrète \fg des paramètres.
+
+	Nous nous interesserons ici uniquement à l'algorithme de déchiffrement
+	\textbf{Dec}, nous ne considèrerons donc que des chiffrés de $0$ ou
+	$1$ et nous interesserons principalement à la profondeur maximale 
+	possible de NAND permettant encore de déchiffrer.
+
+	\begin{subsubsection}{Analyse de la profondeur des circuits}
+	Si $\chi$ est $B$-bornée, on voit en appliquant itérativement la
+	minoration de bruit pour l'opération NAND que pour une profondeur de 
+	$L$ NAND, le bruit est majoré en norme infinie par:
+	\[{(N + 1)}^L B\]
+	Or, afin de fonctinner, l'algorithme de dechiffrement
+	\textbf{Dec} necessite que la norme infinie du bruit soit majorée par q/8.
+	On obtient donc la condition suivante:
+	\begin{equation}
+		\label{depth}
+		L \leq\frac{ \log(q) - 3 - \log(B)}{\log(N+1)}	\end{equation}
 	\end{subsubsection}
 	\begin{subsubsection}{Résumé des contraintes sur les paramètres}
+	Nous indiquons ici quelques contraintes asymptotiques précisées
+	dans la section 3.4 de \cite{EPRINT:GenSahWat13}. Nous n'avons 
+	pas essayé de comprendre les raisons qui poussent à celles-ci
+	car cela aurait necessité une étude bien plus poussée des différentes
+	façon d'attaquer $LWE$.
+
+	L'article conseille de faire croitere $n$ linéairement avec $\log(q/B)$, et,
+	notant $\kappa = \log(q)$, d'avoir:
+	\[ \kappa = O(L \log(N)) = O(L(\log(n) + \log(\kappa)) = O(L\log(n))\]
+
 	\end{subsubsection}
 	\end{subsection} % sécurité asymptotique
 
@@ -267,20 +287,29 @@ estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
 	
 	\flushleft
 	
+	\begin{figure}
+	\label{fig:seal_estimate}
 	\begin{lstlisting}[mathescape=true]
-sage: n, alpha, q = Param.Regev(128)
-sage: costs = estimate_lwe(n, alpha, q)
-usvp: rop: 2^57.7, red: 2^57.7, $\delta$_0: 1.009214, $\beta$: 102, d: 357, m: 228
- dec: rop: 2^61.5, m: 229, red: 2^61.5, $\delta$_0: 1.009595, $\beta$: 93, d: 357,
-     babai: 2^46.8, babai_op: 2^61.9, repeat: 293, $\epsilon$: 0.015625
-dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 376,
-     |v|: 736.521, repeat: 2^19.0, $\epsilon$: 0.003906
+sage: load("estimator.py")
+sage: n = 2048; q = 2^60 - 2^14 + 1; $\alpha$ = 8/q; m = 2*n
+sage: _ = estimate_lwe(n, $\alpha$, q, secret_distribution=(-1,1), 
+	  reduction_cost_model=BKZ.sieve, m=m)
+usvp: rop: =2^115.5,  red: =2^115.5,  $\delta_0$: 1.004975,  
+      $\beta$:  288,  d: 4013,  m: 1964
+ dec: rop: =2^127.1,  m:  =2^11.1,  red: =2^127.1,  $\delta_0$: 1.004663,  
+      $\beta$: 318, d: 4237,  
+      babai: =2^114.8,  babai_op: =2^129.9,  repeat: 7,  $\epsilon$: 0.500000
+dual: rop: =2^118.4,  m:  =2^11.0,  red: =2^118.4,  $\delta_0$: 1.004864,  
+      $\beta$: 298,  
+      repeat:  =2^58.8,  d: 4090,  c:    3.909,  k: 30, postprocess: 13
 	\end{lstlisting}
+	\caption{Analyse de sécurité des paramètres tirés de la librairie SEAL}
+	\end{figure}
 
 	\flushleft
 	
 	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
-	internes à ces attaques. Les trois variables qui nous interresse sont : "rop", "m" et "mem" :
+	internes à ces attaques. Les trois variables qui nous intéresse sont : "rop", "m" et "mem" :
 	
 	\begin{itemize}
 	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre
@@ -299,65 +328,24 @@ dual: rop: 2^81.4, m: 376, red: 2^81.4, $\delta$_0: 1.008810, $\beta$: 111, d: 3
 	et que nous allons présenter ici. Notons que nous avons pour cela 
 	regardé les codes 
 	sources des fonctions sage, disponibles dans leur github (\cite{sage}).
-
-	\paragraph{}
-	\textbf{Les paramètres de Regev}
-	\paragraph{}
-
-	La fonction Regev permet, à partir d'un paramètre $n$, de 
-	créer des paramètres $n, q, \chi$ suivant les recommandations  
-	faites dans \cite{STOC:Regev05} où le théorème~1.1 explique 
-	qu'alors, $\LWE$ se réduit à un problème de réseaux réputé 
-	difficile.
-
-	Plus précisément, pour $n$ donné, il retourne
-	\[q = \text{NextPrime}(n^2), \chi = D^q_\sigma\quad\text{où}\quad
-		\sigma = \frac{q}{\sqrt{2 \pi n} \log(n)^2}\]
-
-	\begin{lstlisting}
-	q = ZZ(next_prime(n**2))
-	s = RR(1/(RR(n).sqrt() * log(n, 2)**2) * q)
-	D = DiscreteGaussianDistributionIntegerSampler(s/sqrt(2*pi.n()), q)
-	\end{lstlisting}
-
-	\paragraph{}
-	\textbf{Les parametres de Lindner et Peiker}
-	\paragraph{}
-	Il sont définis dans  \cite{EPRINT:LinPei10a} et on peut voir dans 
-	le listing suivant la façon dont sage crée ces paramètres.
-	\begin{lstlisting}{}
-	- ``n`` - security parameter (integer > 0)
-	- ``delta`` - error probability per symbol (default: 0.01)
-	- ``m`` - number of allowed samples or ``None`` in which case ``m=2*n +
-	  128`` as in [LP2011]_ (default: ``None``)
-	"""
-	if m is None:
-	    m = 2*n + 128
-	# Find c>=1 such that c*exp((1-c**2)/2))**(2*n) == 2**-40
-	#         (c*exp((1-c**2)/2))**(2*n) == 2**-40
-	#    log((c*exp((1-c**2)/2))**(2*n)) == -40*log(2)
-	#       (2*n)*log(c*exp((1-c**2)/2)) == -40*log(2)
-	#  2*n*(log(c)+log(exp((1-c**2)/2))) == -40*log(2)
-	#            2*n*(log(c)+(1-c**2)/2) == -40*log(2)
-	#              2*n*log(c)+n*(1-c**2) == -40*log(2)
-	#  2*n*log(c)+n*(1-c**2) + 40*log(2) == 0
-	c = SR.var('c')
-	c = find_root(2*n*log(c)+n*(1-c**2) + 40*log(2) == 0, 1, 10)
-	# Upper bound on s**2/t
-	s_t_bound = (sqrt(2) * pi / c / sqrt(2*n*log(2/delta))).n()
-	# Interpretation of "choose q just large enough to allow 
-	# for a Gaussian parameter s>=8" in [LP2011]_
-	q = next_prime(floor(2**round(log(256 / s_t_bound, 2))))
-	# Gaussian parameter as defined in [LP2011]_
-	s = sqrt(s_t_bound*floor(q/4))
-	# Transform s into stddev
-	stddev = s/sqrt(2*pi.n())
-	D   = DiscreteGaussianDistributionIntegerSampler(stddev)
-	LWE.__init__(self, n=n, q=q, D=D, secret_dist='noise', m=m)
-	\end{lstlisting}
 	\end{subsubsection}
 
 	\begin{subsubsection}{Proposition de choix sécurité pour très faible profondeur}
+	\paragraph{}
+	En utilisant les paramètres suivants, tirés de l'API SEAL:
+	\[n = 2048\quad q = 2^{60} - 2^{14} + 1 \quad \alpha = \frac{8}{q}\quad m = 2n \]
+	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande 
+	$2^115$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de
+	115. De plus, l'équation~\eqref{depth} indique qu'une
+	profondeur de NAND $L=3$ est possible.
+
+	\paragraph{}
+	En utilisant les paramètres suivants, tirés \cite{cryptoeprint:2015:755}:
+	\[n = 804\quad  q = 2^{31} - 19\quad \alpha = \frac{\sqrt{2\pi}*57}{q} \quad m = 4972\]
+	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande 
+	$2^129$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de
+	115. De plus, l'équation~\eqref{depth} indique qu'une
+	profondeur de NAND $L=1$ est possible.
 	\end{subsubsection}
 
 	\end{subsection}

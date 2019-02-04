@@ -119,8 +119,52 @@
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 	\end{subsection}
 
+	\begin{subsection}{Réseaux euclidiens}
+	Nous rappelons ici quelques résultats sur les réseaux
+	euclidiens, tels qu'énoncés dans \cite{EC:MicPei12}. 
+	Ils nous serons utiles pour définir les gaussiennes discrètes ainsi que pour comprendre un des algorithme de 
+	déchiffrement du cryptosystème GSW. 
+
+	Tous les réseaux considérés ici sont de rang plein, autrement dit, 
+	si $\L \subset \RR^n$, alors $L$ est de dimension $n$.
+
+	\begin{definition}
+	Soit $L\subset \RR^n$ un réseau. Le dual de $L$ est 
+	défini comme:
+	\[ L^* = \{ v \in \RR^n \::\: \langle x, v \rangle \in \ZZ
+	   \:\text{ pour tout } x\in L\} \]
+	\end{definition}
+	\begin{prop} 
+	Soit $L \subset \RR^n$ un réseau euclidien.
+	Si $B$ est une base de $L$ .
+	$B^{-t}$ est une base de $L^*$.
+	\end{prop}
+
+	Pour $q$ un entier et $A \in \ZZ^{n\times m}$, on pose:
+		\[\Lambda^\bot(A) = \{ z \in \ZZ^m\: :\: A z  = 0 \mod q \}\] 
+	\[\Lambda(A^t) = \{ z \in \ZZ^m\: : \: \exists s\in \ZZq^n, 
+	z = A^t s \mod q\]
+
+		\begin{prop} \label{lambda_reseau}
+	Conservant les notations précédentes, 
+	\[q \cdot {\Lambda^\bot(A)}^* =  \Lambda(A^t)\] 
+	\end{prop}
+	\end{subsection}
 	\begin{subsection}{La gaussienne discrète}
-	Nous reprenons ici \cite{STOC:GenPeiVai08}
+	Très souvent, la distribution $\chi$ choisi pour avoir 
+	des paramètres sécurités pour le problème LWE est
+	une gaussienne discrète. Nous nous proposons ici 
+	d'en indiquer la définition, ainsi que d'en indiquer 
+	certaines propriétés.
+
+	Rappellons aussi qu'une famille $\{\chi_n\}_n$
+	de distributions est dite $B$-bornée pour une borne 
+	$B = B(n)$ si la fonction suivante est négligeable:
+		\[n \mapsto \PP\left(\chi_n > B(n)\right) \]
+
+	\paragraph{}
+	Nous reprenons ici les notations de \cite{STOC:GenPeiVai08}.
+
 	Soit un entier $n > 0$  et $\sigma > 0$. On définit la densité
 	gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$
 	attribue:
@@ -131,8 +175,6 @@
 	$D_\alpha$ comme la distribution de support $\Lambda$ de loi de
 	probabilité: 	
 	\[ D_{\Lambda, s, c}(x) = \frac{\rho_{s,c}(x)}{\sum_{l\in \Lambda}\rho_{s,c}(l)}\]
-	
-
 
 	Pour un entier $q > 0$,  
 	Nous définissions enfin la gaussienne discrète $D^q_{\alpha}$ modulo un entier $q > 0$ comme la
@@ -140,7 +182,15 @@
 		\[ D_{\ZZ, s, c}(\pi^{-1}(x)) \]
 	où $\pi$ est la projection $\ZZ \rightarrow \ZZq$.
 
-	Le lemme 4.2 de \cite{STOC:GenPeiVai08}:
+La définition et la position suivante 
+(Le lemme 4.2 de \cite{STOC:GenPeiVai08})
+permettent de trouver une borne à une famille de gaussienne.
+\begin{definition}
+Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, 
+	le paramètre $\eta_\epsilon(L)$ est le plus petit réel
+	$s>0$ tel que 
+	\[\rho_{1/s}(L^* \setminus \{0\}) \leq \epsilon\]
+\end{definition}
 	\begin{prop}
 	Pour tout $\epsilon > 0$ , $s \geq \eta_{\epsilon}(\ZZ)$ et tout
 	$t>0$:

@@ -175,6 +175,81 @@
 	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
 	\end{subsection}
 	
+\begin{subsection}{Autres algorithmes de déchiffrement}
+L'algorithme de déchiffrement que nous avons présenté fonctionne sans
+contraintes sur $q$ mais ne déchiffre que des chiffrés de $0$ et de $1$.
+	
+Nous proposons ici une analyse un peu plus fine du déchiffrement pour
+montrer comment faire pour des chiffrés de n'importe quel élément de $\ZZq$.
+
+Pour cela, remarquons qu'en partant d'un chiffré  $C$
+de $m \in \ZZq$
+On a: 
+\[ C \cdot \vec{v} = m \vec{v} + e \mod q \]
+pour une erreur $e$
+En considérant l'équation sur les $l$ premières coordoonées, on obtient:
+
+	\[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}) \]
+ 
+Notant $L = \Lambda(\vec{p}^t)$, on constate qu'on peut 
+retrouver $m\vec{p}$ en trouvant le vecteur de $L$
+le plus proche de $\vec{a}$
+
+De cette idée, on déduit 2 algorithmes de déchiffrements 
+supplémentaires, dépendant de la façon dont 
+on résout le problème du vecteur le plus proche.
+
+
+\begin{itemize}
+\item \textbf{mp\_decrypt} qui suppose que $q$ est 
+	une puissance de $2$.
+\item \textbf{mp\_all\_q\_decrypt} sans hypothèses sur $q$.
+\end{itemize}
+
+\begin{subsubsection}{mp\_decrypt: $q$ est une puissance de $2$}
+L'algorithme, présenté dans  \cite{EPRINT:GenSahWat13}, utilise 
+le fait que $q = 2^l$.
+
+En regardant la dernière coordonnée de:
+\[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}) \]
+ 
+On obtient:
+\[m 2^{l-1} + e_{l} \mod 2^l \]
+qui est proche de $0$ si $m$ est pair et de $q/2$ sinon. On déduit de cette 
+façon le premier bit de l'écriture en binaire de $m$ et la méthode est similaire
+pour complètement déduire $m$.
+	
+\end{subsubsection}
+\begin{subsubsection}{mp\_all\_q\_decrypt: $q$ est quelconque}
+Le travail effectué ici est notamment tiré de la section 4 de
+\cite{EC:MicPei12}.
+
+En utilisant la proposition~\ref{lambda_reseau}, on constate que
+\[ L = q \cdot \Lambda^\bot\left(\vec{p}\right) \]
+Il nous suffit donc de trouver une base $B$ de $\Lambda^\bot\left(\vec{p}\right)$
+pour en déduire une base $q \, B^{-t}$ de $L$.
+
+Or, il est facile de voir que  
+\[ B = \begin{bmatrix} 
+	2 & &&& q_0\\  
+	-1 & 2 &&& q_1\\
+   & -1 \\ 
+	&    & \ddots & & \vdots \\
+	&    &       &  2 & q_{k-2} \\
+	&    &       &  -1 & q_{k-1}
+\end{bmatrix}\]
+convient.
+
+On peut alors par exemple utiliser l'algorithme nearest plane de Baibai 
+à partir de cette base pour déchiffrer. Notons que des bornes sur 
+les vecteurs de la décomposition de Gram-Schmidt de cette matrice sont données
+dans~\cite{EC:MicPei12}, ce qui peut-être intéressant car cela est lié 
+au domaine fondamental utilisé par l'algorithme.
+
+\end{subsubsection}
+
+	
+\end{subsection}
 	\begin{subsection}{Opérations homomorphes}
 	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et que donc $\textbf{Flatten}(A) \cdot \vec{v} = A \times \vec{v}$ pour tout $A$.
 	
@@ -193,8 +268,9 @@
 	&= \alpha * \mu * \vec{v} + M_{\alpha} \times \vec{e}
 	\end{align*}
 	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur de $M_\alpha \times \vec{e}$. L'impact de celle-ci sur le déchiffrement sera donc au maximum de $N$ fois l'impact de $\vec{e}$ quel que soi $\alpha$.
-	
+	\textbf{Erreur} : Le chiffré à une erreur $e_2 = M_\alpha \times
+		\vec{e}$. 
+		\[\norm{e_2} \leq N \norm{e_1}\]
 	\paragraph{}
 	\textbf{Add}
 	\flushleft
@@ -209,8 +285,8 @@
 	&= (\mu_1 + \mu_2) * \vec{v} + \vec{e_1} + \vec{e_2}
 	\end{align*}
 	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur de $\vec{e_1} + \vec{e_2}$. L'impact de celle-ci sur le déchiffrement sera donc au maximum de la somme de l'impact de $\vec{e_1}$ et de l'impact de $\vec{e_2}$.
-	
+\textbf{Erreur} : Le chiffré à une erreur $e_3 = \vec{e_1} + \vec{e_2}$.
+\[\norm{e_3} \leq \norm{e_1} + \norm{e_2}\]
 	\paragraph{}
 	\textbf{Mult}
 	\flushleft
@@ -227,8 +303,8 @@
 	&= (\mu_1 * \mu_2) * \vec{v} + \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}
 	\end{align*}
 	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur de $\mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. $C_1 \times \vec{e_2}$ a donc un impact sur le déchiffrement d'au maximum $N$ fois l'impact de $\vec{e_1}$. $\mu_2 * \vec{e_1}$ n'a pas ce genre de contrainte et son impact maximum ne peut guère être limité qu'en limitant les valeurs des messages.
-	
+	\textbf{Erreur} : Le chiffré à une erreur $e_3 = \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. 
+\[\norm{e_3} \leq\mu_2 \norm{e_1} + N \norm{e_2} \]
 	\paragraph{}
 	\textbf{NAND}
 	\flushleft
@@ -244,7 +320,10 @@
 	&= (1 - \mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} - C_1 \times \vec{e_2}
 	\end{align*}
 	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur de $-(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. Son impact sur le déchiffrement est donc équivalent à celui d'une opération $\textbf{Mult}(C_1, C_2)$. Cependant, $\mu_2$ étant ici égal à 0 ou 1, on obtient un impact inférieur ou égal à l'impact de $\vec{e_1}$ plus $N$ fois celui de $\vec{e_2}$.
-	
+	\textbf{Erreur} : Le chiffré à une erreur 
+	$e_3 = -(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. On est dans 
+	un contexte similaire à $\textbf{Mult}(C_1, C_2)$, mais 
+	$\mu_2$ est ici égal à 0 ou 1.
+\[\norm{e_3} \leq \norm{e_1} + N \norm{e_2} \leq (N+1) \max(\norm{e_1}, \norm{e_2})\]
 	\end{subsection}
 \end{section}

@@ -25,7 +25,7 @@ clean:
 
 help:
 	@echo "Usage:"
-	@echo -e "  make [all]\t\tRun the target build"
-	@echo -e "  make build\t\tBuild executable"
-	@echo -e "  make clean\t\tRemove all files produced by the compilation"
-	@echo -e "  make help\t\tDisplay this help"
+	@echo "    make [all]\t\tRun the target build"
+	@echo "    make build\t\tBuild executable"
+	@echo "    make clean\t\tRemove all files produced by the compilation"
+	@echo "    make help\t\tDisplay this help"

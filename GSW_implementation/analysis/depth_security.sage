@@ -175,6 +175,7 @@ def all_estimate_lwe(n):
         string += "    --------------"
         print(string)
         n, alpha, q, m = convert_params(params_maker, nn)
+        print ("n is" + str(n))
         estimate_lwe(nn, alpha, q)
         print("")
     return

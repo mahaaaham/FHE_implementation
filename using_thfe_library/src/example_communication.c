@@ -18,8 +18,8 @@
 void (*h_function)(LweSample*, const LweSample*, const LweSample*, 
 		   const TFheGateBootstrappingCloudKeySet*) = sum;
 /* The 2 arguments that are encrypted and used by h_function */
-const int16_t arg1 = 4321;
-const int16_t arg2 = 1001;
+const int16_t arg1 = 1111;
+const int16_t arg2 = 2222;
 
 
 int 
