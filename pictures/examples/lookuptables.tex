@@ -1,0 +1,112 @@
+\tikzset{rect/.style = {rectangle, draw, minimum width=2cm,
+minimum height = 1cm}}
+
+\node (begin) at (0,0) {$
+  \left[\begin{matrix}
+      b_0 \\
+      b_1 \\
+      b_2 \\
+      b_3 \\
+    \end{matrix}\right]
+  $};
+
+\node (x0) at ($(begin) + (-7.5,-2)$) {$b_0$};
+\node (x5) at ($(begin) + (-2.5,-2)$) {$b_1$};
+\node (x10) at ($(begin) + (2.5,-2)$) {$b_2$};
+\node (x15) at ($(begin) + (7.5,-2)$) {$b_3$};
+
+\node (k0) at ($(x0) + (0,-2)$) {$b_0 \, \textcolor{blue}{\oplus \, k_0}$};
+\node (k5) at ($(x5) + (0,-2)$) {$b_1 \, \textcolor{blue}{\oplus \,k_1}$};
+\node (k10) at ($(x10) + (0,-2)$) {$b_2 \, \textcolor{blue}{\oplus k_2}$};
+\node (k15) at ($(x15) + (0,-2)$) {$b_3 \, \textcolor{blue}{\oplus k_3}$};
+
+\node (s0) at ($(k0) + (0,-2)$) {$\textcolor{blue}{sbox(}b_0 \oplus k_0\textcolor{blue}{)}$};
+\node (s5) at ($(k5) + (0,-2)$) {$\textcolor{blue}{sbox(}b_1 \oplus k_1\textcolor{blue}{)}$};
+\node (s10) at ($(k10) + (0,-2)$) {$\textcolor{blue}{sbox(}b_2 \oplus k_2\textcolor{blue}{)}$};
+\node (s15) at ($(k15) + (0,-2)$) {$\textcolor{blue}{sbox(}b_3 \oplus k_3\textcolor{blue}{)}$};
+
+\node (M0) at ($(s0) + (0,-2)$) {$sbox(b_0 \oplus k_0)\textcolor{blue}{\,*\,MC_0}$};
+\node (M5) at ($(s5) + (0,-2)$) {$sbox(b_1 \oplus k_1)\textcolor{blue}{\,*\,MC_1}$};
+\node (M10) at ($(s10) + (0,-2)$) {$sbox(b_2 \oplus k_2)\textcolor{blue}{\,*\,MC_2}$};
+\node (M15) at ($(s15) + (0,-2)$) {$sbox(b_3 \oplus k_3)\textcolor{blue}{\,*\,MC_3}$};
+
+\node[rect, fill=blue!20] (XL) at ($(M0) + (2.5,-2)$) {\Large LXOR};
+\node[rect, fill=blue!20] (XR) at ($(M15) + (-2.5,-2)$) {\Large RXOR};
+\node[rect, fill=orange!20] (XM) at ($(XL) + (5,-2)$) {\Large MXOR};
+
+\node (end) at ($(XM) + (0,-2)$) {$
+  \left[\begin{matrix}
+      y_{0} \\
+      y_{1} \\
+      y_{2} \\
+      y_{3} \\
+    \end{matrix}\right]
+  $};
+
+\draw[->] (begin) -- (x0);
+\draw[->] (x0) -- (k0);
+\draw[->] (k0) -- (s0);
+\draw[->] (s0) -- (M0);
+\draw[->] (M0) -- (XL);
+
+%% \draw [decorate,decoration={brace,amplitude=5pt},xshift=-4pt,yshift=0pt]
+%% ($(M0) + (-2,0)$) -- ($(x0) + (-2,0)$)
+%% node [black,midway,xshift=-0.6cm] {\footnotesize $\textcolor{blue}{A}$};
+
+\path<2->[draw, color = blue, dotted, thick] ($(k0) + (-2,1)$) rectangle ($(M0) + (2,-0.5)$);
+\node<2-> (A) at ($(k0) + (-2,1.5)$) {\huge\textcolor{blue} A};
+
+\draw[->] (begin) -- (x5);
+\draw[->] (x5) -- (k5);
+\draw[->] (k5) -- (s5);
+\draw[->] (s5) -- (M5);
+\draw[->] (M5) -- (XL);
+
+%% \draw [decorate,decoration={brace,amplitude=5pt},xshift=-4pt,yshift=0pt]
+%% ($(M5) + (-2,0)$) -- ($(x5) + (-2,0)$)
+%% node [black,midway,xshift=-0.6cm] {\footnotesize $B$};
+
+\path<2->[draw, color = blue, dotted, thick] ($(k5) + (-2,1)$) rectangle ($(M5) + (2,-0.5)$);
+\node<2-> (B) at ($(k5) + (-2,1.5)$) {\huge\textcolor{blue} B};
+
+\draw[->] (begin) -- (x10);
+\draw[->] (x10) -- (k10);
+\draw[->] (k10) -- (s10);
+\draw[->] (s10) -- (M10);
+\draw[->] (M10) -- (XR);
+
+%% \draw [decorate,decoration={brace,amplitude=5pt},xshift=-4pt,yshift=0pt]
+%% ($(M10) + (-2.2,0)$) -- ($(x10) + (-2.2,0)$)
+%% node [black,midway,xshift=-0.6cm] {\footnotesize $C$};
+
+\path<2->[draw, color = blue, dotted, thick] ($(k10) + (-2,1)$) rectangle ($(M10) + (2,-0.5)$);
+\node<2-> (C) at ($(k10) + (-2,1.5)$) {\huge\textcolor{blue} C};
+
+\draw[->] (begin) -- (x15);
+\draw[->] (x15) -- (k15);
+\draw[->] (k15) -- (s15);
+\draw[->] (s15) -- (M15);
+\draw[->] (M15) -- (XR);
+
+%% \draw [decorate,decoration={brace,amplitude=5pt},xshift=-4pt,yshift=0pt]
+%% ($(M15) + (-2.2,0)$) -- ($(x15) + (-2.2,0)$)
+%% node [black,midway,xshift=-0.6cm] {\footnotesize $D$};
+
+\path<2->[draw, color = blue, dotted, thick] ($(k15) + (-2,1)$) rectangle ($(M15) + (2,-0.5)$);
+\node<2-> (D) at ($(k15) + (-2,1.5)$) {\huge\textcolor{blue} D};
+
+\draw[->] (XL) -- (XM);
+\draw[->] (XR) -- (XM);
+\draw[->] (XM) -- (end);
+
+%% \draw [decorate,decoration={brace,amplitude=2.5pt},xshift=-4pt,yshift=0pt]
+%% ($(XL) + (-1.5,-0.5)$) -- ($(XL) + (-1.5,0.5)$)
+%% node [black,midway,xshift=-0.8cm] {\footnotesize $LXOR1$};
+
+%% \draw [decorate,decoration={brace,mirror,amplitude=2.5pt},xshift=-4pt,yshift=0pt]
+%% ($(XR) + (+1.75,-0.5)$) -- ($(XR) + (+1.75,0.5)$)
+%% node [black,midway,xshift=+0.8cm] {\footnotesize $RXOR1$};
+
+%% \draw [decorate,decoration={brace,amplitude=2.5pt},xshift=-4pt,yshift=0pt]
+%% ($(XM) + (-3,-0.5)$) -- ($(XM) + (-3,0.5)$)
+%% node [black,midway,xshift=-0.8cm] {\footnotesize $\textcolor{red}{MXOR1}$};

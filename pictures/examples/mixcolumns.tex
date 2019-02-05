@@ -1,0 +1,24 @@
+\node[text width = 15cm] at (0, 0) {$MixColumns (state) = MC
+  %% \left[\begin{matrix}
+  %%     02 & 03 & 01 & 01 \\
+  %%     01 & 02 & 03 & 01 \\
+  %%     01 & 01 & 02 & 03 \\
+  %%     03 & 01 & 01 & 02 \\
+  %%   \end{matrix}\right]
+  *
+  \left[\begin{matrix}
+      x_{0} & x_{4} & x_{8}  & x_{12} \\
+      x_{1} & x_{5} & x_{9}  & x_{13} \\
+      x_{2} & x_{6} & x_{10} & x_{14} \\
+      x_{3} & x_{7} & x_{11} & x_{15} \\
+    \end{matrix}\right]
+  $};
+
+\node[text width = 15cm] at (0, -3) {$MixColumns (state) =
+  \left[\begin{matrix}
+      MC * \left[\begin{matrix} x_{0} \\ x_{1} \\ x_{2} \\ x_{3} \end{matrix}\right]
+      MC * \left[\begin{matrix} x_{4} \\ x_{5} \\ x_{6} \\ x_{7} \end{matrix}\right]
+      MC * \left[\begin{matrix} x_{8} \\ x_{9} \\ x_{10} \\ x_{11} \end{matrix}\right]
+      MC * \left[\begin{matrix} x_{12} \\ x_{13} \\ x_{14} \\ x_{15} \end{matrix}\right]
+    \end{matrix}\right]
+  $};

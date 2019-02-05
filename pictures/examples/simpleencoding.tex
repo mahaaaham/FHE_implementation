@@ -1,0 +1,15 @@
+\tikzset{square/.style = {rectangle, draw, fill = blue!20,  
+minimum width=1cm, minimum height = 0.6cm}}
+\tikzset{encoding/.style = {rectangle, dotted, fill = yellow!20,  minimum
+width=0.7cm, minimum height = 0.6cm}}
+
+\node[square] (S) at (0,0) {};
+
+\node[square] (T) at (4,0) {};
+
+\node at ($(S) - (1.6,0)$) {$\cdots$};
+\node at ($(T) + (1.6,0)$) {$\cdots$};
+
+\draw[->] (S) -- (T);
+\draw[->] ($(S) - (1,0)$) -- (S);
+\draw[->] (T) -- ($(T) + (1,0)$);

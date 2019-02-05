@@ -1,0 +1,53 @@
+	% I place the nodes
+	% absolute way
+	\node[draw] (A) at (0,-5) {A};
+	\node[draw] (B) at (10,-5) {B};
+
+	\draw[->] ($(A) - (1,0)$) -- (A);
+	\node  at ($(A) - (1.5,0)$) {a};
+	\draw[->] ($(B) + (1,0)$) -- (B);
+	\node  at ($(B) + (1.5,0)$) {b};
+
+
+	\node (a1) at ($(A) + (2,3)$) {$a_0$};
+	\node[draw, fill=blue!20] (xor1) at ($(a1) + (3,-1)$) {LXOR1[0]};
+	\node (concat1) at ($(xor1) + (0,1)$) {$(a_0 \,||\, b_0)$};
+	\node (result1) at ($(xor1) + (0,-1)$) {$a_0 \oplus b_0$};
+
+	\node (a8) at ($(A) + (2,-3)$) {$a_7$};
+	\node[draw, fill=blue!20] (xor8) at ($(a8) + (3,-1)$) {LXOR1[7]};
+	\node (concat8) at ($(xor8) + (0,1)$) {$(a_7 \,||\, b_7)$};
+	\node (result8) at ($(xor8) + (0,-1)$) {$a_7 \oplus b_7$};
+
+	\node (b1) at ($(B) + (-2,3)$) {$b_0$};
+	\node (b8) at ($(B) + (-2,-3)$) {$b_7$};
+
+	\draw[->] (A) -- (a1);
+	\draw[->] (A) -- ($(a1) + (0,-1)$);
+	\draw[->] (A) -- ($(a8) + (0,1)$);
+	\draw[->] (A) -- (a8);
+
+	\draw[->] (B) -- (b1);
+	\draw[->] (B) -- (b8);
+	\draw[->] (B) -- ($(b1) + (0,-1)$);
+	\draw[->] (B) -- ($(b8) + (0,1)$);
+
+	\node at ($(A) + (2,0)$) {$\vdots$};
+	\node at ($(A) + (2,1)$) {$\vdots$};
+	\node at ($(A) + (2,-1)$) {$\vdots$};
+	\node at ($(B) + (-2,-1)$) {$\vdots$};
+	\node at ($(B) + (-2,0)$) {$\vdots$};
+	\node at ($(B) + (-2,1)$) {$\vdots$};
+
+	\node  at ($(A) + (5,0)$) {$\vdots$};
+	\node  at ($(A) + (5,-1)$) {$\vdots$};
+
+	\draw[->] (a1) -- (concat1);
+	\draw[->] (b1) -- (concat1);
+	\draw[->] (concat1) -- (xor1);
+	\draw[->] (xor1) -- (result1);
+
+	\draw[->] (a8) -- (concat8);
+	\draw[->] (b8) -- (concat8);
+	\draw[->] (xor8) -- (result8);
+	\draw[->] (concat8) -- (xor8);

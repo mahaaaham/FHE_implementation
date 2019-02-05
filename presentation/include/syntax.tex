@@ -1,0 +1,171 @@
+% ----- rearranged from https://tex.stackexchange.com/questions/83882/how-to-highlight-
+%                  python-syntax-in-latex-listings-lstinputlistings-command#83883 
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{listings}
+\lstset{escapeinside={<@}{@>}}
+
+%
+% ------- PYTHON -------  
+%
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+xleftmargin=0cm,
+numbersep = 0.5cm,
+numbers=left, 
+numberstyle=\tiny\bf, 
+stepnumber=5, 
+basicstyle=\ttm,
+otherkeywords={self, echo, cat, mv, cp},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here (tb)
+showstringspaces=false            % 
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+%
+% -------  C  -------  
+%
+
+% C style for highlighting
+\newcommand\Cstyle{\lstset{
+language=C,
+xleftmargin=0cm,
+numbersep = 0.5cm,
+numbers=left, 
+numberstyle=\tiny\bf, 
+stepnumber=5, 
+basicstyle=\ttm,
+otherkeywords={sizeof},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            %
+}}
+
+
+% C environment
+\lstnewenvironment{C}[1][]
+{
+\Cstyle
+\lstset{#1}
+}
+{}
+
+% C for external files
+\newcommand\Cexternal[2][]{{
+\Cstyle
+\lstinputlisting[#1]{#2}}}
+
+% C for inline
+\newcommand\Cinline[1]{{\Cstyle\lstinline!#1!}}
+
+%
+% -------  ASSEMBLER -------  
+%
+
+% Assembler style for highlighting
+\newcommand\assemblerstyle{\lstset{
+language=[x86masm]Assembler,
+xleftmargin=0cm,
+numbersep = 0.5cm,
+numbers=left, 
+stepnumber=5, 
+numberstyle=\tiny\bf, 
+basicstyle=\ttm,
+otherkeywords={sizeof},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            % 
+}}
+
+
+% assembler environment
+\lstnewenvironment{Assembler}[1][]
+{
+\assemblerstyle
+\lstset{#1}
+}
+{}
+
+% assembler for external files
+\newcommand\assemblerexternal[2][]{{
+\assemblerstyle
+\lstinputlisting[#1]{#2}}}
+
+% assembler for inline
+\newcommand\assemblerinline[1]{{\assemblerstyle\lstinline!#1!}}
+
+%
+% -------  BASH -------  
+%
+
+% Bash style for highlighting
+\newcommand\bashstyle{\lstset{
+language=Bash,
+xleftmargin=0cm,
+numbersep = 0.5cm,
+numbers=left, 
+numberstyle=\tiny\bf, 
+stepnumber=5, 
+basicstyle=\ttm,
+otherkeywords={self, echo, cat, mv, cp},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here (tb)
+showstringspaces=false            % 
+}}
+
+
+% Bash environment
+\lstnewenvironment{bash}[1][]
+{
+\bashstyle
+\lstset{#1}
+}
+{}
+
+% Bash for external files
+\newcommand\bashexternal[2][]{{
+\bashstyle
+\lstinputlisting[#1]{#2}}}
+
+% Bash for inline
+\newcommand\bashinline[1]{{\bashstyle\lstinline!#1!}}

@@ -1,0 +1,41 @@
+\tikzset{square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 1cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=1.7cm,
+minimum height = 0.6cm}}
+
+% absolute way
+\node[draw] (W) at (0,0) {$\text{MC}_0$};
+\node[draw] (X) at (3,0) {$\text{MC}_1$};
+\node[draw] (Y) at (6,0) {$\text{MC}_2$};
+\node[draw] (Z) at (9,0) {$\text{MC}_3$};
+
+\node at ($(W) + (0,0.8)$) {$b_0$};
+\node at ($(X) + (0,0.8)$) {$b_1$};
+\node at ($(Y) + (0,0.8)$) {$b_2$};
+\node at ($(Z) + (0,0.8)$) {$b_3$};
+
+\node[rect, fill=blue!20] (LXOR1) at (1.5,-1.6) {XOR};
+\node[rect, fill=orange!20] (MXOR1) at (4.5,-3) {XOR};
+\node[rect, fill=blue!20] (RXOR1) at (7.5,-1.6) {XOR};
+
+
+\node[square] (MCI) at (-4,-2.4) {$\text{MC}$};
+\node at ($(MCI) + (0,2.1)$) {\footnotesize$\begin{pmatrix} b_0 \\ b_1 \\ b_2 \\ b_3 \end{pmatrix}$};
+\draw[->] ($(MCI) + (0,1)$) -- (MCI);
+\draw[->] (MCI) -- ($(MCI) - (0,1)$);
+
+% vertical line of the begin
+\foreach \item in {W,X,Y,Z}
+\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+
+\draw[->] (MXOR1) -- ($(MXOR1) - (0,0.6)$);
+
+%  Drawing the arrows
+\draw[->] (W) -- (LXOR1);
+\draw[->] (X) -- (LXOR1);
+\draw[->] (Y) -- (RXOR1);
+\draw[->] (Z) -- (RXOR1);
+\draw[->] (LXOR1) -- (MXOR1);
+\draw[->] (RXOR1) -- (MXOR1);

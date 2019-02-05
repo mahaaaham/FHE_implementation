@@ -19,7 +19,7 @@ build:
 clean:
 	rm -f $(EXE) 
 	rm -f *~
-	cd $(INCLUDE) && rm -f *~
+	cd $(INCLUDE) && rm -f *~ *.gch
 	cd $(DATA) && rm -f *.data *.key *~
 	$(MAKE) -C $(SRC) clean
 

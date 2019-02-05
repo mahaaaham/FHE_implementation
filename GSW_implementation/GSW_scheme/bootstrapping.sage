@@ -415,6 +415,9 @@ def rec_bal_red_list_sum(list_to_sum):
     return None
 
 
+# make a bootstrapping and return
+# a list of "updated" values
+# of the arguments of the list list_cipher.
 def bootstrapping_arguments(list_cipher):
     encrypted_sk = encrypt_secret_key(bs_lk)
     return [h_basic_decrypt(encrypted_sk, c) for c in list_cipher]

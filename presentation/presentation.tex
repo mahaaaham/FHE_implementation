@@ -1,0 +1,136 @@
+\documentclass[15pt]{beamer}
+\usepackage[frenchb]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\input{include/syntax.tex} % where are all the options about syntax highlight.
+% Common commands 
+\newcommand{\stdin}{\bashinline{stdin} }
+\newcommand{\stdout}{\bashinline{stdout} }
+\newcommand{\stderr}{\bashinline{stderr} }
+\newcommand{\SubBytes}{\text{\Cinline{SubBytes}~}}
+\newcommand{\Sub}{\text{\Cinline{Sub}~}}
+\newcommand{\AddRoundKey}{\text{\Cinline{AddRoundKey}~}}
+\newcommand{\ShiftRows}{\text{\Cinline{ShiftRows}~}}
+\newcommand{\MixColumns}{\text{\Cinline{MixColumns}~}}
+\newcommand{\Mix}{\text{\Cinline{Mix}~}}
+\newcommand{\shiftkey}{\text{\Cinline{shift\_key}~}}
+\newcommand{\key}{\text{\Cinline{key}~}}
+\newcommand{\state}{\text{\Cinline{state}~}}
+\newcommand{\xor}{\:\oplus\:}
+
+\newcommand{\byte}{\Cinline{byte}}
+\newcommand{\word}{\Cinline{word}}
+\newcommand{\nibble}{\Cinline{nibble}}
+
+\usepackage{ulem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+%\usetheme{theme/beamerthememetropolis}
+\usepackage{beamerthememetropolis}
+
+% \usepackage{parallel}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
+% \textcolor{red}{foo}: \
+
+\usepackage{wrapfig}
+
+\usepackage{enumerate}
+
+\title{Les FHE, c'est facheux.}
+\date{\today}
+\author{Lucas Roux \& Eric Sageloli}
+
+\begin{document}
+
+% ------------------------------------------------------------------------------------------------
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+% ------------------------------------------------------------------------------------------------
+
+\begin{frame}
+  \frametitle{Introduction : contexte Whitebox}
+\begin{itemize}
+  \item Contexte classique:  blackbox
+  \item DRM 
+  \item nouveau contexte : whitebox
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------------------------------------------
+
+\begin{frame}
+  
+  \frametitle{Introduction : comment faire un oral ?}
+  
+  
+  Première idée : 
+  
+  \begin{columns}[T] % align columns
+    
+    \begin{column}{.48\textwidth}
+      \begin{figure}
+        \begin{center}
+          \begin{tikzpicture}[scale = 1, transform shape]
+	    \input{../pictures/examples/alice.tex}
+          \end{tikzpicture}
+        \end{center}
+      \end{figure}
+    \end{column}
+
+    \begin{column}{.48\textwidth}
+      \vspace{2cm}
+      \begin{itemize}
+      \item<2-> Et pourquoi pas?;
+      \item<3-> Ehehe
+        \begin{itemize}
+        \item $2^{128}$ entrées
+        \item 16 octets par sortie
+        \item $16 * 2^{128} = 2^{132}$ octets 
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    
+  \end{columns}
+
+\end{frame}
+
+% ------------------------------------------------------------------------------------------------
+
+\begin{frame}
+  \frametitle{Introduction : comment cacher la clé ?}
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}[scale = 0.6, transform shape]
+    {\includegraphics[width=.10\textwidth]{../pictures/examples/computer.jpg}};
+      \end{tikzpicture}
+    \end{center}
+  \end{figure}
+
+  Pour chaque table :
+  \begin{itemize}
+  \item $2^8$ entrées
+  \item 1 octet en sortie
+  \item taille : $2^8$ octets
+  \end{itemize}
+
+  taille totale : $16 * 2^8 = 2^{12}$ octet = 4 Ko
+
+  \pause
+  \vspace{0.7cm}
+
+  \begin{itemize}
+  \item La clé n'est plus complètement obfusquée.
+  \item<2->On aura besoin de $2032$ tables, stockés sur $500KB$
+  \end{itemize}
+\end{frame}
+
+\end{document}

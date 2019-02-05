@@ -1,0 +1,43 @@
+%\begin{tikzpicture}[scale = 1.2, transform shape]
+	% I place the nodes
+
+	% absolute way
+	\node[draw, text=blue] (A) at (0,0) {A};
+	\node[draw, text=black, dotted] (B) at (3,0) {B};
+	\node[draw, text=black, thick] (C) at (6,0) {C};
+	\node[draw, text=black, fill=yellow] (D) at (9,0) {D};
+
+	\node[draw] (LXOR1) at (1.5,-2) {LXOR1};
+	\node[draw] (MXOR1) at (4.5,-4) {MXOR1};
+	% point d'exclamation pour la transparence (compare avec D)
+	\node[draw, fill = yellow!20] (RXOR1) at (7.5,-2) {RXOR1};
+
+
+	% vertical line of the begin
+	\foreach \item in {A,B,C,D}
+	\draw (\item) -- ($(\item) + (0,1)$);
+
+	\draw (MXOR1) -- ($(MXOR1) - (0,1)$);
+
+	% number above, under and in the sides of the boxs
+	\foreach  \item in {A,B,C,D}
+	\node[below = 0 of \item]   {\footnotesize 8};
+	\foreach  \item in {LXOR1, MXOR1, RXOR1}
+	\node[green, left = 0 of \item]   {\textbf{8}~~};
+	\foreach  \item in {LXOR1, RXOR1}
+	\node[above left = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR1,RXOR1}
+	\node[above right = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR1,RXOR1}
+	\node[below = 0 of \item]   {\footnotesize 1};
+
+	%  Drawing the arrows
+	\draw[->] (A) -- (LXOR1);
+	\draw[->] (B) -- (LXOR1);
+	\draw[->] (C) -- (RXOR1);
+	\draw[->] (D) -- (RXOR1);
+	\draw[->] (LXOR1) -- (MXOR1);
+	\draw[->] (RXOR1) -- (MXOR1);
+
+
+%\end{tikzpicture}

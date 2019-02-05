@@ -191,7 +191,7 @@ def and_circuit():
     return True
 
 
-def test_main_bootstrapping_circuits():
+def all_circuit_with_bs():
     test_reset()
 
     big_transition_message("Lambda = " + str(bs_lambda))

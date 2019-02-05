@@ -8,86 +8,6 @@ load("GSW_scheme/auxilliary_functions.sage")
 load("unitary_tests/framework_test.sage")
 
 
-# global variable used in the algorithms
-decrypt = basic_decrypt
-
-
-def test_no(params, public_key, secret_key, nb_tests):
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
-    for i in range(nb_tests):
-        message = Zq(ZZ.random_element(0,2))
-        print "message = " + str(message)
-        cipher = encrypt(params, public_key, message)
-        print "cipher = " + str(cipher)
-        clear_res = c_NO(params, message)
-        print "clear = " + str(clear_res)
-        cipher_res = h_NO(params, cipher)
-        print "cipher = " + str(cipher_res)
-        result = basic_decrypt(params, secret_key, cipher_res)
-        print "decrypt => " + str(result)
-
-
-def test_and(params, public_key, secret_key, nb_tests):
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
-    for i in range(nb_tests):
-        mess1 = Zq(ZZ.random_element(0,2))
-        print "mess1 = " + str(mess1)
-        mess2 = Zq(ZZ.random_element(0,2))
-        print "mess2 = " + str(mess2)
-        cipher1 = encrypt(params, public_key, mess1)
-        print "cipher1 = " + str(cipher1)
-        cipher2 = encrypt(params, public_key, mess2)
-        print "cipher2 = " + str(cipher1)
-        clear_res = c_AND(params, mess1, mess2)
-        print "clear = " + str(clear_res)
-        cipher_res = h_AND(params, cipher1, cipher2)
-        print "cipher = " + str(cipher_res)
-        result = basic_decrypt(params, secret_key, cipher_res)
-        print "decrypt => " + str(result)
-
-
-def test_or(params, public_key, secret_key, nb_tests):
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
-    for i in range(nb_tests):
-        mess1 = Zq(ZZ.random_element(0,2))
-        print "mess1 = " + str(mess1)
-        mess2 = Zq(ZZ.random_element(0,2))
-        print "mess2 = " + str(mess2)
-        cipher1 = encrypt(params, public_key, mess1)
-        print "cipher1 = " + str(cipher1)
-        cipher2 = encrypt(params, public_key, mess2)
-        print "cipher2 = " + str(cipher1)
-        clear_res = c_OR(params, mess1, mess2)
-        print "clear = " + str(clear_res)
-        cipher_res = h_OR(params, cipher1, cipher2)
-        print "cipher = " + str(cipher_res)
-        result = basic_decrypt(params, secret_key, cipher_res)
-        print "decrypt => " + str(result)
-
-
-def test_xor(params, public_key, secret_key, nb_tests):
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
-    for i in range(nb_tests):
-        mess1 = Zq(ZZ.random_element(0,2))
-        print "mess1 = " + str(mess1)
-        mess2 = Zq(ZZ.random_element(0,2))
-        print "mess2 = " + str(mess2)
-        cipher1 = encrypt(params, public_key, mess1)
-        print "cipher1 = " + str(cipher1)
-        cipher2 = encrypt(params, public_key, mess2)
-        print "cipher2 = " + str(cipher1)
-        clear_res = c_XOR(params, mess1, mess2)
-        print "clear = " + str(clear_res)
-        cipher_res = h_XOR(params, cipher1, cipher2)
-        print "cipher = " + str(cipher_res)
-        result = basic_decrypt(params, secret_key, cipher_res)
-        print "decrypt => " + str(result)
-
-
 # output circuits and their names
 def make_lists_circuits(params):
     q = params[1]
@@ -207,7 +127,7 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
 
 
 # the main test function here: launch the others tests
-def test_main_circuit():
+def all_circuit_without_bs():
     global decrypt
     algorithms = [basic_decrypt, mp_decrypt, mp_all_q_decrypt]
     Lambda = 5

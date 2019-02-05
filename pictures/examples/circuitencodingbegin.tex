@@ -1,0 +1,67 @@
+\tikzset{ square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 0.6cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=2cm,
+minimum height = 0.6cm}}
+
+\tikzset{encoding/.style = {rectangle, fill=gray!20, minimum
+width=1cm, minimum height = 0cm}}
+
+\tikzset{encodingbis/.style = {rectangle, fill=gray!20, minimum
+width=2cm, minimum height = 0.0cm}}
+
+% I place the nodes
+% absolute way
+\node[square] (A) at (0,0) {A};
+\node[square] (B) at (3,0) {B};
+\node[square] (C) at (6,0) {C};
+\node[square] (D) at (9,0) {D};
+
+\node[encoding, below = 0 of A] (Aeo) {};
+\node[encoding, below = 0 of B] (Beo) {};
+\node[encoding, below = 0 of C] (Ceo) {};
+\node[encoding, below = 0 of D] (Deo) {};
+	
+\node at ($(A) + (0,0.8)$) {$b_0$};
+\node at ($(B) + (0,0.8)$) {$b_1$};
+\node at ($(C) + (0,0.8)$) {$b_2$};
+\node at ($(D) + (0,0.8)$) {$b_3$};
+
+\node[rect, fill=blue!20] (LXOR) at (1.5,-2.3) {LXOR};
+\node[rect, fill=orange!20] (MXOR) at (4.5,-4.3) {MXOR};
+\node[rect, fill=blue!20] (RXOR) at (7.5,-2.3) {RXOR};
+
+\node[encodingbis, above = 0 of LXOR] (LXORei) {};
+\node[encodingbis, above = 0 of RXOR] (RXORei) {};
+\node[encodingbis, above = 0 of MXOR] (MXORei) {};
+
+\node[encodingbis, below = 0 of LXOR] (LXOReo) {};
+\node[encodingbis, below = 0 of RXOR] (RXOReo) {};
+\node[encodingbis, below = 0 of MXOR] (MXOReo) {};
+
+% vertical line of the begin
+\foreach \item in {A,B,C,D}
+\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+
+\draw[->] (MXOReo) -- ($(MXOReo) - (0,1)$);
+
+% number above, under and in the sides of the boxs
+\foreach  \item in {Aeo,Beo,Ceo,Deo}
+\node[below = 0 of \item]   {\footnotesize 8};
+\foreach  \item in {LXOR, MXOR, RXOR}
+\node[left = 0 of \item]   {\textbf{8}~~};
+\foreach  \item in {LXORei, RXORei}
+\node[above left = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXORei,RXORei}
+\node[above right = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOReo,RXOReo}
+\node[below = 0 of \item]   {\footnotesize 1};
+
+%  Drawing the arrows
+\draw[->] (Aeo) -- (LXORei);
+\draw[->] (Beo) -- (LXORei);
+\draw[->] (Ceo) -- (RXORei);
+\draw[->] (Deo) -- (RXORei);
+\draw[->] (LXOReo) -- (MXORei);
+\draw[->] (RXOReo) -- (MXORei);

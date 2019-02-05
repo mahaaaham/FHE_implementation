@@ -1,0 +1,19 @@
+\tikzset{square/.style = {rectangle, draw, fill = blue!20,  
+minimum width=1cm, minimum height = 0.6cm}}
+\tikzset{encoding/.style = {rectangle, dotted, fill = gray!20,  minimum
+width=0.7cm, minimum height = 0.6cm}}
+
+\node[square] (S) at (0,0) {};
+\node[encoding, left = 0 of S] (IS) {$h$};
+\node[encoding, right = 0 of S] (OS) {$f$};
+
+\node[square] (T) at (4,0) {};
+\node[encoding, left = 0 of T] (IT) {$f^{-1}$};
+\node[encoding, right = 0 of T] (OT) {$g$};
+
+\node at ($(IS) - (1.6,0)$) {$\cdots$};
+\node at ($(OT) + (1.6,0)$) {$\cdots$};
+
+\draw[->] (OS) -- (IT);
+\draw[->] ($(IS) - (1,0)$) -- (IS);
+\draw[->] (OT) -- ($(OT) + (1,0)$);

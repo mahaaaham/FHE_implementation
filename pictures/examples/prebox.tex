@@ -1,0 +1,45 @@
+\node (col1) at (0,0) {
+  $
+  B = 
+  \begin{bmatrix} 
+    b_{0} \\
+    b_{1} \\
+    b_{2} \\
+    b_{3} \\
+  \end{bmatrix}
+  $
+};
+
+\node (col2) at ($(col1) + (0,-3)$) {$B\, \textcolor{blue}{\oplus \,K}$};
+	\node (col3) at  ($(col2) + (0,-2)$) {$\textcolor{blue}{\text{SubBytes}}(B
+	\oplus K)$};
+\node (col4) at  ($(col3) + (0,-2)$) {$ \textcolor{blue}{MC}\cdot\text{Sub}
+	(B \oplus K)$};
+
+\draw[->] (col1) -- (col2);
+\draw[->] (col2) -- (col3);
+\draw[->] (col3) -- (col4);
+
+\node (r1) at ($(col1) + (8.5,0)$) {$B$};
+\node (b0) at ($(r1) + (-4.8,-1)$) {$b_0$};
+\node (b1) at ($(r1) + (-1.6,-1)$) {$b_1$};
+\node (b2) at ($(r1) + (1.6,-1)$) {$b_2$};
+\node (b3) at ($(r1) + (4.8,-1)$) {$b_3$};
+
+
+\foreach \item in {0, 1, 2, 3}
+	{
+\node (lb\item) at ($(b\item) + (0,-2)$) {$b_\item \oplus k_\item$};
+\node (llb\item) at ($(lb\item) + (0,-2)$)
+	{$\textcolor{blue}{\text{SBox}}(b_\item
+	\oplus k_\item)$};
+\node (lllb\item) at ($(llb\item) + (0,-2)$)  {?};
+	}
+
+\foreach \item in {0, 1, 2, 3}
+{
+\draw[->] (r1) -- (b\item);
+\draw[->] (b\item) -- (lb\item);
+\draw[->] (lb\item) -- (llb\item);
+\draw[->] (llb\item) -- (lllb\item);
+}

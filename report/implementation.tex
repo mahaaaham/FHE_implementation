@@ -1,10 +1,120 @@
 \begin{section}{Implémentation d'un FHE avec bootstrapping \og{} jouet\fg{}}
-	\begin{subsection}{Présentation de notre arborescence}
-	\end{subsection}
-	\begin{subsection}{Une présentation générale: chiffrer et déchiffrer}
-	\end{subsection}
-	\begin{subsection}{Tester des choix de paramètres sur des fonctions sans bootstrapping}
-	\end{subsection}
-	\begin{subsection}{Tester des choix de paramètres sur des fonctions avec bootstrapping}
-	\end{subsection}
+\begin{subsection}{Présentation de notre arborescence}
+Nous avons concu une implémentation simple 
+du cryptosystème GSW en sagemath, située dans le dossier
+\path{GSW_implémentation}. Celui-ci contient quatres dossiers:
+\begin{itemize}
+\item \path{GSW_scheme} contenant l'implémentation de GWS;
+\item \path{analysis} contenant des fonctions permettant 
+	de tester les fonctionnalités de notre implémentation 
+	ou encore de voir les performances 
+	en terme de sécurités de certains choix de paramètres;
+\item \path{unitary_test} contenant des tests assurant le bon fonctionnement
+	des fonctions codées dans les autres dossiers; 
+\item \path{lwe_estimator} contient les fichiers sources de l'API
+	lwe\_estimator que nous avons présenté dans ce rapport; 
+\end{itemize}
+
+Nous proposons ici de faire une revue rapide des trois premiers dossiers. Notez que pour
+\og attacher \fg avec sage un des sources, il faut rester à la racine pour
+éviter des problèmes liés à l'utilisation de chemin relatifs pour les imports.
+
+
+\begin{subsubsection}{GWS\_scheme}
+Ce dossier contient les fichiers suivants:
+\begin{itemize}
+\item \path{GSW_scheme.sage} contient les fonctions principales de GWS
+dont \path{setup}, \path{encrypt} et les 3 algorithmes de
+déchiffrements que sont \path{basic_decrypt}, \path{mp_decrypt}
+et \path{mp_all_q_decrypt}. Il contient aussi différentes variables
+globales, dont \path{decrypt} permettant d'indiquer quel est
+l'algorithme de dechiffrement par défault et les variables 
+\path{bs_foo} indiquant quels paramètres sont utilisés lorsque 
+on utilise des fonctins avec bootstrapping;
+\item \path{auxilliary_functions.sage} contient l'implémentation 
+	des diverses fonctions auxilliaires utilisées pour chiffrer 
+	et déchiffrer les messages, comme par exemple \path{flatten};
+	ou encore une implémentation du nearest plane de Babai;
+\item \path{params_maker.sage} contient diverses fonctions permettant, à 
+	partir d'un $n$, de retourner des paramètres $n, q, \chi, m$
+	utilisés par le cryptosystème. Le fichier \path{GWS_scheme.sage}
+	contient une variable globale \path{params_maker}
+	permettant de fichier celui qu'utilise la fonction
+	\path{sectup};
+\item \path{homomorphic_functions.sage} contient la version homomorphe
+	d'opérations de base comme la somme, ou encore le NAND;
+\item \path{bootstrapping.sage} contient les fonctions necessaires pour
+	effectuer l'algorithme \path{basic_decrypt} homomorphiquement
+	(il s'agit de la fonction \path{h_basic_decrypt}). On y trouve
+	donc notamment diverses façon de sommer homomorphiquement
+	des listes de chiffrés de $0$ et de $1$. Notez que la fonction
+	\path{bootstrapping_arguments} permet de faire un bootstrapping
+	en retournant une valeur \og mise à jour \fg des chiffrés
+	passés en argument, cette fonction est notamment utilisée dans 
+	\path{analysis/h_circuits_with_bootstrapping.sage}.
+\end{itemize}
+\end{subsubsection} % GSW_scheme
+
+\begin{subsubsection}{analysis}
+Ce dossier contient les fichiers suivants:
+\begin{itemize}
+\item \path{depth_security.sage} contenant l'implémentation de GWS;
+\item \path{circuits.sage} contenant des fonctions permettant 
+	de tester les fonctionnalités de notre implémentation 
+	ou encore de voir les performances 
+	en terme de sécurités de certains choix de paramètres;
+\item \path{clear_functions.sage} contient des versions \og en clair \fg
+	de fonctions homomorphes, utilisées dans les circuits;
+\item \path{h_circuits_with_bootstrapping.sage} contient des exemples de
+	fonctions utilisant des bootstrappings. Elles permettent de voir 
+	si, pour certaines fonctions $f$, appliquer $f$ homomorphiquement 
+	sur des chiffrés revient au même que d'abord l'appliquer sur les 
+	clairs puis chiffrer.
+	On peut toutes les lancer en  
+	utilisant  la fonction \path{all_circuit_without_bs};
+\item \path{h_circuits_without_bootstrapping.sage} contient des examples de
+	fonctions n'utilisant pas de bootstrappings. 
+	fonctions utilisant des bootstrappings. Elles permettent de voir 
+	si, pour certaines fonctions $f$, appliquer $f$ homomorphiquement 
+	sur des chiffrés revient au même que d'abord l'appliquer sur les 
+	clairs puis chiffrer.
+	On peut toutes les lancer en  
+	utilisant  la fonction \path{all_circuit_with_bs};
+\item \path{circuits.sage} Contient des fonctions permettant d'écrire 
+	sous forme de string des fonctions algébriques simples, ce qui est utilisé
+	dans  \path{h_circuits_without_bootstrapping.sage}. Par exemple, on 
+	peut écrire \path{abc|*c+a~bc} pour signifier la fonction
+	\[(a,b,c) \mapsto c * (a + (b \text{NAND} c)) \];
+\item \path{all_circuit_analysis.sage} contient la fonction
+	\path{analysis_main} qui lance les différents circuits avec et sans
+	bootstrappings des fichiers précédents. 
+\end{itemize}
+\end{subsubsection} % analysis
+
+\begin{subsubsection}{unitary\_test}
+Ce dossier contient un fichier \path{framework_test.sage} permettant de mettre 
+en forme les sorties des différentes fonctions de test, puis un fichier 
+de test correspondant à chaque fichier du dossier \path{GSW_scheme}.
+Chacun de ses fichiers contient une fonction \path{test_main_FOO}
+ne demandant aucun argument et permettant de lancer les différents 
+tests qu'il contient. De plus, le fichier \path{all_main_test.sage}
+contient une fonction \path{test_main} permettant de lancer toutes 
+les fonctions de forme \path{test_main_FOO}. On peut donc se faire une
+idée du travail réalisé sur les tests en la lancant.
+\begin{itemize}
+\item \path{depth_security.sage} contenant l'implémentation de GWS;
+\item \path{circuits.sage} contenant des fonctions permettant 
+	de tester les fonctionnalités de notre implémentation 
+	ou encore de voir les performances 
+	en terme de sécurités de certains choix de paramètres;
+\item \path{clear_functions.sage} contenant des tests assurant le bon fonctionnement
+	des fonctions codées dans les autres dossiers; 
+\item \path{h_circuits_with_bootstrapping.sage} contient les fichiers sources de l'API
+	lwe\_estimator que nous avons présenté dans ce rapport; 
+\item \path{h_circuits_without_bootstrapping.sage} contient les fichiers sources de l'API
+	lwe\_estimator que nous avons présenté dans ce rapport; 
+\end{itemize}
+\end{subsubsection} % analysis
+
+\end{subsection}
 \end{section}

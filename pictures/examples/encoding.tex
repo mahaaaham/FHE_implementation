@@ -1,0 +1,29 @@
+\tikzset{ square/.style = {rectangle, draw, fill=blue!20, minimum width=1.7cm,
+minimum height = 1.3cm},}
+
+	\node[square] (u) at (0,0) {};
+	\node[below = 0 of u] (uout) {$y_1\: || \: y_2$};
+
+	\node[square] (l) at ($(u) + (-2,-4.5)$) {};
+	\node[above = 0 of l] (lin) {$y_1$};
+	\node[below = 0 of l] (lout)  {$z_1$};
+
+	\node[square] (r) at ($(u) + (2,-4.5)$) {};
+	\node[above = 0 of r] (rin)  {$y_2$};
+	\node[below = 0 of r] (rout)  {$z_2$};
+
+	\node[square] (d) at ($(l) + (2,-4.5)$) {};
+	\node[above = 0 of d] (din)  {$z_1\: || \: z_2$};
+
+	\node (begin) at ($(u) + (0,1.5)$) {$x$};
+	\node (end) at ($(d) + (0,-1.5)$) {$F(x)$};
+
+
+	\draw[->] (begin) -- (u); 
+	\draw[->] (d) -- (end); 
+
+	\draw[->] (uout) -- (lin);
+	\draw[->] (uout) -- (rin);
+
+	\draw[->] (lout) -- (din);
+	\draw[->] (rout) -- (din);

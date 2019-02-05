@@ -1,0 +1,43 @@
+	% I place the nodes
+	% absolute way
+	\node[draw] (W) at (0,0) {W};
+	\node[draw] (X) at (3,0) {X};
+	\node[draw] (Y) at (6,0) {Y};
+	\node[draw] (Z) at (9,0) {Z};
+
+	\node at ($(W) + (0,0.8)$) {$b_0$};
+	\node at ($(X) + (0,0.8)$) {$b_1$};
+	\node at ($(Y) + (0,0.8)$) {$b_2$};
+	\node at ($(Z) + (0,0.8)$) {$b_3$};
+
+	\node[draw, fill=blue!20] (LXOR2) at (1.5,-2) {LXOR2};
+	\node[draw, fill=orange!20] (MXOR2) at (4.5,-4) {MXOR2};
+	\node[draw, fill=blue!20] (RXOR2) at (7.5,-2) {RXOR2};
+
+
+	% vertical line of the begin
+	\foreach \item in {W,X,Y,Z}
+	\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+
+	\draw (MXOR2) -- ($(MXOR2) - (0,1)$);
+
+	% number above, under and in the sides of the boxs
+	\foreach  \item in {W,X,Y,Z}
+	\node[below = 0 of \item]   {\footnotesize 8};
+	\foreach  \item in {LXOR2, MXOR2, RXOR2}
+	\node[left = 0 of \item]   {\textbf{8}~~};
+	\foreach  \item in {LXOR2, RXOR2}
+	\node[above left = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR2,RXOR2}
+	\node[above right = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR2,RXOR2}
+	\node[below = 0 of \item]   {\footnotesize 1};
+
+	%  Drawing the arrows
+	\draw[->] (W) -- (LXOR2);
+	\draw[->] (X) -- (LXOR2);
+	\draw[->] (Y) -- (RXOR2);
+	\draw[->] (Z) -- (RXOR2);
+	\draw[->] (LXOR2) -- (MXOR2);
+	\draw[->] (RXOR2) -- (MXOR2);

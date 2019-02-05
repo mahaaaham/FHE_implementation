@@ -2,16 +2,22 @@ load("GSW_scheme/auxilliary_functions.sage")
 load("GSW_scheme/params_maker.sage")
 
 
-# global parameters:
+# ---- global variables ----
+
+# decryption and parameters:
 # I initialise decrypt to a function to avoid an error
 # with some decrypt.__name__ used in some tests
 decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
 # params_maker = lambda n: no_error(n)
 params_maker = lambda n: no_error(n)
-with_bootstrapping = False
-nb_op_before_bootstraping = 1
-actual_nb_op = 0
 
+# "bootstrapping parameters":
+# when you want to use
+# the bootstrapping, please use these parameters,
+# warning: they are automatically changed wen secret_key_gen, 
+# setup or public_key_gen is used.
+# you can see an example of utilisation in
+# analysis/h_circuits_without_bootstrapping.sage 
 bs_lambda = 3
 bs_params = None
 bs_pk = None
@@ -19,7 +25,8 @@ bs_sk = None
 bs_lk = None
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
-# a matrix used when mp_all_q_decrypt is used.
+# a matrix used when mp_all_q_decrypt is used, it is set 
+# by init_mp_all_q_decrypt.
 S_mp_all_decrypt = 0
 
 # creation of the setup parameters commonly used by the others

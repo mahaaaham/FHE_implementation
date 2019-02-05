@@ -1,0 +1,55 @@
+\tikzset{ square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 1cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=1.7cm,
+minimum height = 0.6cm}}
+
+% I place the nodes
+% absolute way
+\node[draw] (A) at (0,0) {A};
+\node[draw] (B) at (3,0) {B};
+\node[draw] (C) at (6,0) {C};
+\node[draw] (D) at (9,0) {D};
+
+\node at ($(A) + (0,0.8)$) {$x_0$};
+\node at ($(B) + (0,0.8)$) {$x_1$};
+\node at ($(C) + (0,0.8)$) {$x_2$};
+\node at ($(D) + (0,0.8)$) {$x_3$};
+
+\node[rect, fill=blue!20] (LXOR1) at (1.5,-1.6) {LXOR1};
+\node[rect, fill=orange!20] (MXOR1) at (4.5,-3) {MXOR1};
+\node[rect, fill=blue!20] (RXOR1) at (7.5,-1.6) {RXOR1};
+
+
+\node[square, fill=blue!20] (MI) at (-4,-2.4) {$M$};
+\node at ($(MI) + (0,2.1)$) {\footnotesize$\begin{pmatrix} x_0 \\ x_1 \\ x_2 \\ x_3 \end{pmatrix}$};
+\draw[->] ($(MI) + (0,1)$) -- (MI);
+\draw[->] (MI) -- ($(MI) - (0,1)$);
+\node[above = 0 of MI] {\footnotesize ~~~~~8};
+
+% vertical line of the begin
+\foreach \item in {A,B,C,D}
+\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+
+\draw[->] (MXOR1) -- ($(MXOR1) - (0,0.6)$);
+
+% number above, under and in the sides of the boxs
+\foreach  \item in {A,B,C,D}
+\node[below = 0 of \item]   {\footnotesize 8};
+\foreach  \item in {LXOR1, MXOR1, RXOR1}
+\node[left = 0 of \item]   {\textbf{8}~~};
+\foreach  \item in {LXOR1, RXOR1}
+\node[above left = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR1,RXOR1}
+\node[above right = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR1,RXOR1}
+\node[below = 0 of \item]   {\footnotesize 1};
+
+%  Drawing the arrows
+\draw[->] (A) -- (LXOR1);
+\draw[->] (B) -- (LXOR1);
+\draw[->] (C) -- (RXOR1);
+\draw[->] (D) -- (RXOR1);
+\draw[->] (LXOR1) -- (MXOR1);
+\draw[->] (RXOR1) -- (MXOR1);

@@ -1,0 +1,111 @@
+%% \node[draw, fill = blue!20] (E) at (2,0.5) {E};
+%% \node[draw, fill = blue!20] (C) at (1,2) {C};
+%% \node[draw, fill = blue!20] (D) at (3,2) {D};
+%% \node[draw, fill = blue!20] (A) at (2,5) {A};
+%% \node[draw, fill = blue!20] (B) at (2,3.5) {B};
+
+%% \node (begin) at ($(A) + (0,1)$) {Message};
+%% \node (end) at ($(E) + (0,-1)$) {Chiffré};
+%% \draw[->] (begin) -- (A);
+%% \draw[->] (A) -- (B);
+%% \draw[->] (B) -- (C);
+%% \draw[->] (B) -- (D);
+%% \draw[->] (C) -- (E);
+%% \draw[->] (D) -- (E);
+%% \draw[->] (E) -- (end);
+
+\node[draw, fill = blue!20] (T0) at (0,0) {$T_0$};
+\node (x0) at ($(T0) + (0,+1)$) {$x_0$};
+\node (y0) at ($(T0) + (0,-1)$) {$y_0$};
+\draw[->] (x0) -- (T0);
+\draw[->] (T0) -- (y0);
+
+\node[draw, fill = blue!20] (T1) at ($(T0) + (1,0)$) {$T_2$};
+\node (x1) at ($(T1) + (0,+1)$) {$x_1$};
+\node (y1) at ($(T1) + (0,-1)$) {$y_1$};
+\draw[->] (x1) -- (T1);
+\draw[->] (T1) -- (y1);
+
+\node[draw, fill = blue!20] (T2) at ($(T0) + (2,0)$) {$T_2$};
+\node (x2) at ($(T2) + (0,+1)$) {$x_2$};
+\node (y2) at ($(T2) + (0,-1)$) {$y_2$};
+\draw[->] (x2) -- (T2);
+\draw[->] (T2) -- (y2);
+
+\node[draw, fill = blue!20] (T3) at ($(T0) + (3,0)$) {$T_3$};
+\node (x3) at ($(T3) + (0,+1)$) {$x_3$};
+\node (y3) at ($(T3) + (0,-1)$) {$y_3$};
+\draw[->] (x3) -- (T3);
+\draw[->] (T3) -- (y3);
+
+\node[draw, fill = blue!20] (T4) at ($(T0) + (4,0)$) {$T_4$};
+\node (x4) at ($(T4) + (0,+1)$) {$x_4$};
+\node (y4) at ($(T4) + (0,-1)$) {$y_4$};
+\draw[->] (x4) -- (T4);
+\draw[->] (T4) -- (y4);
+
+\node[draw, fill = blue!20] (T5) at ($(T0) + (5,0)$) {$T_5$};
+\node (x5) at ($(T5) + (0,+1)$) {$x_5$};
+\node (y5) at ($(T5) + (0,-1)$) {$y_5$};
+\draw[->] (x5) -- (T5);
+\draw[->] (T5) -- (y5);
+
+\node[draw, fill = blue!20] (T6) at ($(T0) + (6,0)$) {$T_6$};
+\node (x6) at ($(T6) + (0,+1)$) {$x_6$};
+\node (y6) at ($(T6) + (0,-1)$) {$y_6$};
+\draw[->] (x6) -- (T6);
+\draw[->] (T6) -- (y6);
+
+\node[draw, fill = blue!20] (T7) at ($(T0) + (7,0)$) {$T_7$};
+\node (x7) at ($(T7) + (0,+1)$) {$x_7$};
+\node (y7) at ($(T7) + (0,-1)$) {$y_7$};
+\draw[->] (x7) -- (T7);
+\draw[->] (T7) -- (y7);
+
+\node[draw, fill = blue!20] (T8) at ($(T0) + (8,0)$) {$T_8$};
+\node (x8) at ($(T8) + (0,+1)$) {$x_8$};
+\node (y8) at ($(T8) + (0,-1)$) {$y_8$};
+\draw[->] (x8) -- (T8);
+\draw[->] (T8) -- (y8);
+
+\node[draw, fill = blue!20] (T9) at ($(T0) + (9,0)$) {$T_9$};
+\node (x9) at ($(T9) + (0,+1)$) {$x_9$};
+\node (y9) at ($(T9) + (0,-1)$) {$y_9$};
+\draw[->] (x9) -- (T9);
+\draw[->] (T9) -- (y9);
+
+\node[draw, fill = blue!20] (T10) at ($(T0) + (10,0)$) {$T_{10}$};
+\node (x10) at ($(T10) + (0,+1)$) {$x_{10}$};
+\node (y10) at ($(T10) + (0,-1)$) {$y_{10}$};
+\draw[->] (x10) -- (T10);
+\draw[->] (T10) -- (y10);
+
+\node[draw, fill = blue!20] (T11) at ($(T0) + (11,0)$) {$T_{11}$};
+\node (x11) at ($(T11) + (0,+1)$) {$x_{11}$};
+\node (y11) at ($(T11) + (0,-1)$) {$y_{11}$};
+\draw[->] (x11) -- (T11);
+\draw[->] (T11) -- (y11);
+
+\node[draw, fill = blue!20] (T12) at ($(T0) + (12,0)$) {$T_{12}$};
+\node (x12) at ($(T12) + (0,+1)$) {$x_{12}$};
+\node (y12) at ($(T12) + (0,-1)$) {$y_{12}$};
+\draw[->] (x12) -- (T12);
+\draw[->] (T12) -- (y12);
+
+\node[draw, fill = blue!20] (T13) at ($(T0) + (13,0)$) {$T_{13}$};
+\node (x13) at ($(T13) + (0,+1)$) {$x_{13}$};
+\node (y13) at ($(T13) + (0,-1)$) {$y_{13}$};
+\draw[->] (x13) -- (T13);
+\draw[->] (T13) -- (y13);
+
+\node[draw, fill = blue!20] (T14) at ($(T0) + (14,0)$) {$T_{14}$};
+\node (x14) at ($(T14) + (0,+1)$) {$x_{14}$};
+\node (y14) at ($(T14) + (0,-1)$) {$y_{14}$};
+\draw[->] (x14) -- (T14);
+\draw[->] (T14) -- (y14);
+
+\node[draw, fill = blue!20] (T15) at ($(T0) + (15,0)$) {$T_{15}$};
+\node (x15) at ($(T15) + (0,+1)$) {$x_{15}$};
+\node (y15) at ($(T15) + (0,-1)$) {$y_{15}$};
+\draw[->] (x15) -- (T15);
+\draw[->] (T15) -- (y15);

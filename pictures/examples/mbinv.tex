@@ -1,0 +1,55 @@
+\tikzset{ square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 1cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=1.7cm,
+minimum height = 0.6cm}}
+
+% I place the nodes
+% absolute way
+\node[draw] (W) at (0,0) {W};
+\node[draw] (X) at (3,0) {X};
+\node[draw] (Y) at (6,0) {Y};
+\node[draw] (Z) at (9,0) {Z};
+
+\node at ($(W) + (0,0.8)$) {$b_0$};
+\node at ($(X) + (0,0.8)$) {$b_1$};
+\node at ($(Y) + (0,0.8)$) {$b_2$};
+\node at ($(Z) + (0,0.8)$) {$b_3$};
+
+\node[rect, fill=blue!20] (LXOR) at (1.5,-1.6) {LXOR};
+\node[rect, fill=orange!20] (MXOR) at (4.5,-3) {MXOR};
+\node[rect, fill=blue!20] (RXOR) at (7.5,-1.6) {RXOR};
+
+
+\node[square] (MBI) at (-4,-2.4) {$\text{MB}^{-1}$};
+\node at ($(MBI) + (0,2.1)$) {\footnotesize$\begin{pmatrix} b_0 \\ b_1 \\ b_2 \\ b_3 \end{pmatrix}$};
+\draw[->] ($(MBI) + (0,1)$) -- (MBI);
+\draw[->] (MBI) -- ($(MBI) - (0,1)$);
+\node[above = 0 of MBI] {\footnotesize ~~~~~8};
+
+% vertical line of the begin
+\foreach \item in {W,X,Y,Z}
+\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+
+\draw[->] (MXOR) -- ($(MXOR) - (0,0.6)$);
+
+% number above, under and in the sides of the boxs
+\foreach  \item in {W,X,Y,Z}
+\node[below = 0 of \item]   {\footnotesize 8};
+\foreach  \item in {LXOR, MXOR, RXOR}
+\node[left = 0 of \item]   {\textbf{8}~~};
+\foreach  \item in {LXOR, RXOR}
+\node[above left = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR,RXOR}
+\node[above right = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR,RXOR}
+\node[below = 0 of \item]   {\footnotesize 1};
+
+%  Drawing the arrows
+\draw[->] (W) -- (LXOR);
+\draw[->] (X) -- (LXOR);
+\draw[->] (Y) -- (RXOR);
+\draw[->] (Z) -- (RXOR);
+\draw[->] (LXOR) -- (MXOR);
+\draw[->] (RXOR) -- (MXOR);

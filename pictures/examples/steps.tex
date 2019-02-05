@@ -1,0 +1,156 @@
+\node (key) at (11,3.2) { 
+  $
+  \color{red}
+  \begin{bmatrix} 
+    k_{0} & k_{4} & k_{8}  & k_{12} \\
+    k_{1} & k_{5} & k_{9}  & k_{13} \\
+    k_{2} & k_{6} & k_{10} & k_{14} \\
+    k_{3} & k_{7} & k_{11} & k_{15} \\
+  \end{bmatrix} 
+  $
+  };
+
+\node at ($(key) + (-0.2,-1.7)$) {
+  $
+  \color{red}
+  =
+  \begin{bmatrix} 
+  K_0 & K_1 & K_2 & K_3 \\
+  \end{bmatrix} 
+  $
+  };
+
+\node  at ($(key) + (0,1.4)$) {\footnotesize clef étendue du tour:};
+
+\node (matrix0) at (6,3) { 
+  $
+  \begin{bmatrix} 
+    x_{0} & x_{4} & x_{8}  & x_{12} \\
+    x_{1} & x_{5} & x_{9}  & x_{13} \\
+    x_{2} & x_{6} & x_{10} & x_{14} \\
+    x_{3} & x_{7} & x_{11} & x_{15} \\
+  \end{bmatrix}
+  $
+  };
+
+\node (matrix1) at (6,0) { 
+  $
+  \begin{bmatrix} 
+    x_{0} & x_{4} & x_{8}  & x_{12} \\
+    x_{5} & x_{9} & x_{13}  & x_{1} \\
+    x_{10} & x_{14} & x_{2} & x_{6} \\
+    x_{11} & x_{15} & x_{3} & x_{7} \\
+  \end{bmatrix}
+  $
+};
+
+
+\node (col1) at (-0.5,-3) {
+  $
+  C_0 = 
+  \begin{bmatrix} 
+    x_{0} \\
+    x_{5} \\
+    x_{10} \\
+    x_{11} \\
+  \end{bmatrix}
+  $
+};
+
+\path<2->[draw, thick, color = black, dotted]  (-2.9, -4.5) rectangle (1.75, -9);
+
+\node (col2) at (4,-3) {
+  $
+  C_1 = 
+  \begin{bmatrix} 
+  x_{4}\\
+  x_{9}\\
+  x_{14}\\
+  x_{15}\\
+  \end{bmatrix}
+  $
+};
+
+\node (col3) at (8.5,-3) {
+  $
+  C_2 = 
+  \begin{bmatrix} 
+  x_{8} \\
+  x_{13} \\
+  x_{2}\\
+  x_{3}\\
+  \end{bmatrix}
+  $
+};
+
+\node (col4) at (13,-3) {
+  $
+  C_3 = 
+  \begin{bmatrix} 
+	x_{12} \\
+	x_{1} \\
+	x_{6} \\
+	x_{7} \\
+  \end{bmatrix}
+  $
+};
+
+\node (matrix2) at ($(matrix1)+ (0,-10.5)$) { 
+  $
+  \begin{bmatrix} 
+    y_{0} & y_{4} & y_{8}  & y_{12} \\
+    y_{1} & y_{5} & y_{9}  & y_{13} \\
+    y_{2} & y_{6} & y_{10} & y_{14} \\
+    y_{3} & y_{7} & y_{11} & y_{15} \\
+  \end{bmatrix}
+  $
+};
+
+\draw (matrix0) -- ($(matrix0) + (0,-1.3)$) node[below] { \small\color{blue} ShiftRows};
+\draw[->]  (matrix1) -- ($(matrix0) + (0,-2.2)$);
+
+\draw[->] (col1) -- ($(col1) + (0,-2)$) node[below] {$C_0\,
+\textcolor{blue}{\oplus \,K_0}$};
+\draw[->] (col2) -- ($(col2) + (0,-2)$) node[below] {$C_1\,
+\textcolor{blue}{\oplus \,K_1}$};
+\draw[->] (col3) -- ($(col3) + (0,-2)$) node[below] {$C_2\,
+\textcolor{blue}{\oplus \,K_2}$};
+\draw[->] (col4) -- ($(col4) + (0,-2)$) node[below] {$C_3\,
+\textcolor{blue}{\oplus \,K_3}$};
+
+\draw[->] ($(col1) + (0,-2.6)$) -- ($(col1) + (0,-3.4)$) node[below]
+{$\textcolor{blue}{\text{SubBytes}}
+(C_0 \oplus K_0$)};
+\draw[->] ($(col2) + (0, -2.6)$) -- ($(col2) + (0,-3.4)$) node[below] {$\textcolor{blue}{\text{SubBytes}}
+(C_1 \oplus K_1)$};
+\draw[->] ($(col3) + (0, -2.6)$) -- ($(col3) + (0,-3.4)$) node[below] {$\textcolor{blue}{\text{SubBytes}}
+(C_2 \oplus K_2)$};
+\draw[->] ($(col4) + (0, -2.6)$) -- ($(col4) + (0,-3.4)$) node[below] {$\textcolor{blue}{\text{SubBytes}}
+(C_3 \oplus K_3)$};
+
+\draw[->] ($(col1) + (0,-4.2)$) -- ($(col1) + (0,-4.9)$) node[below] {$
+	\textcolor{blue}{MC}\cdot\text{SubBytes}
+(C_0 \oplus K_0$)};
+\draw[->] ($(col2) + (0, -4.2)$) -- ($(col2) + (0,-4.9)$) node[below] {$
+	\textcolor{blue}{MC}\cdot\text{SubBytes}
+(C_1 \oplus K_1$)};
+\draw[->] ($(col3) + (0, -4.2)$) -- ($(col3) + (0,-4.9)$) node[below] {$
+	\textcolor{blue}{MC}\cdot\text{SubBytes}
+(C_2 \oplus K_2)$};
+\draw[->] ($(col4) + (0, -4.2)$) -- ($(col4) + (0,-4.9)$) node[below] {$
+	\textcolor{blue}{MC}\cdot\text{SubBytes}
+(C_3 \oplus K_3)$};
+
+\foreach \item in {(col1),(col2),(col3),(col4)}
+\draw[->] (matrix1) -- \item;
+
+\node (text) at ($(matrix1) + (-5.4, -1)$) {\small\textbf{division en 4 étapes}};
+\node (text2) at ($(matrix1) + (0, 4.5)$) {\small\textbf{début du tour}};
+
+
+\node (text2) at ($(matrix2) + (0, -1.5)$) {\small\textbf{fin du tour}};
+
+\draw[->] ($(col1) + (0,-5.8)$)  -- (matrix2);
+\draw[->] ($(col2) + (0,-5.8)$)  -- (matrix2);
+\draw[->] ($(col3) + (0,-5.8)$)  -- (matrix2);
+\draw[->] ($(col4) + (0,-5.8)$)  -- (matrix2);

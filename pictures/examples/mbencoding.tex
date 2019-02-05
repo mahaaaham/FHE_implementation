@@ -1,0 +1,119 @@
+%\begin{tikzpicture}[scale = 1.2, transform shape]
+	% I place the nodes
+
+\tikzset{ square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 0.6cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=2cm,
+minimum height = 0.6cm}}
+
+\tikzset{encoding/.style = {rectangle, fill=gray!20, minimum
+width=1cm, minimum height = 0cm}}
+
+\tikzset{encodingbis/.style = {rectangle, fill=gray!20, minimum
+width=2cm, minimum height = 0.0cm}}
+
+	% absolute way
+	\node[square] (A) at (0,0) {A};
+	\node[square] (B) at (3,0) {B};
+	\node[square] (C) at (6,0) {C};
+	\node[square] (D) at (9,0) {D};
+
+	\node[square, fill=orange!20] (W) at (0,-7) {W};
+	\node[square, fill=orange!20] (X) at (3,-7) {X};
+	\node[square, fill=orange!20] (Y) at (6,-7) {Y};
+	\node[square, fill=orange!20] (Z) at (9,-7) {Z};
+
+	\node[rect] (LXOR1) at (1.5,-3) {LXOR1};
+	\node[rect] (MXOR1) at (4.5,-5) {MXOR1};
+	\node[rect] (RXOR1) at (7.5,-3) {RXOR1};
+
+	\node[rect] (LXOR2) at (1.5,-9) {LXOR2};
+	\node[rect] (RXOR2) at (7.5,-9) {RXOR2};
+	\node[rect] (MXOR2) at (4.5,-11) {MXOR2};
+
+	% relative way 
+	\node[square, below = 0 of A, fill=orange!20] (MB1) {MB};
+	\node[square, below = 0 of B, fill=orange!20] (MB2) {MB};
+	\node[square, below = 0 of C, fill=orange!20] (MB3) {MB};
+	\node[square, below = 0 of D, fill=orange!20] (MB4) {MB};
+
+	\node[encoding, above = 0 of A] (Ae) {};
+	\node[encoding, above = 0 of B] (Be) {};
+	\node[encoding, above = 0 of C] (Ce) {};
+	\node[encoding, above = 0 of D] (De) {};
+
+	\node[square, below = 0 of A, fill = orange!20] (MB1) {MB};
+	\node[encoding, below = 0 of MB1] (MB1e) {};
+	\node[square, below = 0 of B, fill = orange!20] (MB2) {MB};
+	\node[encoding, below = 0 of MB2] (MB2e) {};
+	\node[square, below = 0 of C, fill = orange!20] (MB3) {MB};
+	\node[encoding, below = 0 of MB3] (MB3e) {};
+	\node[square, below = 0 of D, fill = orange!20] (MB4) {MB};
+	\node[encoding, below = 0 of MB4] (MB4e) {};
+
+	\node[encoding, above = 0 of W] (Wei)  {};
+	\node[encoding, above = 0 of X] (Xei)  {};
+	\node[encoding, above = 0 of Y] (Yei)  {};
+	\node[encoding, above = 0 of Z] (Zei)  {};
+
+	\node[encoding, below = 0 of W] (Weo)  {};
+	\node[encoding, below = 0 of X] (Xeo)  {};
+	\node[encoding, below = 0 of Y] (Yeo)  {};
+	\node[encoding, below = 0 of Z] (Zeo)  {};
+
+	\node[encodingbis, above = 0 of LXOR1] (LXOR1ei)  {};
+	\node[encodingbis, above = 0 of RXOR1] (RXOR1ei)  {};
+	\node[encodingbis, above = 0 of MXOR1] (MXOR1ei)  {};
+	\node[encodingbis, above = 0 of LXOR2] (LXOR2ei)  {};
+	\node[encodingbis, above = 0 of RXOR2] (RXOR2ei)  {};
+	\node[encodingbis, above = 0 of MXOR2] (MXOR2ei)  {};
+
+	\node[encodingbis, below = 0 of LXOR1] (LXOR1eo)  {};
+	\node[encodingbis, below = 0 of RXOR1] (RXOR1eo)  {};
+	\node[encodingbis, below = 0 of MXOR1] (MXOR1eo)  {};
+	\node[encodingbis, below = 0 of LXOR2] (LXOR2eo)  {};
+	\node[encodingbis, below = 0 of RXOR2] (RXOR2eo)  {};
+	\node[encodingbis, below = 0 of MXOR2] (MXOR2eo)  {};
+
+
+	% vertical line of the begin
+	\foreach \item in {Ae,Be,Ce,De}
+	\draw (\item) -- ($(\item) + (0,1)$);
+
+	\draw[->] (MXOR2eo) -- ($(MXOR2) - (0,1)$);
+
+	% number above, under and in the sides of the boxs
+	\foreach  \item in {MB1e, MB2e, MB3e, MB4e, Weo, Xeo, Yeo, Zeo}
+	\node[below = 0 of \item]   {\footnotesize 8};
+	\foreach  \item in {LXOR1, LXOR2, MXOR1, MXOR2, RXOR1, RXOR2}
+	\node[left = 0 of \item]   {\textbf{8}~~};
+	\foreach  \item in {LXOR1ei, LXOR2ei, RXOR1ei, RXOR2ei}
+	\node[above left = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR1ei, LXOR2ei, RXOR1ei, RXOR2ei}
+	\node[above right = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {LXOR1eo, LXOR2eo, RXOR1eo, RXOR2eo}
+	\node[below = 0 of \item]   {\footnotesize 1};
+	\foreach  \item in {Wei, Xei, Yei, Zei}
+	\node[above = 0 of \item]   {\footnotesize 2};
+
+	%  Drawing the arrows
+	\draw[->] (MB1e) -- (LXOR1ei);
+	\draw[->] (MB2e) -- (LXOR1ei);
+	\draw[->] (MB3e) -- (RXOR1ei);
+	\draw[->] (MB4e) -- (RXOR1ei);
+	\draw[->] (LXOR1eo) -- (MXOR1ei);
+	\draw[->] (RXOR1eo) -- (MXOR1ei);
+
+	\foreach \item in {Wei, Xei, Yei, Zei}
+	\draw[->] (MXOR1eo) -- (\item);
+
+	\draw[->] (Weo) -- (LXOR2ei);
+	\draw[->] (Xeo) -- (LXOR2ei);
+	\draw[->] (Yeo) -- (RXOR2ei);
+	\draw[->] (Zeo) -- (RXOR2ei);
+	\draw[->] (LXOR2eo) -- (MXOR2ei);
+	\draw[->] (RXOR2eo) -- (MXOR2ei);
+
+
+%\end{tikzpicture}

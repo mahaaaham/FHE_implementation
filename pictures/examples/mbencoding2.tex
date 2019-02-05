@@ -1,0 +1,65 @@
+\tikzset{ square/.style = {rectangle, draw, minimum width=1cm,
+minimum height = 0.6cm},}
+
+\tikzset{rect/.style = {rectangle, draw, minimum width=2cm,
+minimum height = 0.6cm}}
+
+\tikzset{encoding/.style = {rectangle, fill=yellow!20, minimum
+width=1cm, minimum height = 0cm}}
+
+\tikzset{encodingbis/.style = {rectangle, fill=yellow!20, minimum
+width=2cm, minimum height = 0.0cm}}
+
+% I place the nodes
+% absolute way
+\node[square] (A) at (0,0) {A};
+\node[square] (B) at (3,0) {B};
+\node[square] (C) at (6,0) {C};
+\node[square] (D) at (9,0) {D};
+
+\node[square, below = 0 of A, fill = orange!20] (MB1) {MB};
+\node[square, below = 0 of B, fill = orange!20] (MB2) {MB};
+\node[square, below = 0 of C, fill = orange!20] (MB3) {MB};
+\node[square, below = 0 of D, fill = orange!20] (MB4) {MB};
+
+
+	
+\node[rect, fill=blue!20] (LXOR) at (1.5,-2.8) {LXOR};
+\node[rect, fill=purple!20] (MXOR) at (4.5,-3.8) {MXOR};
+\node[rect, fill=blue!20] (RXOR) at (7.5,-2.8) {RXOR};
+
+\node[square, fill = orange!20] (MBI) at ($(MXOR) - (0,1.5)$) {$\text{MB}^{-1}$};
+
+% vertical line of the begin
+\foreach \item in {A,B,C,D}
+\draw[->] ($(\item) + (0,.6)$) -- (\item);
+
+\node at ($(A) + (0,0.8)$)  {$b_0$};
+\node at ($(B) + (0,0.8)$)  {$b_1$};
+\node at ($(C) + (0,0.8)$)  {$b_2$};
+\node at ($(D) + (0,0.8)$)  {$b_3$};
+
+\draw[->] (MBI) -- ($(MBI) - (0,0.5)$);
+
+% number above, under and in the sides of the boxs
+\foreach  \item in {MB1,MB2,MB3,MB4}
+\node[below = 0 of \item]   {\footnotesize 8};
+\foreach  \item in {LXOR, MXOR, RXOR}
+\node[left = 0 of \item]   {\textbf{8}~~};
+\foreach  \item in {LXOR, RXOR}
+\node[above left = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR,RXOR}
+\node[above right = 0 of \item]   {\footnotesize 1};
+\foreach  \item in {LXOR,RXOR}
+\node[below = 0 of \item]   {\footnotesize 1};
+
+\node[above = 0 of MBI]   {\footnotesize ~~~~~8};
+
+%  Drawing the arrows
+\draw[->] (MB1) -- (LXOR);
+\draw[->] (MB2) -- (LXOR);
+\draw[->] (MB3) -- (RXOR);
+\draw[->] (MB4) -- (RXOR);
+\draw[->] (LXOR) -- (MXOR);
+\draw[->] (RXOR) -- (MXOR);
+\draw[->] (MXOR) -- (MBI);

@@ -1,0 +1,16 @@
+\tikzset{bigsquare/.style = {rectangle, draw, fill = purple!20,  
+minimum width=2cm, minimum height = 2cm}}
+\tikzset{square/.style = {rectangle, dotted, fill = gray!20,  
+minimum width=1cm, minimum height = 1cm}}
+\tikzset{encoding/.style = {rectangle, dotted, fill = gray!20,  minimum
+width=0.7cm, minimum height = 2cm}}
+
+\node[square] (F) at (-3,-2) {$F^{-1}$};
+\node[square] (G) at (3,-2) {$G^{-1}$};
+
+\node[bigsquare] (T) at (0,0) {AES};
+\node[encoding, left = 0 of T] (IT) {$F$};
+\node[encoding, right = 0 of T] (OT) {$G$};
+
+\draw[->] ($(IT) - (1,0)$) -- (IT);
+\draw[->] (OT) -- ($(OT) + (1,0)$);

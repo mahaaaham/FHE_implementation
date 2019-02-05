@@ -1,0 +1,22 @@
+\tikzset{ square/.style = {rectangle, draw, fill=blue!20, minimum width=1.7cm,
+	minimum height = 1cm},}
+
+\tikzset{ encoding/.style = {rectangle, draw, dotted,  fill=gray!20,  minimum
+width=1.7cm, minimum height = 0.6cm},}
+
+\node[square] (S) at (0,-1) {};
+\node[encoding, below = 0 of S] (SE) {$f$};
+
+
+\draw[->] ($(S) + (0,0.75)$) -- (S);
+\draw[->] (SE) -- ($(SE) - (0,0.5)$);
+
+\node[square] (T) at (4.2,-1) {};
+\draw[->] ($(T) + (0,0.75)$) -- (T);
+\draw[->] (T) -- ($(T) - (0,0.8)$);
+
+\node at (-1.6,-1) {sign $\Bigg($};
+\node at (1.2,-1) {$\Bigg)$};
+\node at (1.7,-1) {=};
+\node at (2.6,-1) {sign $\Bigg($};
+\node at (5.5,-1) {$\Bigg)$};

@@ -1,0 +1,39 @@
+\tikzset{ square/.style = {rectangle, draw, fill=blue!20, minimum width=1.7cm,
+	minimum height = 1.3cm},}
+
+\tikzset{ encoding/.style = {rectangle, draw, dotted,  fill=gray!20,  minimum
+width=1.7cm, minimum height = 0.6cm},}
+
+
+	\node[square] (u) at (0,0) {};
+	\node[encoding, below = 0 of u] (uout) {$f \: || \:g$};
+	\node[below = 0 of uout] (uoutenc){$f(y_1) \: || \:g(y_2)$};
+
+	\node[square] (l) at ($(u) + (-2,-4.5)$) {};
+	\node[encoding, above = 0 of l] (lin) {$f^{-1}$};
+	\node[encoding, below = 0 of l] (lout) {$\phi$};
+	\node[above = 0 of lin] (linenc) {$f(y_1)$};
+	\node[below = 0 of lout] (loutenc)  {$\phi(z_1)$};
+
+	\node[square] (r) at ($(u) + (2,-4.5)$) {};
+	\node[encoding, above = 0 of r] (rin) {$g^{-1}$};
+	\node[encoding, below = 0 of r] (rout) {$\psi$};
+	\node[above = 0 of rin] (rinenc) {$g(y_1)$};
+	\node[below = 0 of rout] (routenc) {$\psi(z_2)$};
+
+	\node[square] (d) at ($(l) + (2,-4.5)$) {};
+	\node[encoding, above = 0 of d] (din) {$\phi^{-1} || \psi^{-1}$};
+	\node[above = 0 of din] (dinenc) {$\phi(z_1)\: || \:\psi(z_2)$};
+
+	\node (begin) at ($(u) + (0,1)$) {$x$};
+	\node (end) at ($(d) + (0,-1.5)$) {$F(x)$};
+
+
+	\draw[->] (begin) -- (u); 
+	\draw[->] (d) -- (end); 
+
+	\draw[->] (uoutenc) -- (linenc);
+	\draw[->] (uoutenc) -- (rinenc);
+
+	\draw[->] (loutenc) -- (dinenc);
+	\draw[->] (routenc) -- (dinenc);

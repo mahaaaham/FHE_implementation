@@ -1,0 +1,36 @@
+%% \node[draw, fill = blue!20] (E) at (2,0.5) {E};
+%% \node[draw, fill = blue!20] (C) at (1,2) {C};
+%% \node[draw, fill = blue!20] (D) at (3,2) {D};
+%% \node[draw, fill = blue!20] (A) at (2,5) {A};
+%% \node[draw, fill = blue!20] (B) at (2,3.5) {B};
+
+%% \node (begin) at ($(A) + (0,1)$) {Message};
+%% \node (end) at ($(E) + (0,-1)$) {Chiffré};
+%% \draw[->] (begin) -- (A);
+%% \draw[->] (A) -- (B);
+%% \draw[->] (B) -- (C);
+%% \draw[->] (B) -- (D);
+%% \draw[->] (C) -- (E);
+%% \draw[->] (D) -- (E);
+%% \draw[->] (E) -- (end);
+
+\node[draw, fill = blue!20] (T0) at (0,0) {$TBOX[0]$};
+\node (x0) at ($(T0) + (0,+1)$) {$x_0$};
+\node (y0) at ($(T0) + (0,-1)$) {$y_0$};
+\draw[->] (x0) -- (T0);
+\draw[->] (T0) -- (y0);
+
+\node[draw, fill = blue!20] (T1) at ($(T0) + (3,0)$) {$TBOX[1]$};
+\node (x1) at ($(T1) + (0,+1)$) {$x_1$};
+\node (y1) at ($(T1) + (0,-1)$) {$y_1$};
+\draw[->] (x1) -- (T1);
+\draw[->] (T1) -- (y1);
+
+\node  at ($(T0) + (5.4,0)$) {$\cdots$};
+\node  at ($(T0) + (7.2,0)$) {$\cdots$};
+
+\node[draw, fill = blue!20] (T15) at ($(T0) + (10,0)$) {$TBOX[15]$};
+\node (x15) at ($(T15) + (0,+1)$) {$x_{15}$};
+\node (y15) at ($(T15) + (0,-1)$) {$y_{15}$};
+\draw[->] (x15) -- (T15);
+\draw[->] (T15) -- (y15);

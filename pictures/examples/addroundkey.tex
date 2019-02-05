@@ -1,0 +1,17 @@
+\node[text width=15cm] (begin) at (0, 0) {$AddRoundKey (state) = state \oplus key[r]$};
+
+\node at (2, -2) {$ =
+  \left[\begin{matrix}
+      x_{0} & x_{4} & x_{8}  & x_{12} \\
+      x_{1} & x_{5} & x_{9}  & x_{13} \\
+      x_{2} & x_{6} & x_{10} & x_{14} \\
+      x_{3} & x_{7} & x_{11} & x_{15} \\
+    \end{matrix}\right]
+  \oplus
+  \left[\begin{matrix}
+      key[r]_0 & key[r]_4 & key[r]_8 & key[r]_{12} \\
+      key[r]_1 & key[r]_5 & key[r]_9 & key[r]_{13} \\
+      key[r]_2 & key[r]_6 & key[r]_{10} & key[r]_{14} \\
+      key[r]_3 & key[r]_7 & key[r]_{11} & key[r]_{15} \\
+    \end{matrix}\right]
+  $};
