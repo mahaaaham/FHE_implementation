@@ -53,7 +53,22 @@ La profondeur maximale du calcul de $y_i$ est celle des éléments impliqués da
 \paragraph{}
 
 Les profondeurs des deux algorithmes calculées, on se pose désormais la question de comment organiser les sommes, puisqu'il nous faudra sommer $nb$ nombres sous forme de listes de tailles $lim$. \\
-L'algorithme naïf consisterai dans le premier cas
+L'algorithme naïf consisterai dans le premier cas à appliquer \textbf{basic\_sum} à deux nombres puis à l'appliquer à chaque fois au résultat de la dernière somme avec un autre nombre. Les deux variables additionnées lors de la première addition serait impliquée dans chacune des $nb-1$ opérations et la profondeur en \textbf{NAND} serait donc de $(nb-1)(4 lim - 2)$. \\
+Dans le cas de \textbf{reduced\_sum}, l'algorithme naïf consisterai en : appliquer \textbf{reduced\_sum} à trois des nombres à additionner, puis en choisir un autre et appliquer \textbf{reduced\_sum}, puis lorsqu'il ne reste plus que le résultat de \textbf{reduced\_sum}, y appliquer \textbf{basic\_sum}. On atteint ainsi une profondeur de $12(nb - 2) + 4 lim - 2 = 4(3nb + lim) - 26$ \textbf{NAND}.
+
+\paragraph{}
+
+Il est évident que les additions peuvent être mieux ordonnées. \\
+Par exemple, en visualisant l'organisation comme un arbre, un arbre équilibré réduit au maximum la profondeur et permet à \textbf{basic\_sum} de sommer les $nb$ nombre avec une profondeur en \textbf{NAND} en $\mathcal{O}(\log(nb) * (4lim - 2)) = \mathcal{O}(lim * \log(nb))$ et non plus en $\mathcal{O}(lim * nb)$. \\
+Si l'on construit un équivalent pour \textbf{reduced\_sum}, toujours en terminant par un \textbf{basic\_sum}, on obtient une profondeur en \textbf{NAND} en $\mathcal{O}(\log(nb) + lim)$.
+
+\begin{proof}
+Soit $p \geqslant 3$ tel que $3^{p-1} < nb \leqslant 3^{p}$.
+En réunnissant les nombres à notre disposition par groupes de 3 et en leur appliquant \textbf{reduced\_sum}, puis en recommançant deux fois on se retrouve avec au plus $8 * 3^{p-3} < 3^{p-1}$ nombres à sommer. \\
+On peut donc se ramener à $nb' \leqslant 9$ avec une profondeur en \textbf{reduced\_sum} de $3(p - 2)$. \\
+De là, on peut calculer la somme totale avec une profondeur de quatre \textbf{reduced\_sum} et un \textbf{basic\_sum}, obtenant ainsi une profondeur totale en \textbf{NAND} de $4 lim - 2 + 12(3p - 2) = 4lim + 36p -22$. \\
+Or $p = \lceil \log_3(nb) \rceil$, on est donc bien en $\mathcal{O}(\log(nb) + lim)$.
+\end{proof}
 
 \end{subsection}
 \begin{subsection}{Prendre la valeur absolue dans $\ZZq$}

@@ -46,34 +46,24 @@
 	Voyons par exemple le cas (plus facile) où $q$ est premier:
 
 	\begin{prop}{DWLE vers LWE}
-	Soit $n \geq 1$ un entier, $2 \leq q \leq \text{poly}(n)$ un
-	nombre premier et $\chi$ une distribution sur $\ZZq$.
-	Supposons avoir accés à un automate $\mathcal{W}$ qui accepte 
-	avec une probabilité exponentiellement proche de 1 les 
-	distributions $A_{s, \xi}$ et rejete avec une probabilité
-	exponentiellement proche de 1 la distributions uniforme $U$.
 
-	Il existe alors un automate $\mathcal{W}$ qui, étant donné 
-	des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$,
-	retrouve $s$ avec une probabilité exponentiellement proche de $1$.
+	Soit $n \geqslant 1$ un entier, $2 \leqslant q \leqslant \text{poly}(n)$ un nombre premier et $\chi$ une distribution sur $\ZZq$. Supposons avoir accès à un automate $\mathcal{W}$ qui accepte avec une probabilité exponentiellement proche de 1 les distributions $A_{s, \xi}$ et rejete avec une probabilité exponentiellement proche de 1 la distributions uniforme $U$. \\
+	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de $1$.
 	\end{prop}
 	\begin{proof}
-	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}
-	L'automate $W'$ va trouver $s$ coordoonée par coordonnée.  
-	Montrons comment $W'$ obtient la première coordonnée $s_1$.
-
-	Pour $k \in \ZZq$, on considère la fonction:
-	\[f_k: (a,b) \mapsto (a + (l, 0, \cdots, 0), b + l \cdot k) \]
-	pour $l\in \ZZq$ échantilloné uniformément sur $\ZZq$.
-
-	$f_k$ appliqué à un échantillon uniforme donne un échantillon 
-	uniforme tandis qu'appliqué à un échantillon de $A_{s, \chi}$,
-	il donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme 
-	sinon.
-
-	On peut faire une recherche exhaustive sur les $k \in \ZZq$ 
-	jusqu'à en trouver un accepté par $W$. Ce qui se fait 
-	en temps polynomial car $p < \text{poly}(n)$
+	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}. \\
+	L'automate $W'$ va trouver $s$ coordonée par coordonnée. Montrons comment $W'$ obtient la première coordonnée $s_1$. \\
+	Pour $k \in \ZZq$, on considère la fonction :
+	\[f_{k,1}: (a,b) \mapsto (a + (l, 0, ..., 0), b + l \cdot k) \]
+	pour $l\in \ZZq$ échantilloné uniformément sur $\ZZq$. \\
+	$f_{k,1}$ appliquée à un échantillon uniforme donne un échantillon uniforme tandis qu'appliquée à un échantillon de $A_{s, \chi}$, elle donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme sinon. \\
+	On peut faire une recherche exhaustive sur les $k \in \ZZq$ jusqu'à en trouver un accepté par $W$, qui sera le bon avec une probabilité exponentiellement proche de 1. \\
+	Cela se fait en temps polynomial car $q < \text{poly}(n)$ et $f_{k,1}$ s'execute en temps polynomial. \\
+	On peut effectuer la même chose avec la fonction
+	\[f_{k,i}: (a,b) \mapsto (a + (0, 0, ..., l, 0, ..., 0), b + l \cdot k) \]
+	avec le $l$ ajouté à $a$ en $i$ème position $\forall i$. \\
+	On retrouve ainsi $s$ avec $n$ calculs polynomiaux en $n$, ce qui reste évidemment polynomial en $n$. \\
+	La probabilité de se tromper est $n *$ quelque chose d'exponentiellement proche de 0 et reste donc exponentiellement proche de 0.
 	\end{proof}
 
 	Pour analyser la sécurité du cryptosystème, nous utiliserons le
@@ -88,16 +78,8 @@
 	matricielle:
 
 	\begin{definition}{versions matricielles de DLWE et LWE}
-	En prenant les paramètres de la précédente définition
 
-	Le problème $\DLWE$ concisite à décider 
-	si une matrice $A \in \ZZq^{m \times (n+1)}$ 
-	est uniforme ou bien si il existe un vecteur $\vec{v} = (1\quad
-	-\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq^{m}$ est 
-	crée à partir de $\chi^m$. Autrement dit, avec les notations de 
-	la formulation classique de LWE, si les lignes de $A$ sont de la forme
-		$(b_i, \vec{a}_i)$. 
-
+	En prenant les paramètres de la précédente définition, le problème $\DLWE$ consiste à décider si une matrice $A \in \ZZq^{m \times (n+1)}$ est uniforme ou bien s'il existe un vecteur $\vec{v} = (1\quad -\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq^{m}$ est crée à partir de $\chi^m$. Autrement dit, avec les notations de la formulation classique de LWE, si les lignes de $A$ sont de la forme $(b_i, \vec{a}_i)$. \\
 	Le problème $\LWE$ consiste lui à trouver $\vec{v}$ à partir de $A$.
 	\end{definition}
 

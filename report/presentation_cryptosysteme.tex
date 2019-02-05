@@ -175,7 +175,7 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et un chiffré d'un message $\mu \in \{ 0,1\} $. \\
 	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
-	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $\frac{q}{4}$ et $\frac{q}{2}$, $\frac{q}{2}$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor \frac{x_i}{v_i} \rceil$.
+	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $q/4$ et $q/2$, $q/2$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor x_i/v_i \rceil$.
 
 
 \paragraph{}
@@ -184,11 +184,11 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 \[ C\cdot \vec{v} = \mu\, \vec{v} + \vec{e} \]
 \end{definition}
 \begin{prop}
-	\textbf{Dec} décrypte avec succés les chiffrés dont l'erreur $\vec{e}$
-	satisfait $\norm{\vec{e}} < q/8$.
+	\textbf{Dec} décrypte avec succès les chiffrés dont l'erreur $\vec{e}$ satisfait $\|\vec{e}\|_1 < q/8$.
 \end{prop}
 \begin{proof}
-	A FAIRE
+	On a $x_i = \mu * v_i + e$ avec $\lvert e \lvert \leqslant \|\vec{e}\|_1$ et $\frac{x_i}{v_i} = \mu + \frac{e}{v_i}$. \\
+	$\lvert v_i \lvert > \frac{q}{4}$, d'où $\lvert \frac{e}{v_i} \lvert < 1/2$, donc $\lfloor \frac{x_i}{v_i} \rceil = \mu$.
 \end{proof}
 	\end{subsection}
 	
@@ -202,8 +202,8 @@ montrer comment faire pour des chiffrés de n'importe quel élément de $\ZZq$.
 Pour cela, remarquons qu'en partant d'un chiffré  $C$
 de $m \in \ZZq$
 On a: 
-\[ C \cdot \vec{v} = m \vec{v} + e \mod q \]
-pour une erreur $e$
+\[ C \cdot \vec{v} = m \vec{v} + \vec{e} \mod q \]
+pour une erreur $\vec{e}$. \\
 En considérant l'équation sur les $l$ premières coordoonées, on obtient:
 
 	\[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}) \]
@@ -303,7 +303,7 @@ au domaine fondamental utilisé par l'algorithme.
 	\end{align*}
 	\end{proof}
 \textbf{Erreur} : Le chiffré à une erreur $e_3 = \vec{e_1} + \vec{e_2}$.
-\[\norm{e_3} \leq \norm{e_1} + \norm{e_2}\]
+\[\norm{e_3} \leqslant \norm{e_1} + \norm{e_2}\]
 	\paragraph{}
 	\textbf{Mult}
 	\flushleft
@@ -321,7 +321,7 @@ au domaine fondamental utilisé par l'algorithme.
 	\end{align*}
 	\end{proof}
 	\textbf{Erreur} : Le chiffré à une erreur $e_3 = \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. 
-\[\norm{e_3} \leq\mu_2 \norm{e_1} + N \norm{e_2} \]
+\[\norm{e_3} \leqslant \mu_2 \norm{e_1} + N \norm{e_2} \]
 	\paragraph{}
 	\textbf{NAND}
 	\flushleft
@@ -341,6 +341,6 @@ au domaine fondamental utilisé par l'algorithme.
 	$e_3 = -(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. On est dans 
 	un contexte similaire à $\textbf{Mult}(C_1, C_2)$, mais 
 	$\mu_2$ est ici égal à 0 ou 1.
-\[\norm{e_3} \leq \norm{e_1} + N \norm{e_2} \leq (N+1) \max(\norm{e_1}, \norm{e_2})\]
+\[\norm{e_3} \leqslant \norm{e_1} + N \norm{e_2} \leqslant (N+1) \max(\norm{e_1}, \norm{e_2})\]
 	\end{subsection}
 \end{section}
