@@ -305,15 +305,13 @@ dual: rop: =2^118.4,  m:  =2^11.0,  red: =2^118.4,  $\delta_0$: 1.004864,
 	\end{lstlisting}
 	\caption{Analyse de sécurité des paramètres tirés de la librairie SEAL}
 	\end{figure}
-
+	FIGURE 1 DEVRAIT ÊTRE ICI \\
 	\flushleft
 	
-	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement
-	internes à ces attaques. Les trois variables qui nous intéresse sont : "rop", "m" et "mem" :
+	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement internes à ces attaques. Les trois variables qui nous intéresse sont : "rop", "m" et "mem" :
 	
 	\begin{itemize}
-	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre
-	ce cas de LWE avec cette attaque.
+	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre ce cas de LWE avec cette attaque.
 	
 	\item "mem" (memory) est une estimation de la mémoire qui sera exploitée.
 	
@@ -334,18 +332,14 @@ dual: rop: =2^118.4,  m:  =2^11.0,  red: =2^118.4,  $\delta_0$: 1.004864,
 	\paragraph{}
 	En utilisant les paramètres suivants, tirés de l'API SEAL:
 	\[n = 2048\quad q = 2^{60} - 2^{14} + 1 \quad \alpha = \frac{8}{q}\quad m = 2n \]
-	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande 
-	$2^115$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de
-	115. De plus, l'équation~\eqref{depth} indique qu'une
-	profondeur de NAND $L=3$ est possible.
+	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{115}$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de 115. De plus, l'équation~\eqref{depth} indique qu'une profondeur de NAND $L=3$ est possible. \\
+	On a ici un secret de 15 Ko, une clé publique de 7.6 Mo et des chiffrés de 13 Go.
 
 	\paragraph{}
 	En utilisant les paramètres suivants, tirés de \cite{cryptoeprint:2015:755}:
 	\[n = 804\quad  q = 2^{31} - 19\quad \alpha = \frac{\sqrt{2\pi}*57}{q} \quad m = 4972\]
-	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande 
-	$2^129$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de
-	115. De plus, l'équation~\eqref{depth} indique qu'une
-	profondeur de NAND $L=1$ est possible.
+	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{129}$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de 129. De plus, l'équation~\eqref{depth} indique qu'une profondeur de NAND $L=1$ est possible. \\
+	On a ici un secret de 3 Ko, une clé publique de 5 Mo et des chiffrés de 2 Go.
 	\end{subsubsection}
 
 	\end{subsection}

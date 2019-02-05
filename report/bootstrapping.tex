@@ -9,7 +9,13 @@ Il suffit donc de générer les clés indépendamment les unes des autres pour s
 \end{subsection}
 \begin{subsection}{Un premier découpage}
 Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de déchiffrement \textbf{Dec}, nous allons avoir besoin de l'exprimer uniquement à partir d'opérations \textbf{NAND} sur des 0 et des 1. \\
-N'étant pas sous la contrainte d'être particulièrement performant, nous avons écris des fonctions booléennes homomorphiques \path{NO}, \path{AND}, \path{OR} et \path{XOR} avec des portes \textbf{NAND}. \\ DETAILS NECESSAIRES (nb NAND, profondeur) \\
+N'étant pas sous la contrainte d'être particulièrement performant, nous avons écris des fonctions booléennes homomorphiques \path{NO}, \path{AND}, \path{OR} et \path{XOR} avec des portes \textbf{NAND}. \\
+\begin{itemize}
+\item \path{NO}$(a) = \overline{a}$ se fait en un \textbf{NAND}. \\
+\item \path{AND}$(a, b) = a \land b$ se calcule en deux \textbf{NAND} et est de profondeur 2. \\
+\item \path{OR}$(a, b) = a \lor b$ se fait en trois \textbf{NAND} et est de profondeur 2. \\
+\item \path{XOR}$(a, b) = a \oplus b$ se calcule en six \textbf{NAND} et est de profondeur 4. \\
+\end{itemize}
 Cela nous permettra de l'exécuter homomorphiquement. \\
 Pour cela, nous considèrerons la décomposition binaire du secret et considèreront avoir un chiffré par la seconde clé de chaque bit du premier secret.
 \end{subsection}
@@ -19,8 +25,8 @@ Nous voulons pouvoir sommer homomorphiquement des nombres à partir des chiffré
 \paragraph{}
 
 Le premier, que nous appelerons \textbf{basic\_sum} est l'algorithme naïf de somme binaire, commençant par les bits de poids faible puis remontant vers les bits de poids plus élevés en conservant des retenues. \\
-Soient $A = \sum\limits_{i=0}^{lim} a_i 2^i$ et $B = \sum\limits_{i=0}^{lim} b_i 2^i$ que l'ont veux sommer. \\
-On nomme $s_0, s_1, ..., s_{lim}$ les bits de la somme et $r_i$ la retenue après être passé sur les bits $a_i$ et $b_i$. \\
+Soient $A = \sum\limits_{i=0}^{lim-1} a_i 2^i$ et $B = \sum\limits_{i=0}^{lim-1} b_i 2^i$ que l'ont veux sommer. \\
+On nomme $s_0, s_1, ..., s_{lim-1}$ les bits de la somme et $r_i$ la retenue après être passé sur les bits $a_i$ et $b_i$. \\
 On définit $r_{-1} = 0$. \\
 On calcule alors juste : \\
 $s_i = a_i \oplus b_i \oplus r_{i-1}$ et \\
@@ -29,13 +35,13 @@ Le problème de cette méthode est que l'on réutilise la $r_{i-1}$ pour calcule
 Calculer $s_i$ peut se faire en utilisant $r_{i-1}$ que pour un $\oplus$, ce qui n'ajoute que 4 à la profondeur en \textbf{NAND} du calcul. \\
 $r_i$ peut être calculé en appliquant un \path{AND} et un \path{OR} à $r_{i-1}$, ce qui ajoute aussi 4 à la profondeur. \\
 $r_0 = a_0 \land b_0$ et peut donc être trouvé avec une profondeur de 2 \textbf{NAND}. \\
-$A + B$ se calcule donc avec une profondeur de $4 lim + 2$ \textbf{NAND} en $a_0$ et $b_0$.
+$A + B$ se calcule donc avec une profondeur de $4 lim - 2$ \textbf{NAND} en $a_0$ et $b_0$.
 
 \paragraph{}
 
 Le second, que nous appelerons \textbf{reduced\_sum} est un algorithme assez utilisé qui à trois nombres écris en binaire associe deux listes de tailles $lim$ dont la somme est égale à la somme des trois nombres donnés en entrée. \\
-Soient $A = \sum\limits_{i=0}^{lim} a_i 2^i$, $B = \sum\limits_{i=0}^{lim} b_i 2^i$ et $C = \sum\limits_{i=0}^{lim} c_i 2^i$ que l'ont veux sommer. \\
-On nomme $X = \sum\limits_{i=0}^{lim} x_i 2^i$  et $Y = \sum\limits_{i=0}^{lim} y_i 2^i$ les nombres obtenus. \\
+Soient $A = \sum\limits_{i=0}^{lim-1} a_i 2^i$, $B = \sum\limits_{i=0}^{lim-1} b_i 2^i$ et $C = \sum\limits_{i=0}^{lim-1} c_i 2^i$ que l'ont veux sommer. \\
+On nomme $X = \sum\limits_{i=0}^{lim-1} x_i 2^i$  et $Y = \sum\limits_{i=0}^{lim-1} y_i 2^i$ les nombres obtenus. \\
 On fixe $y_0 = 0$. \\
 On calcule ensuite : \\
 $x_i = a_i \oplus b_i \oplus c_i$ et \\
@@ -43,6 +49,11 @@ $y_i = \overline{(\overline{a_{i-1}} \land \overline{b_{i-1}}) \oplus (\overline
 On remarque que cette méthode, contrairement à \textbf{basic\_sum}, n'effectue pas de récurence. La profondeur totale sera donc le max de la profondeur du calcul de $x_i$ et de celle du calcul de $y_i$. \\
 Calculer $x_i$ consiste en deux $\oplus$ succesifs dont le deuxième utilise le résultat du premier. La profondeur en \textbf{NAND} est donc de 8. \\
 La profondeur maximale du calcul de $y_i$ est celle des éléments impliqués dans deux $\oplus$. Ces éléments subissent donc deux \path{NO}, un \path{AND} et deux \path{XOR}, atteignant ainsi une profondeur de 12 \textbf{NAND}.
+
+\paragraph{}
+
+Les profondeurs des deux algorithmes calculées, on se pose désormais la question de comment organiser les sommes, puisqu'il nous faudra sommer $nb$ nombres sous forme de listes de tailles $lim$. \\
+L'algorithme naïf consisterai dans le premier cas
 
 \end{subsection}
 \begin{subsection}{Prendre la valeur absolue dans $\ZZq$}

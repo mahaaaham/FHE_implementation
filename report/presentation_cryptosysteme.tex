@@ -148,6 +148,7 @@
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup}. \\
 	\textbf{Sortie} : Cet algorithme retourne la clé secrète $\vec{s} \in \ZZq^{n+1}$. \\
 	\textbf{Algorithme} : On génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. On définit la clé secrète comme $\vec{s} = (1, -t_1, ..., -t_n)$. \\
+	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. Par définition, $q$, et donc tous élément de $\ZZq$, s'écrit en $l$ bits. $\vec{s}$ fait donc une taille de $l * (n+1) = N$ bits. \\
 	On note $\vec{v} = $ \textbf{PowersOf2}$(\vec{s})$.
 	
 	\paragraph{}
@@ -156,7 +157,8 @@
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup} et d'une clé secrète construite avec ces mêmes paramètres. \\
 	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{m \times n}$.\\
-	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
+	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$. \\
+	\textbf{Taille} : $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m = N * (m - 1)$ bits.
 	
 	\paragraph{}
 	\textbf{Encrypt}
@@ -164,7 +166,8 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé publique et un message $\mu \in \ZZq$. \\
 	\textbf{Sortie} : Cet algorithme retourne le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.\\
-	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \times I_N + $\textbf{BitDecomp}$(R \times A))$.
+	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \times I_N + $\textbf{BitDecomp}$(R \times A))$. \\
+	\textbf{Taille} : $C \in \ZZq^{N \times N}$ s'écrit en $l * N^2$ bits.
 	
 	\paragraph{}
 	\textbf{Dec}
