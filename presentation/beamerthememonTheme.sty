@@ -1,0 +1,187 @@
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/theme/monTheme.sty,v 1.0 15/11/2016 22:57:02 G.FALLOURD-M.LEBRETON Exp $
+\mode<presentation>
+\definecolor{sectionColor}{RGB}{204,0,0}
+\definecolor{subsectionColor}{RGB}{255,255,255}
+\definecolor{sectionTextColor}{RGB}{255,255,255}
+\definecolor{subsectionTextColor}{RGB}{0,0,0}
+\definecolor{leftFootlineColor}{RGB}{153,0,0}
+\definecolor{middleFootlineColor}{RGB}{204,0,0}
+\definecolor{rightFootlineColor}{RGB}{255,0,0}
+\definecolor{authorColor}{RGB}{255,255,255}
+\definecolor{footlineTitleColor}{RGB}{255,255,255}
+\definecolor{instituteColor}{RGB}{255,255,255}
+\definecolor{dateColor}{RGB}{255,255,255}
+\definecolor{pageColor}{RGB}{255,255,255}
+\definecolor{titleColor}{RGB}{153,0,0}
+\definecolor{titleTextColor}{RGB}{255,255,255}
+\definecolor{bodyColor}{RGB}{255,255,255}
+\definecolor{normalTextColor}{RGB}{0,0,0}
+\definecolor{exampleTextColor}{RGB}{51,153,51}
+\definecolor{alertTextColor}{RGB}{204,51,51}
+\definecolor{chipColor}{RGB}{0,0,102}
+\definecolor{chipTextColor}{RGB}{255,255,255}
+\definecolor{normalBlockColor}{RGB}{102,153,255}
+\definecolor{normalTitleBlockColor}{RGB}{0,0,102}
+\definecolor{normalBlockTextColor}{RGB}{255,255,255}
+\definecolor{normalBlockTitleTextColor}{RGB}{255,255,255}
+\definecolor{exampleBlockColor}{RGB}{0,204,0}
+\definecolor{exampleTitleBlockColor}{RGB}{0,153,0}
+\definecolor{exampleBlockTextColor}{RGB}{255,255,255}
+\definecolor{exampleBlockTitleTextColor}{RGB}{255,255,255}
+\definecolor{alertBlockColor}{RGB}{255,153,153}
+\definecolor{alertTitleBlockColor}{RGB}{204,51,51}
+\definecolor{alertBlockTextColor}{RGB}{255,255,255}
+\definecolor{alertBlockTitleTextColor}{RGB}{255,255,255}
+\setbeamercolor{section in head/foot}{bg=sectionColor, fg=sectionTextColor}
+\setbeamercolor{subsection in head/foot}{bg=subsectionColor, fg=subsectionTextColor}
+\setbeamercolor*{block title}{fg=normalBlockTitleTextColor,bg=normalTitleBlockColor}
+\setbeamercolor*{block body}{fg=normalBlockTextColor,bg=normalBlockColor}
+\setbeamercolor*{block title alerted}{fg=alertBlockTitleTextColor,bg=alertTitleBlockColor}
+\setbeamercolor*{block body alerted}{fg=alertBlockTextColor,bg=alertBlockColor}
+\setbeamercolor*{block title example}{fg=exampleBlockTitleTextColor,bg=exampleTitleBlockColor}
+\setbeamercolor*{block body example}{fg=exampleBlockTextColor,bg=exampleBlockColor}
+\setbeamerfont{block title}{size={}}
+\setbeamercolor{titlelike}{fg=titleTextColor,bg=titleColor}
+\setbeamercolor*{normal text}{fg=normalTextColor,bg=bodyColor}
+\setbeamercolor*{example text}{fg=exampleTextColor}
+\setbeamercolor*{alerted text}{fg=alertTextColor}
+\useinnertheme{default}
+\setbeamercolor{item projected}{bg=chipColor,fg=chipTextColor}
+\setbeamercolor*{sidebar}{bg=sectionColor, fg=sectionTextColor}
+\setbeamercolor*{palette sidebar primary}{bg=subsectionColor,fg=subsectionTextColor}
+\setbeamercolor*{palette sidebar secondary}{bg=sectionColor,fg=sectionTextColor}
+\newdimen\beamer@sidebarwidth
+\newdimen\beamer@headheight
+\beamer@sidebarwidth=4.5\baselineskip
+\beamer@headheight=2.5\baselineskip
+\reset@font
+\def\beamer@lefttext{left}
+\DeclareOptionBeamer{hideothersubsections}[]{\beamer@nav@subsectionstyle{show/show/hide}}
+\DeclareOptionBeamer{hideallsubsections}[]{\beamer@nav@subsectionstyle{hide}}
+\DeclareOptionBeamer{width}{\beamer@sidebarwidth=#1}
+\DeclareOptionBeamer{height}{\beamer@headheight=#1}
+\DeclareOptionBeamer{left}{\def\beamer@sidebarside{left}}
+\DeclareOptionBeamer{right}{\def\beamer@sidebarside{right}}
+\ExecuteOptionsBeamer{left}
+\ProcessOptionsBeamer
+\ifdim\beamer@headheight>0pt
+\defbeamertemplate*{frametitle}{sidebar theme}
+{%
+\nointerlineskip%
+\vskip-\beamer@headheight%
+\vbox to \beamer@headheight{%
+\vfil
+\leftskip=-\beamer@leftmargin%
+\advance\leftskip by0.3cm%
+\rightskip=-\beamer@rightmargin%
+\advance\rightskip by0.3cm plus1fil%
+{\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle\par}%
+{\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle\par}%
+\vbox{}%
+\vskip-1em%
+\vfil
+}%
+}
+\defbeamertemplate*{headline}{sidebar theme}
+{%
+\begin{beamercolorbox}[wd=\paperwidth]{frametitle}
+\ifx\beamer@sidebarside\beamer@lefttext%
+\else%
+\hfill%
+\fi%
+\ifdim\beamer@sidebarwidth>0pt%
+\usebeamercolor[bg]{logo}%
+\vrule width\beamer@sidebarwidth height \beamer@headheight%
+\hskip-\beamer@sidebarwidth%
+\hbox to \beamer@sidebarwidth{\hss\vbox to
+\beamer@headheight{\vss\hbox{\color{fg}\insertlogo}\vss}\hss}%
+\else%
+\vrule width0pt height \beamer@headheight%
+\fi%
+\end{beamercolorbox}
+}
+\fi
+\def\beamer@sidebarformat#1#2#3{%
+\begin{beamercolorbox}[wd=\beamer@sidebarwidth,leftskip=#1,rightskip=1ex plus1fil,vmode]{#2}
+\vbox{}%
+#3\par%
+\vbox{}%
+\vskip-1.5ex%
+\end{beamercolorbox}
+}
+\defbeamertemplate*{section in sidebar}{sidebar theme}
+{%
+\vbox{%
+\vskip1ex%
+\beamer@sidebarformat{3pt}{section in sidebar}{\insertsectionhead}%
+}%
+}
+\defbeamertemplate*{section in sidebar shaded}{sidebar theme}
+{%
+\vbox{%
+\vskip1ex%
+\beamer@sidebarformat{3pt}{section in sidebar shaded}{\insertsectionhead}%
+}%
+}
+\defbeamertemplate*{subsection in sidebar}{sidebar theme}
+{%
+\beamer@sidebarformat{5pt}{subsection in sidebar}{\insertsubsectionhead}%
+}
+\defbeamertemplate*{subsection in sidebar shaded}{sidebar theme}
+{%
+\beamer@sidebarformat{5pt}{subsection in sidebar shaded}{\insertsubsectionhead}%
+}
+\defbeamertemplate*{subsubsection in sidebar}{sidebar theme}
+{%
+\beamer@sidebarformat{7pt}{subsubsection in sidebar}{\insertsubsubsectionhead}%
+}
+\defbeamertemplate*{subsubsection in sidebar shaded}{sidebar theme}
+{%
+\beamer@sidebarformat{7pt}{subsubsection in sidebar shaded}{\insertsubsubsectionhead}%
+}
+\ifdim\beamer@sidebarwidth>0pt
+\setbeamersize{sidebar width \beamer@sidebarside=\beamer@sidebarwidth}
+\defbeamertemplate*{sidebar \beamer@sidebarside}{sidebar theme}
+{
+\beamer@tempdim=\beamer@sidebarwidth%
+\advance\beamer@tempdim by -6pt%
+{\usebeamerfont{title in sidebar}%
+\vskip1.5em%
+\hskip3pt%
+\insertshorttitle[width=\beamer@tempdim,center,respectlinebreaks]\par%
+\vskip1.25em%
+}%
+\insertverticalnavigation{\beamer@sidebarwidth}%
+\vfill
+\ifx\beamer@sidebarside\beamer@lefttext%
+\else%
+\llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+\vskip2pt%
+\fi%
+}%
+\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+\fi
+\setbeamercolor{author in head/foot}{bg=leftFootlineColor, fg=authorColor}
+\setbeamercolor{title in head/foot}{bg=middleFootlineColor, fg=footlineTitleColor}
+\setbeamercolor{institute in head/foot}{fg=instituteColor}
+\setbeamercolor{date in head/foot}{bg=rightFootlineColor, fg=dateColor}
+\defbeamertemplate*{footline}{infolines theme}
+{
+\leavevmode%
+\hbox{%
+\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+\usebeamerfont{author in head/foot}\insertshortauthor~~
+\insertshortinstitute
+\end{beamercolorbox}%
+\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+\usebeamerfont{title in head/foot}\insertshorttitle
+\end{beamercolorbox}%
+\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+\usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+\end{beamercolorbox}
+}%
+\vskip0pt%
+}
+\mode
+<all>
