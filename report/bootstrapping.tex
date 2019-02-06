@@ -234,15 +234,15 @@ On obtient ainsi une profondeur totale en \textbf{NAND} de $4 s - 2 + 12(3p - 2)
 
 \end{subsection}
 \begin{subsection}{Prendre la valeur absolue dans $\ZZq$}
-	Rappelons que la valeur absolue d'un élément $x\in \ZZq$ est par
-	définition la valeur absolue de son représentant dans $\rrbracket -q/2,
-	q/2\rrbracket$. 
-	
-	Dans notre situation, $q = 2^l$ et nous représentons $a\in \ZZq$ par une liste de
-	taille $l-1$\footnote{Pour des raisons techniques, il est en fait
-	représenté par une liste de taille $l$, mais nous ne faisons alors pas
-	attention au dernier bit}, le bit de poids faible étant à gauche.
-	Autrement dit:
+Rappelons que la valeur absolue d'un élément $x\in \ZZq$ est par
+définition la valeur absolue de son représentant dans $\rrbracket -q/2,
+q/2\rrbracket$. 
+
+Dans notre situation, $q = 2^l$ et nous représentons $a\in \ZZq$ par une liste de
+taille $l-1$\footnote{Pour des raisons techniques, il est en fait
+représenté par une liste de taille $l$, mais nous ne faisons alors pas
+attention au dernier bit}, le bit de poids faible étant à gauche.
+Autrement dit:
 \[ a = [a_0, \cdots, a_{l-1}] \quad \text{pour représenter } a = \sum_{i=0}^{l-1} a_i 2^i\]
 
 	On peut alors calculer ainsi en binaire la valeur absolue de $a$:
@@ -269,20 +269,19 @@ return [($a_{l-1} \land a_i) \lor (\overline{a_{l_1}} \land b_i)$  for $i$ in ra
 \end{lstlisting}
 
 On peut alors utiliser les comptes déjà fait, notamment concernant la
-	profondeur en NAND de \textbf{basic\_sum}, pour conclure:
+profondeur en NAND de \textbf{basic\_sum}, pour conclure:
 \begin{prop}
-	En conservant nos conventions pour la représentation des données, prendre la valeur absolue
-	d'un élément $a\in \ZZq$ demande une profondeur de $4s + 2$ NAND.
+En conservant nos conventions pour la représentation des données, prendre la valeur absolue
+d'un élément $a\in \ZZq$ demande une profondeur de $4s + 2$ NAND.
 \end{prop}
 \end{subsection}
 En additionnant nos différents comptes, on peut alors conclure:
 
 \begin{prop}
-	On peut effectuer l'algorithme \textbf{Dec} avec une profondeur de
-	RESULTAT NAND.
+On peut effectuer l'algorithme \textbf{Dec} avec une profondeur de
+RESULTAT NAND.
 \end{prop}
 	
-
 
 
 
