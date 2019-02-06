@@ -157,8 +157,7 @@ terminant par un \textbf{basic\_sum}, on obtient une profondeur en
 \textbf{NAND} en $\mathcal{O}(\log(nb) + s)$.
 
 \begin{prop}
-	Il est possible de sommer $\text{nb}$ vecteurs de $s$ éléments avec une
-	profondeur de METTRE LA REPONSE ICI NAND.
+	Il est possible de sommer $\text{nb}$ vecteurs de $s$ éléments avec une profondeur de $4s + 36\log_3(nb) -22$ \textbf{NAND}.
 \end{prop}
 
 \begin{proof}
@@ -166,10 +165,71 @@ Soit $p \geqslant 3$ tel que $3^{p-1} < nb \leqslant 3^{p}$.
 En réunissant les nombres à notre disposition par groupes de 3 et en leur appliquant \textbf{reduced\_sum}, puis en recommançant deux fois on se retrouve avec au plus $8 * 3^{p-3} < 3^{p-1}$ nombres à sommer. \\
 On peut donc se ramener à $nb' \leqslant 9$ avec une profondeur en \textbf{reduced\_sum} de $3(p - 2)$. \\
 De là, on peut calculer la somme totale avec une profondeur de quatre
-	\textbf{reduced\_sum} et un \textbf{basic\_sum}, obtenant ainsi une
-	profondeur totale en \textbf{NAND} de $4 s - 2 + 12(3p - 2) = 4s + 36p -22$. \\
-Or $p = \lceil \log_3(nb) \rceil$, on est donc bien en $\mathcal{O}(\log(nb) +
-	s)$.
+	\textbf{reduced\_sum} et un \textbf{basic\_sum} :
+
+\center
+\begin{tikzpicture}
+\node (A1) at (0,0) {A1};
+\node (A2) at (1,0) {A2};
+\node (A3) at (2,0) {A3};
+\node (A4) at (3,0) {A4};
+\node (A5) at (4,0) {A5};
+\node (A6) at (5,0) {A6};
+\node (A7) at (6,0) {A7};
+\node (A8) at (7,0) {A8};
+\node (A9) at (8,0) {A9};
+
+\node (B1) at (1,-1) {B1};
+\node (B2) at (2,-1) {B2};
+\node (B3) at (3.5,-1) {B3};
+\node (B4) at (4.5,-1) {B4};
+\node (B5) at (6,-1) {B5};
+\node (B6) at (7,-1) {B6};
+
+\draw (B1) --(A1) --(B2);
+\draw (B1) --(A2) --(B2);
+\draw (B1) --(A3) --(B2);
+\draw (B3) --(A4) --(B4);
+\draw (B3) --(A5) --(B4);
+\draw (B3) --(A6) --(B4);
+\draw (B5) --(A7) --(B6);
+\draw (B5) --(A8) --(B6);
+\draw (B5) --(A9) --(B6);
+
+\node (C1) at (2,-2) {C1};
+\node (C2) at (3,-2) {C2};
+\node (C3) at (5,-2) {C3};
+\node (C4) at (6,-2) {C4};
+
+\draw (C1) --(B1) --(C2);
+\draw (C1) --(B2) --(C2);
+\draw (C1) --(B3) --(C2);
+\draw (C3) --(B4) --(C4);
+\draw (C3) --(B5) --(C4);
+\draw (C3) --(B6) --(C4);
+
+\node (D1) at (3,-3) {D1};
+\node (D2) at (4,-3) {D2};
+\node (D3) at (6,-3) {C4};
+
+\draw (D1) --(C1) --(D2);
+\draw (D1) --(C2) --(D2);
+\draw (D1) --(C3) --(D2);
+\draw (D3) --(C4);
+
+\node (E1) at (4,-4) {E1};
+\node (E2) at (5,-4) {E2};
+
+\draw (E1) --(D1) --(E2);
+\draw (E1) --(D2) --(E2);
+\draw (E1) --(D3) --(E2);
+
+\node (sum) at (4.5,-5) {sum};
+
+\draw (E1) --(sum) --(E2);
+\end{tikzpicture}
+
+On obtient ainsi une profondeur totale en \textbf{NAND} de $4 s - 2 + 12(3p - 2) = 4s + 36p -22$, or $p = \lceil \log_3(nb) \rceil$ donc on a bien une profondeur en \textbf{NAND} de $4s + 36\log_3(nb) -22$.
 \end{proof}
 
 \end{subsection}
