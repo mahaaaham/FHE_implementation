@@ -1,184 +1,139 @@
 \begin{section}{Notions préliminaires}
 	\begin{subsection}{LWE et DLWE}
-	Nous présentons ici les définitions du Learning with Error
-	(LWE) dans leur version décisionnelle et calculatoire.
+	Nous présentons ici les définitions du Learning with Error (LWE) dans leur version décisionnelle et calculatoire.
 	
-	\begin{definition}{Decisional learning with Errors (DLWE), version décisionnelle}
-	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
-	des entiers et $\chi = \chi(\lambda)$ une
-	distribution sur $\ZZ$.
-	Le problème $\DLWE$ consiste à devoir distinguer 
-	deux distributions sur $\ZZq^{n+1}$ à partir d'un nombre polynomial
-	de $m = m(\lambda)$ d'échantillons qu'une des deux à produite.
-	La première distribution crée des vecteurs $(\vec{a}_i,b_i) \in
-	\ZZq^{n+1}$ uniforme.
-	La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré uniformément et 
-	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
-	où $e_i$ est crée obtenue par $\chi$.
-	\end{definition}
-	Notons qu'alors, $n = O(P(\lambda), \log(q) = O(P(\lambda))$ 
-	Pour un polynome $P$.
+	\begin{definition}{Decisional Learning with Errors (DLWE), version décisionnelle}
 
-	\begin{definition}{learning with Errors (LWE)}
-	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ 
-	des entiers et $\chi = \chi(\lambda)$ une
-	distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément 
-	et on considère la distribution qui  
-	prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels:
-		\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),\ q = q(\lambda)$ des entiers et $\chi = \chi(\lambda)$ une distribution sur $\ZZ$.
+	
+	Le problème $\DLWE$ consiste à devoir distinguer deux distributions sur $\ZZq^{n+1}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons qu'une des deux à produite. La première distribution crée des vecteurs $(\vec{a}_i,b_i) \in \ZZq^{n+1}$ uniforme. La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré uniformément et prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels :
+	\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
+	où $e_i$ est crée obtenue par $\chi$. \\
+	\end{definition}
+	Notons qu'alors, $n = O(P(\lambda))\text{ et }\log(q) = O(P(\lambda))$ pour un polynome $P$.
+
+	\begin{definition}{Learning with Errors (LWE)}
+	
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ des entiers et $\chi = \chi(\lambda)$ une distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément et on considère la distribution qui prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels :
+	\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
 	où $e_i$ est crée obtenue par $\chi$.
 
-	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre
-	polynomial $m = m(\lambda)$ d'échantillons.
+	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons.
 	\end{definition}
 
-	Ces deux problèmes sont en fait \og équivalents \fg. Cela semble facile
-	de LWE vers DLWE. De plus, 
-	le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à
-	DLWE à LWE sous certaines hypothèses lorsque $q$ est premier,
-	$q = O(\text{poly}(n))$, plus
-	polynomial en $n$ , et 
-	le théorème 3.1 de \cite{EPRINT:MicPei11} lorsque $q$ est un produit 
-	de premiers $p_i \in O(\text{poly}(n))$, comme ce sera le cas lorsque 
-	nous considèrerons 
-	$q = 2^k$.
+	Ces deux problèmes sont en fait \og équivalents \fg. C'est assez évident de LWE vers DLWE. De plus, le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à DLWE à LWE sous certaines hypothèses lorsque $q$ est premier et $q = \mathcal{O}(\text{poly}(n))$. Le théorème 3.1 de \cite{EPRINT:MicPei11} montre la même chose mais lorsque $q$ est un produit de premiers $p_i \in \mathcal{O}(\text{poly}(n))$, comme ce sera le cas lorsque nous considèrerons $q = 2^k$.
 
-	Voyons par exemple le cas (plus facile) où $q$ est premier:
+	Voyons par exemple le cas (plus facile) où $q$ est premier :
 
 	\begin{prop}{DWLE vers LWE}
 
-	Soit $n \geqslant 1$ un entier, $2 \leqslant q \leqslant \text{poly}(n)$ un nombre premier et $\chi$ une distribution sur $\ZZq$. Supposons avoir accès à un automate $\mathcal{W}$ qui accepte avec une probabilité exponentiellement proche de 1 les distributions $A_{s, \xi}$ et rejete avec une probabilité exponentiellement proche de 1 la distributions uniforme $U$. \\
-	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de $1$.
+	Soit $n \geqslant 1$ un entier, $2 \leqslant q \leqslant \text{poly}(n)$ un nombre premier et $\chi$ une distribution sur $\ZZq$. Supposons avoir accès à un automate $\mathcal{W}$ qui accepte avec une probabilité exponentiellement proche de 1 les distributions $A_{s, \xi}$ et rejete avec une probabilité exponentiellement proche de 1 la distributions uniforme $U$.
+	
+	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de 1.
 	\end{prop}
 	\begin{proof}
-	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}. \\
-	L'automate $W'$ va trouver $s$ coordonée par coordonnée. Montrons comment $W'$ obtient la première coordonnée $s_1$. \\
+	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}.
+	
+	L'automate $W'$ va trouver $s$ coordonée par coordonnée. Montrons comment $W'$ obtient la première coordonnée $s_1$.
+	
 	Pour $k \in \ZZq$, on considère la fonction :
 	\[f_{k,1}: (a,b) \mapsto (a + (l, 0, ..., 0), b + l \cdot k) \]
-	pour $l\in \ZZq$ échantilloné uniformément sur $\ZZq$. \\
-	$f_{k,1}$ appliquée à un échantillon uniforme donne un échantillon uniforme tandis qu'appliquée à un échantillon de $A_{s, \chi}$, elle donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme sinon. \\
-	On peut faire une recherche exhaustive sur les $k \in \ZZq$ jusqu'à en trouver un accepté par $W$, qui sera le bon avec une probabilité exponentiellement proche de 1. \\
-	Cela se fait en temps polynomial car $q < \text{poly}(n)$ et $f_{k,1}$ s'execute en temps polynomial. \\
+	avec $l\in \ZZq$ échantilloné uniformément sur $\ZZq$.
+	
+	$f_{k,1}$ appliquée à un échantillon uniforme donne un échantillon uniforme tandis qu'appliquée à un échantillon de $A_{s, \chi}$, elle donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme sinon.
+	
+	On peut faire une recherche exhaustive sur les $k \in \ZZq$ jusqu'à en trouver un accepté par $W$, qui sera le bon avec une probabilité exponentiellement proche de 1.
+	
+	Cela se fait en temps polynomial car $q < \text{poly}(n)$ et $f_{k,1}$ s'execute en temps polynomial.
+	
 	On peut effectuer la même chose avec la fonction
 	\[f_{k,i}: (a,b) \mapsto (a + (0, 0, ..., l, 0, ..., 0), b + l \cdot k) \]
-	avec le $l$ ajouté à $a$ en $i$ème position $\forall i$. \\
-	On retrouve ainsi $s$ avec $n$ calculs polynomiaux en $n$, ce qui reste évidemment polynomial en $n$. \\
-	La probabilité de se tromper est $n *$ quelque chose d'exponentiellement proche de 0 et reste donc exponentiellement proche de 0.
+	avec le $l$ ajouté à $a$ en $i$ème position $\forall i$.
+	
+	On retrouve ainsi $s$ avec $n$ calculs polynomiaux en $n$, ce qui reste évidemment polynomial en $n$.
+	
+	La probabilité de se tromper est $n$ fois quelque chose d'exponentiellement proche de 0 et reste donc exponentiellement proche de 0.
 	\end{proof}
 
-	Pour analyser la sécurité du cryptosystème, nous utiliserons le
-	problème $DLWE$. 
-	Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est
-	possible de réduire le problème LWE à des problèmes sur des réseaux.
+	Pour analyser la sécurité du cryptosystème, nous utiliserons le problème DLWE. Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est possible de réduire le problème LWE à des problèmes sur des réseaux.
 
-
-	Indiquons ici de façon informelle comment passer du problème LWE à un 
-	problème de type SVP (short vector problem).
-	Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme
-	matricielle:
+	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (short vector problem). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
 
 	\begin{definition}{versions matricielles de DLWE et LWE}
 
-	En prenant les paramètres de la précédente définition, le problème $\DLWE$ consiste à décider si une matrice $A \in \ZZq^{m \times (n+1)}$ est uniforme ou bien s'il existe un vecteur $\vec{v} = (1\quad -\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq^{m}$ est crée à partir de $\chi^m$. Autrement dit, avec les notations de la formulation classique de LWE, si les lignes de $A$ sont de la forme $(b_i, \vec{a}_i)$. \\
+	En prenant les paramètres de la précédente définition, le problème $\DLWE$ consiste à décider si une matrice $A \in \ZZq^{m \times (n+1)}$ est uniforme ou bien s'il existe un vecteur $\vec{v} = (1\quad -\vec{s})$ tel que $A \cdot \vec{v} \in \ZZq^{m}$ est créé à partir de $\chi^m$. Autrement dit, avec les notations de la formulation classique de LWE, si les lignes de $A$ sont de la forme $(b_i, \vec{a}_i)$.
+	
 	Le problème $\LWE$ consiste lui à trouver $\vec{v}$ à partir de $A$.
 	\end{definition}
 
-
-
-	Nous allons ici considérer le problème LWE calculatoire, dans lequel il
-	faut trouver le vecteur $\vec{v}$ tel que:
-
+	Nous allons ici considérer le problème LWE calculatoire, dans lequel il faut trouver le vecteur $\vec{v}$ tel que :
 	\[ A\cdot \vec{v} = \vec{e} \mod q \]
 	où les coordonnées de $\vec{e}$ sont créées par $\chi$.
 
-	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{v})$ tel
-	que:
+	De façon équivalente, il faut trouver un vecteur $(*\quad\vec{v})$ tel que :
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
 	   \begin{bmatrix}* \\ \vec{v} \end{bmatrix} =
 	   \begin{bmatrix} \vec{e} \\ \vec{v} \end{bmatrix} \]
-	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on à
-	alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
+	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 	\end{subsection}
 
 	\begin{subsection}{Réseaux euclidiens}
-	Nous rappelons ici quelques résultats sur les réseaux
-	euclidiens, tels qu'énoncés dans \cite{EC:MicPei12}. 
-	Ils nous serons utiles pour définir les gaussiennes discrètes ainsi que pour comprendre un des algorithme de 
-	déchiffrement du cryptosystème GSW. 
+	Nous rappelons ici quelques résultats sur les réseaux euclidiens, tels qu'énoncés dans \cite{EC:MicPei12}. Ils nous serons utiles pour définir les gaussiennes discrètes ainsi que pour comprendre un des algorithme de déchiffrement du cryptosystème GSW.
 
-	Tous les réseaux considérés ici sont de rang plein, autrement dit, 
-	si $\L \subset \RR^n$, alors $L$ est de dimension $n$.
+	Tous les réseaux considérés ici sont de rang plein, autrement dit, si $\L \subset \RR^n$, alors $L$ est de dimension $n$.
 
 	\begin{definition}
-	Soit $L\subset \RR^n$ un réseau. Le dual de $L$ est 
-	défini comme:
+	Soit $L\subset \RR^n$ un réseau. Le dual de $L$ est défini comme étant :
 	\[ L^* = \{ v \in \RR^n \::\: \langle x, v \rangle \in \ZZ
 	   \:\text{ pour tout } x\in L\} \]
 	\end{definition}
 	\begin{prop} 
-	Soit $L \subset \RR^n$ un réseau euclidien.
-	Si $B$ est une base de $L$ .
+	Soit $L \subset \RR^n$ un réseau euclidien. Soit $B$ est une base de $L$.
+	
 	$B^{-t}$ est une base de $L^*$.
 	\end{prop}
 
-	Pour $q$ un entier et $A \in \ZZ^{n\times m}$, on pose:
+	Pour $q$ un entier et $A \in \ZZ^{n\times m}$, on pose :
 		\[\Lambda^\bot(A) = \{ z \in \ZZ^m\: :\: A z  = 0 \mod q \}\] 
-	\[\Lambda(A^t) = \{ z \in \ZZ^m\: : \: \exists s\in \ZZq^n, 
-	z = A^t s \mod q\]
+	\[\Lambda(A^t) = \{ z \in \ZZ^m\: : \: \exists s\in \ZZq^n, z = A^t s \mod q\}\]
 
 		\begin{prop} \label{lambda_reseau}
 	Conservant les notations précédentes, 
 	\[q \cdot {\Lambda^\bot(A)}^* =  \Lambda(A^t)\] 
 	\end{prop}
 	\end{subsection}
+	
 	\begin{subsection}{La gaussienne discrète}
-	Très souvent, la distribution $\chi$ choisi pour avoir 
-	des paramètres sécurités pour le problème LWE est
-	une gaussienne discrète. Nous nous proposons ici 
-	d'en indiquer la définition, ainsi que d'en indiquer 
-	certaines propriétés.
+	Très souvent, la distribution $\chi$ choisi pour avoir des paramètres sécurités pour le problème LWE est une gaussienne discrète. Nous nous proposons ici d'en indiquer la définition, ainsi que d'en indiquer certaines propriétés.
 
-	Rappellons aussi qu'une famille $\{\chi_n\}_n$
-	de distributions est dite $B$-bornée pour une borne 
-	$B = B(n)$ si la fonction suivante est négligeable:
+	Rappellons aussi qu'une famille $\{\chi_n\}_n$ de distributions est dite $B$-bornée pour une borne $B = B(n)$ si la fonction suivante est négligeable :
 		\[n \mapsto \PP\left(\chi_n > B(n)\right) \]
 
 	\paragraph{}
 	Nous reprenons ici les notations de \cite{STOC:GenPeiVai08}.
 
-	Soit un entier $n > 0$  et $\sigma > 0$. On définit la densité
-	gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$
-	attribue:
-
+	Soit un entier $n > 0$  et $\sigma > 0$. On définit la densité gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$ attribue:
 	\[\rho_{s,c}(x) = e^{\phi * {\frac{||x-c||}{s}}^2} \]
 
-	Puis, pour un réseau $\Lambda \in \RR^n$ Nous définissons la gaussienne discrète
-	$D_\alpha$ comme la distribution de support $\Lambda$ de loi de
-	probabilité: 	
+	Puis, pour un réseau $\Lambda \in \RR^n$, nous définissons la gaussienne discrète $D_\alpha$ comme la distribution de support $\Lambda$ de loi de probabilité: 	
 	\[ D_{\Lambda, s, c}(x) = \frac{\rho_{s,c}(x)}{\sum_{l\in \Lambda}\rho_{s,c}(l)}\]
 
-	Pour un entier $q > 0$,  
-	Nous définissions enfin la gaussienne discrète $D^q_{\alpha}$ modulo un entier $q > 0$ comme la
-		composition la fonction qui a $x \in \ZZq$ attribue   
+	Enfin, pour un entier $q > 0$, nous définissons la gaussienne discrète $D^q_{\alpha}$ modulo un entier $q > 0$ comme la composition la fonction qui a $x \in \ZZq$ attribue 
+	
+	LA COMPOSITION LA FONCTION ? WTF ?  
 		\[ D_{\ZZ, s, c}(\pi^{-1}(x)) \]
 	où $\pi$ est la projection $\ZZ \rightarrow \ZZq$.
 
-La définition et la position suivante 
-(Le lemme 4.2 de \cite{STOC:GenPeiVai08})
-permettent de trouver une borne à une famille de gaussienne.
+La définition et la position suivante (Le lemme 4.2 de \cite{STOC:GenPeiVai08}) permettent de trouver une borne à une famille de gaussienne.
 \begin{definition}
-Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, 
-	le paramètre $\eta_\epsilon(L)$ est le plus petit réel
-	$s>0$ tel que 
-	\[\rho_{1/s}(L^* \setminus \{0\}) \leq \epsilon\]
+Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre $\eta_\epsilon(L)$ est le plus petit réel $s>0$ tel que 
+	\[\rho_{1/s}(L^* \setminus \{0\}) \leqslant \epsilon\]
 \end{definition}
 	\begin{prop}
-	Pour tout $\epsilon > 0$ , $s \geq \eta_{\epsilon}(\ZZ)$ et tout
-	$t>0$:
-	\[ \PP\left(|x-c| \geq t\cdot s\right) \leq 2 e^{-\pi t^2}
-	\cdot \frac{1+\epsilon}{1-\epsilon} \]
-	Notamment, pour $0 < \epsilon  < 1/2$ et $t \geq \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
+	Pour tout $\epsilon > 0$ , $s \geqslant \eta_{\epsilon}(\ZZ)$ et pour tout $t>0$ :
+	\[ \PP\left(|x-c| \geq t\cdot s\right) \leqslant 2 e^{-\pi t^2}	\cdot \frac{1+\epsilon}{1-\epsilon} \]
+	Notamment, pour $0 < \epsilon  < 1/2$ et $t \geqslant \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
 	\end{prop}
 	\end{subsection} % gaussiene discrete
 \end{section}

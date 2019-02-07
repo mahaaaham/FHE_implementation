@@ -166,7 +166,7 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé publique et un message $\mu \in \ZZq$. \\
 	\textbf{Sortie} : Cet algorithme retourne le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.\\
-	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \times I_N + $\textbf{BitDecomp}$(R \times A))$. \\
+	\textbf{Algorithme} : On génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = $ \textbf{Flatten}$(\mu \times I_N + \textbf{BitDecomp}(R \times A))$. \\
 	\textbf{Taille} : $C \in \ZZq^{N \times N}$ s'écrit en $l * N^2$ bits.
 	
 	\paragraph{}

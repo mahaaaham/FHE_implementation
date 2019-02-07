@@ -1,53 +1,16 @@
 \begin{section}{Introduction}
-	RSA, ElGamal ou encore le crytosystème de Pallier possèdent 
-	une propriété interessante: faire le produit de deux chiffrés 
-	revient à chiffrer le produit de leurs clairs. 
-	Cette proriété offre à un attaquant des informations qui affaiblissent 
-	le chiffré - on parle de malléabilité -, mais offre aussi des
-	perspectives interessante: la possibilité à
-	d'appliquer des opérations sur les chiffrés de données permet 
-	de travailler avec des entitiées sans avoir leur dévoiler les données 
-	qu'on estime sensibles.
+	Certains systèmes cryptographiques, comme RSA, ElGamal ou encore le crytosystème de Pallier possèdent une propriété intéressante : faire le produit de deux chiffrés revient à chiffrer le produit de leurs clairs. Cette proriété offre à un attaquant des informations qui affaiblissent le chiffré - on parle de malléabilité -, mais offre aussi des perspectives intéressante : la possibilité d'appliquer des opérations sur les chiffrés de données sans avoir à les déchiffrer permet de travailler avec des entitiées sans avoir leur dévoiler des données que l'on estime sensibles.
 
 	\paragraph{}
-	Toutefois, pouvoir uniquement multiplier des chiffrés\footnote{ou
-	bien seulement les sommer, comme cela peut être par exemple le cas est trop limité 
-	avec des variables de ElGamal} ne permet pas de faire beaucoup de manipulations 
-	interessantes.
-        Il a fallu attendre jusqu'en 2009, avec la thèse de 
-	Craig Gentry \cite{gentry_thesis} pour que 
-	devienne plausible la possibilité d'un cryptosystème \og communtant \fg 
-	à la fois avec la somme, le produit et la multiplication par des
-	scaclaires; on parle alors de \og Fully homomorphic cryptosystem \fg
-	(FHE).
+	Toutefois, pouvoir uniquement multiplier des chiffrés\footnote{ou bien seulement les sommer, comme cela peut être le cas, par exemple avec des variables de ElGamal} est trop limité, ne permettant pas de faire beaucoup de manipulations intéressantes. Il a fallu attendre jusqu'en 2009, avec la thèse de Craig Gentry \cite{gentry_thesis} pour que devienne plausible la possibilité d'un cryptosystème \og commutant \fg à la fois avec la somme, le produit et la multiplication par des scalaires; on parle alors de \og Fully homomorphic cryptosystem \fg (FHE).
 
 	\paragraph{}
-	Celui-ci utilisait des réseaux euclidiens dits \og idéaux
-	\fg et utilisait une tecnique dite de \og bootstrapping \fg 
-	pour passer d'un \og Somewhat fully homomorphic cryptosystem \fg, 
-	limitant le nombre d'opérations possibles afin que le déchiffrement 
-	fonctionne toujours, vers un vrai FHE.
+	Celui-ci utilisait des réseaux euclidiens dits \og idéaux \fg et utilisait une tecnique dite de \og bootstrapping \fg pour passer d'un \og Somewhat fully homomorphic cryptosystem \fg, limitant le nombre d'opérations possibles afin que le déchiffrement fonctionne toujours, vers un vrai FHE.
 
-	A partir de là, de nombreuses tentatives de cryptosystèmes dits \og
-	fully homomorphics \fg ont emergés. 	
-	Notamment, à partir de 2011, des cryptosystèmes dits de seconde
-	génération, basés sur le problème Learning with error ont emergés. Ils 
-	avaient notamment la particularité d'avoir une somme entre chiffrés 
-	facile à mettre en place, tandis que la multiplication demandait elle 
-	plus de travail, demandant notamment une opération dite de \og
-	relinéarisation \fg assez complexe.
+	A partir de là, de nombreuses tentatives de cryptosystèmes dits \og fully homomorphics \fg ont emergés. Notamment, à partir de 2011, des cryptosystèmes dits de seconde	génération, basés sur le problème Learning with Error ont emergés. Ils avaient la particularité d'avoir une somme entre chiffrés facile à mettre en place, tandis que la multiplication demandait elle plus de travail, demandant notamment une opération dite de \og relinéarisation \fg assez complexe.
 
 	\paragraph{}
-	Le but de notre rapport est d'étudier le cryptosystème GWS, dû à 
-	Gentry, Sahai et Waters en 2013 (voir \cite{EPRINT:GenSahWat13}), dit
-	de troisième génération, dont le but fut justement de trouver un
-	cryptotsystème dont la somme autant que le produit de chiffrés
-	soient \og naturels \fg. 
+	Le but de notre rapport est d'étudier le cryptosystème GWS, publié par Gentry, Sahai et Waters en 2013 (voir \cite{EPRINT:GenSahWat13}), dit de troisième génération, dont le but fut justement de trouver un cryptotsystème dont la somme tout comme le produit de chiffrés soient \og naturels \fg.
 
-	Pour cela, nous le présenterons, étudierons sa sécurité, puis en
-	présenterons une implémentation jouet \footnote{sans regards sur les
-	très nombreuses optimisations aujourd'hui faites dans les vraies
-	implémentations de GSW et ses dérivés} faite en sage que nous avons réalisée
-	pour ce prjet (voir CITER LE GIT). Enfin, nous jetterons un oeil 
-	a des API open-source  actuellement disponibles pour utiliser des FHE.
+	Pour cela, nous le présenterons, étudierons sa sécurité, puis en présenterons une implémentation jouet \footnote{sans regards sur les très nombreuses optimisations aujourd'hui faites dans les vraies implémentations de GSW et ses dérivés} faite en \path{sagemath} que nous avons réalisée pour ce projet (voir CITER LE GIT). Enfin, nous jetterons un \oe{}il a des API open-source  actuellement disponibles pour utiliser des FHE.
 \end{section}
