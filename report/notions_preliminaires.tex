@@ -76,8 +76,32 @@
 	   \begin{bmatrix} \vec{e} \\ \vec{v} \end{bmatrix} \]
 	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
-	\end{subsection}
 
+	\textbf{Choix de paramètres pour DLWE:}
+
+	Interessons nous maintenant à la façon de choisir des paramètres
+	pour que le problème $DLWE$ soit difficile. Nous utilisons pour cela 
+	les remarques faites dans \cite{halevi}.
+
+	Déjà, il impose que la distribution $\chi$ soit \og concentrée sur de
+	petites valeurs \fg. Plus précisément, il doit exister un
+	$\alpha = \alpha(n) << 1$ tel que:
+	\[ n \mapsto \PP [x \leftarrow \chi : |x| > \alpha q]\] 
+	soit négligeable.
+
+	il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
+	que des zéros. 
+	Sans que cela soit prouvé, l'article pose alors l'hypothèse suivante,
+	que nous poserons nous aussi:
+
+	\begin{hyp}
+	\label{hyp_dwle}
+	Il existe un $0 < \epsilon < 1$ tel que le problème DLWE soit
+	soit difficile pour 
+	\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
+	\end{hyp}
+
+	\end{subsection}
 	\begin{subsection}{Réseaux euclidiens}
 	Nous rappelons ici quelques résultats sur les réseaux euclidiens, tels qu'énoncés dans \cite{EC:MicPei12}. Ils nous serons utiles pour définir les gaussiennes discrètes ainsi que pour comprendre un des algorithme de déchiffrement du cryptosystème GSW.
 

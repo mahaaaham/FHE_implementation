@@ -60,9 +60,11 @@
 
 		% Explication sans l'erreur, pourquoi c'est homomophique
 	\end{subsection}
-	\begin{subsection}{Fonctions utilisées}
-	Plusieurs algorithmes seront utiles pour pouvoir bien définir le système FHE :
-	
+	\begin{subsection}{Définition du cyrptosystème}
+	Nous allons ici définir le cryptosystème GSW, en utilisant 
+	l'exposition originale faite dans \cite{EPRINT:GenSahWat13},
+	légèrement modifiée pour prendre en compte des remarques interessantes
+	faites par Shai Halevi dans \cite{halevi}.
 	\paragraph{}
 	\textbf{BitDecomp}
 	\flushleft
@@ -138,27 +140,33 @@
 	\flushleft
 
 	\textbf{Entrée} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur. \\
-	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi, m$ du système. \\
-	\textbf{Algorithme} : On définit des paramètres permettant de pouvoir effectuer au moins L opérations sur un chiffré et de toujours pouvoir le déchiffrer correctemment tout en assurant qu'un adversaire attaquant le système doive effectuer au moins $2^\lambda$ opérations, quelle que soit l'attaque qu'il choisisse. La façon de déterminer ces paramètres n'est pas définie afin de pouvoir l'adapter suivant l'evolution des attaques. \\
+	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi,
+	m$ du système. 
+	Le paramètre $L$ indique que les paramètres crées doivent permettre d'évaluer un circuit de NAND de profondeur $L$ tout en pouvant
+	déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de
+	satisfaire la condition \og dite de longueur \fg  
+	\[q > 8nm (1 + N)^L \]
+
+	\textbf{Algorithme}  
+	Nous verrons dans la section des considérations sur les choix des
+	paramètres.\\
 	
 	\paragraph{}
-	\textbf{SecretKeyGen}
+	\textbf{KeyGen}
 	\flushleft
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup}. \\
-	\textbf{Sortie} : Cet algorithme retourne la clé secrète $\vec{s} \in \ZZq^{n+1}$. \\
-	\textbf{Algorithme} : On génère aléatoirement un vecteur $\vec{t} \in \ZZq^n$. On définit la clé secrète comme $\vec{s} = (1, -t_1, ..., -t_n)$. \\
-	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. Par définition, $q$, et donc tous élément de $\ZZq$, s'écrit en $l$ bits. $\vec{s}$ fait donc une taille de $l * (n+1) = N$ bits. \\
-	On note $\vec{v} = $ \textbf{PowersOf2}$(\vec{s})$.
-	
-	\paragraph{}
-	\textbf{PublicKeyGen}
-	\flushleft
-	
-	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup} et d'une clé secrète construite avec ces mêmes paramètres. \\
-	\textbf{Sortie} : Cet algorithme retourne la clé publique $A \in \ZZq^{m \times n}$.\\
-	\textbf{Algorithme} : On génère une matrice uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$. \\
-	\textbf{Taille} : $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m = N * (m - 1)$ bits.
+	\textbf{Sortie} : Cet algorithme la publique $A \in \ZZq^{m \times n}$
+	ainsi que la clé secrète $\vec{s} \in \ZZq^{n+1}$ vérifiant la
+	contrainte $A \cdot \vec{s} \leq n$. \\
+	\textbf{Algorithme}: \\ 
+	\textbf{clé secrète:}  On génère un vecteur $t \in \ZZq^n$ avec $\chi$
+	et on définit la clé secrète comme $\text{\textbf{PowersOf2}}(\vec{s})$
+	pour $\vec{s} = (1, -t_1, ..., -t_n)$. \\
+	\textbf{clé publique:} On génère aléatoirement uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$. \\
+	Si la contrainte $A \cdot \vec{s} \leq n$ n'est pas vérifiée, on recrée un jeu de clés.
+	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. Par définition, $q$, et donc tous élément de $\ZZq$, s'écrit en $l$ bits. $\vec{s}$ fait donc une taille de $l * (n+1) = N$ bits. 
+	D'autre part, $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m = N * (m - 1)$ bits.
 	
 	\paragraph{}
 	\textbf{Encrypt}
@@ -175,7 +183,7 @@
 	
 	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, la clé secrète et un chiffré d'un message $\mu \in \{ 0,1\} $. \\
 	\textbf{Sortie} : Cet algorithme retourne le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.\\
-	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $q/4$ et $q/2$, $q/2$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor x_i/v_i \rceil$.
+	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leq l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $q/4$ et $q/2$, $q/2$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor x_i/v_i \rceil$.
 
 
 \paragraph{}
@@ -184,11 +192,16 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 \[ C\cdot \vec{v} = \mu\, \vec{v} + \vec{e} \]
 \end{definition}
 \begin{prop}
-	\textbf{Dec} décrypte avec succès les chiffrés dont l'erreur $\vec{e}$ satisfait $\|\vec{e}\|_1 < q/8$.
+\label{dec}
+\textbf{Dec} décrypte avec succès les chiffrés dont l'erreur $\vec{e}$
+satisfait $\|\vec{e}\|_\infty < q/8$.
 \end{prop}
 \begin{proof}
-	On a $x_i = \mu * v_i + e$ avec $\lvert e \lvert \leqslant \|\vec{e}\|_1$ et $\frac{x_i}{v_i} = \mu + \frac{e}{v_i}$. \\
-	$\lvert v_i \lvert > \frac{q}{4}$, d'où $\lvert \frac{e}{v_i} \lvert < 1/2$, donc $\lfloor \frac{x_i}{v_i} \rceil = \mu$.
+	Dans ce cas, 
+	On a $x_i = \mu * v_i + e$ avec $\lvert e \lvert \leq
+	\|\vec{e}\|_\infty$ et comme 
+	$\lvert v_i \lvert > \frac{q}{4}$, $\lvert \frac{e}{v_i} \lvert < 1/2$.
+	On a donc $\lfloor \frac{x_i}{v_i} \rceil = \mu$.
 \end{proof}
 	\end{subsection}
 	
@@ -303,7 +316,7 @@ au domaine fondamental utilisé par l'algorithme.
 	\end{align*}
 	\end{proof}
 \textbf{Erreur} : Le chiffré à une erreur $e_3 = \vec{e_1} + \vec{e_2}$.
-\[\norm{e_3} \leqslant \norm{e_1} + \norm{e_2}\]
+\[\norm{e_3} \leq \norm{e_1} + \norm{e_2}\] 
 	\paragraph{}
 	\textbf{Mult}
 	\flushleft
@@ -321,7 +334,7 @@ au domaine fondamental utilisé par l'algorithme.
 	\end{align*}
 	\end{proof}
 	\textbf{Erreur} : Le chiffré à une erreur $e_3 = \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. 
-\[\norm{e_3} \leqslant \mu_2 \norm{e_1} + N \norm{e_2} \]
+\[\norm{e_3} \leq \mu_2 \norm{e_1} + N \norm{e_2} \]
 	\paragraph{}
 	\textbf{NAND}
 	\flushleft
@@ -332,7 +345,7 @@ au domaine fondamental utilisé par l'algorithme.
 	\begin{proof}
 	\begin{align*}
 	\textbf{NAND}(C_1, C_2) \times \vec{v} &= (I_N - C_1 \times C_2) \times \vec{v} \\
-	&= \vec{v} - \textbf{Mult}(C_1, C_2) \\
+	&= \vec{v} - \textbf{Mult}(C_1, C_2)\vec{v} \\
 	&= \vec{v} - (\mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} + C_1 \times \vec{e_2} \\
 	&= (1 - \mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} - C_1 \times \vec{e_2}
 	\end{align*}
@@ -341,6 +354,38 @@ au domaine fondamental utilisé par l'algorithme.
 	$e_3 = -(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. On est dans 
 	un contexte similaire à $\textbf{Mult}(C_1, C_2)$, mais 
 	$\mu_2$ est ici égal à 0 ou 1.
-\[\norm{e_3} \leqslant \norm{e_1} + N \norm{e_2} \leqslant (N+1) \max(\norm{e_1}, \norm{e_2})\]
+\[\norm{e_3} \leq \norm{e_1} + N \norm{e_2} \leq (N+1) \max(\norm{e_1}, \norm{e_2})\]
+	\end{subsection}
+	\begin{subsection}{Correction du cryptosystem}
+	Ici, nous considérons comme seules opérations homomorphes les portes
+	NAND et comme algorithme de déchiffrement \textbf{Dec}.
+	\begin{prop}
+	Si la condition de longueur 
+	\[q > 8nm (1 + N)^L \]
+	est respectée. On peut appliquer $L$ portes NAND à un chiffré
+	de $0$ ou de $1$ et le déchiffrer correctement.
+	\end{prop}
+	\begin{proof}
+	Pour $\mu \in \{0,1\}$, $C = \text{\textbf{Encrypt}}(m)$, on a:
+	\[
+	C\cdot \vec{v} = \mu \vec{v} + \langle \text{BitDecomp}(R\cdot A), \vec{v} \rangle 
+	\]
+	On peut donc minorer ainsi son erreur:
+	\begin{align*}
+	\norm{\langle \text{BitDecomp}(R\cdot A), \vec{v} \rangle}
+	&= \norm{\mu \vec{v} + \langle R\cdot A, \vec{s} \rangle}\\
+	&= \norm{\mu \vec{v} + \langle R\cdot , A\cdot \vec{s} \rangle} \\
+	&\leq  m n \qquad \text{car $R$ est constituée de $0$ ou $1$ et que}
+	\: \norm{A\cdot\vec{s}} \leq n
+	\end{align*}
+	De plus, on peut utiliser l'inégalité indiquée dans la définition de
+	NANd pour voir qu'après l'application de $i$ portes, le bruit $e_i$ du
+	chiffré  $c_i$ satisfait:
+	\[ \norm{e_i} \leq {(N+1)}^i  mn \]
+	On voit donc qu'il suffit de montrer qu'on peut correctement déchiffrer
+	$c_L$. Par la proposition~\ref{dec}, on voit qu'il faut alors avoir:
+	\[ \norm{e_L} < q/8 \] 
+	qui est satisfaite clairement si la condition de longueur l'est.
+	\end{proof}
 	\end{subsection}
 \end{section}

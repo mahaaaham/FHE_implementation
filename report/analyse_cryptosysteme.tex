@@ -144,8 +144,8 @@
 
 	\begin{prop}
 	Supposons avoir pris des paramètres $(n, q, \chi, m)$
-	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\epsilon>0$
-	et $m > (1+\epsilon)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe
+	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\tau >0$
+	et $m > (1+\tau)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe
 	$(A, RA)$ est calculatoirement indistinguable de la
 	distribution uniforme sur $\ZZq^{m \times (n+1)} \times \ZZq^{N
 	\times (n+1)}$
@@ -164,7 +164,7 @@
 	telle que:
 	\[\mathbb{E}_{\mathcal{U}\subset \ZZq^{m\times n+1}}(SD(RU,V)) \leq 
 		\sqrt{m^2\frac{q^{n+1}}{2^m}}\leq \lambda
-	n\log(q)\sqrt{\frac{1}{q^{\epsilon(n+1)}}}=: f(n) \]
+	n\log(q)\sqrt{\frac{1}{q^{\tau(n+1)}}}=: f(n) \]
 	Et, notant $Y = \{ U: \SD(RU,V) \geq \sqrt{f(n)}\}$, on obtient:
 	\[\PP(U \in Y) \leq \sqrt{f(n)} \]
 	où $f$ est négligeable en $n$. 
@@ -187,6 +187,7 @@
 	indistinguables.
 	\end{proof}
 	\begin{thm}
+	\label{ind_cpa}
 	Sous les hypothèses de la proposition précédente, le
 	cryptosysteme est IND-CPA.
 	\end{thm}
@@ -213,8 +214,8 @@
 	
 	\end{subsection}
 
-	\begin{subsection}{Contraintes asymptotiques pour les choix de paramètres} 
-		Le choix des paramètres du système est une étape cruciale de la mise en place de celui-ci,
+	Nous allons maintenant nous interesser au choix de paramètres de notre
+	cryptosystème. C'est une étape cruciale de la mise en place de celui-ci,
 	car ce sont eux qui détermineront les degrés de sécurités et la profondeur des circuits calculables.
 	
 	Sur ce point, deux approches sont possibles: une étude asymptotique ou
@@ -225,49 +226,114 @@
 	$1$ et nous interesserons principalement à la profondeur maximale 
 	possible de NAND permettant encore de déchiffrer.
 
-	\begin{subsubsection}{Analyse de la profondeur des circuits}
-	Si $\chi$ est $B$-bornée, on voit en appliquant itérativement la
-	minoration de bruit pour l'opération NAND que pour une profondeur de 
-	$L$ NAND, le bruit est majoré en norme infinie par:
-	\[{(N + 1)}^L B\]
-	Or, afin de fonctinner, l'algorithme de dechiffrement
-	\textbf{Dec} necessite que la norme infinie du bruit soit majorée par q/8.
-	On obtient donc la condition suivante:
-	\begin{equation}
-		\label{depth}
-		L \leq\frac{ \log(q) - 3 - \log(B)}{\log(N+1)}	\end{equation}
-	\end{subsubsection}
-	\begin{subsubsection}{Résumé des contraintes sur les paramètres}
-	Nous indiquons ici quelques contraintes asymptotiques précisées
-	dans la section 3.4 de \cite{EPRINT:GenSahWat13}. Nous n'avons 
-	pas essayé de comprendre les raisons qui poussent à celles-ci
-	car cela aurait necessité une étude bien plus poussée des différentes
-	façon d'attaquer $LWE$.
+	\begin{subsection}{Choix asymptotique de paramètres pour un leveled GSW}
+	Les indications faites dans l'article original \cite{EPRINT:GenSahWat13} n'étaient pas très explicites; nous nous inspirons donc ici du travail
+	effectué par Shai Haleva dans \cite{halevi} pour avoir un jeu de
+	contraintes nous permettant des paramètres permettant de faire un
+	leveled GSW. 
 
-	L'article conseille de faire croitere $n$ linéairement avec $\log(q/B)$, et,
-	notant $\kappa = \log(q)$, d'avoir:
-	\[ \kappa = O(L \log(N)) = O(L(\log(n) + \log(\kappa)) = O(L\log(n))\]
+	Rappelons que nous avons déjà pris pour hypothèse que le problème DLWE est difficile avec les paramètres suivants:
+	\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
+	De plus, le théorème~\ref{ind_cpa} necessite d'avoir 
+	\[m > (1+\tau)(n+1)\log(q) \]
+	pour un $\tau > 0$ pour que le cryptosystème soit IND-CPA.  Nous prenons alors: 
+	\[ m = 2(n+1)(\lfloor \log(q) \rfloor + 1) = 2(N + \bnorm{q}) < 2
+	\bnorm{q} (N+1)\]
+	Enfin, nous devons aussi respecter la condition de longueur pour pouvoir appliquer une profondeur de $L$ NAND à notre chiffré:
+	\[q > 8nm (1 + N)^L \]
 
-	\end{subsubsection}
-	\end{subsection} % sécurité asymptotique
+En utilisant notre inégalité sur $m$  dans cette dernière équation, on voit alors qu'il nous suffit d'avoir:
 
-	\begin{subsection}{Choix concrets de paramètres}
+\begin{equation}
+q > 16 {(1+N)}^{L+2}
+\end{equation}
+car alors:
+\begin{equation}
+q> 8 (8 N (N+1)) {(1 + N)}^{L} > 8 nm {(1 + N)}^L \\
+\end{equation}
+
+Ceci nous ammène à premier jeu de contraintes: 
+\[ \begin{cases}\alpha  = n \cdot 2^{-n^\epsilon}=  \\
+	q = \lceil 2^{n^\epsilon}\rceil\\ 
+	m = 2(N + \bnorm{q}) \\  
+	n^\epsilon > 4 + (L+2) \log\left( 1 + N\right)
+	\end{cases} \]
+
+Nous allons encore simplifier la dernière contrainte en utilisant:
+\begin{align*} (L+2) \log\left( 1 + N\right) &\leq (L+2) (2 + \log(N)) \\
+&\leq (L+2) (2 + \log(n) +  \log(\bnorm{q})) \\
+&\leq (L+2) (3 + \log(n) + \log(\log(q))
+&\leq 2 L \log(n) \quad \text{pour $n$ assez grand}
+\end{align*}
+
+Ce qui au final, nous donne:
+\[ \begin{cases}
+	\alpha  = n \cdot 2^{-n^\epsilon}=  \\
+	q = \lceil 2^{n^\epsilon} \rceil\\ 
+	m = 2(N + \bnorm{q}) \\  
+	n^\epsilon > 2 L \log(n)
+	\end{cases}  \]
+Il nous reste donc à trouver une valeur pour $n$, dépendant du paramètre de sécurité $\lambda$.  En posant $n = \rho^{1/\epsilon}$, on voit que la dernière contrainte devient:
+\[ \frac{\rho}{\log(\rho)} > \frac{2 L}{\epsilon}  \]
+Et en prenant $\rho = \text{cst} a \log(a)$, cela devient:
+\[\log(a)> \frac{2 L}{\epsilon\:\text{cst}\: a}\:(\log(a) + \log(\log(a)) + \log(cst))   \]
+qui est vérifiée pour $a = L$ et $cst = 4/\epsilon$ car alors, on obtient:
+\begin{align*}
+& \log(L)> \frac{1}{\text{2}}\:(\log(L) + \log(\log(L)) + 2 - \log(\epsilon)) \\
+&\Leftrightarrow  \log(L) - \log(\log(L)) - 2 > \log(\frac{1}{\epsilon})
+\end{align*}
+ce qui est vrai pour $L$ assez grand.  
+
+\begin{align*}
+\Leftrightarrow  \log(L) - \log(\log(L)) - 2 > 0
+\end{align*}
+qui est une fonction croissante en $L$, et positive dés $L = 20$.  Notons enfin que ce choix de valeur $n$ est indépendant du paramètre de sécurité $\lambda$, on peut donc prendre le maximum entre les deux
+valeurs pour plus de cohérence.  
+
+On en déduit le théorème suivant:
+\begin{thm}{leveled GSW}
+Pour $L$ et $\lambda$ assez grands, et sous l'hypothèse sur DWLE~(page \pageref{hyp_dwle}), les paramètres suivants permettent de faire une profondeur de NAND de $L$
+et rendent le cryptosystème GSW IND-CPA:
+\[ \begin{cases} 
+	n = \max\left(\lambda, \lceil 4/\epsilon \log(L) \log(\log(L))
+	\rceil\right)  \\
+	\alpha  = n \cdot 2^{-n^\epsilon}  \\
+	q = \lceil 2^{n^\epsilon} \rceil\\ 
+	m = 2(N + \bnorm{q}) \\  
+	\end{cases}  \]
+\end{thm}
+Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg
+étant donné que la sécurité n'est assurée qu'asymptotiquement. De plus, leur
+taille est très grande, comme le montre TRUC
+
+
+
+
+	\end{subsection}
+
+	\begin{subsection}{Choix de paramètres concrets pour un leveled GSW}
 	\begin{subsubsection}{Présentation de lwe\_estimator}
 	
-		Initialement utilisé dans l'article
-		\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
-		(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
-	Martin Albrecht et 
+	Initialement utilisé dans l'article
+	\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
+	(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
+Martin Albrecht et 
 	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
 	le problème de learning with error.
+
+	Nous avons pensé qu'il pouvait être interessant de l'utiliser afin de
+	voir si nous pouvions trouver des paramètres offrants une sécurité
+	concrète, et non uniquement une famille de paramètres offrant une
+	sécurité asymptotique.
 	
 	
 	\paragraph{}
 	\textbf{estimate\_lwe :}
 
 	\paragraph{}
-	Cependant, l'intérêt premier de ce module est qu'il estime la résistance des paramètres choisis à
-	plusieurs attaques. Pour cela, on utilise la fonction \path{estimate_lwe} :
+	Pour estimer la résistance de paramètres choisis sur un panel
+	d'attaques, on utilise la fonction \path{estimate_lwe} dont une sortie
+	typique est:
 	
 	\flushleft
 	

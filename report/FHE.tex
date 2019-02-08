@@ -1,47 +1,104 @@
-\begin{section}{FHE, SFHE et bootstrapping}
-Nous indiquons ici les définitions de base d'un FHE en adaptant
-l'exposition faite dans~\cite{FOCS:BraVai11}.
+% \begin{section}{FHE, SFHE et bootstrapping}
+% Nous indiquons ici les définitions de base d'un FHE en adaptant
+% l'exposition faite dans~\cite{FOCS:BraVai11}.
 
-\begin{definition}{Cryptosystème homomorphe (HE)}
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
-On considère un anneau $M$ contenant l'espace des clairs, et un espace $C$ de chiffrés.
-\begin{itemize}
-\item $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
-\item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu \in R$ et retourne un chiffré $c\in C$
-\item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu \in M$.
-\item $c_f \leftarrow \Eval_\evk(f, c_1,\cdots,c_l)$ prend une clé d'évaluation
-$\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$ et retourne un chiffré $c_f$.
-\end{itemize}
-\end{definition}
-
-\begin{definition}{Cryptosystème $\mathcal{C}$-homomorphe}
-On considère un cryptosystème homomorphe 
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$ et une famille d'ensembles fonctions $\mathcal{C} = \{\mathcal{C}_{k} \}_{k\in \mathbb{N}}$. \textbf{HE} est dit 
-$\mathcal{C}$-homomorphe  si pour toute fonction $f_k \in \mathcal{C}_k$, et
-pour toutes entrées $\mu_1, \cdots \mu_l \in R$ de la fonction $f_k$:
-\[ \PP\left(\Dec_\sk\left(\Eval_\evk(f,c_1,\cdots,c_l)\right) \neq f(\mu_1,\cdots,\mu_l)  \right) \]
-est négligeable en $k$, pour $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$ et $c_i \leftarrow \Enc_\pk(\mu_i)$.
-\end{definition}
-
-\begin{definition}{Compacité}
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
-
-\end{definition}
-
-\begin{definition}{Cryptosystème pleinement homomorphe (FHE)}
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
-
-\end{definition}
-
-\begin{definition}{Cryptosystème avec amorçage (bootstrappable)}
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
-
-\end{definition}
-
-\begin{definition}{leveled fully homomorphic encryption}
-$\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
-
-\end{definition}
+% Dans cette section, nous considérons un cryptosystème asymétrique avec une
+% fonction supplémentaire $\Eval$:
+% \[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
+% où $M$ est  l'espace des clairs, et un espace $C$ de chiffré. Plus précisément:
+% \begin{itemize}
+% \item $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+% \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu \in R$ et retourne un chiffré $c\in C$
+% \item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu \in M$.
+% \item $c_f \leftarrow \Eval_\evk(f, c_1,\cdots,c_l)$ prend une clé d'évaluation
+% $\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$ et retourne un chiffré $c_f$.
+% \end{itemize}
+% Il va nous servir de base pour définir différentes notions.
 
 
-\end{section}
+% \begin{definition}{Cryptosystème $\mathcal{C}$-homomorphe}
+% On considère une famille d'ensembles fonctions $\mathcal{C} = \{\mathcal{C}_{k} \}_{k\in \mathbb{N}}$. \textbf{HE} est dit 
+% $\mathcal{C}$-homomorphe  si pour toute fonction $f_k \in \mathcal{C}_k$, et
+% pour toutes entrées $\mu_1, \cdots \mu_l \in R$ de la fonction $f_k$:
+% \[ \PP\left(\Dec_\sk\left(\Eval_\evk(f,c_1,\cdots,c_l)\right) \neq f(\mu_1,\cdots,\mu_l)  \right) \]
+% est négligeable en $k$, pour $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$ et $c_i \leftarrow \Enc_\pk(\mu_i)$.
+% \end{definition}
+
+
+% % \begin{definition}{Compacité}
+% % Un cryptosystème homomorphe \textbf{HE} est compact si il existe un polynome $s
+% % = s(\kappa)$ tel que la longueur de la sortie de $\Eval_\evk(f,c_1,\cdots,c_l)$ est majorée
+% % par $s(k)$ pour toute fonction $f\i
+% % \end{definition}
+
+% \begin{definition}
+% Soit $(M, +, x, 0, 1)$ un anneau. On appelle circuit algébrique 
+% l'ensemble $\mathcal{A}_M$ de fonctions stable par composition et
+% contenant:
+% \begin{itemize}
+% \item la fonction somme $\text{\textbf{Add}}: M \times M \rightarrow M$;
+% \item la fonction produit $\text{\textbf{Mul}}: M \times M \rightarrow M$;
+% \item Pour tout $\alpha \in M$, la fonction de multiplication par un scalaire
+% $\text{\textbf{Scal}}_\alpha: M \rightarrow M$;
+% \end{itemize}
+% La profondeur d'un circuit algébrique est la profondeur obtenue
+% en décomposant le circuit sous la forme d'un arbre.
+% \end{definition}
+
+% % \begin{definition}{Cryptosystème pleinement homomorphe (FHE)}
+% % Un cryptosystème est pleinement homomorphe si son ensemble de clairs $M$ est
+% % muni d'une structure d'anneau et si il est $\mathcal{A}_M$-homomorphe.
+% % \end{definition}
+% % \begin{definition}{Cryptosystème pleinement homomorphe (FHE)}
+% % Un cryptosystème est homomorphe pour la profondeur $h = h(\kappa)$$ si son ensemble de clairs $M$ est
+% % muni d'une structure d'anneau et si il est $\mathcal{C}=\{\mathcal{C}_k\}$-homomorphe.
+% % où $\mathcal{C}_k$ sont les circuits algébriques de profondeur au plus $h(k)$.
+% % Notons que si on applique homomorphiquement un circuit de profondeur $p < h(k)$
+% % à $c = \Enc_{\pk}(\mu)$, on peut donc encore lui appliquer un circuit de
+% % profondeur $h(k) - p$.
+% % \end{definition}
+
+% \begin{definition}{leveled fully homomorphic encryption}
+% Un leveled fully homomorphic encryption est un cryptosystème homomorphe pour 
+% lequel $\Keygen$ contient une entrée supplémentaire $1^L$, et le schéma
+% résultant est homomorphe pour les circuits algébriques de profondeur $L$.
+% $\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
+% \end{definition}
+
+% \begin{subsection}{SFHE et bootstrapping}
+
+% \begin{definition}{leveled fully homomorphic encryption}
+% Un somewhat fully homomorphic encryption est un cryptosystème homomorphe
+% pour une classe $\mathcal{C}$ de fonctions tel que $\mathcal{C}_k$
+% contient $\text{\textbf{Add}} \circ \Dec_\sk$  $\text{\textbf{Mult}} \circ \Dec_\sk$ 
+% $\text{\textbf{Scal}}_\alpha \circ \Dec_\sk$ et peut encore effectuer 
+
+% lequel $\Keygen$ contient une entrée supplémentaire $1^L$, et le schéma
+
+% $\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
+% \end{definition}
+
+% La plupart des FHE sont construits à partir de ce que l'on appelle un Somewhat Fully-Homomorphic Encryption (SFHE).
+% Il s'agit d'un cryptosystème homomorphe pour les circuits algébriques 
+% d'une certaine profondeur $h$ auquel on rajoute certaines propriété.
+
+% L'idée est qu'appliquer homomorphiquement \textbf{Add}, \textbf{Mul} ou
+% \textbf{Scal} sur des chiffrées crée un \og bruit \fg, qui lorsqu'il est trop
+% grand, empêche un déchiffrement correct et limite donc la profondeur des
+% circuits algébriques utilisables.
+
+% On demande toutefois deux conditions supplémentaires:
+% \begin{itemize}
+% \item $\Dec_\sk$ peut s'exprimer comme un circuit algébrique appartenant à  $\mathcal{C}$;
+% \item le bruit crée par ce circuit est 
+% \end{itemize}
+
+
+% \begin{definition}{Cryptosystème avec amorçage (bootstrappable)}
+% $\text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)$
+
+% \end{definition}
+
+
+
+% \end{section}
