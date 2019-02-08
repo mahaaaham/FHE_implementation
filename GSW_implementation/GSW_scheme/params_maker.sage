@@ -6,6 +6,9 @@ from sage.crypto.lwe import Regev
 # used for the setup function of the GWS_scheme.
 # from lwe_estimator/estimator.py: α = σ/q or σ·sqrt(2π)/q depending on
 # `sigma_is_stddev`
+count_calls = 0
+count_errors = 0
+nb_errors = 1
 
 
 def seal(n):
@@ -117,3 +120,36 @@ def lindnerpeikert(n):
     if decrypt == mp_decrypt:
         q = 2^floor(log(q, 2))
     return (n, q, distrib, m)
+
+
+def controled_error(n):
+    q = 2^(floor(log(2*n, 2)))
+    epsilon = 1
+    m = ceil((1 + epsilon)*(n+1)*log(q, 2))
+    distrib = lambda: controled_error_distrib(m)
+    return (n, q, distrib, m)
+
+
+def controled_error_distrib(m):
+    global count_calls
+    global count_errors
+    global nb_errors
+
+    count_calls += 1
+    bernoulli = ZZ.random_element(0, m)
+    if (bernoulli < nb_errors):
+        error = 1
+    else:
+        error = 0
+
+    if (count_errors == nb_errors):
+        error = 0
+    elif (m - count_calls + count_errors < nb_errors):
+        error = 1
+
+    if (error != 0):
+        count_errors += 1
+    if (count_calls == m):
+        count_calls = 0
+        count_errors = 0
+    return error

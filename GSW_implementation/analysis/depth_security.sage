@@ -19,8 +19,7 @@ def max_depth(params, operator, decrypt_alg):
     if operator not in ['+', '*', '~']:
         raise NameError("operator should be +, * or ~")
 
-    secret = secret_key_gen(params)
-    public_key = public_key_gen(params, secret)
+    secret, public_key = keys_gen(params)
     secret_key = secret[1]
     (n, q, distrib, m) = params
 

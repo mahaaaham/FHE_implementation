@@ -12,8 +12,7 @@ decrypt = basic_decrypt
 # before use
 def test_decrypt_is_inv_encrypt_one_message(params, message):
     global decrypt
-    secret = secret_key_gen(params)
-    public = public_key_gen(params, secret)
+    secret, public = keys_gen(params)
     secret_key = secret[1]
 
     cipher = encrypt(params, public, message)
@@ -34,9 +33,8 @@ def test_decrypt_is_inv_encrypt(params, nb_messages, upper_bound):
     q = params[1]
     Zq = Integers(q)
 
-    secret = secret_key_gen(params)
+    secret, public = keys_gen(params)
     secret_key = secret[1]
-    public = public_key_gen(params, secret)
 
     for i in range(nb_messages):
         if (upper_bound != 0):

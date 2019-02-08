@@ -11,8 +11,7 @@ def id_circuit():
     global bs_lk
 
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     mess = ZZ.random_element(2)
     cipher = encrypt(bs_params, bs_pk, mess)
@@ -32,8 +31,7 @@ def id_circuit():
 # with two bootstrappings
 def complex_circuit():
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     d_NAND = lambda a, b: h_NAND(bs_params, a, b)
     d_OR = lambda a, b: h_OR(bs_params, a, b)
@@ -73,8 +71,7 @@ def complex_circuit():
 # with two bootstrappings
 def nand_circuit():
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     d_NAND = lambda a, b: h_NAND(bs_params, a, b)
     nand = lambda a, b: (not (a and b))
@@ -104,8 +101,7 @@ def nand_circuit():
 # with two bootstrappings
 def or_circuit():
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     d_OR = lambda a, b: h_OR(bs_params, a, b)
 
@@ -131,8 +127,7 @@ def or_circuit():
 # xor with 2 bootstrappings
 def xor_circuit():
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     d_XOR = lambda a, b: h_XOR(bs_params, a, b)
     nand = lambda a, b: not (a and b)
@@ -163,8 +158,7 @@ def xor_circuit():
 # and with 2 bootstrappings
 def and_circuit():
     setup(bs_lambda)
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     d_AND = lambda a, b: h_AND(bs_params, a, b)
 
