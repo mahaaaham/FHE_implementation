@@ -72,8 +72,7 @@ def encrypt_secret_key(lwe_key):
     N = (n+1)*l
 
     # this will modify bs_sk, bs_lk and bs_pk
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     bit_lk = [bit_decomp([elt]) for elt in lwe_key]
     encrypted_lwe_key = [[encrypt(bs_params, bs_pk, i) for i in elt]

@@ -110,8 +110,7 @@ def test_circuits(params, list_circuits_name, decrypt_algo):
     test_reset()
     transition_message(name + ":")
 
-    secret = secret_key_gen(params)
-    public_key = public_key_gen(params, secret)
+    secret, public_key = keys_gen(params)
     secret_key = secret[1]
     for circuit, list_arg in list_circuits:
         message = "circuit: " + circuit + "    "

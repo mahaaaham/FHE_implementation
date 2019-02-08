@@ -9,23 +9,23 @@ load("GSW_scheme/params_maker.sage")
 # with some decrypt.__name__ used in some tests
 decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
 # params_maker = lambda n: no_error(n)
-params_maker = lambda n: no_error(n)
+params_maker = lambda n: controled_error(n)
 
 # "bootstrapping parameters":
 # when you want to use
 # the bootstrapping, please use these parameters,
-# warning: they are automatically changed wen secret_key_gen, 
+# warning: they are automatically changed wen secret_key_gen,
 # setup or public_key_gen is used.
 # you can see an example of utilisation in
-# analysis/h_circuits_without_bootstrapping.sage 
-bs_lambda = 3
+# analysis/h_circuits_without_bootstrapping.sage
+bs_lambda = 2
 bs_params = None
 bs_pk = None
 bs_sk = None
 bs_lk = None
 bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
 
-# a matrix used when mp_all_q_decrypt is used, it is set 
+# a matrix used when mp_all_q_decrypt is used, it is set
 # by init_mp_all_q_decrypt.
 S_mp_all_decrypt = 0
 
@@ -46,6 +46,7 @@ def setup(Lambda):
 # created by the function setup
 # also: modify bs_lk and bs_sk
 def secret_key_gen(params):
+    print "Old secret_key_gen"
     global bs_sk
     global bs_lk
 
@@ -64,6 +65,7 @@ def secret_key_gen(params):
 # created by the function setup and the secret key
 # also: modify bs_pk
 def public_key_gen(params, secret_keys):
+    print "Old public_key_gen"
     global bs_pk
     (n, q, distrib, m) = params
     (lwe_key, secret_key) = secret_keys
@@ -83,6 +85,38 @@ def public_key_gen(params, secret_keys):
 
     bs_pk = public_key
     return public_key
+
+
+def keys_gen(params):
+    global bs_sk
+    global bs_lk
+    global bs_pk
+
+    (n, q, distrib, m) = params
+    Zq = Integers(q)
+
+    t = random_vector(Integers(q), n)
+    lwe_key = list(Sequence([1] + list(-t), Zq))
+    secret_key = powers_of_2(lwe_key)
+
+    bs_lk, bs_sk = lwe_key, secret_key
+    secret_keys = [lwe_key, secret_key]
+
+
+    B = rand_matrix(Zq, m, n, q)
+
+    error = [Zq(distrib()) for i in range(m)]
+
+    t = -vector(lwe_key[1:])
+    b = B * t + vector(error)
+    public_key = insert_column(B, 0, list(b))
+
+    if public_key * vector(lwe_key) != vector(error):
+        error = "We should have pk * lwe_key = error!"
+        raise NameError(error)
+
+    bs_pk = public_key
+    return secret_keys, public_key
 
 
 # encryption of a message with the setups parameters

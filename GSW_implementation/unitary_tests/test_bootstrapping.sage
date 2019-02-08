@@ -14,9 +14,8 @@ load("unitary_tests/framework_test.sage")
 def test_complementary_two(nb_test, bin_size):
     params = setup(bs_lambda)
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
 
     for test in range(nb_test):
         # easiest to test with a 0 at the end..
@@ -50,11 +49,10 @@ def test_h_abs_ZZ_centered(nb_test, bin_size):
 
     Zq = Integers(q)
     N = (n+1)*l
-    
+
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
 
     for test in range(nb_test):
         # easiest to test with a 0 at the end..
@@ -64,7 +62,7 @@ def test_h_abs_ZZ_centered(nb_test, bin_size):
 
         decrypted_abs_ZZ = [decrypt(params, secret_key, c) for c in abs_ZZ_crypted_bit]
         decrypted_value = ZZ(decrypted_abs_ZZ, 2)
-    
+
         clear_value = Zq(ZZ(clear_bit, 2))
         clear_value = abs(ZZ_centered(clear_value, q))
 
@@ -80,9 +78,8 @@ def test_h_abs_ZZ_centered(nb_test, bin_size):
 def test_h_left (nb_test, len_test):
     params = setup(bs_lambda)
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
     for i in range(nb_test):
         crypted_list = []
         clear_list = []
@@ -104,9 +101,8 @@ def test_h_left (nb_test, len_test):
 def test_h_right (nb_test, len_test):
     params = setup(bs_lambda)
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
     for i in range(nb_test):
         crypted_list = []
         clear_list = []
@@ -128,9 +124,8 @@ def test_h_right (nb_test, len_test):
 def test_h_bit_sum(nb_test, len_test):
     params = setup(bs_lambda)
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
 
     for i in range(nb_test):
         clear_list = [[ZZ.random_element(0, 2) for i in range(len_test)]
@@ -156,9 +151,8 @@ def test_h_reduction_sum(nb_test, len_test):
     params = setup(bs_lambda)
 
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
 
     for i in range(nb_test):
         # the clear values with the expected result
@@ -192,9 +186,8 @@ def test_h_reduction_sum(nb_test, len_test):
 def test_sum_list(nb_elt, bin_size, algo):
     params = setup(bs_lambda)
     Zq = Integers(params[1])
-    secret_keys = secret_key_gen(params)
+    secret_keys, public_key = keys_gen(params)
     secret_key = secret_keys[1]
-    public_key = public_key_gen(params, secret_keys)
 
     clear_list = [[ZZ.random_element(0, 2) for i in range(bin_size)]
                   for j in range(nb_elt)]
@@ -216,8 +209,7 @@ def test_sum_list(nb_elt, bin_size, algo):
 def test_h_basic_decrypt():
     setup(bs_lambda)
     (n, q, distrib, m) = bs_params
-    secret_key_gen(bs_params)
-    public_key_gen(bs_params, [bs_lk, bs_sk])
+    keys_gen(bs_params)
 
     Zq = Integers(q)
     l = floor(log(q, 2)) + 1
@@ -240,8 +232,7 @@ def test_encrypt_secret_key():
 
     # we pick some params
     old_params = setup(bs_lambda)
-    old_secret_keys = secret_key_gen(bs_params)
-    old_public_key = public_key_gen(old_params, old_secret_keys)
+    old_secret_keys, old_public_key = keys_gen(bs_params)
 
     (old_lwe_key, old_secret_key) = old_secret_keys
     (n, q, distrib, m) = old_params
