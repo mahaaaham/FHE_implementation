@@ -95,28 +95,13 @@ en $O(\log(s))$, il s'agit du carry lookahead adder que nous présentons mainten
 \textbf{carry lookahead adder: addition de deux vecteurs avec une profondeur plus faible de
 NAND} \\
 
-Nous appelerons \textbf{cla\_sum} cette algorithme.
-Sa différence avec la somme classique est que les retenues sont en partie 
-calculées en parallèle, ce qui permet via le passage à un arbre
-binaire de diminuer la profondeur de NAND utilisée.
+Nous appelerons \textbf{cla\_sum} cet algorithme. Sa différence avec la somme classique est que les retenues sont en partie calculées en parallèle, ce qui permet via le passage à un arbre binaire de diminuer la profondeur de NAND utilisée.
 
-Bien que nous en avons vu plusieurs expositions, nous n'avons pas 
-trouvé qui donne précisément les formules à utiliser dans un cas
-général. Nous exposons donc ici le détail des 
-formules et des démonstrations sur la profondeur en NAND. 
-Nous supposons toutefois que le lecteur connait cette méthode, 
-et ne souhaitons par exemple pas expliquer l'idée générale de l'algorithme,
-uniquement utilisé dans cette section, qu'il pourra notamment trouver\footnote{Dans une version moins générale, mais
-contenant les idées essentielles} sur l'article wikipédia dédié\cite{wiki_cla}.
+Bien que nous en avons vu plusieurs expositions, nous n'avons pas trouvé qui donne précisément les formules à utiliser dans un cas général. Nous exposons donc ici le détail des formules et des démonstrations sur la profondeur en NAND. Nous supposons toutefois que le lecteur connait cette méthode, et ne souhaitons par exemple pas expliquer l'idée générale de l'algorithme, uniquement utilisé dans cette section, qu'il pourra notamment trouver \footnote{Dans une version moins générale, mais contenant les idées essentielles} sur l'article wikipédia dédié\cite{wiki_cla}.
 
+Notons que pour simplifier les formules, nous faisons ici commencer les indices de listes par 1.
 
-Notons que pour simplifier les formules, nous faisons ici commencer les indices
-de listes par $1$.
-
-
-On suppose que les listes sont de  taille une puissance de deux $s = 2^u$. 
-On pose alors, notant le ou logique par l'addition et le et logique comme un
-produit:
+On suppose que les listes ont pour taille une puissance de deux $s = 2^u$. On pose alors, notant le OU logique par l'addition et le ET logique comme un produit :
 \begin{align*}
 &{G1}_i = a_i +  b_i\quad {P1}_i = a_i b_i \qquad \text{pour $1 \leq i
 \leq 2^u$}\\
@@ -130,8 +115,7 @@ produit:
 {P2^{u}_0} = {P2^{u-1}_{0}} {P2^{u-1}_{1}} 
 \end{align*}
 \begin{prop} \label{g_et_p}
-$G2^k_i$ a une profondeur de NAND de $2 + 4k$ et 
-$P2^k_i$ de $2 + 2k$.
+$G2^k_i$ a une profondeur de NAND de $2 + 4k$ et $P2^k_i$ de $2 + 2k$.
 \end{prop}
 \begin{proof}
 La démonstration est directe par récurrence. 
