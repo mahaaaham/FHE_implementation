@@ -102,13 +102,19 @@ binaire de diminuer la profondeur de NAND utilisée.
 
 Bien que nous en avons vu plusieurs expositions, nous n'avons pas 
 trouvé qui donne précisément les formules à utiliser dans un cas
-général\footnote{de taille quelconque}. Nous exposons donc ici le détail des 
+général. Nous exposons donc ici le détail des 
 formules et des démonstrations sur la profondeur en NAND. 
+Nous supposons toutefois que le lecteur connait cette méthode, 
+et ne souhaitons par exemple pas expliquer l'idée générale de l'algorithme,
+uniquement utilisé dans cette section, qu'il pourra notamment trouver\footnote{Dans une version moins générale, mais
+contenant les idées essentielles} sur l'article wikipédia dédié\cite{wiki_cla}.
+
+
 Notons que pour simplifier les formules, nous faisons ici commencer les indices
 de listes par $1$.
 
 
-On suppose que les listes sont de  taille une puissance de $2$ $s = 2^u$. 
+On suppose que les listes sont de  taille une puissance de deux $s = 2^u$. 
 On pose alors, notant le ou logique par l'addition et le et logique comme un
 produit:
 \begin{align*}
