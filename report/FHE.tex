@@ -1,19 +1,21 @@
 % \begin{section}{FHE, SFHE et bootstrapping}
-% Nous indiquons ici les définitions de base d'un FHE en adaptant
-% l'exposition faite dans~\cite{FOCS:BraVai11}.
 
-% Dans cette section, nous considérons un cryptosystème asymétrique avec une
-% fonction supplémentaire $\Eval$:
-% \[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
-% où $M$ est  l'espace des clairs, et un espace $C$ de chiffré. Plus précisément:
-% \begin{itemize}
-% \item $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
-% \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu \in R$ et retourne un chiffré $c\in C$
-% \item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu \in M$.
-% \item $c_f \leftarrow \Eval_\evk(f, c_1,\cdots,c_l)$ prend une clé d'évaluation
-% $\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$ et retourne un chiffré $c_f$.
-% \end{itemize}
-% Il va nous servir de base pour définir différentes notions.
+
+Nous indiquons ici les définitions de base d'un FHE en adaptant
+l'exposition faite dans~\cite{halevi}.
+
+\begin{definition}
+Un cryptosystème homomorphe est constitué de $4$ fonctions:
+\[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
+où $M$ est  l'espace des clairs, et un espace $C$ de chiffré. Plus précisément:
+\begin{itemize}
+\item $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+\item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu \in R$ et retourne un chiffré $c\in C$
+\item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu \in M$.
+\item $c_f \leftarrow \Eval_\evk(f, c_1,\cdots,c_l)$ prend une clé d'évaluation
+$\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$ et retourne un chiffré $c_f$.
+\end{itemize}
+\begin{definition}
 
 
 % \begin{definition}{Cryptosystème $\mathcal{C}$-homomorphe}
