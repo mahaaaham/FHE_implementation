@@ -92,14 +92,23 @@
 	il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
 	que des zéros. 
 	Sans que cela soit prouvé, l'article pose alors l'hypothèse suivante,
-	que nous poserons nous aussi:
+	que nous utiliserons pour le leveled GSW:
 
-	\begin{hyp}
-	\label{hyp_dwle}
+	\begin{hyp}{hypothèse pour le leveled GSW}
+	\label{hyp_dlwe}
 	Il existe un $0 < \epsilon < 1$ tel que le problème DLWE soit
 	soit difficile pour 
 	\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
 	\end{hyp}
+
+	Pour le GSW avec bootstrapping, nous considèrerons plutôt l'hypothèse
+	suivante:
+	\begin{hyp}{hypothèse pour le leveled GSW}
+	\label{hyp_dlwe_boot}
+	Le problème DLWE est difficile pour 
+	\[ q \approx 2^\text{polylog$(n)$}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
+	\end{hyp}
+
 
 	\end{subsection}
 	\begin{subsection}{Réseaux euclidiens}
