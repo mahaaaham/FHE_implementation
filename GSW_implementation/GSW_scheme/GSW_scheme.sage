@@ -18,7 +18,7 @@ params_maker = lambda n: controled_error(n)
 # setup or public_key_gen is used.
 # you can see an example of utilisation in
 # analysis/h_circuits_without_bootstrapping.sage
-bs_lambda = 2
+bs_lambda = 3
 bs_params = None
 bs_pk = None
 bs_sk = None
@@ -33,7 +33,7 @@ S_mp_all_decrypt = 0
 # functions
 # also: modify bs_params
 def setup(Lambda):
-    global decrypt
+    global decrypttest_main
     global bs_params
     (n, q, distrib, m) = params_maker(Lambda)
     if decrypt == mp_all_q_decrypt:
@@ -92,29 +92,32 @@ def keys_gen(params):
     global bs_lk
     global bs_pk
 
+    condition = false
     (n, q, distrib, m) = params
     Zq = Integers(q)
+    while not condition:
+        t = random_vector(Integers(q), n)
+        lwe_key = list(Sequence([1] + list(-t), Zq))
+        secret_key = powers_of_2(lwe_key)
 
-    t = random_vector(Integers(q), n)
-    lwe_key = list(Sequence([1] + list(-t), Zq))
-    secret_key = powers_of_2(lwe_key)
-
-    bs_lk, bs_sk = lwe_key, secret_key
-    secret_keys = [lwe_key, secret_key]
+        secret_keys = [lwe_key, secret_key]
 
 
-    B = rand_matrix(Zq, m, n, q)
+        B = rand_matrix(Zq, m, n, q)
 
-    error = [Zq(distrib()) for i in range(m)]
+        error = [Zq(distrib()) for i in range(m)]
 
-    t = -vector(lwe_key[1:])
-    b = B * t + vector(error)
-    public_key = insert_column(B, 0, list(b))
+        t = -vector(lwe_key[1:])
+        b = B * t + vector(error)
+        public_key = insert_column(B, 0, list(b))
+        if(inf_norm(public_key * vector(lwe_key)) <= n):
+            condition = true
 
     if public_key * vector(lwe_key) != vector(error):
         error = "We should have pk * lwe_key = error!"
         raise NameError(error)
 
+    bs_lk, bs_sk = lwe_key, secret_key
     bs_pk = public_key
     return secret_keys, public_key
 

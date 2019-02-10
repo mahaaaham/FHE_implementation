@@ -157,3 +157,10 @@ def babai_nearest_plane(B, v):
         raise NameError("babai_nearest_plane: x+e != v")
 
     return list(x)
+
+
+def inf_norm(A):
+    Zq = parent(A[0])
+    q = Zq.characteristic()
+    L = [abs(ZZ_centered(a, q)) for a in A]
+    return max(L)
