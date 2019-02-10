@@ -32,9 +32,9 @@
 	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de 1.
 	\end{prop}
 	\begin{proof}
-	Nous indiquons ici la démontration faite dans \cite{STOC:Regev05}.
+	Nous indiquons ici la démonstration faite dans \cite{STOC:Regev05}.
 	
-	L'automate $W'$ va trouver $s$ coordonée par coordonnée. Montrons comment $W'$ obtient la première coordonnée $s_1$.
+	L'automate $W'$ va trouver $s$ coordonnée par coordonnée. Montrons comment $W'$ obtient la première coordonnée $s_1$.
 	
 	Pour $k \in \ZZq$, on considère la fonction :
 	\[f_{k,1}: (a,b) \mapsto (a + (l, 0, ..., 0), b + l \cdot k) \]
@@ -84,17 +84,20 @@
 	les remarques faites dans \cite{halevi}.
 
 	Déjà, il impose que la distribution $\chi$ soit \og concentrée sur de
-	petites valeurs \fg. Plus précisément, il doit exister un
-	$\alpha = \alpha(n) << 1$ tel que:
+	petites valeurs \fg. Plus précisément, il pose l'hypothèse suivante: 
+
+	\begin{hyp}{Hypothèse sur la probabilité $\chi$}\\ \label{hyp:proba}
+	il doit exister $\alpha = \alpha(n) << 1$ tel que:
 	\[ n \mapsto \PP [x \leftarrow \chi : |x| > \alpha q]\] 
 	soit négligeable.
+	\end{hyp}
 
 	il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
 	que des zéros. 
 	Sans que cela soit prouvé, l'article pose alors l'hypothèse suivante,
 	que nous utiliserons pour le leveled GSW:
 
-	\begin{hyp}{hypothèse pour le leveled GSW}
+	\begin{hyp}{hypothèse pour le leveled GSW} \\
 	\label{hyp_dlwe}
 	Il existe un $0 < \epsilon < 1$ tel que le problème DLWE soit
 	soit difficile pour 
@@ -103,7 +106,7 @@
 
 	Pour le GSW avec bootstrapping, nous considèrerons plutôt l'hypothèse
 	suivante:
-	\begin{hyp}{hypothèse pour le leveled GSW}
+	\begin{hyp}{hypothèse pour le GSW avec bootstrapping} \\
 	\label{hyp_dlwe_boot}
 	Le problème DLWE est difficile pour 
 	\[ q \approx 2^\text{polylog$(n)$}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
@@ -146,16 +149,16 @@
 	\paragraph{}
 	Nous reprenons ici les notations de \cite{STOC:GenPeiVai08}.
 
-	Soit un entier $n > 0$  et $\sigma > 0$. On définit la densité gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$ attribue:
+	Soit un entier $n > 0$  et $s > 0$. On définit la densité gaussienne sur $\RR^n$ comme la fonction qui à $x\in\RR^n$ attribue:
 	\[\rho_{s,c}(x) = e^{\phi * {\frac{||x-c||}{s}}^2} \]
 
-	Puis, pour un réseau $\Lambda \in \RR^n$, nous définissons la gaussienne discrète $D_\alpha$ comme la distribution de support $\Lambda$ de loi de probabilité: 	
+	Puis, pour un réseau $\Lambda \in \RR^n$, nous définissons la
+	gaussienne discrète $D_{\Lambda,s,c}$ comme la distribution de support $\Lambda$ de loi de probabilité: 	
 	\[ D_{\Lambda, s, c}(x) = \frac{\rho_{s,c}(x)}{\sum_{l\in \Lambda}\rho_{s,c}(l)}\]
 
-	Enfin, pour un entier $q > 0$, nous définissons la gaussienne discrète $D^q_{\alpha}$ modulo un entier $q > 0$ comme la composition la fonction qui a $x \in \ZZq$ attribue 
-	
-	LA COMPOSITION LA FONCTION ? WTF ?  
-		\[ D_{\ZZ, s, c}(\pi^{-1}(x)) \]
+	Enfin, pour un entier $q > 0$, nous définissons la gaussienne discrète
+	$D^q_{s}$ modulo un entier $q > 0$ comme la composition la fonction qui a $x \in \ZZq$ attribue 
+		\[ D_{\ZZ, s, 0}(\pi^{-1}(x)) \]
 	où $\pi$ est la projection $\ZZ \rightarrow \ZZq$.
 
 La définition et la position suivante (Le lemme 4.2 de \cite{STOC:GenPeiVai08}) permettent de trouver une borne à une famille de gaussienne.
@@ -164,9 +167,44 @@ Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre $
 	\[\rho_{1/s}(L^* \setminus \{0\}) \leqslant \epsilon\]
 \end{definition}
 	\begin{prop}
+	\label{gaussienne}
 	Pour tout $\epsilon > 0$ , $s \geqslant \eta_{\epsilon}(\ZZ)$ et pour tout $t>0$ :
-	\[ \PP\left(|x-c| \geq t\cdot s\right) \leqslant 2 e^{-\pi t^2}	\cdot \frac{1+\epsilon}{1-\epsilon} \]
-	Notamment, pour $0 < \epsilon  < 1/2$ et $t \geqslant \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
+	\[ \PP\left(x \leftarrow D_{\ZZ, s,c}\: :\: |x-c| \geq t\cdot s\right) \leqslant 2 e^{-\pi t^2}	\cdot \frac{1+\epsilon}{1-\epsilon} \]
+	% Notamment, pour $0 < \epsilon  < 1/2$ et $t \geqslant \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
 	\end{prop}
+
+	L'article \cite{cryptoeprint:2018:786} indique une borne interessante:
+\begin{prop}
+Pour $\epsilon < 0.086435$, on a la borne:
+\[\eta_{\epsilon}(\ZZ)  \leq
+\sqrt{\frac{\ln\left(\epsilon/44 + 2/\epsilon\right)}{\pi}} \]
+\end{prop}
+
+\begin{prop}
+Pour $s \geq 1.5$ et $t > \sqrt(\log(n))$, si il existe une constante $\tau$
+telle que $\alpha \geq \tau n/q$, alors:
+\[ \PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right)\]	
+est négligeable et $D^q_s$ satisfait donc l'hypothèse~\ref{hyp:proba}.
+\end{prop}
+\begin{proof}
+On veut appliquer la proposition~\label{gaussienne}.
+Notons d'abord que la borne précédemment donnée sur 
+permet de dire que pour $epsilon = 0.08$ et $s > 1.5$, on a bien:
+\[ s > \eta_{\epsilon}(\ZZ) \]
+
+De plus, on a:
+\begin{align*}
+\PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right) =
+\PP\left(x\leftarrow D^q_s\: : \: |x|\geq s \frac{q \alpha}{s}  \right)
+\end{align*}
+On en déduit qu'on peut appliquer la proposition précédente avec $t = q \alpha
+/s$.
+
+On en déduit que pour que la probabilité soit négligeable, il suffit qu'il
+existe un $u > 0$ tel que:
+\[q \alpha / s \geq u n\]
+Or, on constate que  $u = s\tau$ convient.
+\end{proof}
+
 	\end{subsection} % gaussiene discrete
 \end{section}

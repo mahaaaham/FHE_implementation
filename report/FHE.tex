@@ -1,21 +1,59 @@
-% \begin{section}{FHE, SFHE et bootstrapping}
+\begin{section}{FHE, SFHE et bootstrapping}
 
 
-Nous indiquons ici les définitions de base d'un FHE en adaptant
-l'exposition faite dans~\cite{halevi}.
+Nous indiquons ici les définitions de base d'un FHE tirées de 
+l'exposition faite dans~\cite{halevi} et que nous conseillons 
+de lire pour une exposition plus détaillée.
 
 \begin{definition}
 Un cryptosystème homomorphe est constitué de $4$ fonctions:
 \[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
 où $M$ est  l'espace des clairs, et un espace $C$ de chiffré. Plus précisément:
 \begin{itemize}
-\item $(\pk, \evk, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+\item $(\pk,, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
 \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu \in R$ et retourne un chiffré $c\in C$
 \item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu \in M$.
-\item $c_f \leftarrow \Eval_\evk(f, c_1,\cdots,c_l)$ prend une clé d'évaluation
-$\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$ et retourne un chiffré $c_f$.
+\item $\vec{c}_f \leftarrow \Eval_\pk(\Pi,\vec{c})$ prend une clé publique
+$\pk$, un circuit  $\Pi$, un vecteur de chiffrés $\vec{c}$ et retourne un
+vecteur de chiffrés $c_f$, un pour chaque sortie du circuit $\Pi$
 \end{itemize}
-\begin{definition}
+\end{definition}
+
+\begin{definition}{correction}
+Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphique
+et  $\mathcal{C} = \{ \mathcal{C}_\tau\}_{\tau \in \mathbb{N}}$ une famille de
+circuits.  On dira que \textbf{E} est correct pour $\mathcal{C}$
+Si il déchiffre avec succès les messages qui viennent d'être chiffrés 
+ainsi que ceux qui ont été évalués sur un circuit. Voir \cite{halevi} pour les
+formules détaillées.
+\end{definition}
+
+\begin{definition}{Compacité}
+Un cryptosystème homomorphe \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ 
+est compact si il existe un polynome $B$ tel que pour tout $\lambda, \tau
+\in \mathbb{N}$, tout circuit $\Pi$ de $t$ entrées et une seule sortie, et un
+chiffré $b = (b_1,\cdots,b_t) \in M^t$, on a:
+\[ 
+\PP \left[ |c'| \leq B(\lambda): (\sk,\pk) \leftarrow \Keygen(1^\lambda,
+1^\tau), \vec{c} \leftarrow \Enc_\pk(\vec{b}), \vec{c} \leftarrow 
+\Eval_\pk(\Pi, \vec{c}) \right] = 1
+\]
+\end{definition}
+
+\begin{definition}{FHE, LHE et SWHE}
+Soit \textbf{E} un cryptosystem homomorphe.
+\begin{itemize}
+\item On dit que c'est un fully homomorphic encryption (abrégé en FHE) si il est correct pour
+une famille $\mathcal{C}$ telle que $\mathcal{C_1}$ contient déjà tous les
+circuits booléens. 
+\item On dit que c'est un  leveled homomorphic encryption (abrégé en LHE)  si il est correct pour une famille
+$\mathcal{C}$ telle que pour tout $\tau$, $\mathcal{C}_\tau$ contient les
+circuits booléens de profondeur plus petite ou égale à $\tau$ 
+\item On dit, informellement, qu'il s'agit d'un somewhat homomorphic encryption
+(abrégé en SWHE) si il est correct pour une famille $\mathcal{C}$ de circuits
+tels que la complexité des circuits de $\mathcal{C}_\tau$ grandis avec $\tau$.
+\end{itemize}
+\end{definition}
 
 
 % \begin{definition}{Cryptosystème $\mathcal{C}$-homomorphe}
@@ -27,11 +65,6 @@ $\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$
 % \end{definition}
 
 
-% % \begin{definition}{Compacité}
-% % Un cryptosystème homomorphe \textbf{HE} est compact si il existe un polynome $s
-% % = s(\kappa)$ tel que la longueur de la sortie de $\Eval_\evk(f,c_1,\cdots,c_l)$ est majorée
-% % par $s(k)$ pour toute fonction $f\i
-% % \end{definition}
 
 % \begin{definition}
 % Soit $(M, +, x, 0, 1)$ un anneau. On appelle circuit algébrique 
@@ -103,4 +136,4 @@ $\evk$, une fonction $f: R^l \rightarrow R$, des chiffrés $(c_1, \cdots, c_l)$
 
 
 
-% \end{section}
+\end{section}
