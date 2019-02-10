@@ -3,7 +3,7 @@
 
 Nous indiquons ici les définitions de base d'un FHE tirées de 
 l'exposition faite dans~\cite{halevi} et que nous conseillons 
-de lire pour une exposition plus détaillée.
+de lire pour avoir plus de détails.
 
 \begin{definition}
 Un cryptosystème homomorphe est constitué de $4$ fonctions:
@@ -55,6 +55,56 @@ tels que la complexité des circuits de $\mathcal{C}_\tau$ grandis avec $\tau$.
 \end{itemize}
 \end{definition}
 
+Nous allons maintenant définir le bootstrapping en introduisant pour cela
+quelques notations.
+
+\begin{itemize}
+\item Pour $\lambda, \tau \in \mathbb{N}$, on désigne par
+$\mathcal{CT}_\epsilon(\lambda,\tau)$ comme l'union des chiffrés de messages 
+ainsi que des évaluations de chiffrés de messages par des circuits de
+$\mathcal{C}_\tau$, les formules détaillées sont donnés dans \cite{halevi};
+\item On considère pour tout chiffré $c\in\mathcal{CT}_\epsilon(\lambda,\tau)$ 
+le circuit $D_c(\sk) = \Dec_\sk(c)$ ayant pour entrée $\sk$ appliquant 
+l'algorithme de déchiffrement de $c$ avec la clé $\sk$. Notons bien que $c$
+n'est pas une entrée du circuit. On crée aussi le circuit suivant, avec pour
+unique entrée \sk, appelé circuit de déchiffrement augmenté de $c_1$ et $c_2$
+\[ D*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk))\]
+\end{itemize}
+
+\begin{definition}{Bootstrappable encryption}
+Un cryptosystème homomorphe
+\textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$
+est bootstrappable si il peut évaluer homomorphiquement tous les circuits 
+de chiffrement augmentés. Autrement dit, si il existe une fonction $\tau$
+bornée par un polynôme tel que pour tous $\lambda \in \mathbb{N}$ et tous
+chiffrés  $c_1, c_2 \in \mathcal{CT}_\epsilon{\lambda, \tau(\lambda)}$, on a
+$D*_{c_1,c_2} \in \mathcal{C}_{\tau(\lambda)}$.
+\end{definition}
+
+\begin{definition}{weak circular security}
+Soit \textbf{E} = $(\Keygen, \Enc, \Dec)$ un cryptosystème et $\mathcal{A}$ un
+algorithme polynomial probabiliste. 
+On considère l'expérience suivante, 
+\begin{itemize}
+\item $1^\tau \leftarrow \mathcal{A}(1^\lambda)$ 
+\item $(\sk, \pk) \leftarrow \Keygen(1^\lambda, 1^\tau)$
+\item on chiffre chaque bit de la clé secrète et on obtient un vecteur de
+chiffrés $\vec{c^*} \leftarrow \Enc_\pk{s_k}$
+\item un bit $b\in \{0,1\}$ est tiré au hasard
+\item On crée $c \leftarrow \Enc_\pk(b)$ 
+\item $b^* \leftarrow \mathcal{A}(\pk, \vec{c^*}, c)$
+\item L'expérience est réussie si $b = b^*$ et ratée sinon.
+\end{itemize}
+Notant $p(\lambda, \mathcal{A})$ la probabilité de succès de cette expérience, on dit
+que $\mathcal{A}$ a un avantage de sécurité circulaire sur \textbf{E} si:
+\[\lambda \mapsto |p(\lambda, \mathcal{A}) - \frac{1}{2}| \]
+est négligeable.
+\end{definition}
+
+\begin{thm}
+Tout cryptosysteme homomorphe bootstrappable avec sécurité circulaire peut être transformé en un 
+cryptosystème fully homomorphe compact.
+\end{thm}
 
 % \begin{definition}{Cryptosystème $\mathcal{C}$-homomorphe}
 % On considère une famille d'ensembles fonctions $\mathcal{C} = \{\mathcal{C}_{k} \}_{k\in \mathbb{N}}$. \textbf{HE} est dit 

@@ -105,15 +105,58 @@ On suppose que les listes ont pour taille une puissance de deux $s = 2^u$. On po
 \begin{align*}
 &{G1}_i = a_i +  b_i\quad {P1}_i = a_i b_i \qquad \text{pour $1 \leq i
 \leq 2^u$}\\
-&{G2}_i = {G2}_{2i + 1} + {G2}_{2i}{P2}_{2i + 1}\qquad {P2}_i = {P2}_{2i}
-{P2}_{2i + 1} \quad \text{pour $1 \leq i \leq 2^{u-1}$}\\
+&{G2}_i = {G2}_{2i} + {G2}_{2i-1}{P2}_{2i}\qquad {P2}_i = {P2}_{2i-1}
+{P2}_{2i} \quad \text{pour $1 \leq i \leq 2^{u-1}$}\\
 &\cdots \\
-&{G2^k_i} = {G2^{k-1}_{2i + 1}} + {G2^{k-1}_{2i}}{P2^{k-1}_{2i + 1}}\qquad
-{P2^{k-1}_i} = {P2^{k-1}_{2i}} {P2^{k-1}_{2i + 1}} \quad \text{pour $1 \leq i
+&{G2^k_i} = {G2^{k-1}_{2i}} + {G2^{k-1}_{2i-1}}{P2^{k-1}_{2i}}\qquad
+{P2^{k}_i} = {P2^{k-1}_{2i-1}} {P2^{k-1}_{2i}} \quad \text{pour $1 \leq i
 \leq 2^{u-k}$}\\
-&{G2^u_0} = {G2^{u-1}_{1}} + {G2^{u-1}_{0}}{P2^{u-1}_{1}}\qquad
-{P2^{u}_0} = {P2^{u-1}_{0}} {P2^{u-1}_{1}} 
+&{G2^u_1} = {G2^{u-1}_{2}} + {G2^{u-1}_{1}}{P2^{u-1}_{2}}\qquad
+{P2^{u}_1} = {P2^{u-1}_{1}} {P2^{u-1}_{2}} 
 \end{align*}
+Les variables G sont dites variables de générations et celles avec un P sont
+dites variables de propagations.
+
+On a alors la propriété suivante:
+\begin{prop}
+Considérons $0 \leq k \leq u$ et $1 \leq i \leq 2^{u-k}$ et notons $B$ le bloc:
+\[ (i-1)2^{k} + 1, \cdots, i 2^{k} \]
+On considère alors $a_{|B}$ et $b_{|B}$ les nombres binaires obtenues en
+restreignant les écritures binaires de $a$ et $b$ aux positions $B$.
+Alors 
+\begin{itemize}
+\item $G2^k_i$ est vraie si et seulement si l'algorithme de somme binaire 
+classique entre $a_{|B}$ et $b_{|B}$ crée une retenue à la dernière position,
+c'est à dire à la position\footnote{on commence à compter à partir de 1} $2^k$.
+On dit alors que le bloc $B$ génère une retenue.
+
+\item $P2^k_i$ est vraie si et seulement si, considérant l'algorithme de somme
+binaire entre $a_{|B}$ et $b_{|B}$ où on ajoute une retenue à la position $1$,
+il y a alors une retenue en dernière position. On dit alors que cette retenue
+s'est propagée le long du bloc $B$.
+\end{itemize}
+\end{prop}
+\begin{proof}
+Par récurrence. Pour $k = 0$, cela est facile: la somme de deux bits $u$ et $v$   
+ne crée une retenue que si $uv$ est vraie, et ne propage une retenue que si
+$u+v$ est vraie.
+
+Maintenant, observons les formules génériques:
+\[{G2^k_i} = {G2^{k-1}_{2i}} + {G2^{k-1}_{2i-1}}{P2^{k-1}_{2i}}\]
+\[{P2^{k}_i} = {P2^{k-1}_{2i-1}} {P2^{k-1}_{2i}} \]
+pour le bloc \[B = (i-1)2^k + 1, \cdots, i 2^k\].
+En notant $L$ et $R$ les deux moities de $B$ ($B = L|R$), on voit qu'elles
+peuvent s'interpréter ainsi:
+\begin{itemize}
+\item $G2^k_i$ n'est vraie que si $R$ génère une retenue ou bien si $L$ en
+génère une qui est propagée par $R$. Ce qui est équivalent à dire que $B$
+génère une retenue.
+\item $P2^{k}_i$ n'est vraie que si une retenue arrivant au début du bloc $L$
+et propagée et qu'une retenue arrivant au début du bloc $R$ est propagée. Ce
+qui, en composant les deux propagations, est équivalent à dire qu'une retenue arrivant au début du bloc $B$ est propagée.  
+\end{itemize}
+On a donc bien ce qu'il fallait démontrer.
+\end{proof}
 \begin{prop} \label{g_et_p}
 $G2^k_i$ a une profondeur de NAND de $2 + 4k$ et $P2^k_i$ de $2 + 2k$.
 \end{prop}
@@ -136,8 +179,7 @@ On définit alors les retenues $c_j$ par la formule:
 \[c_j = {G\nu(a)}_{a/\nu(a)} + c_{\theta(a)} {P(\nu(a))}_{a/\nu(a)}\]
 où $c_0 = 0$ par définition.
 
-Voyons cela sur un exemple avant d'aller plus en détail sur la profondeur.
-
+Voyons cela sur un exemple pour comprendre pourquoi cette formule fonctionne. 
 Si on considère des vecteurs de taille $4 = 2^3$, les formules des retenues
 sont:
 \begin{align*}
@@ -154,6 +196,8 @@ sont:
 Ainsi, si on veut additionner $a = 00111100$ et $b = 01010101$, on obtient:
 \begin{center}
 \begin{tabular}{llllllllll}
+a  && 0&0&1&1&1&1&0&0 \\
+b  && 0&1&0&1&0&1&0&1 \\
 G1 && 0&0&0&1&0&1&0&0 \\
 P1 && 0&1&1&1&1&1&0&1 \\
 G2 && &0&&1&&1&&0 \\
@@ -485,7 +529,4 @@ classique avait été utilisée à la place de l'addition avec carry lookahead.
 
 
 \end{subsection}
-
-
-
 \end{section}
