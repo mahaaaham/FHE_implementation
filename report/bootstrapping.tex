@@ -1,10 +1,11 @@
 \begin{section}{Mise en place d'un bootstrapping}
 \begin{subsection}{Un point sur la sécurité}
-	Nous avons vu que le système cryptographique que nous étudions est IND-CPA, ce qui est le niveau de sécurité théorique que l'on veut généralement. La première question qui se pose pour le bootstrapping est de savoir si l'on garde ce niveau de sécurité.
-
-	Le problème est que pour effectuer un déchiffrement homomorphe, il faut au moins un chiffré de la première clé secrète par la deuxième clé publique, ou, dans notre cas, un chiffré de chaque bit du secret. Il faut pouvoir s'assurer qu'un attaquant soit incapable d'en tirer des informations sur la première clé. On appelle cela la sécurité circulaire.
-	
-	Comme nous l'avons rappelé, le système est IND-CPA, ce qui implique que cette propriété est toujours vérifiée lorsque les deux clés sont indépendantes l'une de l'autre. Il suffit donc de générer les clés indépendamment les unes des autres pour s'assurer d'avoir le niveau de sécurité désiré.
+	Nous avons vu que le système cryptographique que nous étudions est IND-CPA, ce qui est le niveau de sécurité
+	théorique que l'on veut généralement. La première question qui se pose pour le bootstrapping est de savoir si
+	il a la sécurité circulaire, expliquée dans la définition~\ref{def:circular}.
+	Nous n'avons pas trouvé de démonstration de cette sécurité dans l'article original \cite{EPRINT:GenSahWat13} 
+	ou encore dans d'autres expositions (comme \cite{haveli}}. Nous devons donc la supposer pour cette section.
+	cette hypothèse.
 \end{subsection}
 \begin{subsection}{Un premier découpage}
 	Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de déchiffrement \textbf{Dec}, nous allons avoir besoin de l'exprimer uniquement à partir d'opérations \textbf{NAND} sur des 0 et des 1.
@@ -493,7 +494,7 @@ En utilisant l'hypothèse  \ref{hyp_dwle_boot} (page \pageref{hyp_dwle_boot}), n
 
 On utilise alors une légère modification des paramètres conseillées par Shai Halevi:
 \begin{thm}
-Sous l'hypothèse \ref{hyp_dlwe_boot} de difficulté de DWLE, les paramètres suivants rendent cryptosystème GSW bootstrapable et IND-CPA:
+Sous l'hypothèse de sécurité circulaire ainsi que l'hypothèse \ref{hyp_dlwe_boot} de difficulté de DWLE, les paramètres suivants rendent cryptosystème GSW bootstrapable et IND-CPA:
 
 \[ \begin{cases}
  	n = \lambda \\
