@@ -36,7 +36,7 @@ $\|x\|_{1}$ la somme de des valeurs absolues de ses coordonnées.
 	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons.
 	\end{definition}
 
-	Ces deux problèmes sont en fait \og équivalents \fg. C'est assez évident de LWE vers DLWE. De plus, le Lemme 4.2
+	Ces deux problèmes sont en fait \og équivalents \fg~. C'est assez évident de LWE vers DLWE. De plus, le Lemme 4.2
 	de \cite{STOC:Regev05} montre comment réduire à DLWE à LWE sous certaines hypothèses lorsque $q$ est premier et
 	$q = \mathcal{O}(\text{poly}(n))$. Le théorème 3.1 de \cite{EPRINT:MicPei11} montre la même chose mais lorsque
 	$q$ est un produit de premiers $p_i \in \mathcal{O}(\text{poly}(n))$, comme ce sera le cas lorsque nous
@@ -102,7 +102,7 @@ $\|x\|_{1}$ la somme de des valeurs absolues de ses coordonnées.
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
 	   \begin{bmatrix}* \\ \vec{v} \end{bmatrix} =
 	   \begin{bmatrix} \vec{e} \\ \vec{v} \end{bmatrix} \]
-	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg vecteur du réseau engendré par les colonnes de 
+	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg~ vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 
 	\textbf{Choix de paramètres pour DLWE:}
@@ -112,7 +112,7 @@ $\|x\|_{1}$ la somme de des valeurs absolues de ses coordonnées.
 	les remarques faites dans \cite{halevi}.
 
 	Déjà, il impose que la distribution $\chi$ soit \og concentrée sur de
-	petites valeurs \fg. Plus précisément, il pose l'hypothèse suivante: 
+	petites valeurs \fg~. Plus précisément, il pose l'hypothèse suivante: 
 
 	\begin{hyp}{Hypothèse sur la probabilité $\chi$}\\ \label{hyp:proba}
 	il doit exister $\alpha = \alpha(n) << 1$ tel que:

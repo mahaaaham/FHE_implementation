@@ -14,7 +14,7 @@
 
 	La solution consiste alors à ajouter du bruit au chiffré, c'est à dire à chiffrer $m\in \ZZq$ par une matrice $C \in \ZZ^{N \times N}$ telle que :
 	\[ C \vec{v} = m \vec{v} + \vec{e} \]
-	pour une \og petite \fg \ erreur $\vec{e}$. Si le vecteur $\vec{v}$ contient un grand coefficient $v_i$, on voit alors qu'il reste possible de retrouver $m$ avec
+	pour une \og petite \fg~ \ erreur $\vec{e}$. Si le vecteur $\vec{v}$ contient un grand coefficient $v_i$, on voit alors qu'il reste possible de retrouver $m$ avec
 	\begin{align*}
 	\frac{{(C \vec{v})}_i}{v_i} = \frac{m + e_i}{v_i}
 	\end{align*}
@@ -128,7 +128,7 @@
 
 	\textbf{Entrée} : Cet algorithme prends en entrée $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur.
 
-	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi, m$ du système. Le paramètre $L$ indique que les paramètres créés doivent permettre d'évaluer un circuit de \textbf{NAND} de profondeur $L$ tout en pouvant déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de satisfaire la condition dite \og de longueur \fg  
+	\textbf{Sortie} : Cet algorithme retourne les paramètres $n, q, \chi, m$ du système. Le paramètre $L$ indique que les paramètres créés doivent permettre d'évaluer un circuit de \textbf{NAND} de profondeur $L$ tout en pouvant déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de satisfaire la condition dite \og de longueur \fg~  
 	\[q > 8nm (1 + N)^L \]
 
 	\textbf{Algorithme} : Nous verrons cela dans la section des considérations sur les choix des paramètres.
