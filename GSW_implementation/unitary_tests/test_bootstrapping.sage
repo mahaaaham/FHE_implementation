@@ -142,6 +142,7 @@ def test_h_bit_sum(nb_test, len_test):
 
         if clear_sum != decrypted_sum:
             return False
+
     return True
 
 
@@ -184,20 +185,17 @@ def test_h_reduction_sum(nb_test, len_test):
 # test to make the binary sum of NB_ELT elements
 # of binary size BIN_SIZE with the algorithm algo
 def test_sum_list(nb_elt, bin_size, algo):
-    params = setup(bs_lambda)
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
 
     clear_list = [[ZZ.random_element(0, 2) for i in range(bin_size)]
                   for j in range(nb_elt)]
     clear_sum = sum([ZZ(clear_list[i], 2) for i in range(nb_elt)])
     clear_sum %= 2^(bin_size)
 
-    crypted_list = [[encrypt(params, public_key, clear_list[j][i])
+    crypted_list = [[encrypt(bs_params, bs_pk, clear_list[j][i])
                      for i in range(bin_size)] for j in range(nb_elt)]
     crypted_sum = algo(crypted_list)
-    decrypted_sum = [basic_decrypt(params, secret_key, elt)
+    decrypted_sum = [basic_decrypt(bs_params, bs_sk, elt)
                      for elt in crypted_sum]
     decrypted_sum = ZZ(decrypted_sum, 2)
 
@@ -207,14 +205,7 @@ def test_sum_list(nb_elt, bin_size, algo):
 
 
 def test_h_basic_decrypt():
-    setup(bs_lambda)
-    (n, q, distrib, m) = bs_params
-    keys_gen(bs_params)
-
-    Zq = Integers(q)
-    l = floor(log(q, 2)) + 1
-    N = (n+1)*l
-
+    setup_bs_params()
     m = ZZ.random_element(2)
 
     cipher = encrypt(bs_params, bs_pk, m)
@@ -228,32 +219,19 @@ def test_h_basic_decrypt():
 
 
 def test_encrypt_secret_key():
-    global bs_params
+    setup_bs_params()
 
-    # we pick some params
-    old_params = setup(bs_lambda)
-    old_secret_keys, old_public_key = keys_gen(bs_params)
-
-    (old_lwe_key, old_secret_key) = old_secret_keys
-    (n, q, distrib, m) = old_params
-    l = floor(log(q, 2)) + 1
-    N = (n+1)*l
-
-    # we encrypt the old_lwe_key with new params, using setup_bootstrapping
-    encrypted_sk = encrypt_secret_key(old_lwe_key)
-
-    # we try to recover the old_lwe key
     bin_decrypted_sk = [[basic_decrypt(bs_params, bs_sk, bit) for bit in elt]
-                        for elt in encrypted_sk]
+                        for elt in bs_encrypted_sk]
     decrypted_sk = [ZZ(elt, 2) for elt in bin_decrypted_sk]
-    for i in range(len(old_secret_key)):
-        if old_secret_key[i] != decrypted_sk[i]:
+    for i in range(len(bs_sk)):
+        if bs_sk[i] != decrypted_sk[i]:
             return False
     return True
 
 
 def test_main_bootstrapping():
-    nb_test = 5
+    nb_test = 10
     test_reset()
 
     big_transition_message("Lambda = " + str(bs_lambda) +
@@ -262,7 +240,7 @@ def test_main_bootstrapping():
     transition_message("We test the differents sum list algorithms: ")
     bin_size = 10
     nb_elt = 15
-    for algo in [h_naive_classic_list_sum ,
+    for algo in [h_naive_classic_list_sum,
                  h_balanced_classic_list_sum,
                  h_naive_reduction_list_sum,
                  h_balanced_reduction_list_sum]:

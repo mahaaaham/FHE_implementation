@@ -9,21 +9,9 @@ load("GSW_scheme/params_maker.sage")
 # with some decrypt.__name__ used in some tests
 decrypt = lambda params, sk, c: basic_decrypt(params, sk, c)
 # params_maker = lambda n: no_error(n)
-params_maker = lambda n: controled_error(n)
+params_maker = lambda n: no_error(n)
 
-# "bootstrapping parameters":
-# when you want to use
-# the bootstrapping, please use these parameters,
-# warning: they are automatically changed wen secret_key_gen,
-# setup or public_key_gen is used.
-# you can see an example of utilisation in
-# analysis/h_circuits_without_bootstrapping.sage
-bs_lambda = 3
-bs_params = None
-bs_pk = None
-bs_sk = None
-bs_lk = None
-bs_sum_algo = lambda list_to_sum: h_balanced_classic_list_sum(list_to_sum)
+
 
 # a matrix used when mp_all_q_decrypt is used, it is set
 # by init_mp_all_q_decrypt.
@@ -31,22 +19,17 @@ S_mp_all_decrypt = 0
 
 # creation of the setup parameters commonly used by the others
 # functions
-# also: modify bs_params
 def setup(Lambda):
-    global decrypttest_main
-    global bs_params
     (n, q, distrib, m) = params_maker(Lambda)
     if decrypt == mp_all_q_decrypt:
         init_mp_all_q_decrypt(q)
-    bs_params = (n, q, distrib, m)
-    return bs_params
+    params = (n, q, distrib, m)
+    return params
 
 
+# the output is secret_keys = [lwe_key, secret_key]
+# and the public key.
 def keys_gen(params):
-    global bs_sk
-    global bs_lk
-    global bs_pk
-
     condition = false
     (n, q, distrib, m) = params
     Zq = Integers(q)
@@ -71,8 +54,6 @@ def keys_gen(params):
         error = "We should have pk * lwe_key = error!"
         raise NameError(error)
 
-    bs_lk, bs_sk = lwe_key, secret_key
-    bs_pk = public_key
     return secret_keys, public_key
 
 

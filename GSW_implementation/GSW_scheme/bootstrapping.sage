@@ -5,7 +5,22 @@ load("GSW_scheme/auxilliary_functions.sage")
 # WARNING: for the bootstrapping, q
 # has to be a power of 2, and
 # the decrypt algorithm
-# is basic_decrypt
+
+
+# "bootstrapping parameters":
+# when you want to use
+# the bootstrapping, please use these parameters,
+# warning: they are automatically changed wen secret_key_gen,
+# setup or public_key_gen is used.
+# you can see an example of utilisation in
+# analysis/h_circuits_without_bootstrapping.sage
+bs_lambda = 3
+bs_params = None
+bs_pk = None
+bs_sk = None
+bs_encrypted_sk = None
+bs_lk = None
+bs_sum_algo = lambda list_to_sum: h_balanced_reduction_list_sum(list_to_sum)
 
 
 # input: a value in binary, on l bits.
@@ -59,20 +74,17 @@ def h_abs_ZZ_centered(params, bit_cipher):
 # input: the lwe_key of the previous params
 # output encrypted_sk, in the format:
 # [[size l], [size l] ...]
+# and set bs_encrypted_sk to this value
 def encrypt_secret_key(lwe_key):
     global bs_params
     global bs_pk
     global bs_sk
     global bs_lk
-
-    bs_params = setup(bs_lambda)
+    global bs_encrypted_sk
 
     (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
     N = (n+1)*l
-
-    # this will modify bs_sk, bs_lk and bs_pk
-    keys_gen(bs_params)
 
     bit_lk = [bit_decomp([elt]) for elt in lwe_key]
     encrypted_lwe_key = [[encrypt(bs_params, bs_pk, i) for i in elt]
@@ -92,41 +104,14 @@ def encrypt_secret_key(lwe_key):
     if (len(encrypted_sk) != N) or (len(encrypted_sk[0]) != l):
         error = "encrypt_secret_key: wrong size of encrypted_sk"
         raise NameError(error)
+
+    bs_encrypted_sk = encrypted_sk
     return encrypted_sk
-
-
-# apply homomorphicaly the dec algorithm with the
-# bs_params, the bs_public_key and the encrypt of
-# the secret_key with the new keys.
-# doesn't work with "negative errors", i.e: q-e with little e
-def h_basic_decrypt_positives_error(encrypted_sk, cipher):
-    global bs_params
-    global bs_pk
-    global bs_sk
-    global bs_lk
-
-    (n, q, distrib, m) = bs_params
-    l = floor(log(q, 2)) + 1
-    N = (n+1)*l
-
-    # index such that q/4 <v[i_index] < q/8
-    i_index = next(j for j in range(l) if
-                   ZZ_centered(2^j, q) > (q / 4))
-
-    bin_ci = bit_decomp(cipher[i_index])
-    # list_to_sum contains the s_k[j]2^u such that the uth term of
-    # the binary decomposition of ci[j] is 1
-    list_to_sum = [h_right_shift(bs_params, bs_pk, encrypted_sk[i], u)
-                   for i in range(N) for u in range(l)
-                   if bin_ci[l*i + u] == 1]
-
-    scalar_product = bs_sum_algo(list_to_sum)
-    return scalar_product[i_index]
 
 
 # a left shift of SHIFT to the left,
 # the new element of the right are
-# tncrypts of 0
+# encrypts of 0
 # bonus idea: do not create error vector
 # for the encrypt of the 0 that are
 # added
@@ -166,18 +151,6 @@ def h_basic_decrypt(encrypted_sk, cipher):
 
     abs_centered_scalar_product = h_abs_ZZ_centered(bs_params, scalar_product)
     return abs_centered_scalar_product[i_index]
-
-# a left shift of SHIFT to the left,
-# the new element of the right are
-# tncrypts of 0
-# bonus idea: do not create error vector
-# for the encrypt of the 0 that are
-# added
-def h_left_shift(params, public_key, list_bit, shift):
-    if shift == 0:
-        return list_bit
-    return list_bit[shift:] + [encrypt(params, public_key, 0) for i in
-                               range(shift)]
 
 
 # a right shift of SHIFT to the right,
@@ -309,6 +282,7 @@ def h_naive_reduction_list_sum(list_to_sum):
         return list_to_sum[0]
 
     a, b = list_to_sum[0], list_to_sum[1]
+
     for elt in list_to_sum[2:]:
         a, b = h_reduction_sum(bs_params, bs_pk, a, b, elt)
     return h_bit_sum(bs_params, a, b)
@@ -358,9 +332,17 @@ def h_balanced_classic_list_sum(list_to_sum):
 # to be in a case where list_to_sum have 6 elements,
 # and finish the algorithm for this case
 def h_balanced_reduction_list_sum(list_to_sum):
+    if len(list_to_sum) == 0:
+        (n, q, distrib, m) = bs_params
+        l = floor(log(q, 2)) + 1
+        return [encrypt(bs_params, bs_pk, 0) for i in range(l)]
+
     # we recover a list of same sum with 6 elements,
     # and possibly some -1
     list_to_sum = rec_bal_red_list_sum(list_to_sum)
+
+    lenght = max(6, len(list_to_sum))
+    list_to_sum = list_to_sum + [-1]*(lenght - len(list_to_sum))
     # we treat directly the case "6 elements"
     a, b = h_reduction_sum(bs_params, bs_pk,
                            list_to_sum[0],
@@ -374,6 +356,8 @@ def h_balanced_reduction_list_sum(list_to_sum):
     g, h = h_reduction_sum(bs_params, bs_pk, e, f, d)
     result = h_bit_sum(bs_params, g, h)
     if result == -1:
+        print list_to_sum
+        print e,f, g,h
         error = "final result shouldn't be -1"
         raise NameError(error)
     return result
@@ -389,7 +373,8 @@ def h_balanced_reduction_list_sum(list_to_sum):
 #         a size 6
 def rec_bal_red_list_sum(list_to_sum):
     three_multiple = (len(list_to_sum) // 3) + 1
-    list_to_sum = list_to_sum + [-1]*(3*three_multiple - len(list_to_sum))
+    lenght = len(list_to_sum)
+    list_to_sum = list_to_sum + [-1]*((3*three_multiple) - lenght)
     if len(list_to_sum) % 3 != 0:
         error = "h_balanced_reduction_list_sum: problem of size of list_to_sum"
         raise NameError(error)
@@ -418,8 +403,7 @@ def rec_bal_red_list_sum(list_to_sum):
 # a list of "updated" values
 # of the arguments of the list list_cipher.
 def bootstrapping_arguments(list_cipher):
-    encrypted_sk = encrypt_secret_key(bs_lk)
-    return [h_basic_decrypt(encrypted_sk, c) for c in list_cipher]
+    return [h_basic_decrypt(bs_encrypted_sk, c) for c in list_cipher]
 
 
 # input: a list of ciphers of 0 or 1 [encrypt(b_i)]
@@ -471,3 +455,19 @@ def h_basic_decrypt_positives_error(encrypted_sk, cipher):
 
     scalar_product = bs_sum_algo(list_to_sum)
     return scalar_product[i_index]
+
+
+# setup alls the bs_parameters
+def setup_bs_params():
+    global bs_lambda
+    global bs_params
+    global bs_pk
+    global bs_sk
+    global bs_lk
+    global bs_encrypted_sk
+
+    bs_params = setup(bs_lambda)
+    secret_keys, bs_pk = keys_gen(bs_params)
+    bs_lk, bs_sk = secret_keys
+    bs_encrypted_sk = encrypt_secret_key(bs_lk)
+    return

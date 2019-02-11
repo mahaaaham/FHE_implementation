@@ -43,14 +43,16 @@ on utilise des fonctins avec bootstrapping;
 	\path{sectup};
 \item \path{homomorphic_functions.sage} contient la version homomorphe
 	d'opérations de base comme la somme, ou encore le NAND;
-\item \path{bootstrapping.sage} contient les fonctions necessaires pour
+\item \path{bootstrapping.sage} contient les fonctions nécessaires pour
 	effectuer l'algorithme \path{basic_decrypt} homomorphiquement
 	(il s'agit de la fonction \path{h_basic_decrypt}). On y trouve
 	donc notamment diverses façon de sommer homomorphiquement
 	des listes de chiffrés de $0$ et de $1$. Notez que la fonction
-	\path{bootstrapping_arguments} permet de faire un bootstrapping
-	en retournant une valeur \og mise à jour \fg des chiffrés
-	passés en argument, cette fonction est notamment utilisée dans 
+	\path{bootstrapping_arguments} permet d'effectuer un déchiffrement 
+	homomorphique sur chacun des chiffrés
+	passés en argument et que \path{setup_bs_params} permet d'initialiser 
+	des variables globales \path{bs_pk, bs_sk, bs_lk, bs_params, bs_encrypted_sk}
+	situées dans \path{bootstrapping.sage} et notamment utilisés dans
 	\path{analysis/h_circuits_with_bootstrapping.sage}.
 \end{itemize}
 \end{subsubsection} % GSW_scheme
