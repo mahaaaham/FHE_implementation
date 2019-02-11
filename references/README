@@ -35,7 +35,7 @@ Il contient aussi des démos de réduction entre LWE et DLWE (version décisionn
 et des tonnes d'autres choses !
 
 
-How to use a short basis 
+Trapdoors for hard lattices
 @InProceedings{STOC:GenPeiVai08,
   author =       "Craig Gentry and
                   Chris Peikert and

@@ -1,16 +1,33 @@
 \begin{section}{Introduction}
-	Certains systèmes cryptographiques, comme RSA, ElGamal ou encore le crytosystème de Pallier possèdent une propriété intéressante : faire le produit de deux chiffrés revient à chiffrer le produit de leurs clairs. Cette proriété offre à un attaquant des informations qui affaiblissent le chiffré - on parle de malléabilité -, mais offre aussi des perspectives intéressante : la possibilité d'appliquer des opérations sur les chiffrés de données sans avoir à les déchiffrer permet de travailler avec des entitiées sans avoir leur dévoiler des données que l'on estime sensibles.
-
+Certains systèmes cryptographiques, comme RSA, ElGamal ou encore le crytosystème de Pallier possèdent une
+propriété intéressante : faire le produit de deux chiffrés revient à chiffrer le produit de leurs clairs. Cette
+propriété offre à un attaquant des informations qui affaiblissent le chiffré - on parle de malléabilité -, mais
+offre aussi des perspectives intéressante : la possibilité d'appliquer des opérations sur les chiffrés de
+données sans avoir à les déchiffrer permet de travailler avec des entitées sans avoir leur dévoiler des données que l'on estime sensibles.
 	\paragraph{}
 	Toutefois, pouvoir uniquement multiplier des chiffrés\footnote{ou bien seulement les sommer, comme cela peut être le cas, par exemple avec des variables de ElGamal} est trop limité, ne permettant pas de faire beaucoup de manipulations intéressantes. Il a fallu attendre jusqu'en 2009, avec la thèse de Craig Gentry \cite{gentry_thesis} pour que devienne plausible la possibilité d'un cryptosystème \og commutant \fg~ à la fois avec la somme, le produit et la multiplication par des scalaires; on parle alors de \og Fully homomorphic cryptosystem \fg~ (FHE).
 
 	\paragraph{}
-	Celui-ci utilisait des réseaux euclidiens dits \og idéaux \fg~ et utilisait une tecnique dite de \og bootstrapping \fg~ pour passer d'un \og Somewhat fully homomorphic cryptosystem \fg, limitant le nombre d'opérations possibles afin que le déchiffrement fonctionne toujours, vers un vrai FHE.
+	Celui-ci utilisait des réseaux euclidiens dits \og idéaux\fg~ ainsi qu'une technique dite de \og bootstrapping \fg~ pour passer d'un \og Somewhat fully homomorphic cryptosystem \fg, limitant le nombre d'opérations possibles afin que le déchiffrement fonctionne toujours, vers un vrai FHE.
 
-	A partir de là, de nombreuses tentatives de cryptosystèmes dits \og fully homomorphics \fg~ ont emergés. Notamment, à partir de 2011, des cryptosystèmes dits de seconde	génération, basés sur le problème Learning with Error ont emergés. Ils avaient la particularité d'avoir une somme entre chiffrés facile à mettre en place, tandis que la multiplication demandait elle plus de travail, demandant notamment une opération dite de \og relinéarisation \fg~ assez complexe.
+A partir de là, de nombreuses tentatives de FHE ont émergé, basant essentiellement leur sécurité sur le problème
+dit du Learning With Error (LWE) mis en avant en 2005 par Oded Regev dans l'article \cite{STOC:Regev05}.
+En font partie les cryptosystèmes dits de seconde génération apparus vers 2011. 
+Il furent les premiers à permettre une implémentation \og réaliste \fg, et avaient la particularité d'avoir une somme entre chiffrés facile à
+mettre en place, tandis que la multiplication demandait elle plus de travail, demandant notamment une opération
+dite de \og relinéarisation \fg~ assez complexe.  Une troisième génération est ensuite apparue avec le cryptosystème
+GWS, publié  par Gentry, Sahai et Waters en 2013 (voir \cite{EPRINT:GenSahWat13}), se distinguant par 
+une nouvelle approche permettant une définition du produit aussi simple que la somme.
 
-	\paragraph{}
-	Le but de notre rapport est d'étudier le cryptosystème GWS, publié par Gentry, Sahai et Waters en 2013 (voir \cite{EPRINT:GenSahWat13}), dit de troisième génération, dont le but fut justement de trouver un cryptotsystème dont la somme tout comme le produit de chiffrés soient \og naturels \fg.
-
-	Pour cela, nous le présenterons, étudierons sa sécurité, puis en présenterons une implémentation jouet \footnote{sans regards sur les très nombreuses optimisations aujourd'hui faites dans les vraies implémentations de GSW et ses dérivés} faite en \path{sagemath} que nous avons réalisée pour ce projet (voir CITER LE GIT). Enfin, nous jetterons un \oe{}il a des API open-source  actuellement disponibles pour utiliser des FHE.
+Le but de notre rapport et des codes associés, présents dans le github référence à WTFCITERGITHUB est d'étudier 
+le cryptosystème GSW à la fois sous des aspects théoriques et pratiques. 
+Pour cela, nous le présenterons, étudierons sa sécurité et les paramètres permettant de l'assurer, puis en présenterons une implémentation jouet
+\footnote{sans regards sur les très nombreuses optimisations aujourd'hui faites dans les vraies implémentations
+de GSW et ses dérivés} faite en \path{sagemath} que nous avons réalisée pour ce projet.
+Enfin, nous jetterons aussi un \oe{}il à des API open-source permettant d'utiliser des FHE.
+Afin d'être exhaustif, nous avons essayé de donner des définitions pour chacune des notions évoquées dans notre travail,
+notamment concernant les gaussienne discrètes et les diverses définitions associées aux FHE. Notez toutefois que 
+celles-ci sont généralement tirés, ou inspirées d'autres expositions plus détaillées, qui seront évidemment précisés
+et que nous conseillons au lecteur de se référer. En ce sens, ce rapport permet aussi de faire une petite synthèse 
+bibliographique.
 \end{section}
