@@ -1,35 +1,58 @@
 \begin{section}{Notions préliminaires}
+	\begin{subsection}{Différentes normes}
+Pour $x\in ZZ$, on note $\bnorm{x} := \lfloor \log(x) \rfloor + 1$.
+
+Soit $q > 0$. La valeur absolue d'un élément $x \in \ZZq$
+sera par définition la valeur absolue dans $\ZZ$ de son représentatant dans
+$\rrbracket - q/2, q/2 \rrbracket$. 
+	La norme infinie $\norm{\vec{x}}$ d'un vecteur $\vec{x} \in \ZZq^n$ sera 
+alors le maximum des valeurs absolues de ses coordonnées et la norme
+$\|x\|_{1}$ la somme de des valeurs absolues de ses coordonnées.
+
+	\end{subsection}
 	\begin{subsection}{LWE et DLWE}
 	Nous présentons ici les définitions du Learning with Error (LWE) dans leur version décisionnelle et calculatoire.
 	
 	\begin{definition}{Decisional Learning with Errors (DLWE), version décisionnelle}
 
-	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),\ q = q(\lambda)$ des entiers et $\chi = \chi(\lambda)$ une distribution sur $\ZZ$.
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),\ q = q(\lambda)$ des entiers et $\chi =
+	\chi(\lambda)$ une distribution sur $\ZZ$.
 	
-	Le problème $\DLWE$ consiste à devoir distinguer deux distributions sur $\ZZq^{n+1}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons qu'une des deux à produite. La première distribution crée des vecteurs $(\vec{a}_i,b_i) \in \ZZq^{n+1}$ uniforme. La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré uniformément et prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels :
-	\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
-	où $e_i$ est crée obtenue par $\chi$. \\
-	\end{definition}
+	Le problème $\DLWE$ consiste à devoir distinguer deux distributions sur $\ZZq^{n+1}$ à partir d'un nombre
+	polynomial $m = m(\lambda)$ d'échantillons qu'une des deux à produite. La première distribution crée des
+	vecteurs $(\vec{a}_i,b_i) \in \ZZq^{n+1}$ uniforme. La deuxième utilise un $\vec{s} \in \ZZq^n$ tiré
+	uniformément et prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels : \[ b_i = \langle \vec{a}_i,
+	\vec{s} \rangle + e_i \] où $e_i$ est crée obtenue par $\chi$. \\ \end{definition}
 	Notons qu'alors, $n = O(P(\lambda))\text{ et }\log(q) = O(P(\lambda))$ pour un polynome $P$.
 
 	\begin{definition}{Learning with Errors (LWE)}
 	
-	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ des entiers et $\chi = \chi(\lambda)$ une distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément et on considère la distribution qui prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels :
+	Pour un paramètre de sécurité $\lambda$, soit $n = n(\lambda),q = q(\lambda)$ des entiers et $\chi =
+	\chi(\lambda)$ une distribution sur $\ZZ$. On tire $\vec{s} \in \ZZq^n$ uniformément et on considère la
+	distribution qui prend pour valeurs des vecteurs $(\vec{a}_i, b_i)$ pour lesquels :
 	\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \]
 	où $e_i$ est crée obtenue par $\chi$.
 
 	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons.
 	\end{definition}
 
-	Ces deux problèmes sont en fait \og équivalents \fg. C'est assez évident de LWE vers DLWE. De plus, le Lemme 4.2 de \cite{STOC:Regev05} montre comment réduire à DLWE à LWE sous certaines hypothèses lorsque $q$ est premier et $q = \mathcal{O}(\text{poly}(n))$. Le théorème 3.1 de \cite{EPRINT:MicPei11} montre la même chose mais lorsque $q$ est un produit de premiers $p_i \in \mathcal{O}(\text{poly}(n))$, comme ce sera le cas lorsque nous considèrerons $q = 2^k$.
+	Ces deux problèmes sont en fait \og équivalents \fg. C'est assez évident de LWE vers DLWE. De plus, le Lemme 4.2
+	de \cite{STOC:Regev05} montre comment réduire à DLWE à LWE sous certaines hypothèses lorsque $q$ est premier et
+	$q = \mathcal{O}(\text{poly}(n))$. Le théorème 3.1 de \cite{EPRINT:MicPei11} montre la même chose mais lorsque
+	$q$ est un produit de premiers $p_i \in \mathcal{O}(\text{poly}(n))$, comme ce sera le cas lorsque nous
+	considèrerons $q = 2^k$.
 
 	Voyons par exemple le cas (plus facile) où $q$ est premier :
 
 	\begin{prop}{DWLE vers LWE}
 
-	Soit $n \geqslant 1$ un entier, $2 \leqslant q \leqslant \text{poly}(n)$ un nombre premier et $\chi$ une distribution sur $\ZZq$. Supposons avoir accès à un automate $\mathcal{W}$ qui accepte avec une probabilité exponentiellement proche de 1 les distributions $A_{s, \xi}$ et rejete avec une probabilité exponentiellement proche de 1 la distributions uniforme $U$.
+	Soit $n \geqslant 1$ un entier, $2 \leqslant q \leqslant \text{poly}(n)$ un nombre premier et $\chi$ une
+	distribution sur $\ZZq$. Supposons avoir accès à un automate $\mathcal{W}$ qui accepte avec une probabilité
+	exponentiellement proche de 1 les distributions $A_{s, \xi}$ et rejete avec une probabilité exponentiellement
+	proche de 1 la distributions uniforme $U$.
 	
-	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de 1.
+	Il existe alors un automate $\mathcal{V}$ qui, étant donné des échantillons de $\mathcal{A}_{s,\chi}$ pour un
+	certain $s$, retrouve $s$ avec une probabilité exponentiellement proche de 1.
 	\end{prop}
 	\begin{proof}
 	Nous indiquons ici la démonstration faite dans \cite{STOC:Regev05}.
@@ -40,9 +63,11 @@
 	\[f_{k,1}: (a,b) \mapsto (a + (l, 0, ..., 0), b + l \cdot k) \]
 	avec $l\in \ZZq$ échantilloné uniformément sur $\ZZq$.
 	
-	$f_{k,1}$ appliquée à un échantillon uniforme donne un échantillon uniforme tandis qu'appliquée à un échantillon de $A_{s, \chi}$, elle donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme sinon.
+	$f_{k,1}$ appliquée à un échantillon uniforme donne un échantillon uniforme tandis qu'appliquée à un échantillon
+	de $A_{s, \chi}$, elle donne un échantillon de $A_{s, \chi}$ si $k = s_1$, et uniforme sinon.
 	
-	On peut faire une recherche exhaustive sur les $k \in \ZZq$ jusqu'à en trouver un accepté par $W$, qui sera le bon avec une probabilité exponentiellement proche de 1.
+	On peut faire une recherche exhaustive sur les $k \in \ZZq$ jusqu'à en trouver un accepté par $W$, qui sera le
+	bon avec une probabilité exponentiellement proche de 1.
 	
 	Cela se fait en temps polynomial car $q < \text{poly}(n)$ et $f_{k,1}$ s'execute en temps polynomial.
 	
@@ -52,12 +77,15 @@
 	
 	On retrouve ainsi $s$ avec $n$ calculs polynomiaux en $n$, ce qui reste évidemment polynomial en $n$.
 	
-	La probabilité de se tromper est $n$ fois quelque chose d'exponentiellement proche de 0 et reste donc exponentiellement proche de 0.
+	La probabilité de se tromper est $n$ fois quelque chose d'exponentiellement proche de 0 et reste donc
+	exponentiellement proche de 0.
 	\end{proof}
 
-	Pour analyser la sécurité du cryptosystème, nous utiliserons le problème DLWE. Comme l'indique le théorème 1 de \cite{C:GenSahWat13}, il est possible de réduire le problème LWE à des problèmes sur des réseaux.
+	Pour analyser la sécurité du cryptosystème, nous utiliserons le problème DLWE. Comme l'indique le théorème 1 de
+	\cite{C:GenSahWat13}, il est possible de réduire le problème LWE à des problèmes sur des réseaux.
 
-	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (short vector problem). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
+	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (short vector
+	problem). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
 
 	\begin{definition}{versions matricielles de DLWE et LWE}
 
@@ -94,8 +122,8 @@
 
 	il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
 	que des zéros. 
-	Sans que cela soit prouvé, l'article pose alors l'hypothèse suivante,
-	que nous utiliserons pour le leveled GSW:
+	On considère alors deux hypothèses de difficulté 
+	concernant DLWE. 
 
 	\begin{hyp}{hypothèse pour le leveled GSW} \\
 	\label{hyp_dlwe}
@@ -142,6 +170,11 @@
 	
 	\begin{subsection}{La gaussienne discrète}
 	Très souvent, la distribution $\chi$ choisi pour avoir des paramètres sécurités pour le problème LWE est une gaussienne discrète. Nous nous proposons ici d'en indiquer la définition, ainsi que d'en indiquer certaines propriétés.
+Notamment, la propriété~\ref{gaussienne_alpha} montre qu'il suffit 
+de prendre $\chi = D^q_s$ avec un $s > 1.5$ constant pour 
+qu'avec les valeurs de $\alpha$ spécifiées dans les hypothèses~\ref{hyp_dlwe} et
+\ref{hyp_dlwe_boot}, 
+l'hypothèse~\ref{hyp:proba} est satisfaite.
 
 	Rappellons aussi qu'une famille $\{\chi_n\}_n$ de distributions est dite $B$-bornée pour une borne $B = B(n)$ si la fonction suivante est négligeable :
 		\[n \mapsto \PP\left(\chi_n > B(n)\right) \]
@@ -161,9 +194,10 @@
 		\[ D_{\ZZ, s, 0}(\pi^{-1}(x)) \]
 	où $\pi$ est la projection $\ZZ \rightarrow \ZZq$.
 
-La définition et la position suivante (Le lemme 4.2 de \cite{STOC:GenPeiVai08}) permettent de trouver une borne à une famille de gaussienne.
+La définition et la proposition suivante (Le lemme 4.2 de \cite{STOC:GenPeiVai08}) permettent de trouver une borne à une famille de gaussienne.
 \begin{definition}
-Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre $\eta_\epsilon(L)$ est le plus petit réel $s>0$ tel que 
+Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre
+$\eta_\epsilon(L)$, dit smoothing parameter, est le plus petit réel $s>0$ tel que 
 	\[\rho_{1/s}(L^* \setminus \{0\}) \leqslant \epsilon\]
 \end{definition}
 	\begin{prop}
@@ -173,7 +207,7 @@ Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre $
 	% Notamment, pour $0 < \epsilon  < 1/2$ et $t \geqslant \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
 	\end{prop}
 
-	L'article \cite{cryptoeprint:2018:786} indique une borne interessante:
+	L'article \cite{cryptoeprint:2018:786} indique une borne intéressante sur le smoothing parameter:
 \begin{prop}
 Pour $\epsilon < 0.086435$, on a la borne:
 \[\eta_{\epsilon}(\ZZ)  \leq
@@ -181,13 +215,14 @@ Pour $\epsilon < 0.086435$, on a la borne:
 \end{prop}
 
 \begin{prop}
-Pour $s \geq 1.5$ et $t > \sqrt(\log(n))$, si il existe une constante $\tau$
+\label{gaussienne_alpha}
+Pour $s \geq 1.5$ et $\alpha = \alpha(\lambda)$, si il existe une constante $\tau$
 telle que $\alpha \geq \tau n/q$, alors:
-\[ \PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right)\]	
+\[\lambda \rightarrow  \PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right)\]	
 est négligeable et $D^q_s$ satisfait donc l'hypothèse~\ref{hyp:proba}.
 \end{prop}
 \begin{proof}
-On veut appliquer la proposition~\label{gaussienne}.
+On veut appliquer la proposition~\ref{gaussienne}.
 Notons d'abord que la borne précédemment donnée sur 
 permet de dire que pour $epsilon = 0.08$ et $s > 1.5$, on a bien:
 \[ s > \eta_{\epsilon}(\ZZ) \]
@@ -195,10 +230,10 @@ permet de dire que pour $epsilon = 0.08$ et $s > 1.5$, on a bien:
 De plus, on a:
 \begin{align*}
 \PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right) =
-\PP\left(x\leftarrow D^q_s\: : \: |x|\geq s \frac{q \alpha}{s}  \right)
+\PP\left(x\leftarrow D^q_s\: : \: |x|\geq s \left(\frac{q \alpha}{s}\right)  \right)
 \end{align*}
-On en déduit qu'on peut appliquer la proposition précédente avec $t = q \alpha
-/s$.
+On en déduit qu'on peut appliquer la proposition précédente avec $t = \frac{q
+\alpha}{s} $.
 
 On en déduit que pour que la probabilité soit négligeable, il suffit qu'il
 existe un $u > 0$ tel que:

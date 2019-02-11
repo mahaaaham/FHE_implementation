@@ -29,18 +29,16 @@
 	& (\lambda  C_2) \cdot \vec{v} = (\lambda m_1) + \lambda e_i\vec{v} 
 	\end{align*}
 
-	Notamment, on voit que le terme $C_1 * \vec{e}_2$ peut être très grand même pour un petit $\vec{e}_2$. Nous verrons par la suite comment choisir nos paramètres, et notamment $\vec{v}$, afin de toujours pouvoir se ramener à des chiffrés $C \in \{0,1\}^{N \times N}$. De cette façon, on aura :
-	\[ ||C_1 \vec{e}_2|| \leqslant ||\vec{e_2}|| \]
-	
-
-
-
-
+	Notamment, on voit que le terme $C_1 * \vec{e}_2$ peut être très grand
+	même pour un petit $\vec{e}_2$. Nous allons voir à la section suivante
+	comment définir une fonction \textbf{Flatten} transformant une matrice
+	à coefficients dans $\ZZq$ en une matrice à coefficients dans $\{0, 1\}$
+	telle que, pour un bon choix de $\vec{v}$, on ait:
+	\[ \text{\textbf{Flatten}}(C)\cdot\vec{v} = C\cdot\vec{v}\] 
+	Cela permettra alors d'éviter une explosion de l'erreur lors de
+	l'application d'opérations homomorphes. 
 	\end{subsection}
-	\begin{subsection}{Fonctions nécessaires au cryptosystème}
-	Nous allons ici définir le cryptosystème GSW, en utilisant l'exposition originale faite dans \cite{EPRINT:GenSahWat13}, légèrement modifiée pour prendre en compte des remarques interessantes faites par Shai Halevi dans \cite{halevi}.
-
-	A METTRE DANS LE 4.3 ? WTF ?
+	\begin{subsection}{Fonctions auxiliaires utiles au cryptosystème}
 	\paragraph{}
 	\textbf{BitDecomp}
 	\flushleft
@@ -119,6 +117,7 @@
 	
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
+	Nous allons ici définir le cryptosystème GSW, en utilisant l'exposition originale faite dans \cite{EPRINT:GenSahWat13}, légèrement modifiée pour prendre en compte des remarques intéressantes faites par Shai Halevi dans \cite{halevi}.
 	On rappelle que les paramètres du système défini ici sont : le paramètre de dimension $n$, le modulus $q$, un modèle de distribution de l'erreur $\chi$ ainsi que $m$, qui, tout comme $n$ influera la taille des matrices manipulées.
 
 	On note $l = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l$.
@@ -140,20 +139,31 @@
 	
 	\textbf{Entrée} : Cet algorithme n'a besoin en entrée que des paramètres donnés par \textbf{Setup}.
 
-	\textbf{Sortie} : Cet algorithme renvoie la clé secrète $\vec{s} \in \ZZq^{n+1}$ ainsi que la clé publique $A \in \ZZq^{m \times n}$ vérifiant la contrainte $A \cdot \vec{s} \leqslant n$.
+	\textbf{Sortie} : Cet algorithme renvoie la clé secrète $\vec{s} \in
+	\ZZq^{n+1}$ ainsi que la clé publique $A \in \ZZq^{m \times n+1}$ vérifiant la contrainte 
+	$\norm{A \cdot \vec{s}} \leqslant n$.
 
 	\textbf{Algorithme} :
 
 	\textbf{clé secrète} : On génère un vecteur $t \in \ZZq^n$ avec $\chi$ et on définit la clé secrète comme $\text{\textbf{PowersOf2}}(\vec{s})$ pour $\vec{s} = (1, -t_1, ..., -t_n)$.
 
-	\textbf{clé publique} : On génère aléatoirement uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$. La clé publique est la matrice constituée de l'indentation de $\vec{b}$ considéré comme un vecteur colonne et de $B$.
+	\textbf{clé publique} : On génère aléatoirement uniforme $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m
+	éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$.  La clé
+	publique est la matrice $A = \vec{b}\: || \:B$ constituée de l'indentation de $\vec{b}$ considéré comme un
+	vecteur colonne et de $B$.
 
 	Si la contrainte $\norm{A \cdot \vec{s}} \leqslant n$ n'est pas vérifiée, on recrée un jeu de clés.
 
 	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. Par définition, $q$, et donc tous élément de $\ZZq$, s'écrit en $l$ bits. $\vec{s}$ fait donc une taille de $l * (n+1) = N$ bits.
 
-	D'autre part, $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m = N * (m - 1)$ bits.
-	
+	D'autre part, $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m =
+	N * (m - 1)$ bits. \\
+	\textbf{Remarque:} Générer $A$ et $\vec{s}$ jusqu'à avoir $\norm{A \cdot \vec{s}} \leqslant n$ peut poser des
+	problèmes de sécurité, car ce n'est alors plus tout à fait $\chi$ qui est utilisée. 
+	Notons toutefois que $A \cdot \vec{v} = \vec{e}$, et que si $\alpha = n/q$ comme le préconisent 
+	les hypothèses sur les paramètres que nous utiliserons,
+	\[ \PP\left(\vec{e} \leftarrow \chi: \norm{\vec{e}} > n\right) \]
+	est négligeable.
 	\paragraph{}
 	\textbf{Encrypt}
 	\flushleft
