@@ -4,7 +4,7 @@
 	théorique que l'on veut généralement. La première question qui se pose pour le bootstrapping est de savoir si
 	il a la sécurité circulaire, expliquée dans la définition~\ref{def:circular}.
 	Nous n'avons pas trouvé de démonstration de cette sécurité dans l'article original \cite{EPRINT:GenSahWat13} 
-	ou encore dans d'autres expositions (comme \cite{haveli}}. Nous devons donc la supposer pour cette section.
+	ou encore dans d'autres expositions (comme \cite{halevi}). Nous devons donc la supposer pour cette section.
 	cette hypothèse.
 \end{subsection}
 \begin{subsection}{Un premier découpage}
@@ -16,7 +16,7 @@
 
 \begin{lstlisting}
 decrypt(C) :
-	trouver $1 \leq i \leq l$ tel que $q/4 \leq 2^i < q/2$
+	trouver $1 \leqslant i \leqslant l$ tel que $q/4 \leqslant 2^i < q/2$
 	calculer $a = C_i \cdot \vec{v}$
 	retourner $|\frac{a}{\vec{v}_i}|$
 \end{lstlisting}
@@ -60,7 +60,6 @@ $v$, notons que:
 
 	Pour cela, nous allons tout d'abord étudier deux opérations simples sur des listes.
 
-
 \vspace{0.3cm}
 \noindent
 \textbf{basic\_sum : addition classique de deux listes :}
@@ -68,21 +67,21 @@ $v$, notons que:
 	Il s'agit de l'algorithme naïf de somme de deux nombres binaire, commençant par les bits de poids faible puis remontant vers les bits de poids plus élevés en conservant des retenues, sauf celle qui \og sort \fg des listes. On l'appellera ici \textbf{basic\_sum}. Soient 
 \[ A = \sum_{i=0}^{s-1} a_i 2^i \quad B = \sum_{i=0}^{s-1} b_i 2^i\]
 que l'ont veux sommer. La somme
-\[C =\sum_{i=0}^{s-1} c_i 2^i\]
+\[D =\sum_{i=0}^{s-1} d_i 2^i\]
 est alors définie par :
 	
 \begin{figure}[!h]
 \begin{lstlisting}
 $r_{-1}$ = 0
 for $i$ in range($s$):
-	$c_i$ = $a_i \oplus b_i \oplus r_{i-1}$
-	$r_i$ = $(a_i \land b_i) \lor (r_{i-1} \land (a_i \lor b_i))$
+	$d_i$ = $a_i \oplus b_i \oplus c_{i-1}$
+	$c_i$ = $(a_i \land b_i) \lor (c_{i-1} \land (a_i \lor b_i))$
 \end{lstlisting}
 \end{figure}
 
-	Le problème de cette méthode est que la profondeur de NAND nécessaire explose du fait que la formule exprimant $c_{s-1}$ dépend de $a_0$ et $b_0$, et ce à cause de la récursivité du calcul des $r-i$.
+	Le problème de cette méthode est que la profondeur de NAND nécessaire explose du fait que la formule exprimant $d_{s-1}$ dépend de $a_0$ et $b_0$, et ce à cause de la récursivité du calcul des $c-i$.
 
-	Calculer $c_i$ peut se faire en n'utilisant la retenue que pour un $\oplus$, ce qui n'ajoute que 4 à la profondeur en \textbf{NAND} du calcul. $r_i$ est calculé en appliquant un \path{AND} et un \path{OR} à $r_{i-1}$, ce qui ajoute aussi 4 à la profondeur. $r_0 = a_0 \land b_0$ et peut donc être trouvé avec une profondeur de 2 \textbf{NAND}.
+	Calculer $d_i$ peut se faire en n'utilisant la retenue que pour un $\oplus$, ce qui n'ajoute que 4 à la profondeur en \textbf{NAND} du calcul. $c_i$ est calculé en appliquant un \path{AND} et un \path{OR} à $c_{i-1}$, ce qui ajoute aussi 4 à la profondeur. $c_0 = a_0 \land b_0$ et peut donc être trouvé avec une profondeur de 2 \textbf{NAND}.
 	
 	On obtient alors la proposition suivante :
 \begin{prop}
@@ -90,99 +89,81 @@ for $i$ in range($s$):
 \end{prop}
 
 
-Il s'avère qu'il existe une méthode pour additionner deux vecteurs 
-en $O(\log(s))$, il s'agit du carry lookahead adder que nous présentons maintenant. \\
+	Il s'avère qu'il existe une méthode pour additionner deux vecteurs en $\mathcal{O}(\log(s))$, il s'agit du carry lookahead adder que nous présentons maintenant.
 
-\textbf{carry lookahead adder: addition de deux vecteurs avec une profondeur plus faible de
-NAND} \\
+	\textbf{carry lookahead adder: addition de deux vecteurs avec une profondeur plus faible de NAND}
 
-Nous appelerons \textbf{cla\_sum} cet algorithme. Sa différence avec la somme classique est que les retenues sont en partie calculées en parallèle, ce qui permet via le passage à un arbre binaire de diminuer la profondeur de NAND utilisée.
+	Nous appelerons \textbf{cla\_sum} cet algorithme. Sa différence avec la somme classique est que les retenues sont en partie calculées en parallèle, ce qui permet via le passage à un arbre binaire de diminuer la profondeur de NAND utilisée.
 
-Bien que nous en avons vu plusieurs expositions, nous n'avons pas trouvé qui donne précisément les formules à utiliser dans un cas général. Nous exposons donc ici le détail des formules et des démonstrations sur la profondeur en NAND. Nous supposons toutefois que le lecteur connait cette méthode, et ne souhaitons par exemple pas expliquer l'idée générale de l'algorithme, uniquement utilisé dans cette section, qu'il pourra notamment trouver \footnote{Dans une version moins générale, mais contenant les idées essentielles} sur l'article wikipédia dédié\cite{wiki_cla}.
+	Bien que nous en avons vu plusieurs expositions, nous n'en avons pas trouvé qui donne précisément les formules à utiliser dans un cas général. Nous exposons donc ici le détail des formules et des démonstrations sur la profondeur en NAND.
 
-Notons que pour simplifier les formules, nous faisons ici commencer les indices de listes par 1.
+	Notons que pour simplifier les formules, nous faisons ici commencer les indices de listes par 1.
 
-On suppose que les listes ont pour taille une puissance de deux $s = 2^u$. On pose alors, notant le OU logique par l'addition et le ET logique comme un produit :
+	On suppose que les listes ont pour taille une puissance de deux $s = 2^u$. On pose alors, notant le OU logique par l'addition et le ET logique comme un produit :
 \begin{align*}
-&{G1}_i = a_i +  b_i\quad {P1}_i = a_i b_i \qquad \text{pour $1 \leq i
-\leq 2^u$}\\
-&{G2}_i = {G2}_{2i} + {G2}_{2i-1}{P2}_{2i}\qquad {P2}_i = {P2}_{2i-1}
-{P2}_{2i} \quad \text{pour $1 \leq i \leq 2^{u-1}$}\\
-&\cdots \\
-&{G2^k_i} = {G2^{k-1}_{2i}} + {G2^{k-1}_{2i-1}}{P2^{k-1}_{2i}}\qquad
-{P2^{k}_i} = {P2^{k-1}_{2i-1}} {P2^{k-1}_{2i}} \quad \text{pour $1 \leq i
-\leq 2^{u-k}$}\\
-&{G2^u_1} = {G2^{u-1}_{2}} + {G2^{u-1}_{1}}{P2^{u-1}_{2}}\qquad
-{P2^{u}_1} = {P2^{u-1}_{1}} {P2^{u-1}_{2}} 
+	&{G1}_i = a_i b_i\quad {P1}_i = a_i + b_i \qquad \text{pour $1 \leqslant i \leqslant 2^u$} \\
+	&{G2}_i = {G1}_{2i} + {G1}_{2i-1}{P1}_{2i} \qquad {P2}_i = {P1}_{2i-1} {P1}_{2i} \quad \text{pour $1 \leqslant i \leqslant 2^{u-1}$} \\
+	&\cdots \\
+	&{(G2^k)_{i}} = {(G2^{k-1})_{2i}} + {(G2^{k-1})_{2i-1}}{(P2^{k-1})_{2i}}\qquad {(P2^{k})_i} = {(P2^{k-1})_{2i-1}} {(P2^{k-1})_{2i}} \quad \text{pour $1 \leqslant i \leqslant 2^{u-k}$} \\
+	&\cdots \\
+	&{G2^u} = {(G2^{u-1})_{2}} + {(G2^{u-1})_{1}}{(P2^{u-1})_{2}}\qquad {P2^{u}} = {(P2^{u-1})_{1}} {(P2^{u-1})_{2}}
 \end{align*}
-Les variables G sont dites variables de générations et celles avec un P sont
+
+	Les variables G sont dites variables de générations et celles avec un P sont
 dites variables de propagations.
 
-On a alors la propriété suivante:
+	On a alors la propriété suivante :
 \begin{prop}
-Considérons $0 \leq k \leq u$ et $1 \leq i \leq 2^{u-k}$ et notons $B$ le bloc:
+	Considérons $0 \leqslant k \leqslant u$ et $1 \leqslant i \leqslant 2^{u-k}$ et notons $B$ le bloc :
 \[ (i-1)2^{k} + 1, \cdots, i 2^{k} \]
-On considère alors $a_{|B}$ et $b_{|B}$ les nombres binaires obtenues en
-restreignant les écritures binaires de $a$ et $b$ aux positions $B$.
-Alors 
+	On considère alors $a_{|B}$ et $b_{|B}$ les nombres binaires obtenus en restreignant les écritures binaires de $a$ et $b$ aux positions $B$. Alors, 
 \begin{itemize}
-\item $G2^k_i$ est vraie si et seulement si l'algorithme de somme binaire 
-classique entre $a_{|B}$ et $b_{|B}$ crée une retenue à la dernière position,
-c'est à dire à la position\footnote{on commence à compter à partir de 1} $2^k$.
-On dit alors que le bloc $B$ génère une retenue.
+\item $(G2^k)_i$ est vrai si et seulement si l'algorithme de somme binaire classique entre $a_{|B}$ et $b_{|B}$ crée une retenue à la dernière position, c'est à dire à la position\footnote{on commence à compter à partir de 1} $2^k$. On dit alors que le bloc $B$ génère une retenue.
 
-\item $P2^k_i$ est vraie si et seulement si, considérant l'algorithme de somme
-binaire entre $a_{|B}$ et $b_{|B}$ où on ajoute une retenue à la position $1$,
-il y a alors une retenue en dernière position. On dit alors que cette retenue
-s'est propagée le long du bloc $B$.
+\item $(P2^k)_i$ est vrai si et seulement si, considérant l'algorithme de somme binaire entre $a_{|B}$ et $b_{|B}$ où on ajoute une retenue à la position 1, il y a alors une retenue en dernière position. On dit alors que cette retenue s'est propagée le long du bloc $B$.
 \end{itemize}
 \end{prop}
-\begin{proof}
-Par récurrence. Pour $k = 0$, cela est facile: la somme de deux bits $u$ et $v$   
-ne crée une retenue que si $uv$ est vraie, et ne propage une retenue que si
-$u+v$ est vraie.
 
-Maintenant, observons les formules génériques:
-\[{G2^k_i} = {G2^{k-1}_{2i}} + {G2^{k-1}_{2i-1}}{P2^{k-1}_{2i}}\]
-\[{P2^{k}_i} = {P2^{k-1}_{2i-1}} {P2^{k-1}_{2i}} \]
-pour le bloc \[B = (i-1)2^k + 1, \cdots, i 2^k\].
-En notant $L$ et $R$ les deux moities de $B$ ($B = L|R$), on voit qu'elles
-peuvent s'interpréter ainsi:
+\begin{proof}
+	Procédons par récurrence. Pour $k = 0$, cela est facile : la somme de deux bits $u$ et $v$ ne produit une retenue que si $uv$ est vraie, et ne propage une retenue que si $u+v$ est vraie.
+
+	Maintenant, observons les formules génériques :
+\[{(G2^k)_i} = {(G2^{k-1})_{2i}} + {(G2^{k-1})_{2i-1}}{(P2^{k-1})_{2i}}\]
+\[{(P2^{k})_i} = {(P2^{k-1})_{2i-1}} {(P2^{k-1})_{2i}} \]
+pour le bloc
+\[B = (i-1)2^k + 1, \cdots, i 2^k\]
+	En notant $L$ et $R$ les deux moitiés de $B$ ($B = L|R$), on voit qu'elles peuvent s'interpréter ainsi :
 \begin{itemize}
-\item $G2^k_i$ n'est vraie que si $R$ génère une retenue ou bien si $L$ en
-génère une qui est propagée par $R$. Ce qui est équivalent à dire que $B$
-génère une retenue.
-\item $P2^{k}_i$ n'est vraie que si une retenue arrivant au début du bloc $L$
-et propagée et qu'une retenue arrivant au début du bloc $R$ est propagée. Ce
-qui, en composant les deux propagations, est équivalent à dire qu'une retenue arrivant au début du bloc $B$ est propagée.  
+\item $(G2^k)_i$ n'est vrai que si $R$ génère une retenue ou bien si $L$ en génère une qui est propagée par $R$. Ce qui est équivalent à dire que $B$ génère une retenue.
+\item $(P2^{k})_i$ n'est vraie que si une retenue arrivant au début du bloc $L$ est propagée et qu'une retenue arrivant au début du bloc $R$ est propagée. Ce qui, en composant les deux propagations, est équivalent à dire qu'une retenue arrivant au début du bloc $B$ est propagée.  
 \end{itemize}
-On a donc bien ce qu'il fallait démontrer.
+	On a donc bien ce qu'il fallait démontrer.
 \end{proof}
+
 \begin{prop} \label{g_et_p}
-$G2^k_i$ a une profondeur de NAND de $2 + 4k$ et $P2^k_i$ de $2 + 2k$.
+Le calcul de $(G2^k)_i$ a une profondeur en NAND de $2 + 4k$ et celui de $(P2^k)_i$ de $2 + 2k$.
 \end{prop}
+
 \begin{proof}
-La démonstration est directe par récurrence. 
+	La démonstration est directe par récurrence. 
 \end{proof}
 
-Puis, pour un entier $a \in Z$, on défini les notations suivantes:
+	Puis, pour un entier $a \in Z$, on défini les notations suivantes :
 \begin{align*}
-&\nu(a) = \text{la plus petite puissance de $2$ apparaissant dans l'écriture
-binaire de $a$}\\
-&\theta(a) = \text{le plus grand multiple de $2*\nu(a)$ inférieur à $a$}
+	&\nu(a) = \text{la plus petite puissance de 2 apparaissant dans l'écriture binaire de $a$}\\
+	&\theta(a) = \text{le plus grand multiple de $2*\nu(a)$ inférieur à $a$}
 \end{align*}
-Notons qu'alors: $a = \nu(a) + \theta(a)$
-Par exemple: 
-\[\nu(6) = 2, \theta(6) = 4, \nu(13) = 1, \theta(13) = 12, \nu(12)
-= 4, \theta(12) = 8, \nu(1) = 1, \theta(1) = 0\]
-\paragraph{}
-On définit alors les retenues $c_j$ par la formule:
-\[c_j = {G\nu(a)}_{a/\nu(a)} + c_{\theta(a)} {P(\nu(a))}_{a/\nu(a)}\]
-où $c_0 = 0$ par définition.
 
-Voyons cela sur un exemple pour comprendre pourquoi cette formule fonctionne. 
-Si on considère des vecteurs de taille $4 = 2^3$, les formules des retenues
-sont:
+	Notons qu'alors : $a = \nu(a) + \theta(a)$. Par exemple :
+\[\nu(6) = 2,\ \theta(6) = 4;\ \nu(13) = 1,\ \theta(13) = 12;\ \nu(12)= 4,\ \theta(12) = 8;\ \nu(1) = 1,\ \theta(1) = 0\]
+
+\paragraph{}
+
+	On définit alors les retenues $c_j$ par la formule :
+\[c_j = {G\nu(a)}_{a/\nu(a)} + c_{\theta(a)} {P(\nu(a))}_{a/\nu(a)}\]
+	où $c_0 = 0$ par définition.
+
+	Voyons cela sur un exemple pour comprendre pourquoi cette formule fonctionne. Si on considère des vecteurs de taille $8 = 2^3$, les formules des retenues sont :
 \begin{align*}
 &c_1 = {G1_1} + c_0 {P1_1} = {G1_1} \\
 &c_2 = {G2_1} + c_0 {P2_1} = {G2_1}  \\
@@ -194,7 +175,7 @@ sont:
 &c_8 = {G8_1} + c_0 {P8_1} = {G8_1} \\
 \end{align*}
 
-Ainsi, si on veut additionner $a = 00111100$ et $b = 01010101$, on obtient:
+	Ainsi, si on veut additionner $a = 00111100$ et $b = 01010101$, on obtient :
 \begin{center}
 \begin{tabular}{llllllllll}
 a  && 0&0&1&1&1&1&0&0 \\
@@ -210,54 +191,45 @@ P8 && &&&&&&&0 \\
 \end{tabular}
 \end{center}
 
-et on trouve avec les formules précédentes:
-\[ (c_1, \cdots, c_8) = (0,0,0,1,1,1,0,0) \]
-ce qui correspond bien aux retenues.
+	et on trouve avec les formules précédentes :
+\[ (c_1, ..., c_8) = (0,0,0,1,1,1,0,0) \]
+	ce qui correspond bien aux retenues.
 
-On va maintenant voir que cette méthode est bien plus intéressante que la
-méthode classique concernant la profondeur de NAND.
+	On va maintenant voir que cette méthode est bien plus intéressante que la méthode classique concernant la profondeur de NAND.
 \begin{prop}
-Pour deux vecteurs de taille $u$, calculer toutes les retenues 
-nécessite une profondeur de moins de $8 \log(u) + 2$ NAND.
+	Pour deux vecteurs de taille $u$, calculer toutes les retenues nécessite une profondeur de moins de $8 \log(u) + 2$ NAND.
 \end{prop}
-\begin{proof}
-Notons $D(f)$ la profondeur et NAND d'une formule $f$, on a, pour tout $1 \leq
-j \leq 2^u $
 
-\begin{align*}D(c_j) &\leq 2 + \text{max}\left(2 + 4 \log(\nu(j)), 2 +
-\text{max}(D(c_{\theta(j)}), 2 + 2 \log(\nu(j)))))\right) \\
-&\leq 4 + \text{max}\left(2 + 4 \log(\nu(j), D(c_{\theta(j)})\right) \\
-& \leq 4 \log(u) + (2 + 4\log(u)) = 8 \log(u) + 2
+\begin{proof}
+	Notons $D(f)$ la profondeur et NAND d'une formule $f$, on a, pour tout $1 \leqslant j \leqslant 2^u $
+
+\begin{align*}
+D(c_j) &\leqslant 2 + \text{max}\left(2 + 4 \log(\nu(j)), 2 + \text{max}(D(c_{\theta(j)}), 2 + 2 \log(\nu(j)))\right) \\
+&\leqslant 4 + \text{max}\left(2 + 4 \log(\nu(j)), D(c_{\theta(j)})\right) \\
+& \leqslant 4 \log(u) + (2 + 4\log(u)) = 8 \log(u) + 2.
 \end{align*}
-la dernière inégalité utilisant le fait que $D(c_0) = D(0) = 0$ et que 
-la séquence $(j, \theta(j), \theta(\theta(j)) \cdots)$ devient constante à 0 en moins de $\log(u)$
-étapes.
+La dernière inégalité utilise le fait que $D(c_0) = D(0) = 0$ et que la séquence $(j, \theta(j), \theta(\theta(j)), ...)$ devient constante à 0 en moins de $\log(u)$ étapes.
 \end{proof}
 
-Une fois calculée les retenue, la somme entre deux listes $a$ et $b$ se fait
-comme la somme classique, avec:
-$r_i = a_i \oplus b_i \oplus c_i$
+	Une fois calculée les retenue, la somme entre deux listes $a$ et $b$ se fait comme la somme classique, avec : $r_i = a_i \oplus b_i \oplus c_i$.
 
-On en déduit donc:
+	On en déduit donc :
 
 \begin{thm}
-L'algorithme \textbf{cla\_sum} fait la somme de $2$ vecteurs de taille $s$ 
-avec une profondeur de moins de $8 \lceil \log(s) \rceil + 6$ NAND, donc 
-en $O(log(s))$.
+	L'algorithme \textbf{cla\_sum} fait la somme de 2 vecteurs de taille $s$ avec une profondeur de moins de $8 \lceil \log(s) \rceil + 6$ NAND, donc en $\mathcal{O}(log(s))$.
 \end{thm}
+
 \begin{proof}
-Il suffit de compléter les vecteurs par des $0$ pour se réduire $s$ au cas où
-la taille vaut $2^{\lceil \log(s) \rceil}$, on applique alors le travail fait juste au dessus.
+	Il suffit de compléter les vecteurs par des 0 pour se réduire au cas où la taille vaut $2^{\lceil \log(s) \rceil}$, on applique alors le travail fait précédemment.
 \end{proof}
 
-Nous allons maintenant voire une autre opération permettant de diminuer 
-encore la profondeur de NAND nécessaire pour sommer plus de 2 listes. 
+	Nous allons maintenant voire une autre opération permettant de diminuer encore la profondeur de NAND nécessaire pour sommer plus de 2 listes. 
 \vspace{0.3cm}
 \noindent
 \textbf{reduced\_sum :}
 \paragraph{}
 
-	Soient 
+	Soie
 \[A = \sum_{i=0}^{s-1} a_i 2^i, \quad B = \sum_{i=0}^{s-1} b_i 2^i, \quad C = \sum_{i=0}^{s-1} c_i 2^i. \]
 \textbf{reduced\_sum} va créer deux nombres qu'on nomme $X = \sum_{i=0}^{s-1} x_i 2^i$  et $Y = \sum_{i=0}^{s-1} y_i 2^i$ tels que $A + B + C = X + Y$.
 
@@ -458,7 +430,7 @@ utilisant aussi que $\log_3(n+1) \leq \log(n)$ (dés $n \geq 2)$.
 \end{subsection}
 \begin{subsection}{Choix asymptotique de paramètres pour GSW avec bootstrapping}
 
-On va utiliser l'inégalité grossière:
+On va utiliser l'inégalité grossière :
 \[
 88 \lceil\log(\log(q))\rceil + 36 \log(\log(n)) \leq 90\left(\log(\log(q)) + \log(n)\right) \]
 pour voir qu'on aura un GWS avec bootstrapping si on peut évaluer des chemins
