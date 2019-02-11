@@ -42,51 +42,6 @@ def setup(Lambda):
     return bs_params
 
 
-# creation of the lwe_key and secret key with the setups parameters
-# created by the function setup
-# also: modify bs_lk and bs_sk
-def secret_key_gen(params):
-    print "Old secret_key_gen"
-    global bs_sk
-    global bs_lk
-
-    (n, q, distrib, m) = params
-    Zq = Integers(q)
-
-    t = random_vector(Integers(q), n)
-    lwe_key = list(Sequence([1] + list(-t), Zq))
-    secret_key = powers_of_2(lwe_key)
-
-    bs_lk, bs_sk = lwe_key, secret_key
-    return [lwe_key, secret_key]
-
-
-# creation of the public key with the setups parameters
-# created by the function setup and the secret key
-# also: modify bs_pk
-def public_key_gen(params, secret_keys):
-    print "Old public_key_gen"
-    global bs_pk
-    (n, q, distrib, m) = params
-    (lwe_key, secret_key) = secret_keys
-    Zq = Integers(q)
-
-    B = rand_matrix(Zq, m, n, q)
-
-    error = [Zq(distrib()) for i in range(m)]
-
-    t = -vector(lwe_key[1:])
-    b = B * t + vector(error)
-    public_key = insert_column(B, 0, list(b))
-
-    if public_key * vector(lwe_key) != vector(error):
-        error = "We should have pk * lwe_key = error!"
-        raise NameError(error)
-
-    bs_pk = public_key
-    return public_key
-
-
 def keys_gen(params):
     global bs_sk
     global bs_lk
@@ -101,7 +56,6 @@ def keys_gen(params):
         secret_key = powers_of_2(lwe_key)
 
         secret_keys = [lwe_key, secret_key]
-
 
         B = rand_matrix(Zq, m, n, q)
 

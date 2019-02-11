@@ -6,6 +6,6 @@ load("unitary_tests/framework_test.sage")
 
 def analysis_main():
     big_transition_message("-------- Circuits without bootstrapping --------")
-    test_main_circuit()
+    all_circuit_without_bs()
     big_transition_message("-------- Circuits with bootstrapping --------")
-    test_main_bootstrapping_circuits()
+    all_circuit_with_bs()
