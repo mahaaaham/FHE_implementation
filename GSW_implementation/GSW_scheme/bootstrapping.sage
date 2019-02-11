@@ -213,6 +213,70 @@ def h_bit_sum(params, a, b):
     return result
 
 
+# input: a, b lists of encryptions of 0 and 1
+# of same size.
+# output: the homomorphic sum (modulo 2^(len(a))))
+# commentary:
+def h_cla_sum(params, a, b):
+    if a == -1:
+        return b
+    if b == -1:
+        return a
+    d_XOR = lambda u, v: h_XOR(params, u, v)
+    d_NAND = lambda u, v: h_NAND(params, u, v)
+    d_AND = lambda u, v: h_AND(params, u, v)
+    d_OR = lambda u, v: h_OR(params, u, v)
+    length = len(a)
+
+    if length != len(b):
+        error = "h_cla_sum: a and b should have the same length"
+        raise NameError(error)
+    if length == 0:
+        error = "h_cla_sum: a and b shouldn't be empty"
+        raise NameError(error)
+
+    cipher0 = encrypt(params, bs_pk, 0)
+    A=copy(a)
+    B=copy(b)
+    while prime_factors(len(A)) != [2]:
+        A.append(cipher0)
+        B.append(cipher0)
+
+    power_of_len = factor(len(A))[0][1]
+    G = []
+    P = []
+    for k in range(power_of_len):
+        G.append([])
+        P.append([])
+    # On calcule les G1 et P1
+    for i in range(len(A)):
+        G[0].append(d_AND(A[i], B[i]))
+        P[0].append(d_OR(A[i], B[i]))
+    # (G2^k)_i == G[k][i-1] et pareil pour P
+    # On utilise k+1 dans la boucle car range commence en 0
+    for k in range(power_of_len):
+        for i in range(len(A)//(2^k)):
+            G[k+1].append(d_OR(G[k][2*i+1], d_AND(G[k][2*i], P[k][2*i+1])))
+            P[k+1].append(d_AND(P[k][2*i], P[k][2*i+1]))
+
+    # On calcule les retenues
+    c = [cipher0]
+    for j in range(lenght-1):
+        binary = ZZ(j).digits(2)
+        v = 2^binary.index(1)
+        theta = v
+        while theta <= j:
+            theta += v
+        theta -= v
+        temp = d_AND(c[theta], P[binary.index(1)][j//v - 1])
+        c.append(d_OR(G[binary.index(1)][j//v - 1], temp))
+
+    for j in range(length):
+        c[j] = d_XOR(c[j], a[j])
+        c[j] = d_XOR(c[j], b[j])
+    return c
+
+
 # input: a, b, c lists of encryptions of 0 and 1
 # of same size
 # output: u and v lists of encryptions of 0 and 1

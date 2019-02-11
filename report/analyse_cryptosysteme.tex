@@ -294,12 +294,11 @@ ce qui est vrai pour $L$ assez grand.
 \begin{align*}
 \Leftrightarrow  \log(L) - \log(\log(L)) - 2 > 0
 \end{align*}
-qui est une fonction croissante en $L$, et positive dés $L = 20$.  Notons enfin que ce choix de valeur $n$ est indépendant du paramètre de sécurité $\lambda$, on peut donc prendre le maximum entre les deux
-valeurs pour plus de cohérence.  
+	qui est une fonction croissante en $L$, et positive dés $L = 20$.  Notons enfin que ce choix de valeur $n$ est indépendant du paramètre de sécurité $\lambda$, on peut donc prendre le maximum entre les deux valeurs pour plus de cohérence.  
 
 On en déduit le théorème suivant:
 \begin{thm}{leveled GSW}
-Pour $L$ et $\lambda$ assez grands, et sous l'hypothèse sur DWLE~(page \pageref{hyp_dwle}), les paramètres suivants permettent de faire une profondeur de NAND de $L$
+	Pour $L$ et $\lambda$ assez grands, et sous l'hypothèse sur DWLE~(page \pageref{hyp_dwle}), les paramètres suivants permettent de faire une profondeur de NAND de $L$
 et rendent le cryptosystème GSW IND-CPA:
 \[ \begin{cases} 
 	n = \max\left(\lambda, \lceil 4/\epsilon \log(L) \log(\log(L))
@@ -309,11 +308,7 @@ et rendent le cryptosystème GSW IND-CPA:
 	m = 2(N + \bnorm{q}) \\  
 	\end{cases}  \]
 \end{thm}
-Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg
-étant donné que la sécurité n'est assurée qu'asymptotiquement. De plus, leur
-taille est très grande, comme le montre TRUC
-
-
+Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg \ étant donné que la sécurité n'est assurée qu'asymptotiquement.
 
 
 	\end{subsection}
@@ -352,8 +347,7 @@ estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
 	
 	\flushleft
 	
-	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que
-	d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
+	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
 	En fait, elle retourne tout un ensemble de variables pour chaque attaque vérifiée. Le module
 	contient 6 attaques différentes, mais n'en testera que trois par defaut. Cela peut être modifié
 	lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
