@@ -19,7 +19,8 @@
 	\frac{{(C \vec{v})}_i}{v_i} = \frac{m + e_i}{v_i}
 	\end{align*}
 	
-	Nous verrons que pour de bons choix de paramètres, déchiffrer un tel message permet de résoudre une instance de LWE.
+	Nous verrons que pour de bons choix de paramètres, déchiffrer un tel message permet de résoudre une instance de
+	DLWE.
 
 \paragraph{}
 	Toutefois, l'ajout d'une erreur comporte ses inconvénients. Si nous revenons aux équations précédentes, en introduisant les erreurs $\vec{e}_i$ pour chiffrer  $m_i$ ($i\in \{1,2\}$), on obtient :
@@ -48,7 +49,8 @@
 
 	\textbf{Sortie} : la décomposition binaire des éléments de $\vec{a}$ sous la forme d'un vecteur.
 
-	\textbf{Algorithme} : Pour chaque $a_i$, on détermine sa représentation binaire avec les bits de faibles puissance à gauche et non à droite. On retourne la concaténation de ces représentations binaires sous la forme d'un vecteur.
+	\textbf{Algorithme} : Pour chaque $a_i$, on détermine sa représentation binaire avec les bits de faibles
+	puissance à gauche. On retourne la concaténation de ces représentations binaires sous la forme d'un vecteur.
 	
 \vspace{0.5cm}\noindent$\text{\textbf{BitDecomp:}}^{-1}$
 \flushleft
@@ -57,24 +59,34 @@
 
 	\textbf{Sortie} :  ($\sum\limits_{i=0}^{l-1} 2^{i} a_{1,i}, ..., \sum\limits_{i=0}^{l-1} 2^{i} a_{k,i})$.
 
-	\textbf{Remarque} : Si tous les $a_{i,j}$ sont dans $\{ 0,1 \} $, cet algorithme inverse bien \textbf{BitDecomp}, cependant, sa définition ne le limite pas aux vecteurs $\in \{ 0,1\} ^{k\times l}$.
+	\textbf{Remarque} : C'est un inverse à gauche de \textbf{Bitdecomp} sur toutes les entrées et un inverse à droite de
+	\textbf{BitDecomp} sur les vecteurs uniquement constitués de $0$ et de $1$. Il est toutefois aussi défini sur
+	les vecteurs à valeur dans $\ZZq$.
 
 \vspace{0.5cm}\noindent\textbf{Flatten:}
 \flushleft
 
 	\textbf{Entrée} : un vecteur $\vec{a} = (a_{1,0}, ..., a_{1,l-1}, a_{2,0}, ..., a_{k,l-1})$.
 
-	\textbf{Sortie} : le vecteur $\vec{b} = (b_{1,0}, ..., b_{1,l-1}, b_{2,0}, ..., b_{k,l-1})$ dont les éléments sont tous dans $\{ 0,1\} $.
+	\textbf{Sortie} : Un vecteur $\vec{b} = (b_{1,0}, ..., b_{1,l-1}, b_{2,0}, ..., b_{k,l-1})$ à valeurs dans 
+	$\{0,1\}$ ayant même produit scalaire que $\vec{a}$ avec les vecteurs de forme
+	$\text{\textbf{PowersOf2}}(\vec{u})$ pour tout vecteur $\vec{u}$ (voir la proposition~\ref{flatten}).
 
-	\textbf{Algorithme} : On calcule \textbf{BitDecomp}$^{-1}(\vec{a})$ et on obtient un vecteur $\vec{z} \in \ZZq^{k}$. On applique ensuite \textbf{BitDecomp} à $\vec{z}$ et l'on renvoie le résultat obtenu.
-	
+	\textbf{Algorithme} : \textbf{Flatten} = \textbf{BitDecomp}$^{-1} \circ\:\: \textbf{BitDecomp}$  
+
+\begin{samepage} % without it, there was a new page juste after the powerof2...
+
 \vspace{0.5cm}\noindent\textbf{PowersOf2:}
 \flushleft
-
 	\textbf{Entrée} : un vecteur $\vec{a} = (a_1, ..., a_k) \in \ZZq^{k}$.
 
 	\textbf{Sortie} : ($a_1, 2 a_1, 2^{2} a_1, ..., 2^{l-1} a_1, a_2, ..., 2^{l-1} a_k)$.
+\end{samepage}	
 	
+	\paragraph{}
+	Voyons maintenant quelques propriétés de ces applications, notamment concernant \textbf{Flatten} qui joue un
+	rôle clé dans notre cryptosystème en réduisant la valeur absolue des coefficients de chiffrés ainsi que celle du
+	bruit produit après des opérations homomorphes.
 	\begin{prop}
 	Soient $\vec{a}$ et $\vec{b}$ dans $\ZZq^{k}$.
 
@@ -83,14 +95,15 @@
 
 	\begin{proof}
 	\begin{align*}
-	\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} a_{i,j} * (2^{j} * b_i) \\
-	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (a_{i,j} * 2^{j}) \\
-	&= \sum\limits_{i=1}^{k} b_i * a_i \\
+	\langle \textbf{BitDecomp}(\vec{a}), \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k}
+	\sum\limits_{j=0}^{l-1} a_{i,j} \:(2^{j} \:b_i) \\
+	&= \sum\limits_{i=1}^{k} \left(\sum\limits_{j=0}^{l-1} 2^j \:a_{i,j} \right) \: b_i \\ 
+	&= \sum\limits_{i=1}^{k} a_i * b_i \\
 	&= \langle\vec{a},\vec{b} \rangle.
 	\end{align*}
 	\end{proof}
 	
-	\begin{prop}
+	\begin{prop} \label{flatten}
 	Soient $\vec{a}$ dans $\ZZq^{k \times l}$ et $\vec{b}$ dans $\ZZq^{k}$.
 
 	On a $\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle = \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle = \langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle$.
@@ -98,16 +111,17 @@
 
 	\begin{proof}
 	\begin{align*}
-	\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} a_{j+li} * (2^{j} * b_i) \\
-	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (a_{j+li} * 2^{j}) \\
+	\langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle &= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} a_{j+li}
+	\: (2^{j} \: b_i) \\
+	&= \sum\limits_{i=1}^{k} \left(\sum\limits_{j=0}^{l-1} 2^j\: a_{j+li} \right) b_i \\
 	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
 	\end{align*}
 	Soit $c = \textbf{BitDecomp}^{-1}(\vec{a})$.
 	\begin{align*}
 	\langle \textbf{Flatten}(\vec{a}),\textbf{PowersOf2}(\vec{b}) \rangle &= \langle \textbf{BitDecomp}(\vec{c}),\textbf{PowersOf2}(\vec{b}) \rangle \\
-	&= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} c_{i,j} * (2^{j} * b_i) \\
-	&= \sum\limits_{i=1}^{k} b_i * \sum\limits_{j=0}^{l-1} (c_{i,j} * 2^{j}) \\
-	&= \sum\limits_{i=1}^{k} b_i * c_i \\
+	&= \sum\limits_{i=1}^{k} \sum\limits_{j=0}^{l-1} c_{i,j}\: (2^{j}\: b_i) \\
+	&= \sum\limits_{i=1}^{k} \left(\sum\limits_{j=0}^{l-1} 2^j \: c_{i,j}\right)\: b_i \\
+	&= \sum\limits_{i=1}^{k}  c_i b_i \\
 	&= \langle \textbf{BitDecomp}^{-1}(\vec{a}), \vec{b}\rangle \\
 	&= \langle \vec{a}, \textbf{PowersOf2}(\vec{b}) \rangle
 	\end{align*}
@@ -116,25 +130,37 @@
 	\end{subsection}
 	\begin{subsection}{Définition du cryptosystème}
 	Nous allons ici définir le cryptosystème GSW en utilisant conjointement l'article de base
-	\cite{EPRINT:GenSahWat13}e ainsi que des remarques intéressantes faites par Shai Halevi dans \cite{halevi}.
-	On rappelle que les paramètres du système défini ici sont : le paramètre de dimension $n$, le modulus $q$, un
-	modèle de distribution de l'erreur $\chi$ ainsi qu'un paramètre de taille d'échantillon $m$.
-
-	On note $l = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l$.
-		
+	\cite{EPRINT:GenSahWat13} ainsi d'intéressantes remarques faites par Shai Halevi dans \cite{halevi}.
+	On rappelle que les paramètres du système défini ici sont : 
+\begin{itemize}
+\item le paramètre de dimension $n$;
+\item le modulus $q$;
+\item le paramètre de taille d'échantillon $m$;
+\item la distribution $\chi$;
+\end{itemize}
+De plus, on note $l = \bnorm{q} = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l$.
 
 
 \vspace{0.5cm}\noindent\textbf{Setup:}
 
 	\flushleft
 
-	\textbf{Entrée} : $1^\lambda$ et $1^L$ avec $\lambda$ paramètre de sécurité et L paramètre de profondeur.
+	\textbf{Entrée} : $1^\lambda$ et $1^L$ où $\lambda$ est le paramètre de sécurité et L le paramètre de profondeur.
 
-	\textbf{Sortie} : les paramètres $n, q, \chi, m$ du système. Le paramètre $L$ indique que les paramètres créés doivent permettre d'évaluer un circuit de \textbf{NAND} de profondeur $L$ tout en pouvant déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de satisfaire la condition dite \og de longueur \fg~  
+	\textbf{Sortie} : les paramètres $n, q, \chi, m$ soumis à la contrainte de profondeur imposée par $L$, ainsi que
+	des contraintes de sécurités imposées par $\lambda$.
+
+	Le paramètre $L$ indique que les paramètres créés doivent permettre d'évaluer un circuit de \textbf{NAND} de profondeur $L$ tout en pouvant déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de satisfaire la condition dite \og de longueur \fg~  
 	\[q > 8nm (1 + N)^L \]
 
-	\textbf{Algorithme} : Nous verrons cela dans la section des considérations sur les choix des paramètres.
+	\textbf{Algorithme} : Deux sous-sections sont consacrés au choix des paramètres:
+	\begin{itemize}
+	\item la sous-section \ref{sec:leveled} page \pageref{sec:leveled} dans le cadre d'un LHE;
+	\item la sous-section \ref{sec:bootstrapping} page \pageref{sec:bootstrapping} dans le cadre d'un FHE avec
+	bootstrapping.
+	\end{itemize}
 	
+\begin{samepage}
 \vspace{0.5cm}\noindent\textbf{KeyGen:}
 \flushleft
 	
@@ -143,21 +169,24 @@
 	\textbf{Sortie} : la clé secrète $\vec{s} \in
 	\ZZq^{n+1}$ ainsi que la clé publique $A \in \ZZq^{m \times n+1}$ vérifiant la contrainte 
 	$\norm{A \cdot \vec{s}} \leqslant n$.
+\end{samepage}
 
 	\textbf{Algorithme} :
 
 	\textbf{clé secrète} : on génère un vecteur $t \in \ZZq^n$ avec $\chi$ et on définit la clé secrète comme $\text{\textbf{PowersOf2}}(\vec{s})$ pour $\vec{s} = (1, -t_1, ..., -t_n)$.
 
-	\textbf{clé publique} : on génère uniformément $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m
-	éléments choisis suivant la distribution $\chi$. On définit $\vec{b} = B \times \vec{t} + \vec{e}$.  La clé
-	publique est la matrice $A = \vec{b}\: || \:B$ constituée de l'indentation de $\vec{b}$ considéré comme un
-	vecteur colonne et de $B$.
+	\textbf{clé publique} : on génère uniformément $B \in \ZZq^{n \times m}$ et un vecteur $\vec{e}$ de m éléments
+	choisis suivant la distribution $\chi$. On définit 
+	\[\vec{b} = B \times \vec{t} + \vec{e}\]  
+	La clé publique est la matrice $A = \vec{b}\: || \:B$, concaténation de $\vec{b}$ considéré comme
+	un vecteur colonne et de $B$.
 
 	Si la contrainte $\norm{A \cdot \vec{s}} \leqslant n$ n'est pas vérifiée, on recrée un jeu de clés.
 
-	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. Par définition, $q$, et donc tous élément de $\ZZq$, s'écrit en $l$ bits. $\vec{s}$ fait donc une taille de $l * (n+1) = N$ bits.
+	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. On peut de plus représenter tout élément de
+	$\ZZq$ en $l = \bnorm{q}$ bits.  $\vec{s}$ peut donc se représenter en  $l * (n+1) = N$ bits.
 
-	D'autre part, $A \in \ZZq^{m \times n}$ donc A s'écrit en $l * n * m =	N * (m - 1)$ bits.
+	D'autre part, $A \in \ZZq^{m \times n}$ donc A se représente en $l * n * m =	N * (m - 1)$ bits.
 
 	\textbf{Remarque:} Générer $A$ et $\vec{s}$ jusqu'à avoir $\norm{A \cdot \vec{s}} \leqslant n$ peut poser des problèmes de sécurité, car ce n'est alors plus tout à fait $\chi$ qui est utilisée. Notons toutefois que $A \cdot \vec{v} = \vec{e}$, et que si $\alpha = n/q$ comme le préconisent les hypothèses sur les paramètres que nous utiliserons,
 	\[ \PP\left(\vec{e} \leftarrow \chi: \norm{\vec{e}} > n\right) \]
@@ -166,22 +195,28 @@
 \vspace{0.5cm}\noindent\textbf{Encrypt:}
 \flushleft
 	
-	\textbf{Entrée} : les paramètres du système, la clé publique et un message $\mu \in \ZZq$.
+	\textbf{Entrée} : les paramètres du système, une clé publique et un message $\mu \in \ZZq$.
 
-	\textbf{Sortie} : le chiffré $C \in \ZZq^{N \times N}$ de $\mu$.
+	\textbf{Sortie} : un chiffré $C \in \ZZq^{N \times N}$ de $\mu$.
 
-	\textbf{Algorithme}: on génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$. Le chiffré est : $C = \textbf{Flatten}(\mu \times I_N + \textbf{BitDecomp}(R \times A))$.
+	\textbf{Algorithme}: on génère uniformément une matrice $R \in \{ 0,1\} ^{N \times m}$ puis on pose :
+	\[C = \textbf{Flatten}(\mu \times I_N + \textbf{BitDecomp}(R \times A))\]
 
-	\textbf{Taille} : $C \in \ZZq^{N \times N}$ s'écrit en $l * N^2$ bits.
+	\textbf{Taille} : $C \in \ZZq^{N \times N}$ se représente en $l * N^2$ bits.
 	
 \vspace{0.5cm}\noindent\textbf{Decrypt:}
 \flushleft
 	
-	\textbf{Entrée} : les paramètres du système, la clé secrète et un chiffré d'un message $\mu \in \{ 0,1\} $.
+	\textbf{Entrée} : les paramètres du système, une clé secrète et un chiffré d'un message $\mu \in \{ 0,1\}$.
 
-	\textbf{Sortie} : le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée.
+	\textbf{Sortie} : le clair du chiffré si l'erreur de ce dernier n'est pas trop élevée (voir la proposition~\ref{dec})
 
-	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont les puissances de 0 à $l-1$ de 2. Soit $i \leqslant l$ tel que le i+1ème coefficient de $\vec{v}$, égal à $2^{i}$, soit compris entre $q/4$ et $q/2$, $q/2$ compris. On note $C_i$ la ième ligne de $C$. On calcule ensuite $x_i = \langle C_i, \vec{v} \rangle$ et on renvoie $\lfloor x_i/v_i \rceil$.
+	\textbf{Algorithme} : On rappelle que les $l$ premiers coefficients de $\vec{v}$ sont 
+	\[1, 2, \cdots, 2^{l-1} \]
+	On trouve alors $i\in\llbracket 0, l-1\rrbracket$ tel que
+	\footnote{n'oublions pas qu'ici nous considérons la valeur absolue sur $\ZZq$} 
+	$|\vec{v}_i| > q/4$. Notant $C_i$ la ième ligne de $C$, on calcule ensuite 
+	\[ x_i = \langle C_i, \vec{v} \rangle \] et on retourne $\lfloor x_i/v_i \rceil$.
 
 
 \paragraph{}
@@ -192,7 +227,7 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 
 \begin{prop}
 \label{dec}
-\textbf{Dec} décrypte avec succès les chiffrés dont l'erreur $\vec{e}$ satisfait $\|\vec{e}\|_\infty < q/8$.
+\textbf{Decrypt} décrypte avec succès les chiffrés dont l'erreur $\vec{e}$ satisfait $\|\vec{e}\|_\infty < q/8$.
 \end{prop}
 \begin{proof}
 	Dans ce cas, on a $x_i = \mu * v_i + e$ avec $\lvert e \lvert \leqslant \|\vec{e}\|_\infty$. Comme $\lvert v_i \lvert > \frac{q}{4}$, on a $\lvert \frac{e}{v_i} \lvert < 1/2$. On a donc $\lfloor \frac{x_i}{v_i} \rceil = \mu$.
@@ -202,16 +237,19 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 \begin{subsection}{Autres algorithmes de déchiffrement}
 	L'algorithme de déchiffrement que nous avons présenté fonctionne sans contraintes sur $q$ mais ne déchiffre que des chiffrés de 0 et de 1.
 
-	Nous proposons ici une analyse un peu plus fine du déchiffrement pour montrer comment faire pour des chiffrés de n'importe quel élément de $\ZZq$.
+	Nous proposons ici une analyse un peu plus fine afin de pouvoir déchiffrer chiffrés de n'importe quel élément de
+	$\ZZq$.  Notons cependant que ces algorithmes demandent certainement une profondeur plus grande de NAND pour
+	être implémentés. Il serait notamment très improbable que le dernier algorithme que nous allons présenter puisse
+	s'exécuter avec une profondeur assez petite pour permettre un bootstrapping.
 
-	Pour cela, remarquons qu'en partant d'un chiffré  $C$ de $m \in \ZZq$, on a :
-	\[ C \cdot \vec{v} = m \vec{v} + \vec{e} \mod q \]
-	pour une erreur $\vec{e}$.
+\paragraph{}
+	Remarquons qu'en partant d'un chiffré  $C$ de $m \in \ZZq$, on a : \[ C \cdot \vec{v} = m \vec{v} + \vec{e} \mod
+	q \] pour une erreur $\vec{e}$.
 	
-	En considérant l'équation sur les $l$ premières coordonées, on obtient :
+	En considérant l'équation sur les $l$ premières coordonnées, on obtient :
 	\[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}). \]
  
-	Notant $L = \Lambda(\vec{p}^t)$, on constate qu'on peut retrouver $m\vec{p}$ en trouvant le vecteur de $L$ le plus proche de $\vec{a}$.
+	Notant $L = \Lambda(\vec{p}^t)$, on constate que l'on peut retrouver $m\vec{p}$ en trouvant le vecteur de $L$ le plus proche de $\vec{a}$.
 
 	De cette idée, on déduit 2 algorithmes de déchiffrements supplémentaires, dépendant de la façon dont on résout le problème du vecteur le plus proche :
 
@@ -228,7 +266,8 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
  
 	On obtient :
 \[m 2^{l-1} + e_{l} \mod 2^l \]
-	qui est proche de 0 si $m$ est pair et de $q/2$ sinon. On déduit de cette façon le premier bit de l'écriture en binaire de $m$ et la méthode est similaire pour complètement déduire $m$.
+	qui est proche de 0 si $m$ est pair et de $q/2$ sinon. On déduit de cette façon le premier bit de l'écriture en
+	binaire de $m$ et on trouve de proche en proche les autres bits de l'écriture binaire $m$.
 	
 \end{subsubsection}
 \begin{subsubsection}{mp\_all\_q\_decrypt: $q$ est quelconque}

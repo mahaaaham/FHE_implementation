@@ -8,7 +8,7 @@
 	cette hypothèse.
 \end{subsection}
 \begin{subsection}{Un premier découpage}
-	Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de déchiffrement \textbf{Dec}, nous allons avoir besoin de l'exprimer uniquement à partir d'opérations \textbf{NAND} sur des 0 et des 1.
+	Afin de pouvoir effectuer un bootstrapping à partir de l'algorithme de déchiffrement \textbf{Decrypt}, nous allons avoir besoin de l'exprimer uniquement à partir d'opérations \textbf{NAND} sur des 0 et des 1.
 	
 	La première clé secrète est un vecteur d'éléments de $\ZZq$, pas de \{0,1\}, ce qui signifie que pour pouvoir l'utiliser dans le bootstrapping, on est contraint de se servir des chiffrés de chaque bit de chaque élément de la clé.
 
@@ -415,7 +415,7 @@ profondeur de NAND nécessaire.
 \begin{thm} \label{size_dec}
 	Si $q$ est une puissance de $2$.
 	On peut effectuer 
-	l'algorithme \textbf{Dec} avec une profondeur de NAND plus petite que
+	l'algorithme \textbf{Decrypt} avec une profondeur de NAND plus petite que
 	\[88 \lceil \log(\log(q)) \rceil + 36 \log\left(n)\right) \]
 	et donc, en $O(\log(n) + \log(\log(q)))$
 \end{thm}
@@ -429,6 +429,7 @@ utilisant aussi que $\log_3(n+1) \leq \log(n)$ (dés $n \geq 2)$.
 \end{proof}
 \end{subsection}
 \begin{subsection}{Choix asymptotique de paramètres pour GSW avec bootstrapping}
+\label{sec:bootstrapping}
 
 % Notons que pour faire un FHE, il suffit d'avoir des paramètres qui permettent assez de profondeur pour faire 2 fois le
 % circuit de déchiffrement ainsi qu'un NAND. De cette façon, on peut faire autant de fois que souhaité le circuit \[
