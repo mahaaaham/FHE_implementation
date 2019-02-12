@@ -243,8 +243,8 @@ def h_cla_sum(params, a, b):
         B.append(cipher0)
 
     power_of_len = factor(len(A))[0][1]
-    G = []
-    P = []
+    G = [[]]
+    P = [[]]
     for k in range(power_of_len):
         G.append([])
         P.append([])
@@ -255,21 +255,21 @@ def h_cla_sum(params, a, b):
     # (G2^k)_i == G[k][i-1] et pareil pour P
     # On utilise k+1 dans la boucle car range commence en 0
     for k in range(power_of_len):
-        for i in range(len(A)//(2^k)):
+        for i in range(len(A)//(2^(k+1))):
             G[k+1].append(d_OR(G[k][2*i+1], d_AND(G[k][2*i], P[k][2*i+1])))
             P[k+1].append(d_AND(P[k][2*i], P[k][2*i+1]))
 
     # On calcule les retenues
     c = [cipher0]
-    for j in range(lenght-1):
-        binary = ZZ(j).digits(2)
+    for j in range(length-1):
+        binary = ZZ(j+1).digits(2)
         v = 2^binary.index(1)
         theta = v
-        while theta <= j:
+        while theta <= j+1:
             theta += v
         theta -= v
-        temp = d_AND(c[theta], P[binary.index(1)][j//v - 1])
-        c.append(d_OR(G[binary.index(1)][j//v - 1], temp))
+        temp = d_AND(c[theta - 1], P[binary.index(1)][(j+1)//v - 1])
+        c.append(d_OR(G[binary.index(1)][(j+1)//v - 1], temp))
 
     for j in range(length):
         c[j] = d_XOR(c[j], a[j])
@@ -337,6 +337,22 @@ def h_naive_classic_list_sum(list_to_sum):
     return result
 
 
+def h_naive_cla_list_sum(list_to_sum):
+    if len(list_to_sum) == 0:
+        (n, q, distrib, m) = bs_params
+        l = floor(log(q, 2)) + 1
+        return [encrypt(bs_params, bs_pk, 0) for i in range(l)]
+    elif len(list_to_sum) == 1:
+        return list_to_sum[0]
+
+    result = list_to_sum[0]
+    cpt = 0
+    for elt in list_to_sum[1:]:
+        result = h_cla_sum(bs_params, result, elt)
+        cpt += 1
+    return result
+
+
 def h_naive_reduction_list_sum(list_to_sum):
     if len(list_to_sum) == 0:
         (n, q, distrib, m) = bs_params
@@ -388,6 +404,42 @@ def h_balanced_classic_list_sum(list_to_sum):
     elif second_term == -1:
         return first_term
     return h_bit_sum(bs_params, first_term, second_term)
+
+
+def h_balanced_cla_list_sum(list_to_sum):
+    (n, q, distrib, m) = bs_params
+    l = floor(log(q, 2)) + 1
+
+    # the size 1 is treated by the fill operation
+    if len(list_to_sum) == 0:
+        return [encrypt(bs_params, bs_pk, 0) for i in range(l)]
+    elif len(list_to_sum) == 1:
+        return list_to_sum[0]
+    elif len(list_to_sum) == 2:
+        if list_to_sum[0] == -1:
+            # this can be -1
+            return list_to_sum[1]
+        elif list_to_sum[1] == -1:
+            return list_to_sum[0]
+        else:
+            return h_cla_sum(bs_params, list_to_sum[0], list_to_sum[1])
+
+    # we pad with encrypts of 0 to have a list of 2^something elements
+    to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
+    list_to_sum += [-1]*to_fill
+
+    # we end if there is only two elements on the filled list
+    lenght_list = len(list_to_sum)
+    first_list = list_to_sum[:lenght_list // 2]
+    first_term = h_balanced_cla_list_sum(first_list)
+    second_list = list_to_sum[lenght_list // 2:]
+    second_term = h_balanced_cla_list_sum(second_list)
+    if first_term == -1:
+        return second_term
+    elif second_term == -1:
+        return first_term
+    return h_cla_sum(bs_params, first_term, second_term)
+
 
 
 # The balanced version of reduction_sum to make

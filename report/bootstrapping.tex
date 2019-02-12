@@ -510,6 +510,38 @@ respectée. Elles n'auraient par exemple pas été respectées si l'addition
 classique avait été utilisée à la place de l'addition avec carry lookahead.
 \end{rmq}
 
+\begin{figure}
+\begin{tabular}{|l|c|c|c|}
+\hline
+& taille du secret & taille de la clé & taille d'un chiffré \\
+\hline
+$\lambda = 32, \ \rho = 0.1$ & 54 octets & 45 Ko & 293 Ko \\
+\hline
+$\lambda = 32, \ \rho = 0.25$ & 132 octets & 272 Ko & 5 Mo \\
+\hline
+$\lambda = 32, \ \rho = 0.5$ & 260 octets & 1 Mo & 33 Mo \\
+\hline
+$\lambda = 32, \ \rho = 0.75$ & 388 octets & 2 Mo & 108 Mo \\
+\hline
+$\lambda = 64, \ \rho = 0.1$ & 179 octets & 500 Ko & 6 Mo \\
+\hline
+$\lambda = 64, \ \rho = 0.25$ & 447 octets & 4 Mo & 84 Mo \\
+\hline
+$\lambda = 64, \ \rho = 0.5$ & 886 octets & 12 Mo & 653 Mo \\
+\hline
+$\lambda = 64, \ \rho = 0.75$ & 1 Ko & 27 Mo & 2 Go \\
+\hline
+$\lambda = 128, \ \rho = 0.1$ & 565 octets & 5 Mo & 86 Mo \\
+\hline
+$\lambda = 128, \ \rho = 0.25$ & 1 Ko & 30 Mo & 1 Go \\
+\hline
+$\lambda = 128, \ \rho = 0.5$ & 3 Ko & 118 Mo & 10 Go \\
+\hline
+$\lambda = 128, \ \rho = 0.75$ & 4 Ko & 265 Mo & 34 Go \\
+\hline
+\end{tabular}
+\caption{Taille des données suivant les paramètres étudiés précédemment}
+\end{figure}
 
 \end{subsection}
 \end{section}
