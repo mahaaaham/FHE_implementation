@@ -12,20 +12,17 @@ load("unitary_tests/framework_test.sage")
 # list of 0 and 1 of size bin_size
 # since we don't care of the m.s.b, we look modulo 2^(bin_size-1)
 def test_complementary_two(nb_test, bin_size):
-    params = setup(bs_lambda)
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
+
+    Zq = Integers(2^(bin_size-1))
 
     for test in range(nb_test):
         # easiest to test with a 0 at the end..
         clear_bit = [ZZ.random_element(2) for i in range(bin_size - 1)] + [0]
-        crypted_bit = [encrypt(params, public_key, m) for m in clear_bit]
-        crypted_complement = h_complementary_two(params, crypted_bit)
-        decrypted_complement = [decrypt(params, secret_key, c) for c in crypted_complement]
+        crypted_bit = [encrypt(bs_params, bs_pk, m) for m in clear_bit]
+        crypted_complement = h_complementary_two(bs_params, crypted_bit)
+        decrypted_complement = [decrypt(bs_params, bs_sk, c) for c in crypted_complement]
         decrypted_value = ZZ(decrypted_complement, 2)
-
-        Zq = Integers(2^(bin_size-1))
 
         decrypted_value = Zq(decrypted_value)
 
@@ -39,28 +36,24 @@ def test_complementary_two(nb_test, bin_size):
 
 
 def test_h_abs_ZZ_centered(nb_test, bin_size):
-    params = setup(bs_lambda)
-    (n, q, distrib, m) = params
+    setup_bs_params()
 
+    (n, q, distrib, m) = bs_params
     l = floor(log(q, 2)) + 1
+    Zq = Integers(q)
+    N = (n+1)*l
+
     if l-1 != log(q, 2):
         error = "test_h_abs_ZZ_centered: q should be a power of 2"
         raise NameError(error)
 
-    Zq = Integers(q)
-    N = (n+1)*l
-
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
-
     for test in range(nb_test):
         # easiest to test with a 0 at the end..
         clear_bit = [ZZ.random_element(2) for i in range(l)]
-        crypted_bit = [encrypt(params, public_key, m) for m in clear_bit]
-        abs_ZZ_crypted_bit =h_abs_ZZ_centered(params, crypted_bit)
+        crypted_bit = [encrypt(bs_params, bs_pk, m) for m in clear_bit]
+        abs_ZZ_crypted_bit =h_abs_ZZ_centered(bs_params, crypted_bit)
 
-        decrypted_abs_ZZ = [decrypt(params, secret_key, c) for c in abs_ZZ_crypted_bit]
+        decrypted_abs_ZZ = [decrypt(bs_params, bs_sk, c) for c in abs_ZZ_crypted_bit]
         decrypted_value = ZZ(decrypted_abs_ZZ, 2)
 
         clear_value = Zq(ZZ(clear_bit, 2))
@@ -76,21 +69,19 @@ def test_h_abs_ZZ_centered(nb_test, bin_size):
 # Test the h_left_shift function nb_test times
 # on len_test long lists
 def test_h_left (nb_test, len_test):
-    params = setup(bs_lambda)
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
+
     for i in range(nb_test):
         crypted_list = []
         clear_list = []
         for j in range(len_test):
             clear_list.append(ZZ.random_element(0, 2))
-            crypted_list.append(encrypt(params, public_key, clear_list[j]))
+            crypted_list.append(encrypt(bs_params, bs_pk, clear_list[j]))
         print "clear_list = " + str(clear_list)
-        crypted_list = h_left_shift(params, public_key, crypted_list, len_test//2)
+        crypted_list = h_left_shift(bs_params, bs_pk, crypted_list, len_test//2)
         print "shifted of " + str(len_test//2)
         for j in range(len_test):
-            clear = basic_decrypt(params, secret_key, crypted_list[j])
+            clear = basic_decrypt(bs_params, bs_sk, crypted_list[j])
             clear_list[j] = clear
         print "clear_list = " + str(clear_list)
     return
@@ -99,21 +90,19 @@ def test_h_left (nb_test, len_test):
 # Test the h_right_shift function nb_test times
 # on len_test long lists
 def test_h_right (nb_test, len_test):
-    params = setup(bs_lambda)
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
+
     for i in range(nb_test):
         crypted_list = []
         clear_list = []
         for j in range(len_test):
             clear_list.append(ZZ.random_element(0,2))
-            crypted_list.append(encrypt(params, public_key, clear_list[j]))
+            crypted_list.append(encrypt(bs_params, bs_pk, clear_list[j]))
         print "clear_list = " + str(clear_list)
-        crypted_list = h_right_shift(params, public_key, crypted_list, len_test//2)
+        crypted_list = h_right_shift(bs_params, bs_pk, crypted_list, len_test//2)
         print "shifted of " + str(len_test//2)
         for j in range(len_test):
-            clear = basic_decrypt(params, secret_key, crypted_list[j])
+            clear = basic_decrypt(bs_params, bs_sk, crypted_list[j])
             clear_list[j] = clear
         print "clear_list = " + str(clear_list)
     return
@@ -122,10 +111,7 @@ def test_h_right (nb_test, len_test):
 # Test the h_bit_sum function nb_test times
 # on len_test long lists
 def test_h_bit_sum(nb_test, len_test):
-    params = setup(bs_lambda)
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
 
     for i in range(nb_test):
         clear_list = [[ZZ.random_element(0, 2) for i in range(len_test)]
@@ -133,10 +119,10 @@ def test_h_bit_sum(nb_test, len_test):
         clear_sum = sum([ZZ(clear_list[i], 2) for i in range(2)])
         clear_sum %= 2^(len_test)
 
-        crypted_list = [[encrypt(params, public_key, clear_list[j][i])
+        crypted_list = [[encrypt(bs_params, bs_pk, clear_list[j][i])
                          for i in range(len_test)] for j in range(2)]
-        crypted_sum = h_bit_sum(params, crypted_list[0], crypted_list[1])
-        decrypted_sum = [basic_decrypt(params, secret_key, elt)
+        crypted_sum = h_bit_sum(bs_params, crypted_list[0], crypted_list[1])
+        decrypted_sum = [basic_decrypt(bs_params, bs_sk, elt)
                          for elt in crypted_sum]
         decrypted_sum = ZZ(decrypted_sum, 2)
 
@@ -146,14 +132,32 @@ def test_h_bit_sum(nb_test, len_test):
     return True
 
 
+# Test the h_cla_sum function nb_test times
+# on len_test long lists
+def test_h_cla_sum(nb_test, len_test):
+    setup_bs_params()
+
+    for i in range(nb_test):
+        clear_list = [[ZZ.random_element(0, 2) for i in range(len_test)]
+                      for j in range(2)]
+        clear_sum = sum([ZZ(clear_list[i], 2) for i in range(2)])
+        clear_sum %= 2^(len_test)
+
+        crypted_list = [[encrypt(bs_params, bs_pk, clear_list[j][i])
+                         for i in range(len_test)] for j in range(2)]
+        crypted_sum = h_cla_sum(bs_params, crypted_list[0], crypted_list[1])
+        decrypted_sum = [basic_decrypt(bs_params, bs_sk, elt)
+                         for elt in crypted_sum]
+        decrypted_sum = ZZ(decrypted_sum, 2)
+        if clear_sum != decrypted_sum:
+            return False
+
+    return True
+
 # Test the reduction_sum function nb_test times
 # on len_test long lists
 def test_h_reduction_sum(nb_test, len_test):
-    params = setup(bs_lambda)
-
-    Zq = Integers(params[1])
-    secret_keys, public_key = keys_gen(params)
-    secret_key = secret_keys[1]
+    setup_bs_params()
 
     for i in range(nb_test):
         # the clear values with the expected result
@@ -164,16 +168,16 @@ def test_h_reduction_sum(nb_test, len_test):
 
         # the encrypt values with reduction_sum, that we decrypt
         # to see if the sum give the expected result
-        crypted_list = [[encrypt(params, public_key, clear_list[j][i])
+        crypted_list = [[encrypt(bs_params, bs_pk, clear_list[j][i])
                          for i in range(len_test)] for j in range(3)]
 
-        reduced1, reduced2 = h_reduction_sum(params, public_key,
+        reduced1, reduced2 = h_reduction_sum(bs_params, bs_pk,
                                              crypted_list[0],
                                              crypted_list[1],
                                              crypted_list[2])
-        c_reduced1 = [basic_decrypt(params, secret_key, elt)
+        c_reduced1 = [basic_decrypt(bs_params, bs_sk, elt)
                       for elt in reduced1]
-        c_reduced2 = [basic_decrypt(params, secret_key, elt)
+        c_reduced2 = [basic_decrypt(bs_params, bs_sk, elt)
                       for elt in reduced2]
         result = mod(ZZ(c_reduced1, 2) + ZZ(c_reduced2, 2), 2^len_test)
 
@@ -243,7 +247,9 @@ def test_main_bootstrapping():
     for algo in [h_naive_classic_list_sum,
                  h_balanced_classic_list_sum,
                  h_naive_reduction_list_sum,
-                 h_balanced_reduction_list_sum]:
+                 h_balanced_reduction_list_sum,
+                 h_naive_cla_list_sum,
+                 h_balanced_cla_list_sum]:
         one_test(test_sum_list, [nb_elt, bin_size, algo],
                  "algo is: " + algo.__name__)
         one_test(test_sum_list, [nb_elt, bin_size, algo],
