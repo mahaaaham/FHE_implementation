@@ -430,12 +430,20 @@ utilisant aussi que $\log_3(n+1) \leq \log(n)$ (dés $n \geq 2)$.
 \end{subsection}
 \begin{subsection}{Choix asymptotique de paramètres pour GSW avec bootstrapping}
 
+% Notons que pour faire un FHE, il suffit d'avoir des paramètres qui permettent assez de profondeur pour faire 2 fois le
+% circuit de déchiffrement ainsi qu'un NAND. De cette façon, on peut faire autant de fois que souhaité le circuit \[
+% D^*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk))\]
+
+
+
+
 On va utiliser l'inégalité grossière :
 \[
 88 \lceil\log(\log(q))\rceil + 36 \log(\log(n)) \leq 90\left(\log(\log(q)) + \log(n)\right) \]
 pour voir qu'on aura un GWS avec bootstrapping si on peut évaluer des chemins
 de profondeur
 \[ L = 90 \left(\log(\log(q)) + \log(n)\right) \]
+l'inégalité étant assez grossière pour qu'on ne rajoute pas de $1$ pour le circuit NAND.
 
 On avait dans la section \ref{param_leveled} vu qu'on pouvait avoir une
 profondeur de $L$ NAND si on avait: 
@@ -455,10 +463,10 @@ que pour un $\rho > 90$ assez grand, il suffit d'avoir:
 \begin{equation}
 q > {\left(n\log(q))\right)}^{\rho \left(\log(n) + \log(\log(q))\right)}
 \end{equation}
-En utilisant l'hypothèse  \ref{hyp_dwle_boot} (page \pageref{hyp_dwle_boot}), notre jeu de contraintes est alors:
+En utilisant l'hypothèse  \ref{hyp_dlwe_boot} (page \pageref{hyp_dlwe_boot}), notre jeu de contraintes est alors:
 
 \[ \begin{cases}
-\alpha  = n /q
+\alpha  = n /q \\
 	q = 2^\text{polylog$(n)$}\\ 
 	m = 2(N + \bnorm{q}) \\  
 	q > {\left(n\log(q))\right)}^{\rho \left(\log(n) + \log(\log(q))\right)}
@@ -466,7 +474,8 @@ En utilisant l'hypothèse  \ref{hyp_dwle_boot} (page \pageref{hyp_dwle_boot}), n
 
 On utilise alors une légère modification des paramètres conseillées par Shai Halevi:
 \begin{thm}
-Sous l'hypothèse de sécurité circulaire ainsi que l'hypothèse \ref{hyp_dlwe_boot} de difficulté de DWLE, les paramètres suivants rendent cryptosystème GSW bootstrapable et IND-CPA:
+Sous l'hypothèse de sécurité circulaire ainsi que l'hypothèse \ref{hyp_dlwe_boot} de difficulté de DWLE, les paramètres
+suivants rendent cryptosystème GSW bootstrappable et IND-CPA:
 
 \[ \begin{cases}
  	n = \lambda \\

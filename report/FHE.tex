@@ -1,33 +1,32 @@
 \begin{section}{FHE, SFHE et bootstrapping}
 
 Nous indiquons ici les définitions de base d'un FHE tirées de 
-l'exposition faite dans~\cite{halevi} et que nous conseillons 
+l'exposition faite dans~\cite{halevi} que nous conseillons 
 de lire pour avoir plus de détails.
 
-\begin{definition}
-Notons qu'alors que le cryptosystème que nous allons étudier à pour ensemble de clairs $\ZZq$, ces
+Notons que le cryptosystème que nous allons étudier à pour ensemble de clairs $\ZZq$, ces
 définitions seront faites pour un cryptosystème ne permettant de ne chiffrer que $0$ ou $1$.
 Cela peut sembler réducteur, mais nous ne prouverons que le  cryptosysteme
 GSW peut-être adapté en FHE et LHE\footnote{voir les défintions suivantes} qu'en restreignant 
-les clairs à $\{ 0, 1\}$
+les clairs à l'ensemble $\{0, 1\}$
 
-
+\begin{definition}{cryptosystème homomorphe}
 Un cryptosystème homomorphe est constitué de $4$ fonctions:
 \[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
-où l'espace des clairs et $\{0,1\}$ et $C$ l'espace des chiffrés. 
+où l'espace des clairs est $\{0,1\}$ et l'espace des chiffrés est un ensemble $C$.
 Plus précisément:
 \begin{itemize}
-\item $(\pk,, \sk) \leftarrow \Keygen(1^\kappa)$, $\kappa$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+\item $(\pk,, \sk) \leftarrow \Keygen(1^\lambda)$, $\lambda$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
 \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu$ et retourne un chiffré $c\in C$
 \item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu$.
 \item $\vec{c}_f \leftarrow \Eval_\pk(\Pi,\vec{c})$ prend une clé publique
 $\pk$, un circuit  $\Pi$, un vecteur de chiffrés $\vec{c}$ et retourne un
-vecteur de chiffrés $c_f$, un pour chaque sortie du circuit $\Pi$
+vecteur de chiffrés $\vec{c}_f$ contenant un chiffré chaque sortie du circuit $\Pi$
 \end{itemize}
 \end{definition}
 
-\begin{definition}{correction}
-Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphique
+\begin{definition}{correction} \\
+Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphe
 et  $\mathcal{C} = \{ \mathcal{C}_\tau\}_{\tau \in \mathbb{N}}$ une famille de
 circuits.  On dira que \textbf{E} est correct pour $\mathcal{C}$
 Si il déchiffre avec succès les messages qui viennent d'être chiffrés 
@@ -35,30 +34,30 @@ ainsi que ceux qui ont été évalués sur un circuit. Voir \cite{halevi} pour l
 formules détaillées.
 \end{definition}
 
-\begin{definition}{Compacité}
+\begin{definition}{Compacité} \\
 Un cryptosystème homomorphe \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ 
 est compact si il existe un polynome $B$ tel que pour tout $\lambda, \tau
 \in \mathbb{N}$, tout circuit $\Pi$ de $t$ entrées et une seule sortie, et un
-chiffré $b = (b_1,\cdots,b_t) \in M^t$, on a:
+chiffré $b = (b_1,\cdots,b_t) \in \{0,1\}^t$, on a:
 \[ 
-\PP \left[ |c'| \leq B(\lambda): (\sk,\pk) \leftarrow \Keygen(1^\lambda,
+\PP \left[ |c'| \leq B(\lambda): (\!\sk,\pk) \leftarrow \Keygen(1^\lambda,
 1^\tau), \vec{c} \leftarrow \Enc_\pk(\vec{b}), \vec{c} \leftarrow 
 \Eval_\pk(\Pi, \vec{c}) \right] = 1
 \]
 \end{definition}
 
-\begin{definition}{FHE, LHE et SWHE}
-Soit \textbf{E} un cryptosysteme homomorphe.
+\begin{definition}{FHE, LHE et SWHE} \\
+Soit \textbf{E} un cryptosystème homomorphe.
 \begin{itemize}
 \item On dit que c'est un fully homomorphic encryption (abrégé en FHE) si il est correct pour
-une famille $\mathcal{C}$ telle que $\mathcal{C_1}$ contient déjà tous les
+une famille $\mathcal{C}$ telle que $\mathcal{C}_1$ contient déjà tous les
 circuits booléens. 
 \item On dit que c'est un  leveled homomorphic encryption (abrégé en LHE)  si il est correct pour une famille
-$\mathcal{C}$ telle que pour tout $\tau$, $\mathcal{C}_\tau$ contient les
-circuits booléens de profondeur plus petite ou égale à $\tau$ 
-\item On dit, informellement, qu'il s'agit d'un somewhat homomorphic encryption
-(abrégé en SWHE) si il est correct pour une famille $\mathcal{C}$ de circuits
-tels que la complexité des circuits de $\mathcal{C}_\tau$ grandis avec $\tau$.
+$\mathcal{C}$ telle que pour tout $\tau$, $\mathcal{C}_\tau$ contient les circuits booléens de profondeur plus petite ou
+égale à $\tau$. Plus généralement, l'idée est de pouvoir prévoir, pour tout $L$, les paramètres à utiliser afin de
+pouvoir évaluer avec succès les circuits d'une profondeur $L$ 
+\item On dit, informellement, qu'il s'agit d'un somewhat homomorphic encryption (abrégé en SWHE) si il est correct pour
+une famille $\mathcal{C}$ de circuits tels que la complexité des circuits de $\mathcal{C}_\tau$ grandis avec $\tau$.
 \end{itemize}
 \end{definition}
 
@@ -66,29 +65,29 @@ Nous allons maintenant définir le bootstrapping en introduisant pour cela
 quelques notations.
 
 \begin{itemize}
-\item Pour $\lambda, \tau \in \mathbb{N}$, on désigne par
-$\mathcal{CT}_\epsilon(\lambda,\tau)$ comme l'union des chiffrés de messages 
-ainsi que des évaluations de chiffrés de messages par des circuits de
-$\mathcal{C}_\tau$, les formules détaillées sont donnés dans \cite{halevi};
-\item On considère pour tout chiffré $c\in\mathcal{CT}_\epsilon(\lambda,\tau)$ 
-le circuit $D_c(\sk) = \Dec_\sk(c)$ ayant pour entrée $\sk$ appliquant 
-l'algorithme de déchiffrement de $c$ avec la clé $\sk$. Notons bien que $c$
-n'est pas une entrée du circuit. On crée aussi le circuit suivant, avec pour
+\item Pour $\lambda, \tau \in \mathbb{N}$, on note
+$\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ l'union des chiffrés de messages 
+ainsi que des évaluations de chiffrés de messages par des circuits de 
+$\mathcal{C}_\tau$, les formules détaillées étant donnés dans \cite{halevi};
+\item On considère pour tout chiffré $c\in\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ 
+le circuit $D_c(\sk) = \Dec_\sk(c)$ ayant pour entrée $\sk$ et appliquant 
+l'algorithme de déchiffrement de $c$ avec la clé $\sk$ (notons bien que $c$
+n'est pas une entrée du circuit). On crée aussi le circuit suivant, avec pour
 unique entrée \sk, appelé circuit de déchiffrement augmenté de $c_1$ et $c_2$
-\[ D*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk))\]
+\[ D^*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk))\]
 \end{itemize}
 
-\begin{definition}{Bootstrappable encryption}
+\begin{definition}{Bootstrappable encryption} \\
 Un cryptosystème homomorphe
 \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$
 est bootstrappable si il peut évaluer homomorphiquement tous les circuits 
 de chiffrement augmentés. Autrement dit, si il existe une fonction $\tau$
 bornée par un polynôme tel que pour tous $\lambda \in \mathbb{N}$ et tous
-chiffrés  $c_1, c_2 \in \mathcal{CT}_\epsilon{\lambda, \tau(\lambda)}$, on a
-$D*_{c_1,c_2} \in \mathcal{C}_{\tau(\lambda)}$.
+chiffrés  $c_1, c_2 \in \mathcal{CT}_{\text{\textbf{E}}}(\lambda, \tau(\lambda))$, on a
+$D^*_{c_1,c_2} \in \mathcal{C}_{\tau(\lambda)}$.
 \end{definition}
 
-\begin{definition}{weak circular security}
+\begin{definition}{weak circular security} \\
 \label{def:circular}
 Soit \textbf{E} = $(\Keygen, \Enc, \Dec)$ un cryptosystème et $\mathcal{A}$ un
 algorithme polynomial probabiliste. 
@@ -98,7 +97,7 @@ On considère l'expérience suivante,
 \item $(\sk, \pk) \leftarrow \Keygen(1^\lambda, 1^\tau)$
 \item on chiffre chaque bit de la clé secrète et on obtient un vecteur de
 chiffrés $\vec{c^*} \leftarrow \Enc_\pk{s_k}$
-\item un bit $b\in \{0,1\}$ est tiré au hasard
+\item un bit $b\in \{0,1\}$ est tiré uniformément
 \item On crée $c \leftarrow \Enc_\pk(b)$ 
 \item $b^* \leftarrow \mathcal{A}(\pk, \vec{c^*}, c)$
 \item L'expérience est réussie si $b = b^*$ et ratée sinon.
