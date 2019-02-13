@@ -16,19 +16,20 @@ Un cryptosystème homomorphe est constitué de 4 fonctions :
 où l'espace des clairs est $\{0,1\}$ et l'espace des chiffrés est un ensemble $C$.
 Plus précisément:
 \begin{itemize}
-\item $(\pk, \sk) \leftarrow \Keygen(1^\lambda)$, $\lambda$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
-CLÉ D'ÉVALUATION ? IL N'Y A QUE DEUX ÉLÉMENTS RETOURNÉS. WTF ?
+\item $(\pk, \sk) \leftarrow \Keygen(1^\lambda)$, $\lambda$ étant le paramètre de sécurité, retourne une clé publique et une clé secrète.
 \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu$ et retourne un chiffré $c\in C$
 \item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrète $\sk$, un chiffré $c \in C$ et retourne un clair $\mu$.
 \item $\vec{c}_f \leftarrow \Eval_\pk(\Pi,\vec{c})$ prend une clé publique
 $\pk$, un circuit  $\Pi$, un vecteur de chiffrés $\vec{c}$ et retourne un
-vecteur de chiffrés $\vec{c}_f$ contenant un chiffré chaque sortie du circuit $\Pi$.
-OK, ALORS LÀ, ÇA NE VEUX PLUS RIEN DIRE. ÇA RETOURNE QUOI ? WTF ?
+vecteur de chiffrés $\vec{c}_f$ dont les composantes correspondent aux sorties du circuit $\Pi$.
 \end{itemize}
 \end{definition}
+\begin{rmq}
+On s'autorisera à considérer des circuits $\Pi$ avec constantes. Par constante, nous entendons
+un bit qui sera chiffré lors de l'utilisation de $\Eval$. Il faut alors prendre en compte les constantes en plus des variables lorsque l'on veut calculer la profondeur du circuit.
+\end{rmq}
 
 \begin{definition}{Correction}
-
 Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphe
 et  $\mathcal{C} = \{ \mathcal{C}_\tau\}_{\tau \in \mathbb{N}}$ une famille de
 circuits.  On dira que \textbf{E} est correct pour $\mathcal{C}$ si il déchiffre avec succès les messages qui viennent d'être chiffrés 
@@ -74,12 +75,31 @@ $\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ l'union des chiffrés de messag
 ainsi que des évaluations de chiffrés de messages par des circuits de 
 $\mathcal{C}_\tau$, les formules détaillées étant donnés dans \cite{halevi};
 \item On considère pour tout chiffré $c\in\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ 
-le circuit $D_c(\sk) = \Dec_\sk(c)$ ayant pour entrée $\sk$ et appliquant 
-l'algorithme de déchiffrement de $c$ avec la clé $\sk$ (notons bien que $c$
-n'est pas une entrée du circuit). On crée aussi le circuit suivant, avec pour
+le circuit $D_c(\bsk) := \Dec_\sk(c)$ pouvant utiliser un nombre fini des constantes
+ayant pour entrée la décomposition binaire 
+de $\sk$ et appliquant l'algorithme de déchiffrement de $c$ avec la clé $\sk$ (notons bien que $c$ n'est pas une entrée
+du circuit, voir la remarque suivante). On crée aussi le circuit suivant, avec pour
 unique entrée \sk, appelé circuit de déchiffrement augmenté de $c_1$ et $c_2$
 \[ D^*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk)).\]
 \end{itemize}
+\begin{rmq}
+Soyons un peu plus précis sur ce que signifie de dire que $D_c(\bsk)$
+n'a pour entrée que $\sk$. Cela veut dire que quand on applique 
+$\Eval$ au circuit $D_c$ avec un vecteur de chiffrés $\vec{c_{\bsk}}$,
+seules changent dans $D_c$ les portes NAND qui deviennent des 
+NAND homomorphes. 
+
+Il n'est donc à priori pas possible avec cette définition 
+d'utiliser des coefficients de $c$ dans le circuits $D_c$ 
+et d'espérer qu'ils soient alors chiffrés quand on leur applique $\Eval$.
+
+
+Toutefois, comme nous autorisons l'usage de constantes, on peut 
+considérer les coefficients de $c$ comme des constantes et donc 
+s'assurer ainsi qu'ils sont chiffrés lors de l'utilisation de $\Eval$. 
+Il ne faut alors pas oublier de prendre en compte ces constantes pour 
+calculer la profondeur en NAND du circuit.
+\end{rmq}
 
 \begin{definition}{Bootstrappable encryption}
 

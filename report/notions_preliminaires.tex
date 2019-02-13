@@ -89,8 +89,8 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	Pour analyser la sécurité du cryptosystème, nous utiliserons le problème DLWE. Comme l'indique le théorème 1 de
 	\cite{C:GenSahWat13}, il est possible de réduire le problème LWE à des problèmes sur des réseaux.
 
-	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (short vector
-	problem PAS SHORTEST ? WTF ?). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
+	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (shortest vector
+	problem). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
 
 	\begin{definition}{versions matricielles de DLWE et LWE}
 
@@ -126,9 +126,8 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	Il impose déjà que la distribution $\chi$ soit \og concentrée sur de
 	petites valeurs \fg~. Plus précisément, il pose l'hypothèse suivante: 
 	\begin{hyp}{Hypothèse sur la probabilité $\chi$}\\ \label{hyp:proba}
-	il doit exister $\alpha = \alpha(n) <\!\!\!< 1$ tel que:
+	il doit exister $\alpha = \alpha(n) <\!\!\!< 1$ tel que la fonction:
 	\[ n \mapsto \PP [x \leftarrow \chi : |x| > \alpha q]\]
-	TEL QUE OU SACHANT QUE ? WTF ? //
 	soit négligeable.
 	\end{hyp}
 	Notons qu'il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
