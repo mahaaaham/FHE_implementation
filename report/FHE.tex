@@ -4,49 +4,53 @@ Nous indiquons ici les définitions de base d'un FHE tirées de
 l'exposition faite dans~\cite{halevi} que nous conseillons 
 de lire pour avoir plus de détails.
 
-Notons que le cryptosystème que nous allons étudier à pour ensemble de clairs $\ZZq$, ces
-définitions seront faites pour un cryptosystème ne permettant de ne chiffrer que $0$ ou $1$.
+Notons que le cryptosystème que nous allons étudier a pour ensemble de clairs $\ZZq$, mais que ces définitions seront faites pour un cryptosystème ne permettant de ne chiffrer que 0 ou 1.
 Cela peut sembler réducteur, mais nous ne prouverons que le  cryptosysteme
 GSW peut-être adapté en FHE et LHE\footnote{voir les défintions suivantes} qu'en restreignant 
-les clairs à l'ensemble $\{0, 1\}$
+les clairs à l'ensemble $\{0, 1\}$.
 
-\begin{definition}{cryptosystème homomorphe}
-Un cryptosystème homomorphe est constitué de $4$ fonctions:
+\begin{definition}{Cryptosystème homomorphe}
+
+Un cryptosystème homomorphe est constitué de 4 fonctions :
 \[ \text{\textbf{HE}} = (\Keygen, \Enc, \Dec, \Eval)\]
 où l'espace des clairs est $\{0,1\}$ et l'espace des chiffrés est un ensemble $C$.
 Plus précisément:
 \begin{itemize}
-\item $(\pk,, \sk) \leftarrow \Keygen(1^\lambda)$, $\lambda$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+\item $(\pk, \sk) \leftarrow \Keygen(1^\lambda)$, $\lambda$ étant le paramètre de sécurité, retourne une clé publique, une clé d'évaluation et une clé secrète.
+CLÉ D'ÉVALUATION ? IL N'Y A QUE DEUX ÉLÉMENTS RETOURNÉS. WTF ?
 \item $c \leftarrow \Enc_{\pk}(\mu)$ prend une clé publique $\pk$, un clair $\mu$ et retourne un chiffré $c\in C$
-\item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrete $\sk$, un chiffré $c \in C$ et retourne un clair $\mu$.
+\item $\mu \leftarrow \Dec_{\sk}(c)$ prend une clé secrète $\sk$, un chiffré $c \in C$ et retourne un clair $\mu$.
 \item $\vec{c}_f \leftarrow \Eval_\pk(\Pi,\vec{c})$ prend une clé publique
 $\pk$, un circuit  $\Pi$, un vecteur de chiffrés $\vec{c}$ et retourne un
-vecteur de chiffrés $\vec{c}_f$ contenant un chiffré chaque sortie du circuit $\Pi$
+vecteur de chiffrés $\vec{c}_f$ contenant un chiffré chaque sortie du circuit $\Pi$.
+OK, ALORS LÀ, ÇA NE VEUX PLUS RIEN DIRE. ÇA RETOURNE QUOI ? WTF ?
 \end{itemize}
 \end{definition}
 
-\begin{definition}{correction} \\
+\begin{definition}{Correction}
+
 Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphe
 et  $\mathcal{C} = \{ \mathcal{C}_\tau\}_{\tau \in \mathbb{N}}$ une famille de
-circuits.  On dira que \textbf{E} est correct pour $\mathcal{C}$
-Si il déchiffre avec succès les messages qui viennent d'être chiffrés 
-ainsi que ceux qui ont été évalués sur un circuit. Voir \cite{halevi} pour les
+circuits.  On dira que \textbf{E} est correct pour $\mathcal{C}$ si il déchiffre avec succès les messages qui viennent d'être chiffrés 
+ainsi que ceux qui ont été évalués sur un circuit de $\mathcal{C}$. Voir \cite{halevi} pour les
 formules détaillées.
 \end{definition}
 
-\begin{definition}{Compacité} \\
+\begin{definition}{Compacité}
+
 Un cryptosystème homomorphe \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ 
 est compact si il existe un polynome $B$ tel que pour tout $\lambda, \tau
-\in \mathbb{N}$, tout circuit $\Pi$ de $t$ entrées et une seule sortie, et un
+\in \mathbb{N}$, tout circuit $\Pi$ à $t$ entrées et une seule sortie, et un
 chiffré $b = (b_1,\cdots,b_t) \in \{0,1\}^t$, on a:
 \[ 
 \PP \left[ |c'| \leqslant B(\lambda): (\!\sk,\pk) \leftarrow \Keygen(1^\lambda,
 1^\tau), \vec{c} \leftarrow \Enc_\pk(\vec{b}), \vec{c} \leftarrow 
-\Eval_\pk(\Pi, \vec{c}) \right] = 1
+\Eval_\pk(\Pi, \vec{c}) \right] = 1.
 \]
 \end{definition}
 
-\begin{definition}{FHE, LHE et SWHE} \\
+\begin{definition}{FHE, LHE et SWHE}
+
 Soit \textbf{E} un cryptosystème homomorphe.
 \begin{itemize}
 \item On dit que c'est un fully homomorphic encryption (abrégé en FHE) si il est correct pour
@@ -74,10 +78,11 @@ le circuit $D_c(\sk) = \Dec_\sk(c)$ ayant pour entrée $\sk$ et appliquant
 l'algorithme de déchiffrement de $c$ avec la clé $\sk$ (notons bien que $c$
 n'est pas une entrée du circuit). On crée aussi le circuit suivant, avec pour
 unique entrée \sk, appelé circuit de déchiffrement augmenté de $c_1$ et $c_2$
-\[ D^*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk))\]
+\[ D^*_{c_1,c_2}(sk) := \text{NAND}(D_{c_1}(\sk), D_{c_2}(\sk)).\]
 \end{itemize}
 
-\begin{definition}{Bootstrappable encryption} \\
+\begin{definition}{Bootstrappable encryption}
+
 Un cryptosystème homomorphe
 \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$
 est bootstrappable si il peut évaluer homomorphiquement tous les circuits 
@@ -87,19 +92,19 @@ chiffrés  $c_1, c_2 \in \mathcal{CT}_{\text{\textbf{E}}}(\lambda, \tau(\lambda)
 $D^*_{c_1,c_2} \in \mathcal{C}_{\tau(\lambda)}$.
 \end{definition}
 
-\begin{definition}{weak circular security} \\
+\begin{definition}{weak circular security}
+
 \label{def:circular}
 Soit \textbf{E} = $(\Keygen, \Enc, \Dec)$ un cryptosystème et $\mathcal{A}$ un
 algorithme polynomial probabiliste. 
 On considère l'expérience suivante, 
 \begin{itemize}
-\item $1^\tau \leftarrow \mathcal{A}(1^\lambda)$ 
-\item $(\sk, \pk) \leftarrow \Keygen(1^\lambda, 1^\tau)$
-\item on chiffre chaque bit de la clé secrète et on obtient un vecteur de
-chiffrés $\vec{c^*} \leftarrow \Enc_\pk{s_k}$
-\item un bit $b\in \{0,1\}$ est tiré uniformément
-\item On crée $c \leftarrow \Enc_\pk(b)$ 
-\item $b^* \leftarrow \mathcal{A}(\pk, \vec{c^*}, c)$
+\item $1^\tau \leftarrow \mathcal{A}(1^\lambda)$.
+\item $(\sk, \pk) \leftarrow \Keygen(1^\lambda, 1^\tau)$.
+\item On chiffre chaque bit de la clé secrète et on obtient un vecteur de chiffrés $\vec{c^*} \leftarrow \Enc_\pk{s_k}$.
+\item Un bit $b\in \{0,1\}$ est tiré uniformément.
+\item On crée $c \leftarrow \Enc_\pk(b)$ .
+\item $b^* \leftarrow \mathcal{A}(\pk, \vec{c^*}, c)$.
 \item L'expérience est réussie si $b = b^*$ et ratée sinon.
 \end{itemize}
 Notant $p(\lambda, \mathcal{A})$ la probabilité de succès de cette expérience, on dit

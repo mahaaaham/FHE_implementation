@@ -1,7 +1,7 @@
 \begin{section}{Notions préliminaires}
 	\begin{subsection}{Différentes normes}
 Pour $x\in \mathbb{N}$, on note $\bnorm{x} := \lfloor \log(x) \rfloor + 1$.
-Pour $q > 0$. La valeur absolue d'un élément $x \in \ZZq$
+Pour $q > 0$, la valeur absolue d'un élément $x \in \ZZq$
 sera par définition la valeur absolue dans $\ZZ$ de son représentant dans
 $\rrbracket - q/2, q/2 \rrbracket$. 
 	La norme infinie $\norm{\vec{x}}$ d'un vecteur $\vec{x} \in \ZZq^n$ sera 
@@ -25,7 +25,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \] 
 	$e_i$ étant échantillonné par $\chi$.
 	\end{definition}
-	Notons que nécessairement, $n = O(P(\lambda))\text{ et }\log(q) = O(P(\lambda))$ pour un polynome $P$ pour que
+	Notons que nécessairement, $n = \mathcal{O}(P(\lambda))\text{ et }\log(q) = \mathcal{O}(P(\lambda))$ pour un polynome $P$ pour que
 	les données soient générés en temps $1^\lambda$.
 
 	\begin{definition}{Learning with Errors (LWE)}
@@ -39,7 +39,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	Le problème $\LWE$ consiste à trouver $\vec{s}$ à partir d'un nombre polynomial $m = m(\lambda)$ d'échantillons.
 	\end{definition}
 
-	Ces deux problèmes sont en fait \og équivalents \fg. Cela semble assez évident LWE vers DLWE. Pour l'autre sens, 	le Lemme
+	Ces deux problèmes sont en fait \og équivalents \fg. Il est assez évident que savoir résoudre LWE permet de résoudre DLWE. Pour l'autre sens, le Lemme
 	4.2 de \cite{STOC:Regev05} montre comment réduire à DLWE à LWE sous notamment les hypothèses que $q$ soit  
 	premier et $q = \mathcal{O}(\text{poly}(n))$. Le théorème 3.1 de \cite{EPRINT:MicPei11} montre la même chose
 	mais lorsque $q$ est un produit de premiers $p_i \in \mathcal{O}(\text{poly}(n))$, comme ce sera le cas lorsque
@@ -82,7 +82,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	
 	On retrouve ainsi $s$ avec $n$ calculs polynomiaux en $n$, ce qui reste évidemment polynomial en $n$.
 	
-	La probabilité de se tromper vaut de plus $n$ fois un terme exponentiellement proche de 0 et reste donc
+	De plus, la probabilité de se tromper vaut $n$ fois un terme exponentiellement proche de 0 et reste donc
 	exponentiellement proche de 0.
 	\end{proof}
 
@@ -90,7 +90,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	\cite{C:GenSahWat13}, il est possible de réduire le problème LWE à des problèmes sur des réseaux.
 
 	Indiquons ici de façon informelle comment passer du problème LWE à un problème de type SVP (short vector
-	problem). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
+	problem PAS SHORTEST ? WTF ?). Tout d'abord, nous aurons besoin d'exprimer LWE sous une forme matricielle :
 
 	\begin{definition}{versions matricielles de DLWE et LWE}
 
@@ -110,10 +110,10 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix}\cdot
 	   \begin{bmatrix}* \\ \vec{v} \end{bmatrix} =
 	   \begin{bmatrix} \vec{e} \\ \vec{v} \end{bmatrix} \]
-	Si la distribution $\chi$ créé de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg~ vecteur du réseau engendré par les colonnes de 
+	Si la distribution $\chi$ crée de petites valeurs, on voit qu'on a alors trouvé un \og petit \fg~ vecteur du réseau engendré par les colonnes de 
 	\[ \begin{bmatrix}q & A \\ 0 &1 \end{bmatrix} \]
 
-	\textbf{Choix de paramètres pour rentre DLWE difficile:}
+	\textbf{Choix de paramètres pour rendre DLWE difficile :}
 
 	Intéressons nous maintenant à la façon de choisir des paramètres
 	pour que le problème $DLWE$ soit difficile. Il s'agit d'une question épineuse, 
@@ -121,13 +121,14 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	un sujet de recherche important.
 
 	Nous utiliserons pour notre part les remarques faites dans \cite{halevi}, qui datent de 
-	$2017$ et doivent donc être prises avec précautions. 
+	2017 et doivent donc être prises avec précautions. 
 
 	Il impose déjà que la distribution $\chi$ soit \og concentrée sur de
 	petites valeurs \fg~. Plus précisément, il pose l'hypothèse suivante: 
 	\begin{hyp}{Hypothèse sur la probabilité $\chi$}\\ \label{hyp:proba}
 	il doit exister $\alpha = \alpha(n) <\!\!\!< 1$ tel que:
-	\[ n \mapsto \PP [x \leftarrow \chi : |x| > \alpha q]\] 
+	\[ n \mapsto \PP [x \leftarrow \chi : |x| > \alpha q]\]
+	TEL QUE OU SACHANT QUE ? WTF ? //
 	soit négligeable.
 	\end{hyp}
 	Notons qu'il faut donc $\alpha q > 1$ pour que $\chi$ puisse générer autre chose 
@@ -146,8 +147,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 
 	\begin{hyp}{hypothèse pour le leveled GSW} \\
 	\label{hyp_dlwe}
-	Il existe un $0 < \epsilon < 1$ tel que le problème DLWE soit
-	soit difficile pour 
+	Il existe un $0 < \epsilon < 1$ tel que le problème DLWE soit difficile pour 
 	\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
 	\end{hyp}
 
@@ -187,7 +187,7 @@ $\|x\|_{1}$ la somme des valeurs absolues de ses coordonnées.
 	
 	\begin{subsection}{La gaussienne discrète}
 Très souvent, la distribution $\chi$ choisie pour avoir des paramètres sécurités pour les problèmes LWE/DLWE est une
-gaussienne discrète. Nous nous proposons ici d'en indiquer la définition, ainsi que d'en indiquer certaines propriétés.
+gaussienne discrète. Nous nous proposons ici d'en indiquer la définition ainsi que certaines propriétés.
 Notamment, la propriété~\ref{gaussienne_alpha} montre qu'il suffit de prendre $\chi = D^q_s$ avec un $s > 1.5$ constant
 pour qu'avec les valeurs de $\alpha$ spécifiées dans les hypothèses~\ref{hyp_dlwe} et
 \ref{hyp_dlwe_boot}, 
@@ -214,6 +214,7 @@ Nous introduisons maintenant les notions et propositions permettant de montrer p
 des gaussiennes discrètes afin de satisfait l'hypothèse~\ref{hyp:proba}.
 
 \begin{definition}{Smoothing parameter}
+
 Pour un réseau $L$ de dimension $n$ et un réel $\epsilon > 0$, le paramètre $\eta_\epsilon(L)$, dit smoothing parameter,
 est le plus petit réel $s>0$ tel que 
 	\[\rho_{1/s}(L^* \setminus \{0\}) \leqslant \epsilon\]
@@ -229,16 +230,16 @@ Notamment, pour $\epsilon = 0.08$, $\eta_\epsilon(\ZZ) \leqslant 1.5$.
 \begin{prop}
 \label{gaussienne}
 Pour tout $\epsilon > 0$ , $s \geqslant \eta_{\epsilon}(\ZZ)$ et pour tout $t>0$ :
-\[ \PP\left(x \leftarrow D_{\ZZ, s,c}\: :\: |x-c| \geq t\cdot s\right) \leqslant 2 e^{-\pi t^2}	\cdot \frac{1+\epsilon}{1-\epsilon} \]
+\[ \PP\left(x \leftarrow D_{\ZZ, s,c}\: :\: |x-c| \geqslant t\cdot s\right) \leqslant 2 e^{-\pi t^2}	\cdot \frac{1+\epsilon}{1-\epsilon} \]
 % ligne commentée car je ne suis pas sûr de voir pourquoi cela est vrai, et on ne l'utilise pas.
 % Notamment, pour $0 < \epsilon  < 1/2$ et $t \geqslant \omega(\sqrt{\log(n)})$, cette probabilité est négligeable.
 \end{prop}
 
 \begin{prop}
 \label{gaussienne_alpha}
-Pour $s \geq 1.5$ et $\alpha = \alpha(\lambda)$, si il existe une constante $\tau$
-telle que $\alpha \geq \tau n/q$, alors:
-\[\lambda \rightarrow  \PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right)\]	
+Pour $s \geqslant 1.5$ et $\alpha = \alpha(\lambda)$, si il existe une constante $\tau$
+telle que $\alpha \geqslant \tau n/q$, alors:
+\[\lambda \rightarrow  \PP\left(x\leftarrow D^q_s\: : \: |x|\geqslant q \alpha \right)\]	
 est négligeable et $D^q_s$ satisfait donc l'hypothèse~\ref{hyp:proba}.
 \end{prop}
 \begin{proof}
@@ -248,12 +249,12 @@ permet de dire que $s > \eta_{\epsilon}(\ZZ)$.
 
 De plus, en appliquant la proposition précédente avec $t = \frac{q\alpha}{s}$, on voit que 
 \begin{align*}
-\PP\left(x\leftarrow D^q_s\: : \: |x|\geq q \alpha \right) =
-\PP\left(x\leftarrow D^q_s\: : \: |x|\geq s \left(\frac{q \alpha}{s}\right)  \right)
+\PP\left(x\leftarrow D^q_s\: : \: |x|\geqslant q \alpha \right) =
+\PP\left(x\leftarrow D^q_s\: : \: |x|\geqslant s \left(\frac{q \alpha}{s}\right)  \right)
 \end{align*}
 est négligeable si il
 existe un $u > 0$ tel que
-\[q \alpha / s \geq u n\]
+\[q \alpha / s \geq u n.\]
 Or, $u = s\tau$ convient.
 \end{proof}
 

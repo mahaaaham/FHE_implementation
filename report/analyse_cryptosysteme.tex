@@ -295,6 +295,29 @@ et rendent le cryptosystème GSW IND-CPA:
 	m = 2(n+1)\bnorm{q} \\  
 	\end{cases}  \]
 \end{thm}
+
+\begin{figure}[!ht]
+\begin{tabular}{|l|c|c|c|}
+\hline
+& taille du secret & taille de la clé & taille d'un chiffré \\
+\hline
+$L = 10, \ \epsilon = 0.1$ & 131 octets & 264 Ko & 397 Ko \\
+\hline
+$L = 10, \ \epsilon = 0.5$ & 194 octets & 581 Ko & 3 Mo \\
+\hline
+$L = 100, \ \epsilon = 0.1$ & 410 octets & 3 Mo & 4 Mo \\
+\hline
+$L = 100, \ \epsilon = 0.5$ & 411 octets & 3 Mo & 4 Mo \\
+\hline
+$L = 1000, \ \epsilon = 0.1$ & 745 octets & 8 Mo & 13 Mo \\
+\hline
+$L = 1000, \ \epsilon = 0.5$ & 1 Ko & 15 Mo & 151 Mo \\
+\hline
+\end{tabular}
+\caption{Taille des données suivant les paramètres étudiés précédemment avec $\lambda = 128$}
+\label{size_boostrapping}
+\end{figure}
+
 Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg~ \ étant donné que la sécurité n'est
 assurée asymptotiquement. Voyons maintenant si nous pouvons trouver des paramètres concrets permettant une utilisation 
 raisonnable sur un ordinateur.
