@@ -1,47 +1,43 @@
-\begin{section}{Analyse du cryptosystème: sécurité, profondeur des circuits}
+\begin{section}{Sécurité IND-CPA et paramètres pour un leveled GSW}
 	\begin{subsection}{Sécurité du cryptosystème}
 
 	\begin{definition}{Distance statistique}
-	Soit $X$ et $Y$ deux variables aléatoires supportée par
+	Soit $X$ et $Y$ deux variables aléatoires supportées par
 	un ensemble $\mathcal{V}$ et à valeur 
 	dans un groupe abélien $G$. On définit la distance 
 	statistique entre $X$ et $Y$, notée $\SD(X,Y)$, 
-	comme étant la somme:
+	comme étant
 	\[ \frac{1}{2} \sum_{v \in \mathcal{V}} |\mathbb{P}(X = v) -
 	\mathbb{P}(Y = v)| \]
 
-	De plus, on dira que deux familles ${\{X_i\}}_{i \in \NN}$, ${\{Y_i\}}_{i \in \NN}$
-	de distributions sont statistiquement indistinguables si 
-	la fonction 
-	\[ i \longrightarrow \SD(X_i, Y_i) \]
-	est négligeable.
+	\end{definition}
 
-	% \begin{prop}
-	% Pour $X$ et $Y$ définies comme précédemment, on a:
-	% \[\SD(X,Y) = \max_{\mathcal{W}\subset\mathcal{V}} | \PP(X\in\mathcal{W}) - \PP(Y\in\mathcal{W})| \]
-	% \end{prop}
-	% \begin{proof}
-	% \end{proof}
-
+	\begin{definition}{Familles statistiquement indistinguables, calculatoirement indistinguables} \\
+	On dira que deux familles ${\{X_i\}}_{i \in \NN}$, ${\{Y_i\}}_{i \in \NN}$
+	de distributions sont 
+	\begin{itemize}
+	\item statistiquement indistinguables si la fonction $ i \longrightarrow \SD(X_i, Y_i) $ est négligeable.
+	\item calculatoiremt indistinguables il n'existe pas d'automate polynomial probabiliste $\mathcal{A}$
+	pouvant distinguer $X_i$ et $Y_i$ avec un avantage non négligeable.
+	\end{itemize}
+	\begin{prop}
+	Si deux familles de distributions sont statistiquement
+	indistinguables, elles sont calculatoirement indistinguables.
+	\end{prop} 
 
 	\end{definition}
 	\begin{prop} \label{sd_add}
-	Soit ${(X_i)}_{1\leq i \leq n}$ et resp .${(Y_i)}_{1\leq i\leq n}$
+	Soit ${(X_i)}_{1\leqslant i \leqslant n}$ et resp .${(Y_i)}_{1\leqslant i\leqslant n}$
 	deux n-uplets de distributions indépendantes.
-	\[ \SD\left((X_1,\cdots,X_n), (Y_1, \cdots, Y_n)\right) \leq \sum_{i=1}^n \SD(X_i,Y_i) \]
+	\[ \SD\left((X_1,\cdots,X_n), (Y_1, \cdots, Y_n)\right) \leqslant \sum_{i=1}^n \SD(X_i,Y_i) \]
 	\end{prop}
-
-
-
-
 	\begin{proof}
 	Montrons le pour $n = 2$, la suite se déduisant par récurrence.
-	On a:
 	\begin{align*}
 		&\SD\left((X_1,X_2),(Y_1,Y_2)\right) \\
 		&= \frac{1}{2} \sum_{(u,v)}\left| \PP(X_1=u)\PP(X_2=v) -
 		\PP(Y_1=u)\PP(Y_2=v) \right| \\ 
-		&\leq 
+		&\leqslant
 		\frac{1}{2} \sum_{(u,v)}\left| \PP(X_1=u)\left(\PP(X_2=v) - \PP(Y_2 = v)\right)
 		- (\PP(X_1 = u) - \PP(Y_1=u))\PP(Y_2=v) \right| \\
 		&\leq
@@ -51,13 +47,8 @@
 		&= \SD(X_1, Y_1) + \SD(X_2, Y_2)
 	\end{align*}
 	\end{proof}
-	\begin{prop}
-	Si deux familles de distributions sont statistiquement
-	indistinguables, elles sont calculatoirement indistinguables.
-	\end{prop} 
 
-	Le lemme suivant correspond au Claim 5.2 présent dans~\cite{STOC:Regev05}
-	et nous sera utile pour la suite.
+	Le lemme suivant correspond au Claim 5.2 présent dans~\cite{STOC:Regev05}.
 
 	\begin{lemme}
 	Soit $G$ un groupe abélien fini. Pour $r > 1$ et 
@@ -70,7 +61,7 @@
 	 D'autre part, on considère la distribution uniforme
 	 $U$ sur $G$
 	 Alors, on a: 
-	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leq 
+	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leqslant
 	   \sqrt{\frac{|G|}{2^r}}\]
 	 Notamment, 
 	 \[\mathbb{P}\left(SD(s_\mathcal{F},U) \geq
@@ -83,7 +74,7 @@
 	\begin{align*}
 		\sum_{h\in G} {\PP(s_F = h)}^2 &= 
 		\PP\left(\sum_i b_i g_i = \sum_i b'_i g_i\right) \\
-		& \leq \frac{1}{2^l} + \PP
+		& \leqslant \frac{1}{2^l} + \PP
 		\left( \sum_i b_i g_i = \sum_i b'_i g_i |\:\: (b_i)_i \neq
 		(b'_i)_i \right)
 	\end{align*}
@@ -92,7 +83,7 @@
 		g_i\right) = \frac{1}{|G|}\]
 	D'où on déduit que:
 	\[\mathbb{E}_\mathcal{F}\left(\sum_h {\PP(s_{\mathcal{F}} =
-	h)}^2\right) \leq \frac{1}{2^l} + \frac{1}{|G|} \]
+	h)}^2\right) \leqslant \frac{1}{2^l} + \frac{1}{|G|} \]
 
 	Ce qui implique que:
 
@@ -111,12 +102,12 @@
 	\left[ 
 	{\left( \sum_h {\PP(s_F = h)}^2 - 1/|G|\right)}^{1/2} 
 	\right] \\
-&\leq \sqrt{|G|} \:\:
+&\leqslant \sqrt{|G|} \:\:
 {\left( 
 	\mathbb{E}_\mathcal{F}\left[ \sum_h  {\PP(s_F = h)}^2  \right]
 - \frac{1}{|G|}
 \right)}^{1/2} \\
-	&\leq \sqrt{\frac{|G|}{2^l}}
+	&\leqslant \sqrt{\frac{|G|}{2^l}}
 \end{align*}
 
 \end{proof}
@@ -135,7 +126,7 @@
 	 D'autre part, on considère la distribution uniforme
 	 $U$ sur $G^r$
 	 Alors, on a: 
-	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leq 
+	 \[\mathbb{E}_{\mathcal{F}\subset G^r}(SD(s_\mathcal{F},U)) \leqslant
 	   \sqrt{r^2\frac{|G|}{2^r}}\]
 	 Notamment, 
 	 \[\mathbb{P}\left(SD(s_\mathcal{F},U) \geq
@@ -149,10 +140,11 @@
 	\end{proof}
 
 	\begin{prop}
-	Supposons avoir pris des paramètres $(n, q, \chi, m)$
-	tels que l'hypothèse $\LWE$ soit vraie. Alors pour $\tau >0$
-	et $m > (1+\tau)(n+1)\log(q)$ et $m = \mathcal{O}(n\log(q))$ , la distribution jointe
-	$(A, RA)$ est calculatoirement indistinguable de la
+	Supposons avoir pris des paramètres $(n, q, \chi, m)$ tels que l'hypothèse $\LWE$ soit vraie et soit $\tau > 0$.
+
+	Si $m > (1+\tau)(n+1)\log(q)$, la distribution jointe $(A, RA)$, où 
+	$A\in\ZZq^{m \times (n+1)}$ est une clé publique et $R \in{N \times m}$ est crée en tirant les coefficients
+	uniformément dans $\{0,1\}$, est calculatoirement indistinguable de la
 	distribution uniforme sur $\ZZq^{m \times (n+1)} \times \ZZq^{N
 	\times (n+1)}$
 	\end{prop}
@@ -166,42 +158,39 @@
 	indistinguable de $\mathcal{D}_2 = (U, V)$ où $V$ est uniforme.
 	
 	On peut alors utiliser le lemme précédent avec $G = \ZZq^{n+1}$
-	et $r = m$ afin de voir qu'il echiste une constante $\lambda > 0$
+	et $r = m$ afin de voir qu'il existe une constante $\lambda > 0$
 	telle que:
-	\[\mathbb{E}_{\mathcal{U}\subset \ZZq^{m\times n+1}}(SD(RU,V)) \leq 
-		\sqrt{m^2\frac{q^{n+1}}{2^m}}\leq \lambda
+	\[\mathbb{E}_{\mathcal{U}\subset \ZZq^{m\times n+1}}(SD(RU,V)) \leqslant
+		\sqrt{m^2\frac{q^{n+1}}{2^m}}\leqslant \lambda
 	n\log(q)\sqrt{\frac{1}{q^{\tau(n+1)}}}=: f(n) \]
 	Et, notant $Y = \{ U: \SD(RU,V) \geq \sqrt{f(n)}\}$, on obtient:
-	\[\PP(U \in Y) \leq \sqrt{f(n)} \]
+	\[\PP(U \in Y) \leqslant \sqrt{f(n)} \]
 	où $f$ est négligeable en $n$. 
 
-
-
-	
-	Soit $(x,y)\in \ZZq^{m \times (n+1)} \times \ZZq^{m \times (n+1)}$
+\vspace{0.2cm}
+	Pour $(x,y)\in \ZZq^{m \times (n+1)} \times \ZZq^{m \times (n+1)}$, on a alors:
 	\begin{align*}
-	&\left|\PP(D_1 = (x,y)) - \PP(D_2 = (x,y))\right| \\ &\leq \PP(x\in Y)\:
+	&\left|\PP(D_1 = (x,y)) - \PP(D_2 = (x,y))\right| \\ &\leqslant \PP(x\in Y)\:
 	\Big|\PP(D_1 
 	= (x,y)| x\in Y) - \PP(D_2 = (x,y)|x\in Y)\Big| + \PP(x \not\in Y)  \\
-	&\leq |\PP(D_1 = (x,y) | x \in Y) - \PP(D_2 = (x,y)|x \in Y)| + \sqrt{f(n)} \\
-	&\leq 2\sqrt{f(n)} 
+	&\leqslant |\PP(D_1 = (x,y) | x \in Y) - \PP(D_2 = (x,y)|x \in Y)| + \sqrt{f(n)} \\
+	&\leqslant 2\sqrt{f(n)} 
 	\end{align*}
 	
-	Ainsi, il n'est pas possible qu'un automate $\mathcal{A}$
-	polynomial probabiliste puisse distinguer 
-	$\mathcal{D}_1$ de $\mathcal{D}_2$ car elle sont statistiquement 
-	indistinguables.
+	Ainsi, les deux familles de distributions sont statistiquement indistinguables, et donc calculatoirement
+	indistinguables.	
 	\end{proof}
-	\begin{thm}
+	\begin{thm}{Sécurité IND-CPA}\\
 	\label{ind_cpa}
 	Sous les hypothèses de la proposition précédente, le
-	cryptosysteme est IND-CPA.
+	cryptosystème est IND-CPA.
 	\end{thm}
 	\begin{proof}
 	Comme un automate polynomial probabiliste ne peut pas distinguer
-	$A_{s, \chi}$ de la distribution uniforme, on peut supposer que la
-	clé publique $A$ est uniforme.
+	$A_{s, \chi}$ de la distribution uniforme, on peut supposer que les coefficients 
+	clé publique $A$ ont été tirés uniformément dans $\{ 0,1 \}$.
 
+	\paragraph{}
 	Considérons alors un chiffré 
 	\[C = \flatten\left(\mu \cdot \id_N + \bitdecomp(R\cdot A)\right) \in
 	\ZZq^{N\times N}\]
@@ -210,8 +199,8 @@
 	\[ \bitdecomp^{-1}(C) = \mu * \bitdecomp(\id_N) + R\cdot A\]
 
 	Par la proposition précédente, un automate polynomial probabiliste $\mathcal{A}$
-	ne peut pas distinguer $R\cdot A$ d'une matrice uniforme. On peut donc
-	supposer que $R\cdot A$ est uniforme, et que le chiffrement est donc
+	ne peut pas distinguer $RA$ d'une matrice uniforme. On peut donc
+	supposer que $RA$ est uniforme, et donc que le chiffrement est 
 	un one-time pad.
 
 	On en déduit qu'il n'existe pas d'automate polynomial probabiliste
@@ -220,125 +209,124 @@
 	
 	\end{subsection}
 
-	Nous allons maintenant nous intéresser au choix de paramètres de notre
-	cryptosystème. C'est une étape cruciale de la mise en place de celui-ci,
-	car ce sont eux qui détermineront les degrés de sécurités et la profondeur des circuits calculables.
-	
-	Sur ce point, deux approches sont possibles: une étude asymptotique ou
-	bien une étude \og concrète \fg~ des paramètres.
+Nous allons maintenant nous intéresser au choix de paramètres de notre
+cryptosystème. Ils détermineront les degrés de sécurités et la profondeur des circuits calculables.
 
-	Nous nous interesserons ici uniquement à l'algorithme de déchiffrement
-	\textbf{Decrypt}, nous ne considèrerons donc que des chiffrés de $0$ ou
-	$1$ et nous interesserons principalement à la profondeur maximale 
-	possible de NAND permettant encore de déchiffrer.
+Sur ce point, deux approches sont possibles: une étude sur la sécurité asymptotique d'une famille 
+de paramètres et une étude plus concrète, se demandant quelle est la sécurité d'un seul choix de paramètres. 
+Nous jetterons ici un \oe{}il aux deux approches.
 
-	\begin{subsection}{Choix asymptotique de paramètres pour un leveled GSW}
-	\label{sec:leveled}
-	\label{param_leveled}
-	Les indications faites dans l'article original \cite{EPRINT:GenSahWat13} n'étaient pas très explicites; nous nous inspirons donc ici du travail
-	effectué par Shai Haleva dans \cite{halevi} pour avoir un jeu de
-	contraintes nous permettant des paramètres permettant de faire un
-	leveled GSW. 
+\paragraph{}
+Posons ici notre contexte de travail
+Nous nous intéresserons ici uniquement à l'algorithme de déchiffrement
+\textbf{Decrypt} et ne considèrerons donc que des chiffrés de $0$ ou
+$1$. Comme tout circuit booléen peut être construit uniquement avec des NAND, ce sera la seule opération
+que nous considérerons. Notre façon de voir si un circuit peut-être évalué homomorphiquement puis déchiffré
+avec succès sera alors de considérer sa profondeur en NAND.
 
-	Rappelons que nous avons déjà pris pour hypothèse que le problème DLWE est difficile avec les paramètres suivants:
-	\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
-	De plus, le théorème~\ref{ind_cpa} necessite d'avoir 
-	\[m > (1+\tau)(n+1)\log(q) \]
-	pour un $\tau > 0$ pour que le cryptosystème soit IND-CPA.  Nous prenons alors: 
-	\[ m = 2(n+1)(\lfloor \log(q) \rfloor + 1) = 2(N + \bnorm{q}) < 2
-	\bnorm{q} (N+1)\]
-	Enfin, nous devons aussi respecter la condition de longueur pour pouvoir appliquer une profondeur de $L$ NAND à notre chiffré:
-	\[q > 8nm (1 + N)^L \]
+\begin{subsection}{Choix asymptotique de paramètres pour un leveled GSW}
+\label{sec:leveled}
+\label{param_leveled}
+	Nous allons ici que l'hypothèse~\ref{hyp_dwle} est vraie\footnote{Sachant qu'elle est faite dans un 
+	article datant de 2017, il est possible qu'on sache aujourd'hui qu'elle est fausse. Il faudrait faire des
+	recherches supplémentaires
+	pour savoir ce qu'il en est}; autrement dit, que le problème DLWE est difficile avec les paramètres suivants:
+\[ q \approx 2^{n^\epsilon}\quad \alpha q = n\quad \text{$m$ polynomial en $n$}\]
+De plus, le théorème~\ref{ind_cpa} nécessite d'avoir 
+\[m > (1+\tau)(n+1)\log(q) \]
+pour un $\tau > 0$ pour que le cryptosystème soit IND-CPA.  Nous prenons alors: 
+\[ m = 2(n+1)(\lfloor \log(q) \rfloor + 1) = 2(n+1) \bnorm{q} = 2N\]
+Enfin, nous devons aussi respecter la condition de longueur pour pouvoir appliquer une profondeur de $L$ NAND à notre chiffré:
+\[q > 8nm (1 + N)^L \]
 
-En utilisant notre inégalité sur $m$  dans cette dernière équation, on voit alors qu'il nous suffit d'avoir:
+En utilisant les inégalités $m < 2 (N+1)$ et $n < (N+1)$ dans cette dernière équation, on voit alors qu'il nous suffit d'avoir:
 
-\begin{equation}
+\begin{equation*}
 q > 16 {(1+N)}^{L+2}
-\end{equation}
-car alors:
-\begin{equation}
-q> 8 (8 N (N+1)) {(1 + N)}^{L} > 8 nm {(1 + N)}^L \\
-\end{equation}
+\end{equation*}
 
-Ceci nous ammène à premier jeu de contraintes: 
-\[ \begin{cases}\alpha  = n \cdot 2^{-n^\epsilon}=  \\
+Ceci nous amène à un premier jeu de contraintes: 
+\[ \begin{cases}\alpha  = n \cdot 2^{-n^\epsilon}  \\
 	q = \lceil 2^{n^\epsilon}\rceil\\ 
-	m = 2(N + \bnorm{q}) \\  
+	m = 2(n+1)\bnorm{q} \\  
 	n^\epsilon > 4 + (L+2) \log\left( 1 + N\right)
 	\end{cases} \]
 
-Nous allons encore simplifier la dernière contrainte en utilisant:
-\begin{align*} (L+2) \log\left( 1 + N\right) &\leq (L+2) (2 + \log(N)) \\
-&\leq (L+2) (2 + \log(n) +  \log(\bnorm{q})) \\
-&\leq (L+2) (3 + \log(n) + \log(\log(q))
-&\leq 2 L \log(n) \quad \text{pour $n$ assez grand}
+Nous allons encore simplifier la dernière contrainte en utilisant
+\begin{align*} (L+2) \log\left( 1 + N\right) &\leqslant (L+2) (2 + \log(N)) \\
+&\leqslant (L+2) (2 + \log(n+1) +  \log(\bnorm{q})) \\
+&\leqslant (L+2) (4 + \log(n) + \log(\log(q)) \\
+&\leqslant (L+2) (5 + \log(n) + \log(n^\epsilon) \\
+&\leqslant (L+2) (5 + (1+\epsilon)\log(n)) \\
+&\leqslant 5(L+2) + (L+2)(1+\epsilon)\log(n)) \\
+&\leqslant 3 L \log(n) \quad \text{pour $n$ assez grand}
 \end{align*}
 
-Ce qui au final, nous donne:
+ce qui au final, nous donne:
 \[ \begin{cases}
 	\alpha  = n \cdot 2^{-n^\epsilon}=  \\
 	q = \lceil 2^{n^\epsilon} \rceil\\ 
-	m = 2(N + \bnorm{q}) \\  
-	n^\epsilon > 2 L \log(n)
+	m = 2(n+1)\bnorm{q} \\  
+	n^\epsilon > 3 L \log(n)
 	\end{cases}  \]
 Il nous reste donc à trouver une valeur pour $n$, dépendant du paramètre de sécurité $\lambda$.  En posant $n = \rho^{1/\epsilon}$, on voit que la dernière contrainte devient:
-\[ \frac{\rho}{\log(\rho)} > \frac{2 L}{\epsilon}  \]
-Et en prenant $\rho = \text{cst} a \log(a)$, cela devient:
-\[\log(a)> \frac{2 L}{\epsilon\:\text{cst}\: a}\:(\log(a) + \log(\log(a)) + \log(cst))   \]
-qui est vérifiée pour $a = L$ et $cst = 4/\epsilon$ car alors, on obtient:
+\[ \frac{\rho}{\log(\rho)} > \frac{3 L}{\epsilon}  \]
+et en prenant $\rho = \text{cst}\: a \log(a)$, cela devient:
+\[\log(a)> \frac{3 L}{\epsilon\:\text{cst}\: a}\:(\log(a) + \log(\log(a)) + \log(cst))   \]
+qui est vérifiée pour $a = L$ et $cst = 6/\epsilon$ car alors, on obtient:
 \begin{align*}
-& \log(L)> \frac{1}{\text{2}}\:(\log(L) + \log(\log(L)) + 2 - \log(\epsilon)) \\
-&\Leftrightarrow  \log(L) - \log(\log(L)) - 2 > \log(\frac{1}{\epsilon})
+& \log(L)> \frac{1}{\text{2}}\:(\log(L) + \log(\log(L)) + 1 + \log(3) - \log(\epsilon)) \\
+&\Leftrightarrow  \log(L) - \log(\log(L)) - 1 - \log(3) > \log(\frac{1}{\epsilon})
 \end{align*}
 ce qui est vrai pour $L$ assez grand.  
+On obtient donc 
+\[n = \rho^{\frac{1}{\epsilon}}  = {\left(\frac{6 * L * \log(L)}{\epsilon}\right)}^{\frac{1}{\epsilon}}\]
 
-\begin{align*}
-\Leftrightarrow  \log(L) - \log(\log(L)) - 2 > 0
-\end{align*}
-	qui est une fonction croissante en $L$, et positive dés $L = 20$.  Notons enfin que ce choix de valeur $n$ est indépendant du paramètre de sécurité $\lambda$, on peut donc prendre le maximum entre les deux valeurs pour plus de cohérence.  
-
+\paragraph{}
 On en déduit le théorème suivant:
 \begin{thm}{leveled GSW}
-	Pour $L$ et $\lambda$ assez grands, et sous l'hypothèse sur DWLE~(page \pageref{hyp_dwle}), les paramètres suivants permettent de faire une profondeur de NAND de $L$
+	Pour $L$ et $\lambda$ assez grands, et sous l'hypothèse sur DWLE~(page \pageref{hyp_dlwe}), les paramètres suivants permettent de faire une profondeur de NAND de $L$
 et rendent le cryptosystème GSW IND-CPA:
 \[ \begin{cases} 
-	n = \max\left(\lambda, \lceil 4/\epsilon \log(L) \log(\log(L))
+	n = \max\left(\lambda, \lceil 6/\epsilon \log(L) \log(\log(L))
 	\rceil\right)  \\
 	\alpha  = n \cdot 2^{-n^\epsilon}  \\
 	q = \lceil 2^{n^\epsilon} \rceil\\ 
-	m = 2(N + \bnorm{q}) \\  
+	m = 2(n+1)\bnorm{q} \\  
 	\end{cases}  \]
 \end{thm}
-Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg~ \ étant donné que la sécurité n'est assurée qu'asymptotiquement.
+Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg~ \ étant donné que la sécurité n'est
+assurée asymptotiquement. Voyons maintenant si nous pouvons trouver des paramètres concrets permettant une utilisation 
+raisonnable sur un ordinateur.
 
+\end{subsection}
 
-	\end{subsection}
-
-	\begin{subsection}{Choix de paramètres concrets pour un leveled GSW}
-	\begin{subsubsection}{Présentation de lwe\_estimator}
+\begin{subsection}{Choix de paramètres concrets pour un leveled GSW}
+\begin{subsubsection}{Présentation de lwe\_estimator}
+\label{estimator}
 	
-	Initialement utilisé dans l'article
-	\cite{EPRINT:AlbPlaSco15},\path{lwe_estimator}
-	(disponible à l'adresse \cite{estimator}) est un module de sagemath actuellement maintenu par
-Martin Albrecht et 
-	destiné à estimer la résistance face à diverses attaques de paramètres précis pour
-	le problème de learning with error.
+Initialement utilisé dans l'article \cite{EPRINT:AlbPlaSco15}, \path{lwe_estimator} (disponible à l'adresse
+\cite{estimator}) est un module de sagemath principalement maintenu par Martin Albrecht et destiné à estimer la résistance
+de paramètres précis face à diverses attaques de paramètres précis pour le problème de learning with error.
 
-	Nous avons pensé qu'il pouvait être interessant de l'utiliser afin de
-	voir si nous pouvions trouver des paramètres offrants une sécurité
-	concrète, et non uniquement une famille de paramètres offrant une
-	sécurité asymptotique.
-	
-	
-	\paragraph{}
-	\textbf{estimate\_lwe :}
+\paragraph{}
+Nous avons pensé qu'il pouvait être intéressant de l'utiliser afin de voir si nous pouvions trouver des paramètres
+offrants une sécurité concrète, et non uniquement une famille de paramètres offrant une sécurité asymptotique.
+Notons toutefois que la sécurité de notre cryptosystème n'est pas basée sur LWE mais DLWE, ce qui biaise dés le départ 
+notre approche. De plus, la démonstration IND-CPA est elle aussi asymptotique et nous n'avons pas vu si il est possible 
+de réduire une attaque du cryptosystème sur un seul jeu de paramètres à une attaque de DLWE.
 
-	\paragraph{}
-	Pour estimer la résistance de paramètres choisis sur un panel
-	d'attaques, on utilise la fonction \path{estimate_lwe} dont une sortie
-	typique est:
-	
-	\flushleft
+Ces avertissements faits, regardons plus en détail comment fonctionne  \path{lwe_estimator}.
+
+
+\paragraph{}
+\textbf{estimate\_lwe :}
+
+\paragraph{}
+Pour estimer la résistance de paramètres choisis sur un panel d'attaques, on utilise la fonction \path{estimate_lwe}
+dont une sortie typique est:
+
+\flushleft
 	
 	\begin{lstlisting}
 estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
@@ -346,18 +334,25 @@ estimate_lwe(n, alpha=None, q=None, secret_distribution=True, m=oo,
              skip=("mitm", "arora-gb", "bkw"))
         \end{lstlisting}
 	
-	\flushleft
-	
-	Cette dernière prends en arguments les paramètres usuels de LWE, n, $\alpha$ et q, ainsi que d'autres arguments optionnels et rend plusieurs résultats dont le sens n'est pas forcément évident.
-	En fait, elle retourne tout un ensemble de variables pour chaque attaque vérifiée. Le module
-	contient 6 attaques différentes, mais n'en testera que trois par defaut. Cela peut être modifié
-	lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
-	
-	\flushleft
-	
-	\begin{figure}
-	\label{fig:seal_estimate}
-	\begin{lstlisting}[mathescape=true]
+\flushleft
+Cette dernière prend en arguments les paramètres suivants qui lui permettent de créer une instance LWE
+\begin{itemize}
+\item Les paramètres $n, q$ habituels;
+\item Un paramètre $\alpha$ égal à $s / q$ où $s$ est le paramètre de la gaussienne discrète utilisée comme paramètre
+$\chi$ (à ne pas confondre avec le paramètre $\alpha$ de l'hypothèse \ref{hyp:proba});
+\item d'autres arguments optionnels.
+\end{itemize}
+Le paramètre $m$ est optionnel car chaque attaque contre LWE évaluée utilise le nombre d'échantillons $m$ qui lui est nécessaire 
+pour fonctionner et l'indique en sortie de la fonction. En réalité, même en indiquant un $m$ en option, la
+sortie peut préciser des valeurs de $m$ supérieure à notre indication.
+
+\paragraph{}
+Elle retourne ensuite une résumé de la mémoire, du temps et d'autres paramètres spécifiques que nécessitent
+diverses attaques contre LWE avec ce choix de paramètres . Le module contient 6 attaques différentes, mais n'en testera que
+trois par défaut. Cela peut être modifié lorsque l'on appelle la fonction \path{estimate_lwe} via l'argument skip.
+\flushleft
+\begin{figure}
+\begin{lstlisting}[mathescape=true]
 sage: load("estimator.py")
 sage: n = 2048; q = 2^60 - 2^14 + 1; $\alpha$ = 8/q; m = 2*n
 sage: _ = estimate_lwe(n, $\alpha$, q, secret_distribution=(-1,1), 
@@ -370,44 +365,58 @@ usvp: rop: =2^115.5,  red: =2^115.5,  $\delta_0$: 1.004975,
 dual: rop: =2^118.4,  m:  =2^11.0,  red: =2^118.4,  $\delta_0$: 1.004864,  
       $\beta$: 298,  
       repeat:  =2^58.8,  d: 4090,  c:    3.909,  k: 30, postprocess: 13
-	\end{lstlisting}
-	\caption{Analyse de sécurité des paramètres tirés de la librairie SEAL}
-	\end{figure}
-	\flushleft
-	
-	Les variables rendues pour chaque attaques ne sont pas toutes utiles, certaines étant strictement internes à ces attaques. Les trois variables qui nous intéresse sont : "rop", "m" et "mem" :
-	
-	\begin{itemize}
-	\item "rop" (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre ce cas de LWE avec cette attaque.
-	
-	\item "mem" (memory) est une estimation de la mémoire qui sera exploitée.
-	
-	\item "m" indique le nombre d'échantillons nécessaires pour résoudre le problème avec ces valeurs de
-	"rop" et "mem". A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
-	lorsqu'on appelle \path{estimate_lwe}.
-	\end{itemize}
+\end{lstlisting}
+\caption{Analyse de sécurité des paramètres tirés de la librairie SEAL}
+\label{fig:seal_estimate}
+\end{figure}
 
-	le module \path{sage.crypto.lwe} contient des choix de paramètres pour
-	le problème LWE, dont deux qui utilisent la gaussienne discrète
-	\footnote{un autre utilise la distribution uniforme}
-	et que nous allons présenter ici. Notons que nous avons pour cela 
-	regardé les codes 
-	sources des fonctions sage, disponibles dans leur github (\cite{sage}).
-	\end{subsubsection}
 
-	\begin{subsubsection}{Proposition de choix sécurité pour très faible profondeur}
-	\paragraph{}
-	En utilisant les paramètres suivants, tirés de l'API SEAL:
-	\[n = 2048\quad q = 2^{60} - 2^{14} + 1 \quad \alpha = \frac{8}{q}\quad m = 2n \]
-	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{115}$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de 115. De plus, l'équation~\eqref{depth} indique qu'une profondeur de NAND $L=3$ est possible. \\
-	On a ici un secret de 15 Ko, une clé publique de 7.6 Mo et des chiffrés de 13 Go.
+\vspace{0.2cm}
+Une sortie de la fonction \path{estimate_lwe} est montrée dans la figure~\ref{fig:seal_estimate}.
+Les principaux paramètres concernant le coût de chaque attaque sont \path{rop}, \path{mem} et \path{m}, où
 
-	\paragraph{}
-	En utilisant les paramètres suivants, tirés de \cite{cryptoeprint:2015:755}:
-	\[n = 804\quad  q = 2^{31} - 19\quad \alpha = \frac{\sqrt{2\pi}*57}{q} \quad m = 4972\]
-	On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{129}$ opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de 129. De plus, l'équation~\eqref{depth} indique qu'une profondeur de NAND $L=1$ est possible. \\
-	On a ici un secret de 3 Ko, une clé publique de 5 Mo et des chiffrés de 2 Go.
-	\end{subsubsection}
+\begin{itemize}
+\item \path{rop} (ring operations) est une estimation du nombre d'opérations à effectuer afin de résoudre ce cas de LWE avec cette attaque.
+\item  \path{mem} (memory) est une estimation de la mémoire qui sera exploitée.
+\item \path{m} indique le nombre d'échantillons nécessaires pour résoudre le problème avec les paramètres choisis. 
+A noter que l'on peut limiter le nombre d'échantillons disponibles pour l'attaquant
+lorsqu'on appelle \path{estimate_lwe}.
+\end{itemize}
 
-	\end{subsection}
+\end{subsubsection}
+\begin{subsubsection}{Proposition de choix sécurité pour très faible profondeur} \label{sec:choix_concrets}
+\paragraph{}
+
+Comment par noter que \path{lwe_estimate} n'arrive pas à estimer la sécurité des paramètres de bootstrapping (étudiés
+dans une section ultérieure), même 
+avec un paramètre de sécurité $\lambda = 50$. Autre mauvaise nouvelle, la sécurité estimée des paramètres leveled
+n'est pas bonne, ni pour $\epsilon = 1/3$, ni pour un epsilon bien plus petit, et ce même avec de grands $\lambda$, 
+le paramètre \path{rop} reste proche de $2^{30}$ pour une des attaques. Cela peut signifier plusieurs choses:
+\begin{itemize}
+\item l'hypothèse de sécurité faite dans \cite{halevi} n'est plus réaliste;
+\item le choix de $\epsilon$ doit être fait finement;
+\item l'estimation est peut-être trop grossière.
+\end{itemize}
+Nous n'avons pas été dans le détail pour voir ce qu'il en est.
+
+Nous nous sommes donc tournés vers d'autres choix de paramètres concrets, parmi ceux proposés dans 
+\cite{estimator}.
+
+\paragraph{}
+En utilisant les paramètres suivants, tirés de l'API SEAL: 
+\[n = 2048\quad q = 2^{60} - 2^{14} + 1 \quad \alpha = \frac{8}{q}\quad m = 2n \] 
+On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{115}$
+opérations de base dans l'anneau $\ZZq$, soit un facteur de sécurité de 115. De plus, la condition de longueur
+est respectée pour $L=3$ donc une profondeur de 3 NAND est possible. \\ 
+\textbf{Taille:} secret: 15 Ko, une clé publique: 7.6 Mo, chiffré d'un message: 13 Go.
+
+\paragraph{}
+En utilisant les paramètres suivants, tirés de \cite{cryptoeprint:2015:755}:
+\[n = 804\quad  q = 2^{31} - 19\quad \alpha = \frac{\sqrt{2\pi}*57}{q} \quad m = 4972\]
+On voit que l'estimation proposée par lwe indique  l'attaque la plus rapide demande $2^{129}$ opérations de base dans
+l'anneau $\ZZq$, soit un facteur de sécurité de 129. De plus, la condition de longueur
+est respectée pour $L=1$ donc une profondeur de 3 NAND est possible. \\ 
+\textbf{Taille:} secret: 3 Ko, clé publique: 5 Mo, chiffré d'un message: 2 Go.
+\end{subsubsection}
+\end{subsection}
 \end{section}

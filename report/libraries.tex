@@ -1,6 +1,6 @@
 \begin{section}{Des librairies pour du FHE}
-Plusieurs librairies open-sources implémentant divers FHE sont disponibles. 
-On peut notamment en trouver une liste sur HomomorphicEncryption.org \cite{homencrypt.org}, 
+Plusieurs librairies open source implémentant divers FHE sont disponibles. 
+On peut notamment en trouver une liste sur HomomorphicEncryption.org~\cite{homencrypt.org}
 qui se décrit comme \og an open consortium of industry, government and academia to 
 standardize homomorphic encryption \fg.
 
@@ -8,23 +8,22 @@ Nous proposons ici d'en évoquer deux:
 \begin{itemize}
 \item The Simple Encrypted Arithmetic Library (SEAL) \cite{seal}, dont nous avons tiré des paramètres  
 \og réalistes \fg\footnote{Pas forcément pour nos machines et avec notre implémentation}
-sécurisés et autorisant une profondeur de NAND non null (même si irréaliste: seulement 3);
+sécurisés et autorisant une profondeur de NAND non nul (même si irréaliste: seulement 3, voir la 
+sous-section~\ref{sec:choix_concrets} page~\pageref{sec:choix_concrets});
 \item The Gate Bootstrapping API \cite{TFHE} qui implémente une variation du cryptosystème GSW;
 \end{itemize}
 
 \begin{subsection}{La librarie SEAL}
-Acronyme de Simple Encrypted Arithmetic Library, SEAL (voir \cite{seal}) 
+Acronyme de \og Simple Encrypted Arithmetic Library \fg, SEAL \cite{seal}
 est une librairie écrite par le \og cryptography research group \fg~ de Microsoft, en C++ sous 
 licence MIT. Elle se propose d'implémenter deux FHE de seconde génération: 
 BVS \cite{EPRINT:FanVer12} et CKKS \cite{AC:CKKS17}.
 
 Son installation est facile\footnote{Sur Linux debian 4.9.0-8-amd64, nous avons dû
-utilister les backports debians pour avoir une version de cmake suffisament récente}
-et il est directement possible de compiler un executable permettant de tester 
-diverses fonctionnalitées de la librarie. De plus, la documentation
-\cite{seal_manual_231},
-malheureusement non à jour, indique quelques points théoriques autant du point 
-de vue mathématique que des choix de représentation des données.
+utiliser les backports debians pour avoir une version de cmake suffisament récente}
+et un executable d'exemple est déjà présent pour tester diverses fonctionnalités de la librarie. De plus, la
+documentation \cite{seal_manual_231}, malheureusement non à jour, indique quelques points théoriques autant du point de
+vue mathématique que des choix de représentation des données.
 \end{subsection}
 
 \begin{subsection}{The Gate Bootstrapping API}
@@ -37,46 +36,45 @@ s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M
 
 Elle utilise une version modifiée du cryptosysteme GSW (\cite{C:GenSahWat13})
 étudié dans notre rapport, et permettant aussi bien du LHE que du FHE. C'est
-pourquoi nous allons parler plus en détail de celle-ci.
+pourquoi nous allons en parler plus en détails.
 
 Ses performances sont interessantes; il est notamment indiqué dans la sous-section
 4.2 de \cite{cryptoeprint:2016:870} que pour un ordinateur 64-bit simple coeur 
-(i7-4930MX) cadencé à 3.00GHz, le bootstrapping se fait en un temps moyen de 52ms.
-de clée de bootstrapping d'environ 24MO.
+(i7-4930MX) cadencé à 3.00GHz, le bootstrapping se fait en un temps moyen de 52ms et 
+que la clé de bootstrapping fait environ 24MO.
 
-Pour arriver à de tels résultats, de nombreuses modifications et optimisations dans le codes 
-ont été faites. Notamment, le problème sur lequel s'appuie le cryptosystème n'est plus 
-LWE mais TFHE, présenté dans les librairies suscitées.
+Pour arriver à de tels résultats, de nombreuses modifications et optimisations dans le codes ont été faites. Notamment,
+le problème sur lequel s'appuie le cryptosystème n'est plus LWE mais une variante nommée TFHE, présentée dans
+\cite{cryptoeprint:2016:870}. 
 
 \begin{subsubsection}{Un exemple simple}
-En plus d'une présentation de leur API, leur site de présentation
-contient un tutorial sous forme de 3 fichiers de codes simples 
-permettant de simuler une \og communication chiffrée\fg~ entre Alice et le cloud:
+En plus d'une présentation de leur API, leur site contient un tutorial sous forme de 3 fichiers de codes simples
+permettant de simuler une communication chiffrée entre Alice et un cloud:
 \begin{itemize}
-\item Alice génère des clés, chiffre des données et les envoies ainsi
-	que la clé de bootstrapping au cloud;
-\item Le cloud applique homomorphiquement une fonction, le minimum
-	entre deux nombres, aux données et les renvoie à Alice;
+\item Alice génère des clés, chiffre des données et les envoie ainsi que la clé de bootstrapping au cloud;
+\item Le cloud applique homomorphiquement une fonction, le minimum entre deux nombres, aux données et les renvoie à
+Alice;
 \item Alice déchiffre le résultat;
 \end{itemize}
+
+\paragraph{}
 Afin de manipuler la librairie, nous avons \og mis en forme \fg~ ces fichiers
 en y ajoutant quelques modifications. Le tout est situé dans 
 \path{using_tfhe_library} et il suffit de faire \path{make} 
-pour compiler l'executable, sous couvert d'avoir la librairie tfhe installée.
+pour compiler l'exécutable, à condition d'avoir la librairie tfhe installée.
 	
-Les fichiers sources ainsi que les hearders contiennent normalement assez de
-commentaire pour être lisibles. Nous proposons donc ici de résumer brièvement 
-le rôle de chaque fichier source:
+Les fichiers sources ainsi que les headers contiennent normalement assez de
+commentaire pour être lisibles. Voici un résumé du rôle de chaque fichier source:
 \begin{itemize}
-\item \path{alice.c} contient des fonctions permettant de générer
-clés, chiffrer et déchiffrer;
+\item \path{alice.c} contient des fonctions permettant de générer les
+clés, de chiffrer et de déchiffrer;
 \item \path{homomorphic_functions.c} contient deux exemples de fonctions 
-appliquables homomorphiquement: le minimum de deux nombres (déjà 
+applicables homomorphiquement: le minimum de deux nombres (déjà 
 présent dans le tutorial) et leur somme;
-\item \path{cloud.c} contient une fonction permetant d'appliquer 
+\item \path{cloud.c} contient une fonction permettant d'appliquer 
 homomorphiquement une des fonctions de \path{homomorphic_functions.c}
 sur des chiffrés puis d'enregistrer le résultat;
-\item enfin, \path{example_communication.c} utilise les fichiers précédents
+\item \path{example_communication.c} utilise les fichiers précédents
 	pour simuler une communication entre Alice et le cloud.
 \end{itemize}
 

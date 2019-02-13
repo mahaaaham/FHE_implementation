@@ -9,7 +9,7 @@
   \usepackage{url}
   \usepackage{graphicx}
   \usepackage{listings}
-  % \usepackage[left=4cm, right=4cm, top=2cm, bottom=2cm]{geometry}
+  \usepackage[left=4cm, right=4cm, top=2cm, bottom=2cm]{geometry}
 
   \usepackage{tikz}
   \usetikzlibrary{graphs, graphs.standard, quotes}% quotes library is for the [""] edges
@@ -22,44 +22,43 @@
   \newtheorem{cor}{Corolaire}
   \newtheorem{rmq}{Remarque}
 
+% for double brackets \llbracket \rrbracket
+\usepackage{stmaryrd}
 
-  % for double brackets \llbracket \rrbracket
-  \usepackage{stmaryrd}
+% for the "say" command, to make quotes
+\usepackage{csquotes}
 
-  % for the "say" command, to make quotes
-  \usepackage{csquotes}
+\usepackage{caption}
 
-  \usepackage{caption}
+\usepackage{color}
+\definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
+\definecolor{dbluecolor}{rgb}{0.01,0.02,0.7}
+\definecolor{dgreencolor}{rgb}{0.2,0.4,0.0}
+\definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
 
-  \usepackage{color}
-  \definecolor{dblackcolor}{rgb}{0.0,0.0,0.0}
-  \definecolor{dbluecolor}{rgb}{0.01,0.02,0.7}
-  \definecolor{dgreencolor}{rgb}{0.2,0.4,0.0}
-  \definecolor{dgraycolor}{rgb}{0.30,0.3,0.30}
-  
-  % used defined commands
-  \newcommand{\LWE}{\text{LWE}_{n,q,\chi}}
-  \newcommand{\DLWE}{\text{DLWE}_{n,q,\chi}}
-  \newcommand{\SD}{\text{SD}}
-  \newcommand{\id}{\text{I}}
-  \newcommand{\flatten}{\text{Flatten}}
-  \newcommand{\bitdecomp}{\text{BitDecomp}}
-  \newcommand{\ZZ}{\mathbb{Z}}
-  \newcommand{\NN}{\mathbb{N}}
-  \newcommand{\RR}{\mathbb{R}}
-  \newcommand{\ZZq}{\mathbb{Z}_q}
-  \newcommand{\EE}{\mathbb{E}}
-  \newcommand{\PP}{\mathbb{P}}
-  \newcommand{\norm}[1]{{\|#1\|}_{\infty}}
-  \newcommand{\bnorm}[1]{{|#1|}_{\text{bin}}}
+% used defined commands
+\newcommand{\LWE}{\text{LWE}_{n,q,\chi}}
+\newcommand{\DLWE}{\text{DLWE}_{n,q,\chi}}
+\newcommand{\SD}{\text{SD}}
+\newcommand{\id}{\text{I}}
+\newcommand{\flatten}{\text{Flatten}}
+\newcommand{\bitdecomp}{\text{BitDecomp}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZq}{\mathbb{Z}_q}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\norm}[1]{{\|#1\|}_{\infty}}
+\newcommand{\bnorm}[1]{{|#1|}_{\text{bin}}}
 
-  \newcommand{\pk}{\text{pk}}
-  \newcommand{\sk}{\text{sk}}
-  \newcommand{\evk}{\text{evk}}
-  \newcommand{\Dec}{\text{\textbf{Decrypt}}}
-  \newcommand{\Eval}{\text{\textbf{Eval}}}
-  \newcommand{\Keygen}{\text{\textbf{Keygen}}}
-  \newcommand{\Enc}{\text{\textbf{Encrypt}}}
+\newcommand{\pk}{\text{pk}}
+\newcommand{\sk}{\text{sk}}
+\newcommand{\evk}{\text{evk}}
+\newcommand{\Dec}{\text{\textbf{Decrypt}}}
+\newcommand{\Eval}{\text{\textbf{Eval}}}
+\newcommand{\Keygen}{\text{\textbf{Keygen}}}
+\newcommand{\Enc}{\text{\textbf{Encrypt}}}
 
 \input{latex_config/lstlisting.tex}
 

@@ -142,8 +142,7 @@ De plus, on note $l = \bnorm{q} = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l
 
 
 \vspace{0.5cm}\noindent\textbf{Setup:}
-
-	\flushleft
+\flushleft
 
 	\textbf{Entrée} : $1^\lambda$ et $1^L$ où $\lambda$ est le paramètre de sécurité et L le paramètre de profondeur.
 
@@ -151,7 +150,7 @@ De plus, on note $l = \bnorm{q} = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l
 	des contraintes de sécurités imposées par $\lambda$.
 
 	Le paramètre $L$ indique que les paramètres créés doivent permettre d'évaluer un circuit de \textbf{NAND} de profondeur $L$ tout en pouvant déchiffrer correctement. Nous montrerons qu'il est alors nécessaire de satisfaire la condition dite \og de longueur \fg~  
-	\[q > 8nm (1 + N)^L \]
+	\begin{equation}\label{eq:longueur} q > 8nm (1 + N)^L \end{equation}
 
 	\textbf{Algorithme} : Deux sous-sections sont consacrés au choix des paramètres:
 	\begin{itemize}
@@ -249,7 +248,7 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 	En considérant l'équation sur les $l$ premières coordonnées, on obtient :
 	\[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}). \]
  
-	Notant $L = \Lambda(\vec{p}^t)$, on constate que l'on peut retrouver $m\vec{p}$ en trouvant le vecteur de $L$ le plus proche de $\vec{a}$.
+	Notant $L = \Lambda(\vec{p}^{\:t})$, on constate que l'on peut retrouver $m\vec{p}$ en trouvant le vecteur de $L$ le plus proche de $\vec{a}$.
 
 	De cette idée, on déduit 2 algorithmes de déchiffrements supplémentaires, dépendant de la façon dont on résout le problème du vecteur le plus proche :
 
@@ -264,19 +263,19 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 	En regardant la dernière coordonnée de :
 \[\vec{a} = m \vec{p} + \vec{e} \mod q\quad \text{où}\quad \vec{p} = (1\:2\:\cdots\:2^{l-1}), \]
  
-	On obtient :
+	on obtient :
 \[m 2^{l-1} + e_{l} \mod 2^l \]
 	qui est proche de 0 si $m$ est pair et de $q/2$ sinon. On déduit de cette façon le premier bit de l'écriture en
-	binaire de $m$ et on trouve de proche en proche les autres bits de l'écriture binaire $m$.
+	binaire de $m$ et on trouve de proche en proche les autres bits de l'écriture binaire de $m$.
 	
 \end{subsubsection}
 \begin{subsubsection}{mp\_all\_q\_decrypt: $q$ est quelconque}
 	Le travail effectué ici est notamment tiré de la section 4 de \cite{EC:MicPei12}.
 
 	En utilisant la proposition~\ref{lambda_reseau}, on constate que
-\[ L = q \cdot \Lambda^\bot\left(\vec{p}\right). \]
+\[ L = q \cdot \Lambda^\bot\left(\:\vec{p}\:\right) \]
 
-	Il nous suffit donc de trouver une base $B$ de $\Lambda^\bot\left(\vec{p}\right)$ pour en déduire une base $q \, B^{-t}$ de $L$.
+	Il nous suffit donc de trouver une base $B$ de $\Lambda^\bot\left(\vec{p}\:\right)$ pour en déduire une base $q \, B^{-t}$ de $L$.
 
 	Or, il est facile de voir que
 \[ B = \begin{bmatrix} 
@@ -289,56 +288,70 @@ On appellera erreur d'un chiffré $C$ d'un message $\mu$ le vecteur $\vec{e}$ te
 \end{bmatrix}\]
 convient.
 
-On peut alors par exemple utiliser l'algorithme \textbf{nearest plane} de Baibai à partir de cette base pour déchiffrer. Notons que des bornes sur les vecteurs de la décomposition de Gram-Schmidt de cette matrice sont données dans \cite{EC:MicPei12}, ce qui peut-être intéressant, car cela est lié au domaine fondamental utilisé par l'algorithme.
+On peut alors par exemple utiliser l'algorithme de vecteur le plus proche \textbf{nearest plane} de Baibai à partir de
+cette base pour déchiffrer. Notons que des bornes sur les vecteurs de la décomposition de Gram-Schmidt de cette matrice
+sont données dans \cite{EC:MicPei12}, ce qui peut-être intéressant, car cela est lié au domaine fondamental utilisé par
+l'algorithme et donc à sa réussite.
 
 \end{subsubsection}	
 \end{subsection}
 
 \begin{subsection}{Opérations homomorphes}
-	On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et que donc $\textbf{Flatten}(A) \cdot \vec{v} = A \times \vec{v}$ pour tout $A$.
+Nous allons ici présenter diverses opérations homomorphes pour l'algorithme GSW. Toutefois, seule l'opération
+\text{NAND} sera permise pour le LHE et le FHE avec bootstrapping que nous considèrerons car d'une part, seuls les
+chiffrés de $0$ et de $1$ seront autorisé et d'autre part, nos choix de paramètres ne sont fait qu'en supposant des
+circuits contenant uniquement des \textbf{NAND}\footnote{Ce choix est cohérent tout circuit booléen peut être construit
+uniquement à partir de portes  NAND.}.
+
+
+\paragraph{}
+On rappelle que $\vec{v}$ est de la forme $\textbf{PowersOf2}(\vec{s})$ et donc que
+\[\textbf{Flatten}(C) \cdot \vec{v} = C \times \vec{v}\quad \text{pour tout $C\in \ZZ^{N \times N}$.} \]
 	
-	\paragraph{}
-	\textbf{MultConst}
-	\flushleft
+\vspace{0.5cm}\noindent\textbf{MultConst:}
+\flushleft
 	
-	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système, un chiffré $C \in \ZZq^{N \times N}$ d'un message $\mu$ et une constante $\alpha \in \ZZq$. \\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\alpha \cdot \mu$.\\
-	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \times I_N)$ puis l'on renvoie $\textbf{Flatten}(M_{\alpha} \times C)$.
-	\begin{proof}
+	\textbf{Entrée} : les paramètres du cryptosystème, un chiffré $C \in \ZZq^{N \times N}$ d'un message $\mu$ et une constante $\alpha \in \ZZq$. \\
+	\textbf{Sortie} : un chiffré de $\alpha \cdot \mu$.\\
+	\textbf{Algorithme} : On calcule $M_{\alpha} = \textbf{Flatten}(\alpha \times I_N)$ puis on retourne 
+	\[\textbf{Flatten}(M_{\alpha} \times C)\]
+	Cela fonctionne car:
 	\begin{align*}
 	\textbf{MultConst}(C, \alpha) \times \vec{v} &= M_{\alpha} \times C \times \vec{v} \\
 	&= M_{\alpha} \cdot (\mu * \vec{v} + \vec{e}) \\
 	&= M_{\alpha} \times \mu * \vec{v} + M_{\alpha} \times \vec{e} \\
 	&= \alpha * \mu * \vec{v} + M_{\alpha} \times \vec{e}
 	\end{align*}
-	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur $e_2 = M_\alpha \times
-		\vec{e}$. 
-		\[\norm{e_2} \leq N \norm{e_1}\]
-	\paragraph{}
-	\textbf{Add}
-	\flushleft
+	\textbf{Erreur} : le chiffré à une erreur $e_2 = M_\alpha \times \vec{e}\:$ majorée par
+		\[\norm{e_2} \leqslant N \norm{e_1}\]
+
+\vspace{0.5cm}\noindent\textbf{Add:}
+\flushleft
 	
-	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \ZZq$.\\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 + \mu_2$.\\
-	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 + C_2)$.
-	\begin{proof}
+	\textbf{Entrée} : les paramètres du cryptosystème et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ respectifs des messages $\mu_1, \mu_2 \in \ZZq$.\\
+	\textbf{Sortie} : un chiffré de $\mu_1 + \mu_2$.\\
+	\textbf{Algorithme} : On retourne 
+	\[\textbf{Flatten}(C_1 + C_2)\]
+	Cela fonctionne car:
 	\begin{align*}
 	\textbf{Add}(C_1, C_2) \times \vec{v} &= (C_1 + C_2) \times \vec{v} \\
 	&= (\mu_1 * \vec{v} + \vec{e_1}) + (\mu_2 * \vec{v} + \vec{e_2}) \\
 	&= (\mu_1 + \mu_2) * \vec{v} + \vec{e_1} + \vec{e_2}
 	\end{align*}
-	\end{proof}
-\textbf{Erreur} : Le chiffré à une erreur $e_3 = \vec{e_1} + \vec{e_2}$.
-\[\norm{e_3} \leq \norm{e_1} + \norm{e_2}\] 
-	\paragraph{}
-	\textbf{Mult}
-	\flushleft
+\textbf{Erreur} : le chiffré à une erreur $e_3 = \vec{e_1} + \vec{e_2}$ majorée par
+
+\[\norm{e_3} \leqslant \norm{e_1} + \norm{e_2}\] 
+
+
+\begin{samepage}
+\vspace{0.5cm}\noindent\textbf{Mult:}
+\flushleft
 	
-	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \ZZq$.\\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\mu_1 * \mu_2$. \\
-	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(C_1 \times C_2)$.
-	\begin{proof}
+	\textbf{Entrée} : les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ respectifs des messages $\mu_1, \mu_2 \in \ZZq$.\\
+	\textbf{Sortie} : un chiffré de $\mu_1 * \mu_2$. \\
+\end{samepage}
+	\textbf{Algorithme} : on retourne \[\textbf{Flatten}(C_1 \times C_2)\]
+	Cela fonctionne car
 	\begin{align*}
 	\textbf{Mult}(C_1, C_2) \times \vec{v} &= (C_1 \times C_2) \times \vec{v} \\
 	&= C_1 \times (\mu_2 * \vec{v} + \vec{e_2}) \\
@@ -346,33 +359,32 @@ On peut alors par exemple utiliser l'algorithme \textbf{nearest plane} de Baibai
 	&= \mu_2 * (\mu_1 * \vec{v} + \vec{e_1}) + C_1 \times \vec{e_2} \\
 	&= (\mu_1 * \mu_2) * \vec{v} + \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}
 	\end{align*}
-	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur $e_3 = \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. 
-\[\norm{e_3} \leq \mu_2 \norm{e_1} + N \norm{e_2} \]
-	\paragraph{}
-	\textbf{NAND}
-	\flushleft
+	\textbf{Erreur} : le chiffré à une erreur $e_3 = \mu_2 * \vec{e_1} + C_1 \times \vec{e_2}$. La matrice $C_1$ étant de la forme $\textbf{Flatten}(c_1)$, elle ne contient que des 0 et des 1. 
+	On a donc la majoration
+\[\norm{e_3} \leqslant \mu_2 \norm{e_1} + N \norm{e_2} \]
+
+\vspace{0.5cm}\noindent\textbf{NAND:}
+\flushleft
 	
-	\textbf{Entrée} : Cet algorithme prend en entrée les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ des messages $\mu_1, \mu_2 \in \{ 0,1\}$.\\
-	\textbf{Sortie} : Cet algorithme retourne un chiffré de $\overline{(\mu_1 \land \mu_2)} = 1 - \mu_1 * \mu_2$. \\
-	\textbf{Algorithme} : On calcule et on retourne $\textbf{Flatten}(I_N - C_1 \cdot C_2)$.
-	\begin{proof}
+	\textbf{Entrée} : les paramètres du système et deux chiffrés $C_1, C_2 \in \ZZq^{N \times N}$ respectifs des messages $\mu_1, \mu_2 \in \{ 0,1\}$.\\
+	\textbf{Sortie} : un chiffré de $\overline{(\mu_1 \land \mu_2)}$. \\
+	\textbf{Algorithme} : on retourne \[\textbf{Flatten}(I_N - C_1 \cdot C_2)\].
+	Cela fonctionne car on a utilisé le fait que $\overline{(\mu_1 \land \mu_2)} = 1 - \mu_1 * \mu_2$, ainsi:
 	\begin{align*}
 	\textbf{NAND}(C_1, C_2) \times \vec{v} &= (I_N - C_1 \times C_2) \times \vec{v} \\
 	&= \vec{v} - \textbf{Mult}(C_1, C_2)\vec{v} \\
 	&= \vec{v} - (\mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} + C_1 \times \vec{e_2} \\
 	&= (1 - \mu_1 * \mu_2) * \vec{v} - \mu_2 * \vec{e_1} - C_1 \times \vec{e_2}
 	\end{align*}
-	\end{proof}
-	\textbf{Erreur} : Le chiffré à une erreur 
+	\textbf{Erreur} : le chiffré à une erreur 
 	$e_3 = -(\mu_2 * \vec{e_1} + C_1 \times \vec{e_2})$. On est dans 
 	un contexte similaire à $\textbf{Mult}(C_1, C_2)$, mais 
-	$\mu_2$ est ici égal à 0 ou 1.
-\[\norm{e_3} \leq \norm{e_1} + N \norm{e_2} \leq (N+1) \max(\norm{e_1}, \norm{e_2})\]
+	$\mu_2$ est ici égal à 0 ou 1. On a la majoration
+\[\norm{e_3} \leqslant \norm{e_1} + N \norm{e_2} \leqslant (N+1) \max(\norm{e_1}, \norm{e_2})\]
 	\end{subsection}
-	\begin{subsection}{Correction du cryptosystem}
+	\begin{subsection}{Correction du cryptosystème}
 	Ici, nous considérons comme seules opérations homomorphes les portes
-	NAND et comme algorithme de déchiffrement \textbf{Dec}.
+	NAND et comme algorithme de déchiffrement \textbf{Decrypt}.
 	\begin{prop}
 	Si la condition de longueur 
 	\[q > 8nm (1 + N)^L \]
@@ -389,17 +401,19 @@ On peut alors par exemple utiliser l'algorithme \textbf{nearest plane} de Baibai
 	\norm{\langle \text{BitDecomp}(R\cdot A), \vec{v} \rangle}
 	&= \norm{\mu \vec{v} + \langle R\cdot A, \vec{s} \rangle}\\
 	&= \norm{\mu \vec{v} + \langle R\cdot , A\cdot \vec{s} \rangle} \\
-	&\leq  m n \qquad \text{car $R$ est constituée de $0$ ou $1$ et que}
-	\: \norm{A\cdot\vec{s}} \leq n
+	&\leqslant  m n \quad {\displaystyle \text{car $R$ est à valeurs dans $\{0,1\}$ et}
+	\: \norm{A\cdot\vec{s}} \leqslant n}
 	\end{align*}
-	De plus, on peut utiliser l'inégalité indiquée dans la définition de
-	NANd pour voir qu'après l'application de $i$ portes, le bruit $e_i$ du
+	Utilisant la majoration de l'erreur indiquée dans la définition de
+	NAND, on voit qu'après l'application de $i$ portes, le bruit $e_i$ du
 	chiffré  $c_i$ satisfait:
-	\[ \norm{e_i} \leq {(N+1)}^i  mn \]
-	On voit donc qu'il suffit de montrer qu'on peut correctement déchiffrer
-	$c_L$. Par la proposition~\ref{dec}, on voit qu'il faut alors avoir:
+	\[ \norm{e_i} \leqslant {(N+1)}^i  mn \]
+	Il suffit donc de montrer qu'on peut correctement déchiffrer
+	$c_L$, qui correspond au cas avec la plus grande erreur. Par la proposition~\ref{dec}, on voit qu'il faut alors avoir:
 	\[ \norm{e_L} < q/8 \] 
-	qui est satisfaite clairement si la condition de longueur l'est.
+	ce qui est vrai si
+	\[ {(N+1)}^L < q/8 \]
+	On retrouve donc la condition de longueur.
 	\end{proof}
 	\end{subsection}
 \end{section}
