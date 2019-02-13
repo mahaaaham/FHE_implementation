@@ -22,6 +22,9 @@ bs_encrypted_sk = None
 bs_lk = None
 bs_sum_algo = lambda list_to_sum: h_balanced_reduction_list_sum(list_to_sum)
 
+# the algorithm to sum 2 lists used by the diverse algo that sum a list of lists.
+bit_sum_algo =  lambda a, b, params : h_cla_sum(a, b, params)
+
 
 # input: a value in binary, on l bits.
 # output: the absolute value of a representant modulo q=2^(l-1) of the
@@ -332,7 +335,7 @@ def h_naive_classic_list_sum(list_to_sum):
     result = list_to_sum[0]
     cpt = 0
     for elt in list_to_sum[1:]:
-        result = h_bit_sum(bs_params, result, elt)
+        result = bit_sum_algo(bs_params, result, elt)
         cpt += 1
     return result
 
@@ -348,7 +351,7 @@ def h_naive_cla_list_sum(list_to_sum):
     result = list_to_sum[0]
     cpt = 0
     for elt in list_to_sum[1:]:
-        result = h_cla_sum(bs_params, result, elt)
+        result = bit_sum_algo(bs_params, result, elt)
         cpt += 1
     return result
 
@@ -365,7 +368,7 @@ def h_naive_reduction_list_sum(list_to_sum):
 
     for elt in list_to_sum[2:]:
         a, b = h_reduction_sum(bs_params, bs_pk, a, b, elt)
-    return h_bit_sum(bs_params, a, b)
+    return bit_sum_algo(bs_params, a, b)
 
 
 # here, we complete by a power of 2,
@@ -387,7 +390,7 @@ def h_balanced_classic_list_sum(list_to_sum):
         elif list_to_sum[1] == -1:
             return list_to_sum[0]
         else:
-            return h_bit_sum(bs_params, list_to_sum[0], list_to_sum[1])
+            return bit_sum_algo(bs_params, list_to_sum[0], list_to_sum[1])
 
     # we pad with encrypts of 0 to have a list of 2^something elements
     to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
@@ -403,7 +406,7 @@ def h_balanced_classic_list_sum(list_to_sum):
         return second_term
     elif second_term == -1:
         return first_term
-    return h_bit_sum(bs_params, first_term, second_term)
+    return bit_sum_algo(bs_params, first_term, second_term)
 
 
 def h_balanced_cla_list_sum(list_to_sum):
@@ -422,7 +425,7 @@ def h_balanced_cla_list_sum(list_to_sum):
         elif list_to_sum[1] == -1:
             return list_to_sum[0]
         else:
-            return h_cla_sum(bs_params, list_to_sum[0], list_to_sum[1])
+            return bit_sum_algo(bs_params, list_to_sum[0], list_to_sum[1])
 
     # we pad with encrypts of 0 to have a list of 2^something elements
     to_fill = 2^ceil(log(len(list_to_sum), 2)) - len(list_to_sum)
@@ -438,7 +441,7 @@ def h_balanced_cla_list_sum(list_to_sum):
         return second_term
     elif second_term == -1:
         return first_term
-    return h_cla_sum(bs_params, first_term, second_term)
+    return bit_sum_algo(bs_params, first_term, second_term)
 
 
 
@@ -470,7 +473,7 @@ def h_balanced_reduction_list_sum(list_to_sum):
                            list_to_sum[5])
     e, f = h_reduction_sum(bs_params, bs_pk, a, b, c)
     g, h = h_reduction_sum(bs_params, bs_pk, e, f, d)
-    result = h_bit_sum(bs_params, g, h)
+    result = bit_sum_algo(bs_params, g, h)
     if result == -1:
         print list_to_sum
         print e,f, g,h
@@ -539,9 +542,9 @@ def h_complementary_two(params, bit_cipher):
     cipher_one = [encrypt_one] + [encrypt_zero]*(lenght-1)
     complementary_cipher = [h_NO(params, c) for c in bit_cipher]
 
-    bit_sum = h_bit_sum(params, cipher_one, complementary_cipher)
-    bit_sum[-1] = encrypt_zero
-    return bit_sum
+    result = bit_sum_algo(params, cipher_one, complementary_cipher)
+    result[-1] = encrypt_zero
+    return result
 
 
 # apply homomorphicaly the dec algorithm with the
