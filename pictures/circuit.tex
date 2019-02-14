@@ -1,0 +1,40 @@
+\pgfmathsetmacro{\ha}{0}
+\pgfmathsetmacro{\va}{0}
+
+
+\pgfmathsetmacro{\hbase}{-1}
+\pgfmathsetmacro{\vbase}{0}
+\pgfmathsetmacro{\vtree}{1}
+\pgfmathsetmacro{\htree}{1}
+
+\pgfmathsetmacro{\hnewtree}{5}
+
+% s for the base of the tree (= the root), fool for "the node at the left of foo", 
+% foor for the right
+
+\node (pi)  at (0.3,-3) {$\Pi(a,b,c)$};
+\node (evpi) at (5.5,-3) {\small$\text{Eval}(\Pi,C_a,C_b,C_c)$};
+
+\node  (b) at ($(\ha, \va)$) {NAND}; 
+\node  (bl) at ($(\ha-\htree, \va-\vtree)$) {a}; 
+\node  (br) at ($(\ha+\htree, \va-\vtree)$) {NAND}; 
+\node  (brl) at ($(\ha, \va-2*\vtree)$) {b}; 
+\node  (brr) at ($(\ha+2*\htree, \va-2*\vtree)$) {c}; 
+
+\draw[->] (b) -- (bl); \draw[->] (b) -- (br);
+\draw[->] (br) -- (brl);
+\draw[->] (br) -- (brr);
+
+
+\node  (hb) at ($(b) + (\hnewtree,0)$) {$\text{hNAND}$};
+\node  (hbr) at ($(br) + (\hnewtree,0)$) {$\text{hNAND}$};
+\node  (hbl) at ($(bl) + (\hnewtree,0)$) {$C_a$}; 
+\node  (hbrl) at ($(brl) + (\hnewtree,0)$) {$C_b$}; 
+\node  (hbrr) at ($(brr) + (\hnewtree,0)$) {$C_c$}; 
+
+\draw[->, thick] ($(br) + (1,0)$) -- ($(hbl) + (-0.5,0)$);
+
+\draw[->] (hb) -- (hbl);
+\draw[->] (hb) -- (hbr);
+\draw[->] (hbr) -- (hbrl);
+\draw[->] (hbr) -- (hbrr);
