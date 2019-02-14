@@ -1,0 +1,59 @@
+% make a horizontal line beginning with #1 + (#2,#3) and with a length #4
+\newcommand{\makeline}[4]{
+\draw[-]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
+}
+
+\pgfmathsetmacro{\hbase}{2}
+\pgfmathsetmacro{\vbase}{2}
+\pgfmathsetmacro{\hshift}{1}
+\pgfmathsetmacro{\vshift}{0}
+\pgfmathsetmacro{\vlineind}{-1}
+\pgfmathsetmacro{\hlineind}{-0.5}
+
+\def\a{{"$a_1$","$a_2$","$a_3$","$a_4$","$a_5$","$a_6$","$a_7$","$a_8$"}} 
+\def\b{{"$b_1$","$b_2$","$b_3$","$b_4$","$b_5$","$b_6$","$b_7$","$b_8$"}} 
+
+\def\l{{"1","2","3","4","5","6","7","8"}} 
+\def\ll{{"1","2","3","4"}} 
+\def\lll{{"1","2"}} 
+\def\llll{{"1"}} 
+
+\node  (pg) at ($(\hbase - 1.5, \vbase - 1.5)$) {$G1, P1$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 2.5)$) {$G2, P2$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 3.5)$) {$G4, P4$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 4.5)$) {$G8, P8$}; 
+
+% vertical 
+% the a_i
+\foreach \item in {0,...,7}
+\node  (a\item) at ($(\hbase + \hshift * \item, \vbase)$) {\pgfmathparse{\a[\item]}\pgfmathresult}; 
+
+% the b_i
+% vertical line of the begin
+\foreach \item in {0,...,7}
+\node[below = \vshift of a\item] (b\item) {\pgfmathparse{\b[\item]}\pgfmathresult}; 
+
+% lines 1
+\foreach \item in {0,...,7}
+{
+\node (l1\item) at ($(b\item) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {$\pgfmathparse{\l[\item]}\pgfmathresult$};
+\makeline{b\item}{\hlineind}{\vlineind}{\hshift - 0.15}
+}
+\foreach \item in {0,2,4,6}
+% lines 2
+{
+\node (l1\item) at ($(b\item) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {$\pgfmathparse{\ll[\item/2]}\pgfmathresult$};
+\makeline{b\item}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+}
+% lines 3
+\foreach \item in {0,4}
+{
+\node (l1\item) at ($(b\item) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {$\pgfmathparse{\ll[\item/4]}\pgfmathresult$};
+\makeline{b\item}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
+% lines 4
+}
+\foreach \item in {0}
+{
+\node (l1\item) at ($(b\item) + (\hlineind + 1/2 * 8 * 0.9 * \hshift ,4 * \vlineind + 0.2)$) {$\pgfmathparse{\ll[\item]}\pgfmathresult$};
+\makeline{b\item}{\hlineind}{4 * \vlineind}{8 * \hshift}
+}

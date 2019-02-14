@@ -1,26 +1,25 @@
-\documentclass[16pt]{beamer}
+\documentclass[15pt,usenames,dvipsnames]{beamer}
 \usepackage[frenchb]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
 \input{../presentation/include/syntax.tex} % where are all the options about syntax highlight.
 
-\newcommand{\byte}{\Cinline{byte}}
-\newcommand{\word}{\Cinline{word}}
-\newcommand{\nibble}{\Cinline{nibble}}
-
-
 \usepackage{ulem}
 \usepackage{graphicx}
-\usepackage{../oral/theme/beamerthememetropolis}
+\usepackage{../presentation/theme/beamerthememetropolis}
 
-\usepackage{parallel}
+
+
+% \usepackage{parallel}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
+\usepackage{pgfmath}
 
 \usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
                     % \textcolor{red}{foo}: \
+\usepackage[dvipsnames]{xcolor} % to have more colors.
 
 \usepackage{wrapfig}
 
