@@ -83,10 +83,10 @@
 
 \begin{frame} 
 \frametitle{GSW, premier essai:}
-\textbf{Clé secrète:} un vecteur $sk \in \ZZq^{N}$ \\
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
 \textbf{Clé publique:} pk\\
 \textbf{Chiffrement:} Encrypt(pk, $\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
-\[C \vec{sk} = \vec{s}\]
+\[C \vec{sk} = \mu\vec{sk}\]
 \vspace{-1cm}
 
 \textbf{Déchiffrement:} Evident \\
@@ -380,8 +380,8 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
 
 %\textbf{Profondeur de NAND totale majorée par :}
 %\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \lceil \log_2(n) \rceil\]
-\textbf{Profondeur de NAND totale en :} \
-\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \lceil \log_2(n) \rceil\]
+\textbf{Profondeur de NAND totale en :} 
+$$\mathcal{O}(\log(\log(q)) + \log(n))$$
 avec n un paramètre du système.
 
 Certains choix de paramètres permettent d'effectuer un bootstrapping en garantissant que le cryptosystème est IND-CPA.
