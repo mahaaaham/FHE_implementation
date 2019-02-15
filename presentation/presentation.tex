@@ -119,9 +119,9 @@ et $\lambda \in \ZZq$,
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
 \textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand
 \begin{align*}
-\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{v_i} \right\rceil &= 
-\left\lfloor \frac{{\left(\mu\vec{sk}_i + {\color{red}\vec{e}_i}\right)}_i}{v_i} \right\rceil \\
-&= \left\lfloor \mu + \frac{\vec{e}_i}{v_i} \right\rceil \\
+\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{\vec{sk}_i} \right\rceil &= 
+\left\lfloor \frac{{\left(\mu\vec{sk}_i + {\color{red}\vec{e}_i}\right)}_i}{\vec{sk}_i} \right\rceil \\
+&= \left\lfloor \mu + \frac{\vec{e}_i}{\vec{sk}_i} \right\rceil \\
 &= \mu
 \end{align*}
 \end{frame} 
@@ -251,8 +251,8 @@ Alors:
 L'algorithme de déchiffrement est le suivant :
 \begin{enumerate}
 \item trouver $1 \leqslant i \leqslant l$ tel que $q/4 \leqslant 2^i < q/2$
-\item calculer $a = C_i \cdot \vec{v}$
-\item retourner $|\frac{a}{\vec{v}_i}|$
+\item calculer $a = C_i \cdot \vec{sk}$
+\item retourner $|\frac{a}{\vec{sk}_i}|$
 \end{enumerate}
 
 \begin{itemize}
