@@ -1,4 +1,4 @@
-\documentclass[11pt,xcolor={usenames,dvipsnames}]{beamer}
+\documentclass[10pt,xcolor={usenames,dvipsnames}]{beamer}
 \usepackage[frenchb]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -50,19 +50,32 @@
 \newcommand{\Enc}{\text{\textbf{Encrypt}}}
 
 \begin{document}
+ \begin{frame} 
+ \maketitle
+ \end{frame}
+
+%%------------------------------------------------------------------------------------------------
+
 
  \begin{frame} 
  \frametitle{Un bref historique}
 
 \begin{itemize}
-\item Un premier plan par Craig Gentry;
-\item FHE de secondes génération
-Entrée typique: polynômes de degré 1.
+\item 2009: Un premier plan par Craig Gentry dans sa thèse;
 \begin{itemize}
-\item somme: la somme des polynômes
-\item produit: on obtient un degré 2.
+\item idée du bootstrapping;
 \end{itemize}
-\item FHE de troisième génération: BVS.
+\item 2011: premiers FHE de seconde génération: Z.Brakerski, V.Vaikuntanathan, J.Fan, F.Vercauteren \\
+	\begin{itemize}
+	\item basés sur LWE et ses variantes (comme RLWE);
+	\item une somme simple à définir;
+	\item un produit en 2 étapes;\\
+	\end{itemize}
+\item 2013: premiers FHE de troisième génération: GWS par C.Gentry, B.Waters and A.Sahai, en 2013;
+	\begin{itemize}
+	\item basés sur LWE et ses variantes;
+	\item produit et somme de même nature;
+	\end{itemize}
 \end{itemize}
 \end{frame} 
 
@@ -393,12 +406,42 @@ $\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
 
 \begin{frame} 
 \frametitle{The Gate Bootstrapping API}
+\begin{itemize}
+\item s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
+\item librairie open source utilisable en C et C++ 
+\item version modifiée du cryptosysteme GSW, avec une variante de LWE nommée TFHE.
+\end{itemize}
+Performances:
+pour un ordinateur 64-bit simple coeur (i7-4930MX) cadencé à 3.00GHz, le bootstrapping se fait en un temps moyen de 52ms
+et la clé de bootstrapping fait environ 24 Mo.
+ 
+
+\end{frame} 
+
+\begin{frame} 
+On a considéré le scénario suivant:
+\begin{itemize}
+\item Alice génère des clés, chiffre deux nombres de 16 bits  et les inscrits dans un fichier;
+\item Le cloud récupère les donnés, applique homomorphiquement la fonction minimum aux deux nombres et inscrit le résultat dans un fichier;
+\item Alice récupère et déchiffre le résultat.
+\end{itemize}
+Pour un paramètre de sécurité $\lambda = 110$ et sur un ordinateur 64-bit quadri-coeur (i5-7200U CPU) cadendcé à 2.50GHz
+on obtient un temps de 
+De plus, les taille des données sont les suivantes:
+
 \end{frame} 
 
 % ------------------------------------------------------------------------------------------------
 
 \begin{frame}
 \frametitle{Ce dont nous n'avons pas parlé}
+\begin{itemize}
+\item Flatten, dont nous avons caché la définition sous le tapis;
+\item Deux autres algorithmes de déchiffrement;
+\item Les gaussiennes discrètes;
+\item Choix des paramètres pour un leveled FHE;
+\item Contraintes de sécurité supplémentaires liées au bootstrapping;
+\end{itemize}
 \end{frame}
 
 % ------------------------------------------------------------------------------------------------
