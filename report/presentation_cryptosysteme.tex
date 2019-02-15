@@ -185,7 +185,7 @@ De plus, on note $l = \bnorm{q} = \lfloor$log $q\rfloor + 1$ et $N = (n + 1)$ $l
 	\textbf{Taille} : Comme on l'a dit, $\vec{s} \in \ZZq^{n+1}$. On peut de plus représenter tout élément de
 	$\ZZq$ en $l = \bnorm{q}$ bits.  $\vec{s}$ peut donc se représenter en  $l * (n+1) = N$ bits.
 
-	D'autre part, $A \in \ZZq^{m \times n}$ donc A se représente en $l * n * m =	N * (m - 1)$ bits.
+	D'autre part, $A \in \ZZq^{m \times n+1}$ donc A se représente en $l * (n + 1) * m = N * m$ bits.
 
 	\textbf{Remarque:} Générer $A$ et $\vec{s}$ jusqu'à avoir $\norm{A \cdot \vec{s}} \leqslant n$ peut poser des problèmes de sécurité, car ce n'est alors plus tout à fait $\chi$ qui est utilisée. Notons toutefois que $A \cdot \vec{v} = \vec{e}$, et que si $\alpha = n/q$ comme le préconisent les hypothèses sur les paramètres que nous utiliserons,
 	\[ \PP\left(\vec{e} \leftarrow \chi: \norm{\vec{e}} > n\right) \]

@@ -9,7 +9,7 @@ uniquement à l'aide de 0 et de 1.
 
 Nous allons donc créer ce circuit et nous trouverons une majoration de la profondeur de NAND qu'il nécessite afin de pouvoir, dans une dernière partie, trouver des paramètres sécurités permettant le bootstrapping.
 
-Rappelons enfin que $l = \log(q)+1$ et que $N = (n+1)*l$.
+Rappelons enfin que $l = \log_2(q)+1$ et que $N = (n+1)*l$.
 \begin{subsection}{Un point sur la sécurité}
 Nous avons vu que le système cryptographique que nous étudions est IND-CPA. 
 La première question qui se pose pour le bootstrapping est de savoir si il a la sécurité
@@ -18,7 +18,7 @@ dans l'article original \cite{EPRINT:GenSahWat13} ou encore dans d'autres exposi
 donc la supposer pour cette section.
 \end{subsection}
 \begin{subsection}{Un premier découpage}
-Comme la clé secrète est un vecteur de $\ZZq^N$ et qu'un élément de $\ZZq$ a une décomposition binaire d'au plus $\log(q)$ éléments, nous pouvons représenter la clé secrète par une liste de $N\log(q)$ 0 et 1.
+Comme la clé secrète est un vecteur de $\ZZq^N$ et qu'un élément de $\ZZq$ a une décomposition binaire d'au plus $\log_2(q)$ éléments, nous pouvons représenter la clé secrète par une liste de $N\log_2(q)$ 0 et 1.
 
 L'algorithme que nous allons étudier est le suivant:
 \begin{lstlisting}[label={lst:decoupage}]
@@ -29,7 +29,7 @@ decrypt(C) :
 \end{lstlisting}
 Insistons sur le fait que le chiffré $C$ n'est pas une entrée du circuit. Notamment, même lors de 
 l'application homomorphe de ce circuit, nous pouvons supposer que $C$ est connu, alors que
-seul les chiffrés des $N\log(q)$ éléments de la représentation en 0 et 1 de la clé secrète sera connu. 
+seul les chiffrés des $N\log_2(q)$ éléments de la représentation en 0 et 1 de la clé secrète sera connu. 
 
 Nous allons tout de suite profiter de cela en remarquant que
 \begin{align*} 
@@ -98,7 +98,7 @@ Calculer $d_i$ peut se faire en n'utilisant la retenue que pour un $\oplus$, ce 
 \end{prop}
 
 
-Il s'avère qu'il existe une méthode pour additionner deux listes en $\mathcal{O}(\log(s))$. 
+Il s'avère qu'il existe une méthode pour additionner deux listes en $\mathcal{O}(\log_2(s))$. 
 Son idée consiste à ne pas calculer les retenues une à une \og linéairement \fg, mais à 
 introduire un arbre binaire permettant de faire en partie en parallèle le calcul des retenues.
 Il s'agit du carry lookahead adder que nous présentons maintenant.
@@ -220,24 +220,24 @@ P8 && &&&&&&&0 \\
 
 	On va maintenant voir que cette méthode est bien plus intéressante que la méthode classique concernant la profondeur de NAND.
 \begin{prop}
-	Pour deux listes de taille $u$, calculer toutes les retenues nécessite une profondeur de moins de $8 \log(u) + 2$ NAND.
+	Pour deux listes de taille $u$, calculer toutes les retenues nécessite une profondeur de moins de $8 \log_2(u) + 2$ NAND.
 \end{prop}
 
 \begin{proof}
 	Notant $D(f)$ la profondeur de NAND d'une formule $f$, la formule \eqref{cla} nous permet de voir que pour tout $1 \leqslant j \leqslant 2^u $:
 
 \begin{align*}
-D(c_j) &\leqslant 2 + \text{max}\left[2 + 4 \log(\nu(j)),\:\: 2 + \text{max}\left(D(c_{\theta(j)}), 2 + 2
-\log(\nu(j))\right)\right] \\
-&\leqslant 2 + \text{max}\left(2 + 4 \log(\nu(j)),\:\: 2 + D(c_{\theta(j)})\right) \\
-&\leqslant 4 + \text{max}\left(2 + 4 \log(\nu(j)), D(c_{\theta(j)})\right) \\
-& \leqslant 4 \log(u) + (2 + 4\log(u)) = 8 \log(u) + 2.
+D(c_j) &\leqslant 2 + \text{max}\left[2 + 4 \log_2(\nu(j)),\:\: 2 + \text{max}\left(D(c_{\theta(j)}), 2 + 2
+\log_2(\nu(j))\right)\right] \\
+&\leqslant 2 + \text{max}\left(2 + 4 \log_2(\nu(j)),\:\: 2 + D(c_{\theta(j)})\right) \\
+&\leqslant 4 + \text{max}\left(2 + 4 \log_2(\nu(j)), D(c_{\theta(j)})\right) \\
+& \leqslant 4 \log_2(u) + (2 + 4\log_2(u)) = 8 \log_2(u) + 2.
 \end{align*}
 La dernière inégalité utilisant $D(c_0) = D(0) = 0$ ainsi que le fait que la séquence $(j, \theta(j), \theta(\theta(j)),
-...)$ devient constante à 0 en moins de $\log(u)$ étapes. 
+...)$ devient constante à 0 en moins de $\log_2(u)$ étapes. 
 
 Cela se montre en constatant que $\theta^n(j)$ est un multiple positif de $2^\tau$ inférieur à $u$, pour un 
-$\tau > n$ et ne peut donc valoir que 0 si $n > \log(u)$.
+$\tau > n$ et ne peut donc valoir que 0 si $n > \log_2(u)$.
 \end{proof}
 
 	Une fois calculée les retenues $(c_i)_i$, la somme entre deux listes $a$ et $b$ se fait comme la somme classique, avec : $r_i = a_i \oplus b_i \oplus c_i$.
@@ -246,11 +246,11 @@ $\tau > n$ et ne peut donc valoir que 0 si $n > \log(u)$.
 
 \begin{thm}
 \label{cla_sum}
-	L'algorithme \textbf{cla\_sum} fait la somme de 2 listes de taille $s$ avec une profondeur de moins de $8 \lceil \log(s) \rceil + 6$ NAND, donc en $\mathcal{O}(log(s))$.
+	L'algorithme \textbf{cla\_sum} fait la somme de 2 listes de taille $s$ avec une profondeur de moins de $8 \lceil \log_2(s) \rceil + 6$ NAND, donc en $\mathcal{O}(log_2(s))$.
 \end{thm}
 
 \begin{proof}
-	Il suffit de compléter les listes par des 0 pour se réduire au cas où la taille vaut $2^{\lceil \log(s) \rceil}$ et d'appliquer le travail fait précédemment.
+	Il suffit de compléter les listes par des 0 pour se réduire au cas où la taille vaut $2^{\lceil \log_2(s) \rceil}$ et d'appliquer le travail fait précédemment.
 \end{proof}
 \end{subsubsection}
 
@@ -306,7 +306,7 @@ L'algorithme naïf n'utilisant que \textbf{cla\_sum} consisterait à appliquer
 \textbf{cla\_sum} à deux listes, puis à sommer le résultat de ce calcul avec une nouvelle liste et ainsi de suite jusqu'à avoir sommé toutes les $nb$ listes.
 On voit qu'ainsi, l'arbre dont les n\oe{}uds correspondent à une application de \textbf{cla\_sum}
 aurait alors une profondeur de $nb - 1$, ce qui fait que la profondeur totale nécessaire serait 
-bornée par $(nb-1)(8\lceil\log(s)\rceil + 6)$.
+bornée par $(nb-1)(8\lceil\log_2(s)\rceil + 6)$.
 
 \paragraph{}
 Nous avons toutefois vu qu'il y a tout intérêt à utiliser \textbf{reduced\_sum}
@@ -317,7 +317,7 @@ procéder ainsi de suite jusqu'à ne plus avoir que deux listes qu'on somme alor
 
 L'arbre dont les n\oe{}uds correspondent à une application de \textbf{reduced\_sum}
 ou bien de \textbf{cla\_sum} a alors une profondeur de $nb - 1$, avec une seule utilisation de \textbf{cla\_sum}. On a donc une profondeur en NAND majorée par:
-\[ 12(nb - 2) + 8 \lceil \log(s) \rceil + 6 = 12 nb + 8 \lceil \log(s) \rceil - 18\]
+\[ 12(nb - 2) + 8 \lceil \log_2(s) \rceil + 6 = 12 nb + 8 \lceil \log_2(s) \rceil - 18\]
 	
 \paragraph{}
 Les additions peuvent cependant être bien mieux ordonnées, en utilisant 
@@ -330,7 +330,7 @@ comme arbre équilibré un arbre binaire (quitte à compléter les listes par de
 sembler ridicule vu que l'on parle de somme de bits, mais il ne faut pas oublier que ce circuit s'applique 
 ensuite homomorphiquement} que leur taille
 soit une puissance de 2), ce qui donne une profondeur en NAND de   
-$(\lfloor \log(nb) \rfloor)(8\lceil\log(s)\rceil + 6)$
+$(\lfloor \log_2(nb) \rfloor)(8\lceil\log_2(s)\rceil + 6)$
 
 \paragraph{}
 Dans l'exemple utilisant d'abord \textbf{reduced\_sum} puis une fois \textbf{cla\_sum}, 
@@ -340,7 +340,7 @@ cela se fait de la même façon, même si la démonstration est un peu moins év
 \begin{prop}
 \label{sum_list}
 Il est possible de sommer $nb$ listes de $s$ éléments avec une profondeur de NAND majorée par 
-$8 \lceil \log(s) \rceil + 36\lceil\log_3(nb)\rceil -18$. Soit, une profondeur en $\mathcal{O}(\log(nb) + \log(s))$.
+$8 \lceil \log_2(s) \rceil + 36\lceil\log_3(nb)\rceil -18$. Soit, une profondeur en $\mathcal{O}(\log_2(nb) + \log_2(s))$.
 \end{prop}
 
 \begin{proof}
@@ -359,7 +359,7 @@ la somme totale avec une profondeur de quatre \textbf{reduced\_sum} et un \textb
 \end{center}
 
 En utilisant la proposition~\ref{reduction_sum} ainsi que le théorème~\ref{cla_sum}, on obtient que la profondeur totale en NAND est majorée par :
-\[ 8 \lceil \log(s)\rceil + 6+ 12(3p - 2) = 8 \lceil \log(s) \rceil + 36p -18.\]
+\[ 8 \lceil \log_2(s)\rceil + 6+ 12(3p - 2) = 8 \lceil \log_2(s) \rceil + 36p -18.\]
 Or, par définition, $p = \lceil \log_3(nb) \rceil$, ce qui permet de conclure.
 \end{proof}
 
@@ -398,7 +398,7 @@ return [($a_{l-1} \land a_i) \lor (\overline{a_{l_1}} \land b_i)$  for $i$ in ra
 	On peut alors utiliser le théorème \ref{cla_sum} pour conclure:
 \begin{prop}
 Il est possible de calculer la valeur absolue en binaire d'un élément $a\in \ZZq$ avec une profondeur de moins de
-$8\lceil \log(s) \rceil + 11$ NAND.
+$8\lceil \log_2(s) \rceil + 11$ NAND.
 \end{prop}
 \end{subsection}
 
@@ -408,16 +408,16 @@ de déchiffrement tel que décrit dans le listing~\ref{lst:decoupage} page~\page
 \begin{thm} \label{size_dec}
 Si $q$ est une puissance de 2, on peut effectuer 
 l'algorithme \textbf{Decrypt} avec une profondeur de NAND plus petite que
-\[88 \lceil \log(\log(q)) \rceil + 36 \log\left(n)\right) \]
-et donc, en $O(\log(n) + \log(\log(q)))$
+\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \log\left(n)\right) \]
+et donc, en $\mathcal{O}(\log_2(n) + \log_2(\log_2(q)))$
 \end{thm}
 \begin{proof}
-En utilisant les propositions précédentes ainsi que le fait qu'il y a au plus $N*l = \log(q)^2 * (n+1)$ listes à
+En utilisant les propositions précédentes ainsi que le fait qu'il y a au plus $N*l = \log_2(q)^2 * (n+1)$ listes à
 sommer, on majore la profondeur de NAND par
-\[16 \lceil \log(\log(q)) \rceil + 36 \log_3\left(\log(q)^2
-*(n+1)\right) = 16 \lceil \log(\log(q)) \rceil + 72 \log_3(\log(q)) + 36 \log_3\left((n+1)\right) \]
+\[16 \lceil \log_2(\log_2(q)) \rceil + 36 \log_3\left(\log_2(q)^2
+*(n+1)\right) = 16 \lceil \log_2(\log_2(q)) \rceil + 72 \log_3(\log_2(q)) + 36 \log_3\left((n+1)\right) \]
 et on majore le logarithme en base 3 par celui en base 2 pour conclure, en
-utilisant aussi que $\log_3(n+1) \leqslant\log(n)$ (dès $n \geqslant 2)$.
+utilisant aussi que $\log_3(n+1) \leqslant\log_2(n)$ (dès $n \geqslant 2)$.
 \end{proof}
 
 Nous avons maintenant toutes les informations nécessaires pour choisir des paramètres permettant le bootstrapping.
@@ -426,9 +426,9 @@ Nous avons maintenant toutes les informations nécessaires pour choisir des para
 \label{sec:bootstrapping}
 
 On va utiliser l'inégalité grossière :
-\[88 \lceil\log(\log(q))\rceil + 36 \log(\log(n)) \leqslant 90\left(\log(\log(q)) + \log(n)\right) \]
+\[88 \lceil\log_2(\log_2(q))\rceil + 36 \log_2(\log_2(n)) \leqslant 90\left(\log_2(\log_2(q)) + \log_2(n)\right) \]
 pour voir que, pour obtenir un GWS avec bootstrapping, il suffit de pouvoir évaluer les circuits dont la profondeur en NAND est majorée par
-\[ L = 90 \left(\log(\log(q)) + \log(n)\right). \]
+\[ L = 90 \left(\log_2(\log_2(q)) + \log_2(n)\right). \]
 L'inégalité est assez grossière pour qu'on n'ait pas besoin de rajouter de 1 à la profondeur maximale pour s'assurer de pouvoir effectuer des calculs hors de ce circuit.
 
 \paragraph{}
@@ -440,17 +440,17 @@ q > 16 {(1+N)}^{L+2}.
 En injectant la valeur précédente dans $L$ et en utilisant une majoration
 grossière, on voit qu'il suffit d'avoir
 \begin{equation}
-q > {\left((n+1)(\lceil \log(q) \rceil + 1 )\right)}^{90 \left(\log(n) +
-\log(\log(q))\right)}.
+q > {\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{90 \left(\log_2(n) +
+\log_2(\log_2(q))\right)}.
 \end{equation}
 
 Suivant le raisonnement de Shai Halevi dans \cite{halevi}, on remarque 
 qu'il existe un $\rho > 90$ tel que 
 
 \begin{equation*}
-{\left((n+1)(\lceil \log(q) \rceil + 1 )\right)}^{90 \left(\log(n) +
-\log(\log(q))\right)} < 
-{\left(n\log(q))\right)}^{\rho\:\left(\log(n) + \log(\log(q))\right)}.
+{\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{90 \left(\log_2(n) +
+\log_2(\log_2(q))\right)} < 
+{\left(n\log_2(q))\right)}^{\rho\:\left(\log_2(n) + \log_2(\log_2(q))\right)}.
 \end{equation*}
 En utilisant l'hypothèse  \ref{hyp_dlwe_boot} (page \pageref{hyp_dlwe_boot}), notre jeu de contraintes est alors:
 
@@ -458,7 +458,7 @@ En utilisant l'hypothèse  \ref{hyp_dlwe_boot} (page \pageref{hyp_dlwe_boot}), n
 \alpha  = n /q \\
 	q = 2^\text{polylog$(n)$}\\ 
 	m = 2(n+1) \bnorm{q} \\  
-	q > {\left(n\log(q))\right)}^{\rho\: \left[\log(n) + \log(\log(q))\right]}
+	q > {\left(n\log_2(q))\right)}^{\rho\: \left[\log_2(n) + \log_2(\log_2(q))\right]}
 	\end{cases} \]
 
 \paragraph{}
@@ -478,22 +478,22 @@ suivants rendent le cryptosystème GSW bootstrappable et IND-CPA :
 \end{thm}
 \begin{proof}
 Il nous faut montrer que l'inégalité 
-	\[ q > {\left(n\log(q)\right)}^{\:\rho\:\left(\log(n) + \log(\log(q))\right)} \]
+	\[ q > {\left(n\log_2(q)\right)}^{\:\rho\:\left(\log_2(n) + \log_2(\log_2(q))\right)} \]
 est vérifiée pour $n$ assez grand.
 
 \paragraph{}
 En substituant $q$ par sa valeur à gauche, l'inégalité devient:
 \begin{equation*}
-n^{\rho \log^2(n)} > {\left(n\log(q))\right)}^{\:\rho\: \left(\log(n) + \log(\log(q)\right)}.
+n^{\rho \log^2(n)} > {\left(n\log_2(q))\right)}^{\:\rho\: \left(\log_2(n) + \log_2(\log_2(q)\right)}.
 \end{equation*}
 
 En passant au logarithme, l'inégalité devient:
-\[ \log^3(n) > {\left[\log(n) + \log(\log(q))\right]}^2. \]
+\[ \log^3(n) > {\left[\log_2(n) + \log_2(\log_2(q))\right]}^2. \]
 
 Or,
-\[ \log(\log(q)) \leqslant \log(\rho \log^3(n) + 1) \leqslant 1 + \log(\rho) + 3 \log(\log(n)).\]
+\[ \log_2(\log_2(q)) \leqslant \log_2(\rho \log^3(n) + 1) \leqslant 1 + \log_2(\rho) + 3 \log_2(\log_2(n)).\]
 Il suffit donc de montrer que:
-\[ \log^3(n) > {(1 + \log(\rho) + 3\log(\log(n)) + \log(n))}^2,\]
+\[ \log^3(n) > {(1 + \log_2(\rho) + 3\log_2(\log_2(n)) + \log_2(n))}^2,\]
 ce qui est vrai pour $n$ assez grand.
 \end{proof}
 \begin{rmq}
@@ -509,29 +509,17 @@ pour stocker les différents composants de GSW en utilisant ces paramètres.
 \hline
 & taille du secret & taille de la clé & taille d'un chiffré \\
 \hline
-$\lambda = 32, \ \rho = 0.1$ & 54 octets & 45 Ko & 293 Ko \\
+$\lambda = 8, \ \rho = 90$ & 3 Ko & 113 Mo & 135 Go \\
 \hline
-$\lambda = 32, \ \rho = 0.25$ & 132 octets & 272 Ko & 5 Mo \\
+$\lambda = 8, \ \rho = 100$ & 3 Ko & 139 Mo & 186 Go \\
 \hline
-$\lambda = 32, \ \rho = 0.5$ & 260 octets & 1 Mo & 33 Mo \\
+$\lambda = 16, \ \rho = 90$ & 12 Ko & 2 Go & 6 To \\
 \hline
-$\lambda = 32, \ \rho = 0.75$ & 388 octets & 2 Mo & 108 Mo \\
+$\lambda = 16, \ \rho = 100$ & 13 Ko & 3 Go & 9 To \\
 \hline
-$\lambda = 64, \ \rho = 0.1$ & 179 octets & 500 Ko & 6 Mo \\
+$\lambda = 32, \ \rho = 90$ & 45 Ko & 32 Go & 176 To \\
 \hline
-$\lambda = 64, \ \rho = 0.25$ & 447 octets & 4 Mo & 84 Mo \\
-\hline
-$\lambda = 64, \ \rho = 0.5$ & 886 octets & 12 Mo & 653 Mo \\
-\hline
-$\lambda = 64, \ \rho = 0.75$ & 1 Ko & 27 Mo & 2 Go \\
-\hline
-$\lambda = 128, \ \rho = 0.1$ & 565 octets & 5 Mo & 86 Mo \\
-\hline
-$\lambda = 128, \ \rho = 0.25$ & 1 Ko & 30 Mo & 1 Go \\
-\hline
-$\lambda = 128, \ \rho = 0.5$ & 3 Ko & 118 Mo & 10 Go \\
-\hline
-$\lambda = 128, \ \rho = 0.75$ & 4 Ko & 265 Mo & 34 Go \\
+$\lambda = 32, \ \rho = 100$ & 50 Ko & 40 Go & 242 To \\
 \hline
 \end{tabular}
 \caption{Taille des données suivant les paramètres étudiés précédemment}
