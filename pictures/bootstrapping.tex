@@ -1,9 +1,9 @@
 \pgfmathsetmacro{\ha}{0}
 \pgfmathsetmacro{\va}{0}
-\node  (before) at ($(\ha, \va)$) {\small$C = D + \text{\textcolor{Orange}{error}}$}; 
-\node  (after) at ($(\ha+8, \va)$) {\small$C^{\text{new}} =D + \text{\textcolor{Green}{error}}$}; 
+\node  (before) at ($(\ha, \va)$) {\small$C = D + \text{\textcolor{Orange}{erreur}}$}; 
+\node  (after) at ($(\ha+8, \va)$) {\small$C_{\text{new}} =D + \text{\textcolor{Green}{erreur}}$}; 
 \node  (clear) at ($(\ha+4, \va)$) {$\mu$}; 
-\node  (e) at ($(\ha+2.5, \va+0.5)$) {$\text{Decrypt}(\text{sk}, C)$}; 
-\node  (d) at ($(\ha+5.5, \va+0.5)$) {$\text{Encrypt}(\text{sk}, \mu)$}; 
+\node  (e) at ($(\ha+2.5, \va+0.5)$) {$\text{Decrypt}(\vec{sk}, C)$}; 
+\node  (d) at ($(\ha+5.5, \va+0.5)$) {$\text{Encrypt}(\vec{sk}, \mu)$}; 
 \draw[->] (before) to (clear);
 \draw[->] (clear) to (after);

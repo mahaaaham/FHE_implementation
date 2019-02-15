@@ -62,17 +62,17 @@
  \frametitle{Un bref historique}
 
 \begin{itemize}
-\item 2009: Un premier plan par Craig Gentry dans sa thèse;
+\item 2009: un premier plan par Craig Gentry dans sa thèse :
 \begin{itemize}
 \item idée du bootstrapping;
 \end{itemize}
-\item 2011: premiers FHE de seconde génération: Z.Brakerski, V.Vaikuntanathan, J.Fan, F.Vercauteren \\
+\item 2011: premiers FHE de seconde génération: Z.Brakerski, V.Vaikuntanathan, J.Fan, F.Vercauteren :
 	\begin{itemize}
 	\item basés sur LWE et ses variantes (comme RLWE);
 	\item une somme simple à définir;
-	\item un produit en 2 étapes;\\
+	\item un produit en 2 étapes;
 	\end{itemize}
-\item 2013: premiers FHE de troisième génération: GWS par C.Gentry, B.Waters and A.Sahai, en 2013;
+\item 2013: premiers FHE de troisième génération: GWS par C.Gentry, B.Waters and A.Sahai, en 2013 :
 	\begin{itemize}
 	\item basés sur LWE et ses variantes;
 	\item produit et somme de même nature;
@@ -94,16 +94,16 @@
 \[C \vec{sk} = \mu\vec{sk}\]
 \vspace{-1cm}
 
-\textbf{Déchiffrement:} Evident \\
+\textbf{Déchiffrement:} évident : recherche de valeur propre \\
 \textbf{Opérations homomorphes:}\\
 Pour {\small$C_i = \text{Encrypt}(\mu_i) \quad(1 \leqslant i \leqslant 2)$}
-et $\lambda \in \ZZq$
+et $\lambda \in \ZZq$,
 \begin{itemize}
 \item \textbf{Somme:} $C_1 + C_2\quad$
 \[\left(C_1 + C_2\right) \vec{sk} = (\mu_1 + \mu_2)\: \vec{sk}\]
 \item \textbf{Produit:} $C_1 \times C_2\quad$
-\[\left(C_1 \times C_2\right)\: \vec{sk} = C_1\left(\mu_2\:\vec{sk}\right) = (\mu_1 \mu_2)\:\vec{s}\]
-\item \textbf{NAND:} $C_1 * C_2 - \text{Id}$
+\[\left(C_1 \times C_2\right)\: \vec{sk} = C_1\left(\mu_2\:\vec{sk}\right) = (\mu_1 \mu_2)\:\vec{sk}\]
+\item \textbf{NAND:} $C_1 \times C_2 - \text{Id}$
 \item \textbf{Produit par scalaire:} $\lambda C_1\quad$
 \end{itemize}
 \end{frame} 
@@ -112,13 +112,14 @@ et $\lambda \in \ZZq$
 
 \begin{frame} 
 \frametitle{GSW, seconde tentative}
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
 \textbf{Clé secrète:} un vecteur $sk \in \ZZq^{N}$ \\
 \textbf{Clé publique:} pk\\
 \textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
 \textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand
 \begin{align*}
-\text{Decrypt}(sk, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{v_i} \right\rceil &= 
+\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{v_i} \right\rceil &= 
 \left\lfloor \frac{{\left(\mu\vec{sk}_i + {\color{red}\vec{e}_i}\right)}_i}{v_i} \right\rceil \\
 &= \left\lfloor \mu + \frac{\vec{e}_i}{v_i} \right\rceil \\
 &= \mu
@@ -136,13 +137,13 @@ Retour sur les opérations homomorphes:
 \[\left(C_1 + C_2\right) \vec{sk} = (\mu_1 + \mu_2) \vec{sk} + {\color{red}\vec{e}_1 + \vec{e}_2}\]
 \item \textbf{NAND:} $C_1 \times C_2 - \text{Id}$
 \begin{align*}
-\left(C_1 \times C_2 - \text{Id}\right) \vec{sk} &= C_1\left(\mu_2\vec{sk} + {\color{red}\vec{e}_2} - \vec{s}\right) \\
+\left(C_1 \times C_2 - \text{Id}\right) \vec{sk} &= C_1\left(\mu_2\vec{sk} + {\color{red}\vec{e}_2} - \vec{sk}\right) \\
 &= (\mu_1 \mu_2 - 1) \vec{sk} + {\color{red}\mu_2 \vec{e}_1 + C_1 \vec{e_2}}
 \end{align*}
 \end{itemize}
 
 \textbf{Problème:} \\
-Les coefficients de $C_1 \vec{e}_2$ peuvent être gros
+Les coefficients de $C_1 \vec{e}_2$ peuvent être gros.
 
 \end{frame} 
 
@@ -153,28 +154,18 @@ Les coefficients de $C_1 \vec{e}_2$ peuvent être gros
 On utilise une fonction Flatten qui a notamment les propriétés suivantes:
 \begin{align*}
 &C \in \ZZq^{n \times n} \Rightarrow \text{Flatten}(C) \in \{0,1\}^{N \times N} \\
-& \langle Flatten(C), \vec{sk} \rangle = \langle C, \vec{sk} \rangle \quad{ pour un secret \vec{sk} bien choisi}
+& \langle Flatten(C), \vec{sk} \rangle = \langle C, \vec{sk} \rangle \quad\text{pour un secret }\vec{sk}\text{ bien choisi}
 \end{align*}
 
-\textbf{Clé secrète:} un vecteur $s \in \ZZq^{N}$ bien choisi\\
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ bien choisi\\
 \textbf{Clé publique:} pk\\
 \textbf{Chiffrement:} Encrypt(pk, $\mu$) = $\text{Flatten}(C)\in \ZZq^{N \times N}\:$ pour $C$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
-\textbf{Déchiffrement:} on prend un $i$ tel que $\vec{s}_i$ est grand et:
-\[\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{s}\right)}_i}{v_i} \right\rceil \]
+\textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand et:
+\[\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{\vec{sk}_i} \right\rceil \]
 
 Opérations homomorphes: on applique Flatten aux précédentes opérations homomorphes.
 
-\begin{itemize}
-\item \textbf{Somme:} $\text{Flatten}\left(C_1 + C_2\right)\quad$ \\
-\[\text{Flatten}\left(C_1 + C_2\right)\: \vec{sk} = (\mu_1 + \mu_2)\:\vec{sk} + {\color{red}\vec{e}_1 + \vec{e}_2}\]
-Alors, la nouvelle erreur est majorée par $\bnorm{\vec{e_1}} + \bnorm{\vec{e_2}}$
-\item \textbf{Produit:} $\text{Flatten}\left(C_1 \times C_2\right)\quad$ \\
-\item \textbf{NAND} $\text{Flatten}\left(C_1 \times C_2 - \text{Id}\right)\quad$ \\
-\[\text{Flatten}\left(C_1 \times C_2 - \text{Id}\right)\: \vec{sk} = (\mu_1 \mu_2 - 1)\: \vec{sk} + {\color{red}\mu_2 \vec{e}_1 + C_1 \vec{e_2}}\]
-Comme $C_1 \in \{0,1\}^{N\times N}$, la nouvelle erreur est majorée par 
-$\bnorm{\vec{e_1}} + N\:\bnorm{\vec{e_2}} \leqslant (1+N) \max\left(\bnorm{\vec{e}_1},\bnorm{\vec{e}_2}\right)$
-\end{itemize}
 \end{frame} 
   
 %%------------------------------------------------------------------------------------------------
@@ -237,7 +228,7 @@ Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés (sk, p
 \pause
 
 Soit $\Pi$ le circuit booléen tel que 
-\[\quad\Pi(\text{binsk})= \text{Decrypt}\left(\text{sk}, C\right) \]
+\[\quad\Pi(\text{binsk})= \text{Decrypt}\left(\vec{sk}, C\right) \]
 
 \pause
 Alors:
@@ -257,7 +248,7 @@ Alors:
 
 \begin{frame}
 \frametitle{Découpage de Decrypt}
-L'algorithme de déchiffrement est le suivant:
+L'algorithme de déchiffrement est le suivant :
 \begin{enumerate}
 \item trouver $1 \leqslant i \leqslant l$ tel que $q/4 \leqslant 2^i < q/2$
 \item calculer $a = C_i \cdot \vec{v}$
@@ -441,40 +432,39 @@ $\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
 \begin{frame} 
 \frametitle{The Gate Bootstrapping API}
 \begin{itemize}
-\item s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
 \item librairie open source utilisable en C et C++ 
-\item version modifiée du cryptosysteme GSW, avec une variante de LWE nommée TFHE.
+\item utilise une version modifiée du cryptosysteme GSW, avec une variante de LWE nommée TFHE.
+\item s'appuie notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
 \end{itemize}
-Performances:
-pour un ordinateur 64-bit simple coeur (i7-4930MX) cadencé à 3.00GHz, le bootstrapping se fait en un temps moyen de 52ms
+\textbf{Performances} : pour un ordinateur 64-bit simple coeur (i7-4930MX) cadencé à 3.00GHz, le bootstrapping se fait en un temps moyen de 52ms
 et la clé de bootstrapping fait environ 24 Mo.
  
 
 \end{frame} 
 
 \begin{frame} 
-On a considéré le scénario suivant:
+\frametitle{The Gate Bootstrapping API}
 \begin{itemize}
-\item Alice génère des clés, chiffre deux nombres de 16 bits  et les inscrits dans un fichier;
-\item Le cloud récupère les donnés, applique homomorphiquement la fonction minimum aux deux nombres et inscrit le résultat dans un fichier;
+\item Alice génère des clés, chiffre deux nombres de 16 bits et les inscrits dans un fichier;
+\item le cloud récupère les données, applique homomorphiquement la fonction minimum aux deux nombres et inscrit le résultat dans un fichier;
 \item Alice récupère et déchiffre le résultat.
 \end{itemize}
-Pour un paramètre de sécurité $\lambda = 110$ et sur un ordinateur 64-bit quadri-coeur (i5-7200U CPU) cadendcé à 2.50GHz
-on obtient un temps de 2.10s.
-De plus, les taille des données sont les suivantes:
+\textbf{Performances} : pour un paramètre de sécurité $\lambda = 110$ et sur un ordinateur 64-bit quadri-coeur (i5-7200U CPU) cadencé à 2.50GHz, on obtient un temps de 2.10s.
+
+On a alors des données de tailles :
 
 \begin{figure}
 \begin{tabular}{|c|c|}
 \hline
 Données & Taille \\
 \hline
-Clé secrète & 79Mo \\
+Clé secrète & 79 Mo \\
 \hline
-Clé publique et clé de bootstrapping  & 79Mo \\
+Clé publique et clé de bootstrapping  & 79 Mo \\
 \hline
-Chiffrement d'un bit & 2Ko \\
+Chiffrement d'un bit & 2 Ko \\
 \hline
-Chiffrement des deux nombres & 64Ko\\
+Chiffrement des deux nombres & 64 Ko\\
 \hline
 \end{tabular}
 \end{figure}
