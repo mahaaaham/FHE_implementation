@@ -93,9 +93,9 @@ avec l'opération \text{NAND}.
 
 \begin{frame} 
 \frametitle{GSW, premier essai:}
-\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{n}$ \\
 \textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
+\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $C\in \ZZq^{n \times n}\:$ telle que  
 \[C \vec{sk} = \mu\vec{sk}\]
 \vspace{-1cm}
 
@@ -117,9 +117,9 @@ et $\lambda \in \ZZq$,
 
 \begin{frame} 
 \frametitle{GSW, seconde tentative}
-\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{n}$ \\
 \textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
+\textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{n \times n}\:$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
 \textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand
 \begin{align*}
@@ -157,13 +157,13 @@ Les coefficients de $C_1 \vec{e}_2$ peuvent être gros.
 \frametitle{GSW, troisième tentative}
 On utilise une fonction Flatten qui a notamment les propriétés suivantes:
 \begin{align*}
-&C \in \ZZq^{n \times n} \Rightarrow \text{Flatten}(C) \in \{0,1\}^{N \times N} \\
+&C \in \ZZq^{n \times n} \Rightarrow \text{Flatten}(C) \in \{0,1\}^{n \times n} \\
 & \langle Flatten(C), \vec{sk} \rangle = \langle C, \vec{sk} \rangle \quad\text{pour un secret }\vec{sk}\text{ bien choisi}
 \end{align*}
 
-\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ bien choisi\\
+\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{n}$ bien choisi\\
 \textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $\text{Flatten}(C)\in \ZZq^{N \times N}\:$ pour $C$ telle que  
+\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $\text{Flatten}(C)\in \ZZq^{n \times n}\:$ pour $C$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
 \textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand et:
 \[\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{\vec{sk}_i} \right\rceil \]
@@ -174,28 +174,55 @@ Opérations homomorphes: on applique Flatten aux précédentes opérations homom
   
 %%------------------------------------------------------------------------------------------------
   
+%%------------------------------------------------------------------------------------------------
 \begin{frame} 
-\frametitle{clé publique et sécurité IND-CPA}
+\frametitle{Le problème Decisional Learning With Error (DLWE)}
+\textbf{paramètres:} le paramètre de sécurité $\color{blue}\lambda$,
+la dimension ${\color{blue}n = n(\lambda)} \in \mathbb{N}$,
+le module ${\color{blue}q = q(\lambda)} \in \mathbb{N}$,
+une distribution ${\color{blue}\chi = \chi(\lambda)}$ à valeur dans $\mathbb{N}$,
+un paramètre de nombre d'échantillons ${\color{blue}m = m(\lambda)}\in \mathbb{N}$.
 
-$pk = A \in \ZZq^{N * m}$ une matrice telle que
-\[ A\: \vec{sk} = {\color{red} \vec{e}} \]
-où les coordonnées de $\color{red}\vec{e}$ sont petites.
-
-$A$ est choisie en se basant sur le problème DLWE:
+\textbf{problème DLWE($n, q, \chi, m$):} 
+distinguer si $A \in \ZZq^{m \times n+1}$ 
 \begin{itemize}
-\item pour de bons choix de paramètres, $A$ est indistinguable d'une matrice
-choisie uniformément.
+\item a été échantillonnée uniformément; 
+\item $A = (\vec{b}^\intercal ||B)$ où $B\in {\ZZq}^{m \times n}$
+est échantillonnée uniformément et 
+\[\vec{b} = {\color{red}\vec{e}} + B \vec{t}\]
+pour  $\color{red}\vec{e}$ échantillonné par $\chi$ et $\vec{t}$ uniformément.
 \end{itemize}
 
-\textbf{Choix de C:}
-Pour chiffrer $\mu \in \ZZq$:
-\[ C :=\mu\:\text{Id} + A R \qquad R\in {\{0,1\}}^{m \times N}\: \text{ tirée uniformément.} \]
+En notant $\vec{sk} = (1\: -\vec{t})$, on a
+\[ A \:\vec{sk} = {\color{red}\vec{e}} \]
 
-\textbf{Sécurité:} pour de bons choix de paramètres\\
-$\nexists\:\: \mathcal{A}$ algorithme polynomial probabiliste distinguant
+
+\textbf{Hypothèse DLWE:} Il existe une famille de paramètres telles qu'aucun algorithme polynomial
+$\mathcal{A}$ n'a un avantage non négligeable pour distinguer les deux cas.
+\end{frame} 
+
+
+%%------------------------------------------------------------------------------------------------
+
+\begin{frame} 
+\frametitle{clé publique et sécurité IND-CPA}
+\textbf{Idée} prendre $\text{pk}= A$, et $\chi$ qui échantillonne de petites valeurs.
+
+Pour chiffrer $\mu \in \ZZq$:
+\[ C :=\mu\:\text{Id} + RA \qquad R\in {\{0,1\}}^{m \times n}\: \text{ tirée uniformément.} \]
+Ainsi: $\quad C\:\vec{sk} = C \mu +  R {\color{red}\vec{e}}\:= C \mu + {\color{red}\vec{e'}}
+\quad\:\: \text{avec } {\color{red}\vec{e'}} \text{ petit}$
+
+
+\textbf{Sécurité:} pour des paramètres t.q l'hypothèse DLWE est vérifié:\\
 \begin{itemize}
-\item $(A,AR)$ 
-\item un couple de matrices choisies uniformément.
+\item $A$ est indistinguable d'une matrice choisie uniformément. 
+\item On montre que
+$\nexists\:\: \mathcal{A}$ algorithme polynomial probabiliste distinguant
+	\begin{itemize}
+	\item $(A,AR)$ 
+	\item un couple de matrices choisies uniformément.
+	\end{itemize}
 \end{itemize}
 
 $C$ peut donc se voir comme un one-time pad.
@@ -493,7 +520,7 @@ Concernant la définition de GSW:
 Concernant les choix paramètres et la sécurité:
 
 \begin{itemize}
-\item le problème DLWE;
+\item hypothèses de sécurité sur DLWE, définitions équivalentes, lien LWE/DLWE;
 \item les gaussiennes discrètes;
 \item la librairie sagemath lwe\_estimator pour estimer la sécurité de paramètres LWE;
 \item La notion de leveled FHE et des choix des paramètres pour un leveled FHE.
