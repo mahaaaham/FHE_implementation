@@ -4,6 +4,25 @@
 \usepackage[T1]{fontenc}
 % \usepackage{FiraSans}
 
+\usetheme{metropolis}
+\usepackage{ulem}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor} % to have more colors.
+
+% \usepackage{parallel}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
+% \textcolor{red}{foo}: \
+\usepackage{wrapfig}
+\usepackage{enumerate}
+
+\title{Les FHE, c'est facheux.}
+\date{\today}
+\author{Lucas Roux \& Eric Sageloli}
 
 % used defined commands
 \newcommand{\LWE}{\text{LWE}_{n,q,\chi}}
@@ -21,64 +40,19 @@
 \newcommand{\norm}[1]{{\|#1\|}_{\infty}}
 \newcommand{\bnorm}[1]{{|#1|}_{\text{bin}}}
 
-\newenvironment{tightcenter}{%
-\setlength\topsep{0pt}
-\setlength\parskip{0pt}
-\begin{center}
-}{%
-\end{center}
-}
-
 \newcommand{\pk}{\text{pk}}
 \newcommand{\sk}{\text{sk}}
+\newcommand{\bsk}{\text{bsk}}
 \newcommand{\evk}{\text{evk}}
 \newcommand{\Dec}{\text{\textbf{Decrypt}}}
 \newcommand{\Eval}{\text{\textbf{Eval}}}
 \newcommand{\Keygen}{\text{\textbf{Keygen}}}
 \newcommand{\Enc}{\text{\textbf{Encrypt}}}
 
-\usetheme{metropolis}
-\usepackage{ulem}
-\usepackage{graphicx}
-\usepackage[dvipsnames]{xcolor} % to have more colors.
-
-
-% \usepackage{parallel}
-\usepackage{tikz}
-\usetikzlibrary{positioning}
-\usetikzlibrary{calc}
-\usetikzlibrary{decorations.pathreplacing}
-
-\usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
-% \textcolor{red}{foo}: \
-
-\usepackage{wrapfig}
-
-\usepackage{enumerate}
-
-\title{Les FHE, c'est facheux.}
-\date{\today}
-\author{Lucas Roux \& Eric Sageloli}
-
 \begin{document}
 
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame}
-  \maketitle
-\end{frame}
-
-%-------------------------------------------------------------------------------------------------
-
-
-\begin{frame}
-\frametitle{Définition informelle d'un FHE}
-\end{frame}
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Un bref historique}
+ \begin{frame} 
+ \frametitle{Un bref historique}
 
 \begin{itemize}
 \item Un premier plan par Craig Gentry;
@@ -92,7 +66,7 @@ Entrée typique: polynômes de degré 1.
 \end{itemize}
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%%------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{GSW, premier essai:}
@@ -104,7 +78,7 @@ Entrée typique: polynômes de degré 1.
 
 \textbf{Déchiffrement:} Evident \\
 \textbf{Opérations homomorphes:}\\
-Pour $\scriptsize C_i = \text{Encrypt}(\mu_i) \quad(1 \leqslant i \leqslant 2)$ 
+Pour {\small$C_i = \text{Encrypt}(\mu_i) \quad(1 \leqslant i \leqslant 2)$}
 et $\lambda \in \ZZq$
 \begin{itemize}
 \item \textbf{Somme:} $C_1 + C_2\quad$
@@ -116,7 +90,7 @@ et $\lambda \in \ZZq$
 \end{itemize}
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{GSW, second essai:}
@@ -132,7 +106,8 @@ et $\lambda \in \ZZq$
 &= \mu
 \end{align*}
 \end{frame} 
-% ------------------------------------------------------------------------------------------------
+
+%% ------------------------------------------------------------------------------------------------
 
 
 \begin{frame} 
@@ -153,7 +128,7 @@ Les coefficients de $C_1 \vec{e}_2$ peuvent être gros
 
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------------------------
   
 \begin{frame} 
 \frametitle{GSW, version finale:}
@@ -184,388 +159,12 @@ $\bnorm{\vec{e_1}} + N\:\bnorm{\vec{e_2}} \leqslant (1+N) \max\left(\bnorm{\vec{
 \end{itemize}
 \end{frame} 
   
-% ------------------------------------------------------------------------------------------------
+%%------------------------------------------------------------------------------------------------
   
 \begin{frame} 
-\frametitle{Sécurité IND-CPA: le problème DLWE}
-paramètres du problème
-\begin{itemize}
-\item
-\documentclass[11pt,xcolor={usenames,dvipsnames}]{beamer}
-\usepackage[frenchb]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-% \usepackage{FiraSans}
+\frametitle{Le problème DLWE}
+\textbf{Paramètres:} $n, q\in \mathbb{N}$, une distribution $\chi$ sur $\ZZq$
 
-
-% used defined commands
-\newcommand{\LWE}{\text{LWE}_{n,q,\chi}}
-\newcommand{\DLWE}{\text{DLWE}_{n,q,\chi}}
-\newcommand{\SD}{\text{SD}}
-\newcommand{\id}{\text{I}}
-\newcommand{\flatten}{\text{Flatten}}
-\newcommand{\bitdecomp}{\text{BitDecomp}}
-\newcommand{\ZZ}{\mathbb{Z}}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\ZZq}{\mathbb{Z}_q}
-\newcommand{\EE}{\mathbb{E}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\norm}[1]{{\|#1\|}_{\infty}}
-\newcommand{\bnorm}[1]{{|#1|}_{\text{bin}}}
-
-\newenvironment{tightcenter}{%
-\setlength\topsep{0pt}
-\setlength\parskip{0pt}
-\begin{center}
-}{%
-\end{center}
-}
-
-\newcommand{\pk}{\text{pk}}
-\newcommand{\sk}{\text{sk}}
-\newcommand{\evk}{\text{evk}}
-\newcommand{\Dec}{\text{\textbf{Decrypt}}}
-\newcommand{\Eval}{\text{\textbf{Eval}}}
-\newcommand{\Keygen}{\text{\textbf{Keygen}}}
-\newcommand{\Enc}{\text{\textbf{Encrypt}}}
-
-\usetheme{metropolis}
-\usepackage{ulem}
-\usepackage{graphicx}
-\usepackage[dvipsnames]{xcolor} % to have more colors.
-
-
-% \usepackage{parallel}
-\usepackage{tikz}
-\usetikzlibrary{positioning}
-\usetikzlibrary{calc}
-\usetikzlibrary{decorations.pathreplacing}
-
-\usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
-% \textcolor{red}{foo}: \
-
-\usepackage{wrapfig}
-
-\usepackage{enumerate}
-
-\title{Les FHE, c'est facheux.}
-\date{\today}
-\author{Lucas Roux \& Eric Sageloli}
-
-\begin{document}
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame}
-  \maketitle
-\end{frame}
-
-%-------------------------------------------------------------------------------------------------
-
-
-\begin{frame}
-\frametitle{Définition informelle d'un FHE}
-\end{frame}
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Un bref historique}
-
-\begin{itemize}
-\item Un premier plan par Craig Gentry;
-\item FHE de secondes génération
-Entrée typique: polynômes de degré 1.
-\begin{itemize}
-\item somme: la somme des polynômes
-\item produit: on obtient un degré 2.
-\end{itemize}
-\item FHE de troisième génération: BVS.
-\end{itemize}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{GSW, premier essai:}
-\textbf{Clé secrète:} un vecteur $sk \in \ZZq^{N}$ \\
-\textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
-\[C \vec{sk} = \vec{s}\]
-\vspace{-1cm}
-
-\textbf{Déchiffrement:} Evident \\
-\textbf{Opérations homomorphes:}\\
-Pour $\scriptsize C_i = \text{Encrypt}(\mu_i) \quad(1 \leqslant i \leqslant 2)$ 
-et $\lambda \in \ZZq$
-\begin{itemize}
-\item \textbf{Somme:} $C_1 + C_2\quad$
-\[\left(C_1 + C_2\right) \vec{sk} = (\mu_1 + \mu_2)\: \vec{sk}\]
-\item \textbf{Produit:} $C_1 \times C_2\quad$
-\[\left(C_1 \times C_2\right)\: \vec{sk} = C_1\left(\mu_2\:\vec{sk}\right) = (\mu_1 \mu_2)\:\vec{s}\]
-\item \textbf{NAND:} $C_1 * C_2 - \text{Id}$
-\item \textbf{Produit par scalaire:} $\lambda C_1\quad$
-\end{itemize}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{GSW, second essai:}
-\textbf{Clé secrète:} un vecteur $sk \in \ZZq^{N}$ \\
-\textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
-\[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
-\textbf{Déchiffrement:} on prend un $i$ tel que $\vec{sk}_i$ est grand
-\begin{align*}
-\text{Decrypt}(sk, C) = \left\lfloor \frac{{\left(C\vec{sk}\right)}_i}{v_i} \right\rceil &= 
-\left\lfloor \frac{{\left(\mu\vec{sk}_i + {\color{red}\vec{e}_i}\right)}_i}{v_i} \right\rceil \\
-&= \left\lfloor \mu + \frac{\vec{e}_i}{v_i} \right\rceil \\
-&= \mu
-\end{align*}
-\end{frame} 
-% ------------------------------------------------------------------------------------------------
-
-
-\begin{frame} 
-\frametitle{GSW, second essai:}
-Retour sur les opérations homomorphes:
-\begin{itemize}
-\item \textbf{Somme:} $C_1 + C_2\quad$
-\[\left(C_1 + C_2\right) \vec{sk} = (\mu_1 + \mu_2) \vec{sk} + {\color{red}\vec{e}_1 + \vec{e}_2}\]
-\item \textbf{NAND:} $C_1 \times C_2 - \text{Id}$
-\begin{align*}
-\left(C_1 \times C_2 - \text{Id}\right) \vec{sk} &= C_1\left(\mu_2\vec{sk} + {\color{red}\vec{e}_2} - \vec{s}\right) \\
-&= (\mu_1 \mu_2 - 1) \vec{sk} + {\color{red}\mu_2 \vec{e}_1 + C_1 \vec{e_2}}
-\end{align*}
-\end{itemize}
-
-\textbf{Problème:} \\
-Les coefficients de $C_1 \vec{e}_2$ peuvent être gros
-
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-  
-\begin{frame} 
-\frametitle{GSW, version finale:}
-On utilise une fonction Flatten qui a notamment les propriétés suivantes:
-\begin{align*}
-&C \in \ZZq^{n \times n} \Rightarrow \text{Flatten}(C) \in \{0,1\}^{N \times N} \\
-& \langle Flatten(C), \vec{sk} \rangle = \langle C, \vec{sk} \rangle \quad{ pour un secret \vec{sk} bien choisi}
-\end{align*}
-
-\textbf{Clé secrète:} un vecteur $s \in \ZZq^{N}$ bien choisi\\
-\textbf{Clé publique:} pk\\
-\textbf{Chiffrement:} Encrypt(pk, $\mu$) = $\text{Flatten}(C)\in \ZZq^{N \times N}\:$ pour $C$ telle que  
-\[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
-\textbf{Déchiffrement:} on prend un $i$ tel que $\vec{s}_i$ est grand et:
-\[\text{Decrypt}(\vec{sk}, C) = \left\lfloor \frac{{\left(C\vec{s}\right)}_i}{v_i} \right\rceil \]
-
-Opérations homomorphes: on applique Flatten aux précédentes opérations homomorphes.
-
-\begin{itemize}
-\item \textbf{Somme:} $\text{Flatten}\left(C_1 + C_2\right)\quad$ \\
-\[\text{Flatten}\left(C_1 + C_2\right)\: \vec{sk} = (\mu_1 + \mu_2)\:\vec{sk} + {\color{red}\vec{e}_1 + \vec{e}_2}\]
-Alors, la nouvelle erreur est majorée par $\bnorm{\vec{e_1}} + \bnorm{\vec{e_2}}$
-\item \textbf{Produit:} $\text{Flatten}\left(C_1 \times C_2\right)\quad$ \\
-\item \textbf{NAND} $\text{Flatten}\left(C_1 \times C_2 - \text{Id}\right)\quad$ \\
-\[\text{Flatten}\left(C_1 \times C_2 - \text{Id}\right)\: \vec{sk} = (\mu_1 \mu_2 - 1)\: \vec{sk} + {\color{red}\mu_2 \vec{e}_1 + C_1 \vec{e_2}}\]
-Comme $C_1 \in \{0,1\}^{N\times N}$, la nouvelle erreur est majorée par 
-$\bnorm{\vec{e_1}} + N\:\bnorm{\vec{e_2}} \leqslant (1+N) \max\left(\bnorm{\vec{e}_1},\bnorm{\vec{e}_2}\right)$
-\end{itemize}
-\end{frame} 
-  
-% ------------------------------------------------------------------------------------------------
-  
-\begin{frame} 
-\frametitle{Sécurité IND-CPA: le problème DLWE}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{FHE avec bootstrapping}
-\[ C = D + \text{\textcolor{Orange}{erreur}} \]
-  \noindent
-  \begin{center}
-      \begin{tikzpicture}[scale = 1, transform shape]
-      	\input{../pictures/bootstrapping.tex}
-      \end{tikzpicture}
-  \end{center}
-  \noindent
-  \vspace{-0.7cm}
-
-% \[ \text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) \]
-
-\pause
-Soit $\Pi$ le circuit booléen tel que 
-\[\quad\Pi(\text{binsk})= \text{Decrypt}\left(\text{sk}, C\right) \]
-
-\pause
-Alors:
-\begin{align*}
-\small
-\text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) 
-=& \text{Encrypt}\left(\text{sk},\: \Pi(\text{binsk})\right) \\
-=& \text{Eval}\left(\Pi, \text{Encrypt}(\text{sk}, \text{binsk})\right)
-\end{align*}
-\vspace{-0.5cm}
-\begin{itemize}
-\item Si $\Pi$ contient assez peu de NAND, on peut avoir un FHE.
-\end{itemize}
-
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame}[containsverbatim]
-\frametitle{Découpage de Decrypt}
-L'algorithme de déchiffrement est le suivant:
-\begin{enumerate}
-\item trouver $1 \leqslant i \leqslant l$ tel que $q/4 \leqslant 2^i < q/2$
-\item calculer $a = C_i \cdot \vec{v}$
-\item retourner $|\frac{a}{\vec{v}_i}|$
-\end{enumerate}
-
-\begin{itemize}
-\item On peut ramener le calcul du produit scalaire à une somme de nombres binaire;
-\item Diviser par une puissance de $2$ est un shift à gauche sur l'écriture binaire;
-\item Calculer la valeur valeur absolue implique essentiellement de faire un complément à 2.
-\end{itemize}
-
-Voyons comment sommer deux nombres binaires.
-
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{sommer deux listes: }
-Somme classique entre deux nombres binaires:
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 1.2, transform shape]
-      	\input{../pictures/classic_sum.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-\begin{itemize}
-\item $a_1$ et $b_1$ présents dans la formule booléenne de $r_s$.
-\item profondeur de NAND en $O(s)$
-\end{itemize}
-\end{frame} 
-    
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{sommer deux listes: carry lookahead adder}
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 0.5, transform shape]
-      	\input{../pictures/cla1.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-
-
-\begin{columns}
-\begin{column}{0.4\textwidth}
-\pause
-\begin{itemize}
-\item $G$ pour génération
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 0.6, transform shape]
-      	\input{../pictures/cla_sum_g.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-\item $P$ pour propagation
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 0.6, transform shape]
-      	\input{../pictures/cla_sum_p.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-\end{itemize}
-\end{column}
-
-\begin{column}{0.6\textwidth}  %%<--- here
-\pause
-
-% \vspace{-1cm}
-
-$(G1)_i = a_i \wedge b_i \quad (P1)_i = a_i \vee b_i$
-\pause
-
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 0.9, transform shape]
-      	\input{../pictures/formula_recu.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-
-${(G2^{i+1})}_1 = {(G2^i)}_2 \vee \left ( {(G2^i)}_1 \wedge {(P2^i)}_2 \right)$\\
-
-\vspace{0.3cm}
-
-${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
-
-\end{column}
-\end{columns}
-
-\end{frame} 
-
-
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{sommer deux listes: carry lookahead added}
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}[scale = 0.6, transform shape]
-      	\input{../pictures/cla2.tex}
-      \end{tikzpicture}
-    \end{center}
-  \end{figure}
-\end{frame} 
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Profondeur de NAND de l'algorithme de déchiffrement}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Paramètres avec bootstrapping obtenus, taille}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Paramètres avec bootstrapping obtenus, taille}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame} 
-\frametitle{Des librairies pour faire du FHE}
-\end{frame} 
-
-% ------------------------------------------------------------------------------------------------
-
-\begin{frame}
-\frametitle{Ce dont nous n'avons pas parlé}
-\end{frame}
-
-% ------------------------------------------------------------------------------------------------
-\end{itemize}
 Le problème DLWE($n,q,\chi$) consiste à distinguer deux distributions:
 \begin{itemize}
 \item La distribution qui crée uniformément $(\vec{a}, b) \in \ZZq^{n+1}$;
@@ -577,7 +176,7 @@ $e_i$ étant échantillonné par $\chi$.
 à partir d'un ensemble d'échantillons.
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%%------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{FHE avec bootstrapping}
@@ -600,7 +199,6 @@ Soit $\Pi$ le circuit booléen tel que
 \pause
 Alors:
 \begin{align*}
-\small
 \text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) 
 =& \text{Encrypt}\left(\text{sk},\: \Pi(\text{binsk})\right) \\
 =& \text{Eval}\left(\Pi, \text{Encrypt}(\text{sk}, \text{binsk})\right)
@@ -612,9 +210,9 @@ Alors:
 
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------------------------
 
-\begin{frame}[containsverbatim]
+\begin{frame}
 \frametitle{Découpage de Decrypt}
 L'algorithme de déchiffrement est le suivant:
 \begin{enumerate}
@@ -633,7 +231,7 @@ Voyons comment sommer deux nombres binaires.
 
 \end{frame} 
 
-% ------------------------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{sommer deux listes: }
@@ -651,7 +249,7 @@ Somme classique entre deux nombres binaires:
 \end{itemize}
 \end{frame} 
     
-% ------------------------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{sommer deux listes: carry lookahead adder}
@@ -714,9 +312,7 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
 
 \end{frame} 
 
-
-
-% ------------------------------------------------------------------------------------------------
+%%------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{sommer deux listes: carry lookahead added}
@@ -729,7 +325,8 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
   \end{figure}
 Les variables de générations de blocs commençants par 0 calculent des retenues.
 \end{frame} 
-% ------------------------------------------------------------------------------------------------
+
+%% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{sommer deux listes: carry lookahead added}
@@ -741,9 +338,10 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
     \end{center}
   \end{figure}
 Les variables de générations de blocs commençants par 0 calculent des retenues.
-\[c_6 = G2_3 \vee \left( c_4 \wedge P2_3\right) = 1 \vee \left( 1 \wedge 1 \right) =  \]
+\[c_6 = G2_3 \vee \left( c_4 \wedge P2_3\right) = 1 \vee \left( 1 \wedge 1 \right) = 1 \]
 \[\quad\]
 \end{frame} 
+
 % ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
@@ -759,7 +357,8 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
 \[c_6 = G2_3 \vee \left( c_4 \wedge P2_3\right) = 1 \vee \left( 1 \wedge 1 \right) = 1 \]
 \[c_7 = G1_7 \vee \left( c_6 \wedge P1_7\right) = 0 \vee \left( 1 \wedge 0 \right) = 0 \]
 \end{frame} 
-% ------------------------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------------------------
 
 \begin{frame} 
 \frametitle{Profondeur de NAND de l'algorithme de déchiffrement}
@@ -790,3 +389,4 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
 \end{frame}
 
 % ------------------------------------------------------------------------------------------------
+\end{document}
