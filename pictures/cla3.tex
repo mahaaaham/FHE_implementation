@@ -1,0 +1,82 @@
+% make a horizontal line beginning with #1 + (#2,#3) and with a length #4
+\newcommand{\makeline}[4]{
+\draw[-, thick]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
+}
+\newcommand{\makeredline}[4]{
+\draw[-, thick, red]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
+}
+
+\pgfmathsetmacro{\hbase}{2}
+\pgfmathsetmacro{\vbase}{2}
+\pgfmathsetmacro{\hshift}{1}
+\pgfmathsetmacro{\vshift}{0}
+\pgfmathsetmacro{\vlineind}{-1}
+\pgfmathsetmacro{\vcarry}{-5.5}
+\pgfmathsetmacro{\hlineind}{-0.5}
+
+\def\a{{"0","0","1","1","1","1","0","0"}}
+\def\b{{"0","1","0","1","0","1","0","1"}}
+
+\node  (pg) at ($(\hbase - 1.5, \vbase - 1.5)$) {$\textcolor{Blue}{G1}, \textcolor{Orange}{P1}$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 2.5)$) {$\textcolor{Blue}{G2}, \textcolor{Orange}{P2}$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 3.5)$) {$\textcolor{Blue}{G4}, \textcolor{Orange}{P4}$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 4.5)$) {$\textcolor{Blue}{G8}, \textcolor{Orange}{P8}$}; 
+\node  (a) at ($(\hbase - 1.5, \vbase)$) {a}; 
+\node  (b) at ($(\hbase - 1.5, \vbase-0.5)$) {b}; 
+
+% vertical 
+% the a_i
+\foreach \item in {0,...,7}
+\node  (a\item) at ($(\hbase + \hshift * \item, \vbase)$) {\pgfmathparse{\a[\item]}\pgfmathresult}; 
+
+% the b_i
+% vertical line of the begin
+\foreach \item in {0,...,7}
+\node[below = \vshift of a\item] (b\item) {\pgfmathparse{\b[\item]}\pgfmathresult}; 
+
+% lines 1
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeredline{b0}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l11) at ($(b1) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{1}};
+\makeline{b1}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l12) at ($(b2) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{1}};
+\makeline{b2}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l13) at ($(b3) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{1}};
+\makeline{b3}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l14) at ($(b4) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{1}};
+\makeline{b4}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l15) at ($(b5) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{1}};
+\makeline{b5}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l16) at ($(b6) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeline{b6}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l17) at ($(b7) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{1}};
+\makeline{b7}{\hlineind}{\vlineind}{\hshift - 0.15}
+
+% lines 2
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeredline{b0}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+\node (l12) at ($(b2) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{1}};
+\makeline{b2}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+\node (l14) at ($(b4) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{1}};
+\makeline{b4}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+\node (l16) at ($(b6) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeline{b6}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+% lines 3
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{0}};
+\makeredline{b0}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
+\node (l14) at ($(b4) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeline{b4}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
+% lines 4
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 8 * 0.9 * \hshift ,4 * \vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
+\makeredline{b0}{\hlineind}{4 * \vlineind}{8 * \hshift}
+
+% carry
+\node  (c) at ($(\hbase - 1.5, \vbase + \vcarry)$) {\text{carry}};
+\node  (c1) at ($(\hbase - 1 + 1 * \hshift , \vbase + \vcarry)$) {$\color{red}0$};
+\node  (c2) at ($(\hbase - 1 + 2 * \hshift , \vbase + \vcarry)$) {$\color{red}0$};
+\node  (c3) at ($(\hbase - 1 + 3 * \hshift , \vbase + \vcarry)$) {?};
+\node  (c4) at ($(\hbase - 1 + 4 * \hshift , \vbase + \vcarry)$) {$\color{red}1$};
+\node  (c5) at ($(\hbase - 1 + 5 * \hshift , \vbase + \vcarry)$) {?};
+\node  (c6) at ($(\hbase - 1 + 6 * \hshift , \vbase + \vcarry)$) {?};
+\node  (c7) at ($(\hbase - 1 + 7 * \hshift , \vbase + \vcarry)$) {?};
+\node  (c8) at ($(\hbase - 1 + 8 * \hshift , \vbase + \vcarry)$) {$\color{red}0$};

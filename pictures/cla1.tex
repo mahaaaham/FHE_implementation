@@ -1,0 +1,49 @@
+% make a horizontal line beginning with #1 + (#2,#3) and with a length #4
+\newcommand{\makeline}[4]{
+\draw[-, thick]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
+}
+
+\pgfmathsetmacro{\hbase}{0}
+\pgfmathsetmacro{\vbase}{4}
+\pgfmathsetmacro{\hshift}{2}
+\pgfmathsetmacro{\vshift}{0}
+\pgfmathsetmacro{\vlineind}{-1}
+\pgfmathsetmacro{\hlineind}{-1}
+
+\def\a{{"$a_1$","$a_2$","$a_3$","$a_4$"}} 
+\def\b{{"$b_1$","$b_2$","$b_3$","$b_4$"}} 
+
+\node  (pg) at ($(\hbase - 1.5, \vbase - 1.5)$) {$G1, P1$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 2.5)$) {$G2, P2$}; 
+\node  (pg) at ($(\hbase - 1.5, \vbase - 3.5)$) {$G4, P4$}; 
+\node  (a) at ($(\hbase - 1.5, \vbase)$) {a}; 
+\node  (b) at ($(\hbase - 1.5, \vbase-0.5)$) {b}; 
+
+% vertical 
+% the a_i
+\foreach \item in {0,...,3}
+\node  (a\item) at ($(1 + \hshift * \item, \vbase)$) {\pgfmathparse{\a[\item]}\pgfmathresult}; 
+
+% the b_i
+% vertical line of the begin
+\foreach \item in {0,...,3}
+\node[below = \vshift of a\item] (b\item) {\pgfmathparse{\b[\item]}\pgfmathresult}; 
+
+% lines 1
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {$$};
+\makeline{b0}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l11) at ($(b1) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {$$};
+\makeline{b1}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l12) at ($(b2) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {$$};
+\makeline{b2}{\hlineind}{\vlineind}{\hshift - 0.15}
+\node (l13) at ($(b3) + (\hlineind + 1/2 * 0.9 * \hshift ,\vlineind + 0.2)$) {$$};
+\makeline{b3}{\hlineind}{\vlineind}{\hshift - 0.15}
+
+% lines 2
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {$$};
+\makeline{b0}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+\node (l12) at ($(b2) + (\hlineind + 1/2 * 2 * 0.9 * \hshift ,2 * \vlineind + 0.2)$) {$$};
+\makeline{b2}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
+% lines 3
+\node (l10) at ($(b0) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {$$};
+\makeline{b0}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}

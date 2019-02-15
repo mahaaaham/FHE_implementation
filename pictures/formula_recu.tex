@@ -1,0 +1,15 @@
+\pgfmathsetmacro{\ha}{0}
+\pgfmathsetmacro{\va}{0}
+\pgfmathsetmacro{\vs}{-1}
+
+
+\node (gi) at ($(\ha-1.3, \va+0.1)$) {$G2^i, P2^i$};
+\node (gip1) at ($(\ha-1.3, \va+\vs+0.1)$) {$G2^{i+1}, P2^{i+1}$}; 
+
+\node (i) at ($(\ha+2, \va+0.2)$) {\scriptsize$1$}; 
+\node (ii) at ($(\ha+0.9, \va+\vs+0.2)$) {\scriptsize$1$}; 
+\node (iii) at ($(\ha+3.3, \va+\vs+0.2)$) {\scriptsize$2$}; 
+
+\draw[-]   ($(\ha,\va)$) -- ($(\ha+4,\va)$);
+\draw[-]   ($(\ha,\va+\vs)$) -- ($(\ha+1.8,\va+\vs)$);
+\draw[-]   ($(\ha+2.2,\va+\vs)$) -- ($(\ha+4,\va+\vs)$);

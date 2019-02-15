@@ -1,0 +1,9 @@
+\pgfmathsetmacro{\ha}{0}
+\pgfmathsetmacro{\va}{0}
+
+
+\node  (a) at ($(\ha, \va)$) {$a_5\quad a_6 \quad a_7 \quad a_8$}; 
+\node  (b) at ($(\ha, \va-0.5)$) {$b_5\quad b_6 \quad b_7 \quad b_8$}; 
+\node  (p1) at ($(\ha-2, \va-0.5)$) {$+$}; 
+\draw[-]   ($(p1) + (0,-0.5)$) -- ($(p1) + (4,-0.5)$);
+\node  (x) at ($(\ha+0.3, \va-1.5)$) {$ X\quad X \quad X \quad X \quad 1$};
