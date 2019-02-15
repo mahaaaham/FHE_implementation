@@ -21,6 +21,7 @@ count_calls = 0
 count_errors = 0
 nb_errors = 1
 
+
 def leveled(security):
     tmp = log(L, 2)
     n = max(security, ceil((6 * L * tmp)/epsilon)^(1/epsilon))
@@ -33,6 +34,7 @@ def leveled(security):
     distrib = DiscreteGaussianDistributionIntegerSampler(s, q)
     return (n, q, distrib, m)
 
+
 def bootstrapping(security):
     # the value of the parameter rho used for the bootstrapping parameters
     # in the section bootstrapping of the report, theorem 6
@@ -44,6 +46,7 @@ def bootstrapping(security):
     m = 2 * (n+1) * l
     distrib = DiscreteGaussianDistributionIntegerSampler(s, q)
     return (n, q, distrib, m)
+
 
 def seal(security):
     n = security
