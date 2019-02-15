@@ -20,7 +20,7 @@
 \usepackage{wrapfig}
 \usepackage{enumerate}
 
-\title{Les FHE, c'est facheux.}
+\title{\'Etude d'un FHE de troisième génération}
 \date{\today}
 \author{Lucas Roux \& Eric Sageloli}
 
@@ -106,8 +106,9 @@ et $\lambda \in \ZZq$,
 %% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{GSW, second essai:}
+\frametitle{GSW, seconde tentative}
 \textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
+\textbf{Clé secrète:} un vecteur $sk \in \ZZq^{N}$ \\
 \textbf{Clé publique:} pk\\
 \textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
@@ -124,7 +125,7 @@ et $\lambda \in \ZZq$,
 
 
 \begin{frame} 
-\frametitle{GSW, second essai:}
+\frametitle{GSW, seconde tentative}
 Retour sur les opérations homomorphes:
 \begin{itemize}
 \item \textbf{Somme:} $C_1 + C_2\quad$
@@ -144,7 +145,7 @@ Les coefficients de $C_1 \vec{e}_2$ peuvent être gros.
 %% ------------------------------------------------------------------------------------------------
   
 \begin{frame} 
-\frametitle{GSW, version finale:}
+\frametitle{GSW, troisième tentative}
 On utilise une fonction Flatten qui a notamment les propriétés suivantes:
 \begin{align*}
 &C \in \ZZq^{n \times n} \Rightarrow \text{Flatten}(C) \in \{0,1\}^{N \times N} \\
@@ -165,22 +166,44 @@ Opérations homomorphes: on applique Flatten aux précédentes opérations homom
 %%------------------------------------------------------------------------------------------------
   
 \begin{frame} 
-\frametitle{Le problème DLWE}
-\textbf{Paramètres:} $n, q\in \mathbb{N}$, une distribution $\chi$ sur $\ZZq$
+\frametitle{clé publique et sécurité IND-CPA}
 
-Le problème DLWE($n,q,\chi$) consiste à distinguer deux distributions:
-\begin{itemize}
-\item La distribution qui crée uniformément $(\vec{a}, b) \in \ZZq^{n+1}$;
-\item La distribution qui utilise un secret $\vec{s}\in \ZZq^n$ tiré uniformément, 
-et crée des vecteurs $(\vec{a}, b)$ où
-\[ b_i = \langle \vec{a}_i, \vec{s} \rangle + e_i \] 
-$e_i$ étant échantillonné par $\chi$.
-\end{itemize}
-à partir d'un ensemble d'échantillons.
+$pk = A \in \ZZq^{N * m}$ une matrice telle quel
+\[ A\: \vec{sk} = {\color{red} \vec{e}} \]
+où les coordonnées de $\color{red}\vec{e}$ sont petites
+
+Cette matrice est choisie en se basant sur le problème DLWE de façon à ce que, 
+pour de bons choix de paramètres, $A$ est indistinguable d'une matrice
+choisie uniformément.
+
+Pour chiffrer $\mu \in \ZZq$, on peut poser:
+\[ C =\mu\:\text{Id} + A R \]
+pour $R\in {\{0,1\}}^{m \times N}$ tirée uniformément.
+
+Alors: $(A,AR)$ est indistinguable d'un choix uniforme de matrices $(U,V)$
+par un attaquant $\mathcal{A}$ polynomial probabiliste.
+
+$C$ peut donc se voir comme un one-time pad.
 \end{frame} 
 
 %%------------------------------------------------------------------------------------------------
 
+\begin{frame} 
+\frametitle{Evaluation d'un circuit booléen, profondeur de NAND}
+Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés (sk, pk)
+  \begin{center}
+      \begin{tikzpicture}[scale = 1, transform shape]
+      	\input{../pictures/circuit.tex}
+      \end{tikzpicture}
+  \end{center}
+  Si le circuit $\Pi$ a une profondeur de NAND assez faible:
+  \[ \Pi(a,c,b) = \text{Decrypt}\left(\text{sk}, \text{Eval}\left(\Pi, C_a, C_b, C_b\right)\right) \]
+  On note alors:
+  \[ \text{Encrypt}\left(\text{pk}, \Pi(a,c,b)\right) \approx \text{Eval}\left(\Pi, C_a, C_b, C_b\right) \]
+\end{frame}
+
+%%------------------------------------------------------------------------------------------------
+ 
 \begin{frame} 
 \frametitle{FHE avec bootstrapping}
 \[ C = D + \text{\textcolor{Orange}{erreur}} \]
@@ -193,18 +216,23 @@ $e_i$ étant échantillonné par $\chi$.
   \noindent
   \vspace{-0.7cm}
 
-% \[ \text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) \]
-
 \pause
+
 Soit $\Pi$ le circuit booléen tel que 
 \[\quad\Pi(\text{binsk})= \text{Decrypt}\left(\vec{sk}, C\right) \]
 
 \pause
 Alors:
 \begin{align*}
+<<<<<<< HEAD
 \text{Encrypt}\left(\vec{sk},\: \text{Decrypt}\left(\vec{sk},C\right)\right) 
 =& \text{Encrypt}\left(\vec{sk},\: \Pi(\overrightarrow{binsk})\right) \\
 =& \text{Eval}\left(\Pi, \text{Encrypt}(\vec{sk}, \overrightarrow{binsk})\right)
+=======
+\text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) 
+=&\: \text{Encrypt}\left(\text{sk},\: \Pi(\text{binsk})\right) \\
+\approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(\text{sk}, \text{binsk})\right)
+>>>>>>> ac817dff8dad7e6668aac0ff2592046b6ca70593
 \end{align*}
 \vspace{-0.5cm}
 \begin{itemize}
@@ -440,14 +468,28 @@ Chiffrement des deux nombres & 64 Ko\\
 
 \begin{frame}
 \frametitle{Ce dont nous n'avons pas parlé}
+Concernant la définition de GSW:
 \begin{itemize}
-\item Flatten, dont nous avons caché la définition sous le tapis;
-\item Deux autres algorithmes de déchiffrement;
-\item Les gaussiennes discrètes;
-\item Choix des paramètres pour un leveled FHE;
-\item Contraintes de sécurité supplémentaires liées au bootstrapping;
+\item flatten, dont nous avons caché la définition sous le tapis;
+\item deux autres algorithmes de déchiffrement.
+\end{itemize}
+Concernant les choix paramètres et la sécurité:
+
+\begin{itemize}
+\item le problème DLWE;
+\item les gaussiennes discrètes;
+\item la librairie sagemath lwe\_estimator pour estimer la sécurité de paramètres LWE;
+\item La notion de leveled FHE et des choix des paramètres pour un leveled FHE.
+\end{itemize}
+
+Concernant le bootstrapping:
+\begin{itemize}
+\item des optimisations supplémentaires pour sommer plusieurs nombres binaires;
+\item contraintes de sécurité supplémentaires (sécurité circulaire).
 \end{itemize}
 \end{frame}
+
+
 
 % ------------------------------------------------------------------------------------------------
 \end{document}
