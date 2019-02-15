@@ -426,8 +426,24 @@ On a considéré le scénario suivant:
 \item Alice récupère et déchiffre le résultat.
 \end{itemize}
 Pour un paramètre de sécurité $\lambda = 110$ et sur un ordinateur 64-bit quadri-coeur (i5-7200U CPU) cadendcé à 2.50GHz
-on obtient un temps de 
+on obtient un temps de 2.10s.
 De plus, les taille des données sont les suivantes:
+
+\begin{figure}
+\begin{tabular}{|c|c|}
+\hline
+Données & Taille \\
+\hline
+Clé secrète & 79Mo \\
+\hline
+Clé publique et clé de bootstrapping  & 79Mo \\
+\hline
+Chiffrement d'un bit & 2Ko \\
+\hline
+Chiffrement des deux nombres & 64Ko\\
+\hline
+\end{tabular}
+\end{figure}
 
 \end{frame} 
 

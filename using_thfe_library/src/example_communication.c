@@ -16,10 +16,10 @@
 /* 2 functions are disponibles: sum and minimum, 
    see homomorphic_functions.h */
 void (*h_function)(LweSample*, const LweSample*, const LweSample*, 
-		   const TFheGateBootstrappingCloudKeySet*) = sum;
+		   const TFheGateBootstrappingCloudKeySet*) = minimum;
 /* The 2 arguments that are encrypted and used by h_function */
-const int16_t arg1 = 1111;
-const int16_t arg2 = 2222;
+const int16_t arg1 = 1234;
+const int16_t arg2 = 1232;
 
 
 int 
