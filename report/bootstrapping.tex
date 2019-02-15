@@ -340,7 +340,7 @@ cela se fait de la même façon, même si la démonstration est un peu moins év
 \begin{prop}
 \label{sum_list}
 Il est possible de sommer $nb$ listes de $s$ éléments avec une profondeur de NAND majorée par 
-$8 \lceil \log_2(s) \rceil + 36\lceil\log_3(nb)\rceil -18$. Soit, une profondeur en $\mathcal{O}(\log_2(nb) + \log_2(s))$.
+$8 \lceil \log_2(s) \rceil + 36\lceil\log_3(nb)\rceil -18$. Soit, une profondeur en $\mathcal{O}(\log_3(nb) + \log_2(s))$.
 \end{prop}
 
 \begin{proof}
@@ -408,14 +408,14 @@ de déchiffrement tel que décrit dans le listing~\ref{lst:decoupage} page~\page
 \begin{thm} \label{size_dec}
 Si $q$ est une puissance de 2, on peut effectuer 
 l'algorithme \textbf{Decrypt} avec une profondeur de NAND plus petite que
-\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \log\left(n)\right) \]
+\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \lceil \log_2(n) \rceil \]
 et donc, en $\mathcal{O}(\log_2(n) + \log_2(\log_2(q)))$
 \end{thm}
 \begin{proof}
 En utilisant les propositions précédentes ainsi que le fait qu'il y a au plus $N*l = \log_2(q)^2 * (n+1)$ listes à
 sommer, on majore la profondeur de NAND par
 \[16 \lceil \log_2(\log_2(q)) \rceil + 36 \log_3\left(\log_2(q)^2
-*(n+1)\right) = 16 \lceil \log_2(\log_2(q)) \rceil + 72 \log_3(\log_2(q)) + 36 \log_3\left((n+1)\right) \]
+*(n+1)\right) = 16 \lceil \log_2(\log_2(q)) \rceil + 72 \lceil \log_3(\log_2(q)) \rceil + 36 \lceil \log_3(n+1) \rceil \]
 et on majore le logarithme en base 3 par celui en base 2 pour conclure, en
 utilisant aussi que $\log_3(n+1) \leqslant\log_2(n)$ (dès $n \geqslant 2)$.
 \end{proof}

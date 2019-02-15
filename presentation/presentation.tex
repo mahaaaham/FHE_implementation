@@ -364,7 +364,28 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
 
 \begin{frame} 
 \frametitle{Effectuer un bootstrapping}
-\end{frame} 
+
+\textbf{Profondeur de NAND totale majorée par :}
+\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \lceil \log_2(n) \rceil\]
+avec n un paramètre du système.
+
+Certains choix de paramètres permettent d'effectuer un bootstrapping en garantissant que le cryptosystème est IND-CPA.
+\pause
+
+\begin{figure}
+\begin{tabular}{|c|c|c|c|}
+\hline
+sécurité & taille du secret & taille de la clé & taille d'un chiffré \\
+\hline
+$\lambda = 8$ & 3 Ko & 113 Mo & 135 Go \\
+\hline
+$\lambda = 16$ & 12 Ko & 2 Go & 6 To \\
+\hline
+$\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
+\hline
+\end{tabular}
+\end{figure}
+\end{frame}
 
 % ------------------------------------------------------------------------------------------------
 
