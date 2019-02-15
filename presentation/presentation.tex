@@ -118,7 +118,6 @@ et $\lambda \in \ZZq$,
 \begin{frame} 
 \frametitle{GSW, seconde tentative}
 \textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
-\textbf{Clé secrète:} un vecteur $\vec{sk} \in \ZZq^{N}$ \\
 \textbf{Clé publique:} pk\\
 \textbf{Chiffrement:} Encrypt($\mu$) = $C\in \ZZq^{N \times N}\:$ telle que  
 \[C \vec{sk} = \vec{sk} + {\color{red}\vec{e}}\qquad \text{avec }  {\color{red}\vec{e}} \text{ petit} \]
@@ -180,7 +179,7 @@ Opérations homomorphes: on applique Flatten aux précédentes opérations homom
 
 $pk = A \in \ZZq^{N * m}$ une matrice telle que
 \[ A\: \vec{sk} = {\color{red} \vec{e}} \]
-où les coordonnées de $\color{red}\vec{e}$ sont petites
+où les coordonnées de $\color{red}\vec{e}$ sont petites.
 
 $A$ est choisie en se basant sur le problème DLWE:
 \begin{itemize}
@@ -210,14 +209,14 @@ $C$ peut donc se voir comme un one-time pad.
 
 \begin{frame} 
 \frametitle{Evaluation d'un circuit booléen, profondeur de NAND}
-Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés (sk, pk)
+Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés ($\vec{sk}$, pk)
   \begin{center}
       \begin{tikzpicture}[scale = 1, transform shape]
       	\input{../pictures/circuit.tex}
       \end{tikzpicture}
   \end{center}
   Si le circuit $\Pi$ a une profondeur de NAND assez faible:
-  \[ \Pi(a,c,b) = \text{Decrypt}\left(\text{sk}, \text{Eval}\left(\Pi, C_a, C_b, C_b\right)\right) \]
+  \[ \Pi(a,c,b) = \text{Decrypt}(\vec{sk}, \text{Eval}\left(\Pi, C_a, C_b, C_b)\right) \]
   On note alors:
   \[ \text{Encrypt}\left(\text{pk}, \Pi(a,c,b)\right) \approx \text{Eval}\left(\Pi, C_a, C_b, C_b\right) \]
 \end{frame}
@@ -239,14 +238,14 @@ Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés (sk, p
 \pause
 
 Soit $\Pi$ le circuit booléen tel que 
-\[\quad\Pi(\text{binsk})= \text{Decrypt}\left(\vec{sk}, C\right) \]
+\[\quad\Pi(\overrightarrow{binsk})= \text{Decrypt}\left(\vec{sk}, C\right) \]
 
 \pause
 Alors:
 \begin{align*}
-\text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) 
-=&\: \text{Encrypt}\left(\text{sk},\: \Pi(\text{binsk})\right) \\
-\approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(\text{sk}, \text{binsk})\right)
+\text{Encrypt}\left(\vec{sk},\: \text{Decrypt}\left(\vec{sk},C\right)\right) 
+=&\: \text{Encrypt}\left(\vec{sk},\: \Pi(\overrightarrow{binsk})\right) \\
+\approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(\vec{sk}, \overrightarrow{binsk})\right)
 \end{align*}
 \vspace{-0.5cm}
 \begin{itemize}
@@ -279,7 +278,7 @@ Voyons comment sommer deux nombres binaires.
 %% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{sommer deux listes: }
+\frametitle{Sommer deux listes: }
 Somme classique entre deux nombres binaires:
   \begin{figure}
     \begin{center}
@@ -297,7 +296,7 @@ Somme classique entre deux nombres binaires:
 %% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{sommer deux listes: carry lookahead adder}
+\frametitle{Sommer deux listes: carry lookahead adder}
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.5, transform shape]
@@ -360,7 +359,7 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
 %%------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{sommer deux listes: carry lookahead added}
+\frametitle{Sommer deux listes: carry lookahead added}
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.7, transform shape]
@@ -376,7 +375,7 @@ Les variables de générations de blocs commençants par 0 calculent des retenue
 %% ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{sommer deux listes: carry lookahead added}
+\frametitle{Sommer deux listes: carry lookahead added}
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.7, transform shape]
