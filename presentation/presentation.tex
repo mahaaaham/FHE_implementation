@@ -60,7 +60,12 @@
 
  \begin{frame} 
  \frametitle{Un bref historique}
-
+\textbf{Définition informelle: } un FHE (Fully homomorphic encryption) est un cryptosystème dont les chiffrés 
+ sont sur définis sur un anneau $R$ et ayant des opérations sur les chiffrés qui 
+ \og commutent \fg~avec les opérations 
+ d'addition, de multiplication et de multiplication par un scalaire. 
+\textbf{Définition alternative:} l'ensemble des messages est $\{0,1\}$ et le cryptosystème commute  
+avec l'opération \text{NAND}.
 \begin{itemize}
 \item 2009: un premier plan par Craig Gentry dans sa thèse :
 \begin{itemize}
@@ -173,20 +178,26 @@ Opérations homomorphes: on applique Flatten aux précédentes opérations homom
 \begin{frame} 
 \frametitle{clé publique et sécurité IND-CPA}
 
-$pk = A \in \ZZq^{N * m}$ une matrice telle quel
+$pk = A \in \ZZq^{N * m}$ une matrice telle que
 \[ A\: \vec{sk} = {\color{red} \vec{e}} \]
 où les coordonnées de $\color{red}\vec{e}$ sont petites
 
-Cette matrice est choisie en se basant sur le problème DLWE de façon à ce que, 
-pour de bons choix de paramètres, $A$ est indistinguable d'une matrice
+$A$ est choisie en se basant sur le problème DLWE:
+\begin{itemize}
+\item pour de bons choix de paramètres, $A$ est indistinguable d'une matrice
 choisie uniformément.
+\end{itemize}
 
-Pour chiffrer $\mu \in \ZZq$, on peut poser:
-\[ C =\mu\:\text{Id} + A R \]
-pour $R\in {\{0,1\}}^{m \times N}$ tirée uniformément.
+\textbf{Choix de C:}
+Pour chiffrer $\mu \in \ZZq$:
+\[ C :=\mu\:\text{Id} + A R \qquad R\in {\{0,1\}}^{m \times N}\: \text{ tirée uniformément.} \]
 
-Alors: $(A,AR)$ est indistinguable d'un choix uniforme de matrices $(U,V)$
-par un attaquant $\mathcal{A}$ polynomial probabiliste.
+\textbf{Sécurité:} pour de bons choix de paramètres\\
+$\nexists\:\: \mathcal{A}$ algorithme polynomial probabiliste distinguant
+\begin{itemize}
+\item $(A,AR)$ 
+\item un couple de matrices choisies uniformément.
+\end{itemize}
 
 $C$ peut donc se voir comme un one-time pad.
 \end{frame} 
@@ -250,15 +261,15 @@ Alors:
 \frametitle{Découpage de Decrypt}
 L'algorithme de déchiffrement est le suivant :
 \begin{enumerate}
-\item trouver $1 \leqslant i \leqslant l$ tel que $q/4 \leqslant 2^i < q/2$
+\item trouver $i$ tel que $\vec{sk}_i$ est grand et une puissance de 2; 
 \item calculer $a = C_i \cdot \vec{sk}$
 \item retourner $|\frac{a}{\vec{sk}_i}|$
 \end{enumerate}
 
 \begin{itemize}
 \item On peut ramener le calcul du produit scalaire à une somme de nombres binaire;
-\item Diviser par une puissance de $2$ est un shift à gauche sur l'écriture binaire;
-\item Calculer la valeur valeur absolue implique essentiellement de faire un complément à 2.
+\item La division est simplement un shift sur l'écriture binaire;
+\item Calculer la valeur absolue implique essentiellement de faire un complément à 2.
 \end{itemize}
 
 Voyons comment sommer deux nombres binaires.

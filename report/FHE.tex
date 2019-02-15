@@ -24,10 +24,6 @@ $\pk$, un circuit  $\Pi$, un vecteur de chiffrés $\vec{c}$ et retourne un
 vecteur de chiffrés $\vec{c}_f$ dont les composantes correspondent aux sorties du circuit $\Pi$.
 \end{itemize}
 \end{definition}
-\begin{rmq}
-On s'autorisera à considérer des circuits $\Pi$ avec constantes. Par constante, nous entendons
-un bit qui sera chiffré lors de l'utilisation de $\Eval$. Il faut alors prendre en compte les constantes en plus des variables lorsque l'on veut calculer la profondeur du circuit.
-\end{rmq}
 
 \begin{definition}{Correction}
 Soit \textbf{E} = $(\Keygen, \Enc, \Dec, \Eval)$ un cryptosystème homomorphe
@@ -75,8 +71,7 @@ $\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ l'union des chiffrés de messag
 ainsi que des évaluations de chiffrés de messages par des circuits de 
 $\mathcal{C}_\tau$, les formules détaillées étant donnés dans \cite{halevi};
 \item On considère pour tout chiffré $c\in\mathcal{CT}_{\text{\textbf{E}}}(\lambda,\tau)$ 
-le circuit $D_c(\bsk) := \Dec_\sk(c)$ pouvant utiliser un nombre fini des constantes
-ayant pour entrée la décomposition binaire 
+le circuit $D_c(\bsk) := \Dec_\sk(c)$ ayant pour entrée la décomposition binaire 
 de $\sk$ et appliquant l'algorithme de déchiffrement de $c$ avec la clé $\sk$ (notons bien que $c$ n'est pas une entrée
 du circuit, voir la remarque suivante). On crée aussi le circuit suivant, avec pour
 unique entrée \sk, appelé circuit de déchiffrement augmenté de $c_1$ et $c_2$
@@ -92,13 +87,6 @@ NAND homomorphes.
 Il n'est donc à priori pas possible avec cette définition 
 d'utiliser des coefficients de $c$ dans le circuits $D_c$ 
 et d'espérer qu'ils soient alors chiffrés quand on leur applique $\Eval$.
-
-
-Toutefois, comme nous autorisons l'usage de constantes, on peut 
-considérer les coefficients de $c$ comme des constantes et donc 
-s'assurer ainsi qu'ils sont chiffrés lors de l'utilisation de $\Eval$. 
-Il ne faut alors pas oublier de prendre en compte ces constantes pour 
-calculer la profondeur en NAND du circuit.
 \end{rmq}
 
 \begin{definition}{Bootstrappable encryption}

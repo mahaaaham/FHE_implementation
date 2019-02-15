@@ -381,7 +381,7 @@ if $a_{l-2} = 0$:
 else:
 	# on a $a \geqslant q/2$, alors $|a - q| = \left( (2^l - 1) - a + 1 \right)$
 	$a$ = [NOT($a_i$) for $i$ in range($l$)]
-	return cla_sum($a$, $1$)
+	return cla_sum($a$, $[1,0,\cdots,0]$)
 \end{lstlisting}
 \vspace{0.3cm}
 
@@ -390,12 +390,28 @@ conditions. On va donc considérer la modification du code suivante:
 
 \vspace{0.3cm}
 \begin{lstlisting}
-$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], 1)
+$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0,\cdots,0]$ )
 return [($a_{l-1} \land a_i) \lor (\overline{a_{l_1}} \land b_i)$  for $i$ in range($l$)]
 \end{lstlisting}
 \vspace{0.3cm}
 
-	On peut alors utiliser le théorème \ref{cla_sum} pour conclure:
+Notre algorithme a encore un dernier problème: il n'est pas possible d'utiliser des constantes
+dans notre circuit booléen, on ne peut donc à priori pas faire l'instruction
+
+\vspace{0.3cm}
+\begin{lstlisting}
+$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0,\cdots,0]$ )
+\end{lstlisting}
+\vspace{0.3cm}
+Notons toutefois que pour un booléen $x$
+\[\overline{x \wedge 0 } = x \qquad \overline{x \wedge 1 } = \overline{x}\]
+Il est donc possible de remplacer tout NAND avec une  constante par une opération sans constante
+ayant une profondeur de NAND inférieur ou égale. \\
+On peut donc se passer de cette constante, et le calcul de profondeur que l'on effectue avec cette constante
+majore celui qu'on aurait fait en s'en passant.
+
+\paragraph{}
+Utilisons le théorème \ref{cla_sum} pour conclure:
 \begin{prop}
 Il est possible de calculer la valeur absolue en binaire d'un élément $a\in \ZZq$ avec une profondeur de moins de
 $8\lceil \log_2(s) \rceil + 11$ NAND.
