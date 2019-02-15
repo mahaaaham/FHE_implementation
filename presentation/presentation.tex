@@ -224,15 +224,9 @@ Soit $\Pi$ le circuit booléen tel que
 \pause
 Alors:
 \begin{align*}
-<<<<<<< HEAD
-\text{Encrypt}\left(\vec{sk},\: \text{Decrypt}\left(\vec{sk},C\right)\right) 
-=& \text{Encrypt}\left(\vec{sk},\: \Pi(\overrightarrow{binsk})\right) \\
-=& \text{Eval}\left(\Pi, \text{Encrypt}(\vec{sk}, \overrightarrow{binsk})\right)
-=======
 \text{Encrypt}\left(\text{sk},\: \text{Decrypt}\left(\text{sk},C\right)\right) 
 =&\: \text{Encrypt}\left(\text{sk},\: \Pi(\text{binsk})\right) \\
 \approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(\text{sk}, \text{binsk})\right)
->>>>>>> ac817dff8dad7e6668aac0ff2592046b6ca70593
 \end{align*}
 \vspace{-0.5cm}
 \begin{itemize}
