@@ -4,6 +4,6 @@
 \node  (after) at ($(\ha+8, \va)$) {\small$C_{\text{new}} =D + \text{\textcolor{Green}{erreur}}$}; 
 \node  (clear) at ($(\ha+4, \va)$) {$\mu$}; 
 \node  (e) at ($(\ha+2.5, \va+0.5)$) {$\text{Decrypt}(\vec{sk}, C)$}; 
-\node  (d) at ($(\ha+5.5, \va+0.5)$) {$\text{Encrypt}(\vec{sk}, \mu)$}; 
+\node  (d) at ($(\ha+5.5, \va+0.5)$) {$\text{Encrypt}(pk, \mu)$}; 
 \draw[->] (before) to (clear);
 \draw[->] (clear) to (after);

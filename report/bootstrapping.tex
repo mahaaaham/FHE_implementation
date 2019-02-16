@@ -381,7 +381,7 @@ if $a_{l-2} = 0$:
 else:
 	# on a $a \geqslant q/2$, alors $|a - q| = \left( (2^l - 1) - a + 1 \right)$
 	$a$ = [NOT($a_i$) for $i$ in range($l$)]
-	return cla_sum($a$, $[1,0,\cdots,0]$)
+	return cla_sum($a$, $[1,0, ...,0]$)
 \end{lstlisting}
 \vspace{0.3cm}
 
@@ -390,7 +390,7 @@ conditions. On va donc considérer la modification du code suivante:
 
 \vspace{0.3cm}
 \begin{lstlisting}
-$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0,\cdots,0]$ )
+$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0, ...,0]$ )
 return [($a_{l-1} \land a_i) \lor (\overline{a_{l_1}} \land b_i)$  for $i$ in range($l$)]
 \end{lstlisting}
 \vspace{0.3cm}
@@ -400,7 +400,7 @@ dans notre circuit booléen, on ne peut donc à priori pas faire l'instruction
 
 \vspace{0.3cm}
 \begin{lstlisting}
-$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0,\cdots,0]$ )
+$b$ = cla_sum([$\overline{a_i}$ for $i$ in range($l$)], $[1,0, ...,0]$ )
 \end{lstlisting}
 \vspace{0.3cm}
 Notons toutefois que pour un booléen $x$
