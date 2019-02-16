@@ -148,8 +148,12 @@ Retour sur les opérations homomorphes:
 \end{align*}
 \end{itemize}
 
-\textbf{Problème:} \\
-Les coefficients de $C_1 \vec{e}_2$ peuvent être grands.
+
+analysons $\color{red}\mu_2 \vec{e}_1 + C_1 \vec{e_2}$:
+\begin{itemize}
+\item $\color{red}\mu_2 \vec{e}_1$ ne rajoute pas beaucoup d'erreur;
+\item $\color{red}C_1 \vec{e}_2$ est plus problématique.
+\end{itemize}
 
 \end{frame} 
 
@@ -221,7 +225,7 @@ Ainsi: $\quad C\:\vec{sk} = C \mu +  R {\color{red}\vec{e}}\:= C \mu + {\color{r
 \item $A$ est indistinguable d'une matrice choisie uniformément. 
 \item $\nexists\:\: \mathcal{A}$ algorithme polynomial probabiliste distinguant:
 	\begin{itemize}
-	\item $(A,AR)$ 
+	\item $(A,RA)$ 
 	\item un couple de matrices choisies uniformément.
 	\end{itemize}
 \end{itemize}
@@ -327,16 +331,27 @@ Somme classique de deux nombres binaires:
 \frametitle{Sommer deux listes: carry lookahead adder}
   \begin{figure}
     \begin{center}
-      \begin{tikzpicture}[scale = 0.5, transform shape]
+      \begin{tikzpicture}[scale = 1, transform shape]
       	\input{../pictures/cla1.tex}
       \end{tikzpicture}
     \end{center}
   \end{figure}
+\end{frame} 
 
+%% ------------------------------------------------------------------------------------------------
+
+\begin{frame} 
+\frametitle{Sommer deux listes: carry lookahead adder}
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}[scale = 0.5, transform shape]
+      	\input{../pictures/cla11.tex}
+      \end{tikzpicture}
+    \end{center}
+  \end{figure}
 
 \begin{columns}
 \begin{column}{0.4\textwidth}
-\pause
 \begin{itemize}
 \item $G$ pour génération
   \begin{figure}
@@ -420,7 +435,7 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.7, transform shape]
-      	\input{../pictures/cla3.tex}
+      	\input{../pictures/cla33.tex}
       \end{tikzpicture}
     \end{center}
   \end{figure}
@@ -436,7 +451,7 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.7, transform shape]
-      	\input{../pictures/cla4.tex}
+      	\input{../pictures/cla333.tex}
       \end{tikzpicture}
     \end{center}
   \end{figure}
