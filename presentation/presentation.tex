@@ -11,9 +11,11 @@
 
 % \usepackage{parallel}
 \usepackage{tikz}
+\usepackage{tikz-cd}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usetikzlibrary{decorations.pathreplacing}
+\usepackage{esvect}
 
 \usepackage{xcolor} % to put colors in equations, ex:  \color{red} ...  or
 % \textcolor{red}{foo}: \
@@ -239,7 +241,7 @@ $C$ est indistinguable d'un one-time pad.
 
 \begin{section}{Mise en place d'un bootstrapping}
 
-\begin{frame} 
+\begin{frame}[fragile]
 \frametitle{Evaluation d'un circuit booléen, profondeur de NAND}
 Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés ($\vec{sk}$, pk)
   \begin{center}
@@ -248,14 +250,19 @@ Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés ($\vec
       \end{tikzpicture}
   \end{center}
   Si le circuit $\Pi$ a une profondeur de NAND assez faible:
-  \[ \Pi(a,c,b) = \text{Decrypt}(\vec{sk}, \text{Eval}\left(\Pi, C_a, C_b, C_b)\right) \]
-  On note :
-  \[ \text{Encrypt}\left(\text{pk}, \Pi(a,c,b)\right) \approx \text{Eval}\left(\Pi, C_a, C_b, C_b\right) \]
+  \vspace{-0.5cm}
+\begin{center}
+\begin{tikzcd}
+a,b,c \ar[rr,"\text{Encrypt(pk, $\cdot$)}"]  \ar[d, "\Pi(\cdot)"]&\quad& C_a, C_b, C_c \ar[d, "\text{Eval$(\Pi, \cdot)$}"] \\
+\Pi(a,b,c) \arrow{rr}{\text{Encrypt(pk,$\cdot$)}} &\quad&  \text{Encrypt}\left(pk, \Pi(a,b,c)\right) \approx \text{Eval}(\Pi(C_a,C_b,C_c))
+\end{tikzcd}
+\end{center}
+
 \end{frame}
 
 %%------------------------------------------------------------------------------------------------
  
-\begin{frame} 
+\begin{frame}[fragile]
 \frametitle{FHE avec bootstrapping}
 \[ C = D + \text{\textcolor{Orange}{erreur}} \]
   \noindent
@@ -270,16 +277,28 @@ Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés ($\vec
 \pause
 
 Soit $\Pi$ le circuit booléen tel que 
-\[\quad\Pi(\overrightarrow{binsk})= \text{Decrypt}\left(\vec{sk}, C\right) \]
+\[\quad\Pi(\vv{binsk}) = \text{Decrypt}\left(\vec{sk}, C\right) \]
 
 \pause
 Alors:
-\begin{align*}
-\text{Encrypt}\left(pk,\: \text{Decrypt}\left(\vec{sk},C\right)\right) 
-=&\: \text{Encrypt}\left(pk,\: \Pi(\overrightarrow{binsk})\right) \\
-\approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(pk, \overrightarrow{binsk})\right)
-\end{align*}
 \vspace{-0.5cm}
+% \begin{align*}
+% \text{Encrypt}\left(pk,\: \text{Decrypt}\left(\vec{sk},C\right)\right) 
+% =&\: \text{Encrypt}\left(pk,\: \Pi(\overrightarrow{binsk})\right) \\
+% \approx&\: \text{Eval}\left(\Pi, \text{Encrypt}(pk, \overrightarrow{binsk})\right)
+% \end{align*}
+% \vspace{-0.5cm}
+\begin{center}
+\begin{tikzcd}
+\vv{\text{binsk}} \ar[rr,"\text{Encrypt(pk, $\cdot$)}"]  \ar[d, "\Pi(\cdot)"]&\quad& C_a, C_b, C_c \ar[d, "\text{Eval$(\Pi, \cdot)$}"] \\
+\Pi(\vv{\text{binsk}}) \arrow{rr}{\text{Encrypt(pk,$\cdot$)}} &\quad& 
+{\scriptsize {\color{blue} \text{Encrypt}\left(\text{pk}, \text{Decrypt}(\text{sk}, C)\right) }
+\approx \text{Eval}(\Pi, \text{Encrypt}\left(\text{pk},\vv{\text{binsk}}\right)}
+\end{tikzcd}
+\end{center}
+% \text{Encrypt}\left(pk, \text{Decrypt}(sk, \text{binsk})\right) \approx \text{Eval}\left(\Pi, \text{Encrypt}(pk,
+% \text{binsk})\right) \\
+
 \begin{itemize}
 \item Si $\Pi$ contient assez peu de NAND, on peut créer un FHE.
 \end{itemize}
