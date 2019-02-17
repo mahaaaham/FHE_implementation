@@ -1,2 +1,5 @@
 # FHE_implementation
-Study and implementation of an fully homomorphic cryptosystem.
+Etude et implémentation jouet du cryptosystème GSW.
+Voir le rapport "report.pdf" pour plus de détails.
+
+
