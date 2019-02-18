@@ -81,7 +81,7 @@ avec l'opération \text{NAND}.
 	\item une somme simple à définir;
 	\item un produit en 2 étapes;
 	\end{itemize}
-\item 2013: premiers FHE de troisième génération: GWS par C. Gentry, B. Waters and A. Sahai, en 2013 :
+\item 2013: premiers FHE de troisième génération: GSW par C. Gentry, B. Waters and A. Sahai, en 2013 :
 	\begin{itemize}
 	\item basés sur LWE et ses variantes;
 	\item produit et somme de même nature;
@@ -315,11 +315,11 @@ L'algorithme de déchiffrement est le suivant :
 \item calculer $a = \langle C_i , \vec{sk} \rangle$
 \item retourner $|\frac{a}{\vec{sk}_i}|$
 \end{enumerate}
-
+\pause
 \begin{itemize}
+\item La division est simplement un shift sur l'écriture binaire; 
+\item Calculer la valeur absolue implique essentiellement de faire un complément à 2. \pause
 \item On peut ramener le calcul du produit scalaire à une somme de nombres binaire;
-\item La division est simplement un shift sur l'écriture binaire;
-\item Calculer la valeur absolue implique essentiellement de faire un complément à 2.
 \end{itemize}
 
 Voyons comment sommer deux nombres binaires.
