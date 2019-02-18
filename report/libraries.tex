@@ -10,7 +10,7 @@ Nous proposons ici d'en évoquer deux:
 \og réalistes \fg\footnote{Pas forcément pour nos machines et avec notre implémentation}
 sécurisés et autorisant une profondeur de NAND non nulle (même si irréaliste: seulement 3, voir la 
 sous-section~\ref{sec:choix_concrets} page~\pageref{sec:choix_concrets});
-\item The Gate Bootstrapping API \cite{TFHE} qui implémente une variation du cryptosystème GSW;
+\item La librairie TFHE \cite{TFHE} qui implémente une variation du cryptosystème GSW;
 \end{itemize}
 
 \begin{subsection}{La librarie SEAL}
@@ -26,11 +26,11 @@ documentation \cite{seal_manual_231}, malheureusement non à jour, indique quelq
 vue mathématique que des choix de représentation des données.
 \end{subsection}
 
-\begin{subsection}{The Gate Bootstrapping API}
+\begin{subsection}{La librairie TFHE}
 Notre présentation s'appuie sur celle donnée dans la page officielle (voir \cite{TFHE})
  qui est claire et bien documentée.
 
-L'API Gate Bootstrapping est une librairie open source utilisable en C et C++ s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
+Il s'agit d'une librairie open source utilisable en C et C++ s'appuyant notamment sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
 (voir \cite{cryptoeprint:2016:870} et \cite{cryptoeprint:2017:430}). 
 
 Elle utilise une version modifiée du cryptosysteme GSW \cite{C:GenSahWat13}
@@ -43,7 +43,8 @@ Ses performances sont interessantes; il est notamment indiqué dans la sous-sect
 que la clé de bootstrapping fait environ 24 Mo.
 
 Pour arriver à de tels résultats, de nombreuses modifications et optimisations dans le codes ont été faites. Notamment,
-le problème sur lequel s'appuie le cryptosystème n'est plus LWE mais une variante nommée TFHE, présentée dans
+le problème sur lequel s'appuie le cryptosystème n'est plus LWE mais une généralisation nommée TLWE (Torus Learning With
+Error) , présentée dans
 \cite{cryptoeprint:2016:870}. 
 
 \begin{subsubsection}{Un exemple simple}

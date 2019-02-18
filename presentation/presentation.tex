@@ -533,11 +533,11 @@ $\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
 
 
 \begin{frame} 
-\frametitle{The Gate Bootstrapping API}
+\frametitle{La librairie TFHE}
 \begin{itemize}
-\item librairie open source pour du C/C++ 
+\item librairie open source pour du C/C++, disponible à l'adresse \url{https://tfhe.github.io/tfhe/};
 \item s'appuie sur des travaux de I. Chillotti, N. Gama, M. Georgieve et M. Izabachène 
-\item utilise une version modifiée du cryptosysteme GSW, avec une variante de LWE nommée TFHE.
+\item utilise une version modifiée du cryptosysteme GSW, avec une généralisation de LWE nommée TLWE.
 \end{itemize}
 \textbf{Performances} : pour un ordinateur 64-bit simple coeur (i7-4930MX) cadencé à 3.00GHz
 \begin{itemize}
@@ -548,7 +548,7 @@ $\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
 \end{frame} 
 
 \begin{frame} 
-\frametitle{The Gate Bootstrapping API}
+\frametitle{La librairie TFHE}
 \begin{itemize}
 \item Alice génère des clés, chiffre deux nombres de 16 bits et les inscrits dans un fichier;
 \item le cloud récupère les données, applique homomorphiquement la fonction minimum aux deux nombres et inscrit le résultat dans un fichier;
