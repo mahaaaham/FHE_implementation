@@ -64,7 +64,7 @@
  \end{frame}
 
 %%------------------------------------------------------------------------------------------------
-\begin{section}{Introduction}
+% \begin{section}{Introduction}
 
  \begin{frame} 
  \frametitle{Un bref historique}
@@ -94,7 +94,7 @@ avec l'opération \text{NAND}.
 \end{itemize}
 \end{frame} 
 
-\end{section}
+% \end{section}
 
 %%------------------------------------------------------------------------------------------------
 
@@ -416,7 +416,7 @@ ${(G2^{i+1})}_1 = {(G2^i)}_2 \vee \left ( {(G2^i)}_1 \wedge {(P2^i)}_2 \right)$\
 
 \vspace{0.3cm}
 
-${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
+${(P2^{i+1})}_1 = {(P2^i)}_1 \wedge {(P2^i)}_2$
 
 \end{column}
 \end{columns}
@@ -471,7 +471,7 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
 % ------------------------------------------------------------------------------------------------
 
 \begin{frame} 
-\frametitle{sommer deux listes: carry lookahead adder}
+\frametitle{Sommer deux listes: carry lookahead adder}
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}[scale = 0.7, transform shape]
@@ -505,8 +505,8 @@ ${(P2^{i+1})}_1 = {(G2^i)}_1 \wedge {(P2^i)}_2$
 \item Profondeur de NAND en $\mathcal{O}(\log(\log(q)) + \log(n))$
 \end{itemize}
 
-\textbf{Conclusion:}
-Certains choix de paramètres permettent d'effectuer un bootstrapping en garantissant que le cryptosystème est IND-CPA.
+\textbf{Théorème}
+Il existe une famille de paramètres permettant d'effectuer un bootstrapping et garantissant la sécurité  IND-CPA.
 \pause
 
 \textbf{Taille des données permettant du bootstrapping:}
@@ -586,18 +586,19 @@ Concernant la définition de GSW:
 \item deux autres algorithmes de déchiffrement.
 \end{itemize}
 Concernant les choix de paramètres et la sécurité:
+\vspace{-0.2cm}
 
 \begin{itemize}
 \item hypothèses de sécurité sur DLWE, définitions équivalentes, lien LWE/DLWE;
 \item les gaussiennes discrètes;
 \item la librairie sagemath lwe\_estimator pour estimer la sécurité de paramètres LWE;
-\item notion de leveled FHE et choix de paramètres pour un leveled FHE.
+\item notion de leveled FHE et choix de paramètres sous une hypothèse de sécurité DLWE précise;
 \end{itemize}
 
 Concernant le bootstrapping:
 \begin{itemize}
 \item optimisations supplémentaires pour sommer plusieurs nombres binaires;
-\item contraintes de sécurité supplémentaires (sécurité circulaire).
+\item choix de paramètres sous une hypothèse de sécurité DLWE précise;
 \end{itemize}
 \end{frame}
 
