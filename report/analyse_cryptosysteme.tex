@@ -300,11 +300,12 @@ et rendent le cryptosystème GSW IND-CPA:
 
 On remarque qu'en pratique, ces paramètres donnent des tailles irréalistes.
 \begin{figure}[!ht]
+\begin{center}
 \begin{tabular}{|l|c|c|c|}
 \hline
 & taille de sk& taille de pk& taille d'un chiffré \\
 \hline
-$L = 5, \ \epsilon = 0.9$ & 7Ko & 100Mo & 2To \\
+$L = 5, \ \epsilon = 0.9$ & 7Ko & 100Mo & 2Go \\
 \hline
 $L = 10, \ \epsilon = 0.9$ & 62Ko & 7Go & 590Go \\
 \hline
@@ -315,6 +316,7 @@ $L = 10, \ \epsilon = 0.5$ & 44Mo & 3000To & 500 000To \\
 \end{tabular}
 \caption{Taille des données suivant les paramètres présentés précédemment avec $\lambda = 128$}
 \label{size_boostrapping}
+\end{center}
 \end{figure}
 
 Remarquons toutefois qu'il s'agit uniquement de paramètres \og théoriques \fg~\ étant donné que la sécurité n'est
