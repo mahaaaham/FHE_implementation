@@ -8,6 +8,9 @@
 \newcommand{\makebigline}[4]{
 \draw[-, very thick, dashed]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
 }
+\newcommand{\makebigredline}[4]{
+\draw[-, very thick, dashed, red]   ($(#1) + (#2,#3)$) -- ($(#1) + (#2 + #4,#3)$);
+}
 
 \pgfmathsetmacro{\hbase}{2}
 \pgfmathsetmacro{\vbase}{2}
@@ -66,7 +69,7 @@
 \makeline{b6}{\hlineind}{2 * \vlineind}{2 * \hshift - 0.15}
 % lines 3
 \node (l10) at ($(b0) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {\textcolor{Blue}{1}\ \textcolor{Orange}{0}};
-\makeredline{b0}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
+\makebigredline{b0}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
 \node (l14) at ($(b4) + (\hlineind + 1/2 * 4 * 0.9 * \hshift ,3 * \vlineind + 0.2)$) {\textcolor{Blue}{0}\ \textcolor{Orange}{0}};
 \makeline{b4}{\hlineind}{3 * \vlineind}{4 * \hshift - 0.15}
 % lines 4
