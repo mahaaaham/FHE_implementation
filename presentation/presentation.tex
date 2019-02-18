@@ -259,7 +259,8 @@ Soit $a,b,c\in\{0, 1\}$ et $C_a, C_b, C_c$ leurs chiffrés pour des clés ($\vec
 \begin{center}
 \begin{tikzcd}
 a,b,c \ar[rr,"\text{Encrypt(pk, $\cdot$)}"]  \ar[d, "\Pi(\cdot)"]&\quad& C_a, C_b, C_c \ar[d, "\text{Eval$(\Pi, \cdot)$}"] \\
-\Pi(a,b,c) \arrow{rr}{\text{Encrypt(pk,$\cdot$)}} &\quad&  \text{Encrypt}\left(pk, \Pi(a,b,c)\right) \approx \text{Eval}(\Pi(C_a,C_b,C_c))
+\Pi(a,b,c) \arrow{rr}{\text{Encrypt(pk,$\cdot$)}} &\quad&  \text{Encrypt}\left(pk, \Pi(a,b,c)\right) \approx
+\text{Eval}(\Pi, C_a,C_b,C_c)
 \end{tikzcd}
 \end{center}
 
@@ -298,7 +299,7 @@ Alors:
 \vv{\text{binsk}} \ar[rr,"\text{Encrypt(pk, $\cdot$)}"]  \ar[d, "\Pi(\cdot)"]&\quad& C_a, C_b, C_c \ar[d, "\text{Eval$(\Pi, \cdot)$}"] \\
 \Pi(\vv{\text{binsk}}) \arrow{rr}{\text{Encrypt(pk,$\cdot$)}} &\quad& 
 {\scriptsize {\color{blue} \text{Encrypt}\left(\text{pk}, \text{Decrypt}(\text{sk}, C)\right) }
-\approx \text{Eval}(\Pi, \text{Encrypt}\left(\text{pk},\vv{\text{binsk}}\right)}
+\approx \text{Eval}(\Pi, \text{Encrypt}\left(\text{pk},\vv{\text{binsk}}\right))}
 \end{tikzcd}
 \end{center}
 % \text{Encrypt}\left(pk, \text{Decrypt}(sk, \text{binsk})\right) \approx \text{Eval}\left(\Pi, \text{Encrypt}(pk,
@@ -513,7 +514,7 @@ Il existe une famille de paramètres permettant d'effectuer un bootstrapping et 
 \begin{figure}
 \begin{tabular}{|c|c|c|c|}
 \hline
-paramètre de sécurité & taille de pk & taille de sk & taille d'un chiffré \\
+paramètre de sécurité & taille de sk & taille de pk & taille d'un chiffré \\
 \hline
 $\lambda = 8$ & 3 Ko & 113 Mo & 135 Go \\
 \hline
@@ -541,7 +542,6 @@ $\lambda = 32$ & 45 Ko & 32 Go & 176 To \\
 \textbf{Performances} : pour un ordinateur 64-bit simple coeur (i7-4930MX) cadencé à 3.00GHz
 \begin{itemize}
 \item le bootstrapping se fait en un temps moyen de 52ms
-\item la clé de bootstrapping fait environ 24 Mo.
 \end{itemize}
  
 
