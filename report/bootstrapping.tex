@@ -49,8 +49,8 @@ Nous allons tout de suite profiter de cela en remarquant que
 	profondeur 2;
 \item \path{OR}$(a, b) = a \lor b$ se fait en trois \path{NAND} et est de
 	profondeur 2;
-\item \path{XOR}$(a, b) = a \oplus b$ se calcule en six \path{NAND} et est de
-	profondeur 4.
+\item \path{XOR}$(a, b) = a \oplus b$ se calcule en quatre \path{NAND} et est de
+	profondeur 3.
 \end{itemize}
 
 \paragraph{}
@@ -59,7 +59,7 @@ $v$, notons que:
 \begin{itemize}
 \item $\overline{f}$ a une profondeur $u+1$;
 \item $f \land g$ et $f \lor g$ ont une profondeur de $\text{max}(u,v) + 2$;
-\item $f \oplus g$ a une profondeur de $\text{max}(u,v) + 4$;
+\item $f \oplus g$ a une profondeur de $\text{max}(u,v) + 3$;
 \end{itemize}
 \end{subsection}
 \begin{subsection}{Sommer des listes de 0 et de 1 en minimisant la profondeur de NAND}
@@ -90,11 +90,11 @@ for $i$ in range($s$):
 Le problème de cette méthode est que la profondeur de NAND nécessaire explose du fait que la formule exprimant
 $d_{s-1}$ dépend de $a_0$ et $b_0$, et ce à cause de la récursivité du calcul des $c_i$.
 
-Calculer $d_i$ peut se faire en n'utilisant la retenue que pour un $\oplus$, ce qui n'ajoute que 4 à la profondeur en NAND du calcul. $c_i$ est calculé en appliquant un AND et un OR à $c_{i-1}$, ce qui ajoute aussi 4 à la profondeur. $c_0 = a_0 \land b_0$ et peut donc être trouvé avec une profondeur de 2 NAND.
+Calculer $d_i$ peut se faire en n'utilisant la retenue que pour un $\oplus$, ce qui n'ajoute que 3 à la profondeur en NAND du calcul. $c_i$ est calculé en appliquant un AND et un OR à $c_{i-1}$, ce qui ajoute aussi 4 à la profondeur. $c_0 = a_0 \land b_0$ et peut donc être trouvé avec une profondeur de 2 NAND.
 	
 	On obtient alors la proposition suivante :
 \begin{prop}
-	L'algorithme \textbf{basic\_sum} nécessite une profondeur de $4*s - 2$ NAND.
+	L'algorithme \textbf{basic\_sum} nécessite une profondeur de $4*s - 3$ NAND.
 \end{prop}
 
 
@@ -227,13 +227,16 @@ Cela se montre en constatant que $\theta^n(j)$ est un multiple positif de $2^\ta
 $\tau > n$ et ne peut donc valoir que 0 si $n > \log_2(u)$.
 \end{proof}
 
-	Une fois calculée les retenues $(c_i)_i$, la somme entre deux listes $a$ et $b$ se fait comme la somme classique, avec : $r_i = a_i \oplus b_i \oplus c_i$.
+	Une fois calculée les retenues $(c_i)_i$, la somme entre deux listes $a$ et $b$ se fait comme la somme
+	classique, avec : $r_i = a_i \oplus b_i \oplus c_i$. Notons que pour limiter la profondeur de NAND, on le
+	calcule ainsi \[r_i = \left( a_i \oplus b_i \right) \oplus c_i \]
 
 	On en déduit donc :
 
 \begin{thm}
 \label{cla_sum}
-	L'algorithme \textbf{cla\_sum} fait la somme de 2 listes de taille $s$ avec une profondeur de moins de $8 \lceil \log_2(s) \rceil + 6$ NAND, donc en $\mathcal{O}(log_2(s))$.
+	L'algorithme \textbf{cla\_sum} fait la somme de 2 listes de taille $s$ avec une profondeur de moins de $8 \lceil
+	\log_2(s) \rceil + 5$ NAND, donc en $\mathcal{O}(log_2(s))$.
 \end{thm}
 
 \begin{proof}
@@ -270,9 +273,10 @@ for $i$ in range($s$):
 
 Or:
 \begin{itemize}
-\item calculer $x_i$ consiste en deux $\oplus$ successifs dont le deuxième utilise le résultat du premier. La profondeur en NAND est donc de 8. 
+\item calculer $x_i$ consiste en deux $\oplus$ successifs dont le deuxième utilise le résultat du premier. La profondeur
+en NAND est donc de 6. 
 \item la profondeur maximale du calcul de $y_i$ est celle des éléments impliqués dans deux \nolinebreak
-$\oplus$. Ces éléments subissent donc deux NO, un AND et deux XOR, atteignant ainsi une profondeur de 12 NAND.
+$\oplus$. Ces éléments subissent donc deux NO, un AND et deux XOR, atteignant ainsi une profondeur de 10 NAND.
 \end{itemize}
 
 On a donc la proposition suivante:
@@ -293,7 +297,7 @@ L'algorithme naïf n'utilisant que \textbf{cla\_sum} consisterait à appliquer
 \textbf{cla\_sum} à deux listes, puis à sommer le résultat de ce calcul avec une nouvelle liste et ainsi de suite jusqu'à avoir sommé toutes les $nb$ listes.
 On voit qu'ainsi, l'arbre dont les n\oe{}uds correspondent à une application de \textbf{cla\_sum}
 aurait alors une profondeur de $nb - 1$, ce qui fait que la profondeur totale nécessaire serait 
-bornée par $(nb-1)(8\lceil\log_2(s)\rceil + 6)$.
+bornée par $(nb-1)(8\lceil\log_2(s)\rceil + 5)$.
 
 \paragraph{}
 Nous avons toutefois vu qu'il y a tout intérêt à utiliser \textbf{reduced\_sum}
@@ -304,7 +308,7 @@ procéder ainsi de suite jusqu'à ne plus avoir que deux listes qu'on somme alor
 
 L'arbre dont les n\oe{}uds correspondent à une application de \textbf{reduced\_sum}
 ou bien de \textbf{cla\_sum} a alors une profondeur de $nb - 1$, avec une seule utilisation de \textbf{cla\_sum}. On a donc une profondeur en NAND majorée par:
-\[ 12(nb - 2) + 8 \lceil \log_2(s) \rceil + 6 = 12 nb + 8 \lceil \log_2(s) \rceil - 18\]
+\[ 10(nb - 2) + 8 \lceil \log_2(s) \rceil + 5 = 10 nb + 8 \lceil \log_2(s) \rceil - 15\]
 	
 \paragraph{}
 Les additions peuvent cependant être bien mieux ordonnées, en utilisant 
@@ -317,7 +321,7 @@ comme arbre équilibré un arbre binaire (quitte à compléter les listes par de
 sembler ridicule vu que l'on parle de somme de bits, mais il ne faut pas oublier que ce circuit s'applique 
 ensuite homomorphiquement} que leur taille
 soit une puissance de 2), ce qui donne une profondeur en NAND de   
-$(\lfloor \log_2(nb) \rfloor)(8\lceil\log_2(s)\rceil + 6)$
+$(\lfloor \log_2(nb) \rfloor)(8\lceil\log_2(s)\rceil + 5)$
 
 \paragraph{}
 Dans l'exemple utilisant d'abord \textbf{reduced\_sum} puis une fois \textbf{cla\_sum}, 
@@ -327,7 +331,7 @@ cela se fait de la même façon, même si la démonstration est un peu moins év
 \begin{prop}
 \label{sum_list}
 Il est possible de sommer $nb$ listes de $s$ éléments avec une profondeur de NAND majorée par 
-$8 \lceil \log_2(s) \rceil + 36\lceil\log_3(nb)\rceil -18$. Soit, une profondeur en $\mathcal{O}(\log_3(nb) + \log_2(s))$.
+$8 \lceil \log_2(s) \rceil + 30\lceil\log_3(nb)\rceil - 15$. Soit, une profondeur en $\mathcal{O}(\log_3(nb) + \log_2(s))$.
 \end{prop}
 
 \begin{proof}
@@ -346,7 +350,7 @@ la somme totale avec une profondeur de quatre \textbf{reduced\_sum} et un \textb
 \end{center}
 
 En utilisant la proposition~\ref{reduction_sum} ainsi que le théorème~\ref{cla_sum}, on obtient que la profondeur totale en NAND est majorée par :
-\[ 8 \lceil \log_2(s)\rceil + 6+ 12(3p - 2) = 8 \lceil \log_2(s) \rceil + 36p -18.\]
+\[ 8 \lceil \log_2(s)\rceil + 5 + 10(3p - 2) = 8 \lceil \log_2(s) \rceil + 30p -15.\]
 Or, par définition, $p = \lceil \log_3(nb) \rceil$, ce qui permet de conclure.
 \end{proof}
 
@@ -411,14 +415,14 @@ de déchiffrement tel que décrit dans le listing~\ref{lst:decoupage} page~\page
 \begin{thm} \label{size_dec}
 Si $q$ est une puissance de 2, on peut effectuer 
 l'algorithme \textbf{Decrypt} avec une profondeur de NAND plus petite que
-\[88 \lceil \log_2(\log_2(q)) \rceil + 36 \lceil \log_2(n) \rceil \]
+\[76 \lceil \log_2(\log_2(q)) \rceil + 30 \lceil \log_2(n) \rceil \]
 et donc, en $\mathcal{O}(\log_2(n) + \log_2(\log_2(q)))$
 \end{thm}
 \begin{proof}
 En utilisant les propositions précédentes ainsi que le fait qu'il y a au plus $N*l = \log_2(q)^2 * (n+1)$ listes à
 sommer, on majore la profondeur de NAND par
-\[16 \lceil \log_2(\log_2(q)) \rceil + 36 \log_3\left(\log_2(q)^2
-*(n+1)\right) = 16 \lceil \log_2(\log_2(q)) \rceil + 72 \lceil \log_3(\log_2(q)) \rceil + 36 \lceil \log_3(n+1) \rceil \]
+\[16 \lceil \log_2(\log_2(q)) \rceil + 30 \log_3\left(\log_2(q)^2
+*(n+1)\right) = 16 \lceil \log_2(\log_2(q)) \rceil + 60 \lceil \log_3(\log_2(q)) \rceil + 30 \lceil \log_3(n+1) \rceil \]
 et on majore le logarithme en base 3 par celui en base 2 pour conclure, en
 utilisant aussi que $\log_3(n+1) \leqslant\log_2(n)$ (dès $n \geqslant 2)$.
 \end{proof}
@@ -429,9 +433,9 @@ Nous avons maintenant toutes les informations nécessaires pour choisir des para
 \label{sec:bootstrapping}
 
 On va utiliser l'inégalité grossière :
-\[88 \lceil\log_2(\log_2(q))\rceil + 36 \log_2(\log_2(n)) \leqslant 90\left(\log_2(\log_2(q)) + \log_2(n)\right) \]
+\[76 \lceil\log_2(\log_2(q))\rceil + 30 \log_2(\log_2(n)) \leqslant 80\left(\log_2(\log_2(q)) + \log_2(n)\right) \]
 pour voir que, pour obtenir un GWS avec bootstrapping, il suffit de pouvoir évaluer les circuits dont la profondeur en NAND est majorée par
-\[ L = 90 \left(\log_2(\log_2(q)) + \log_2(n)\right). \]
+\[ L = 80 \left(\log_2(\log_2(q)) + \log_2(n)\right). \]
 L'inégalité est assez grossière pour qu'on n'ait pas besoin de rajouter de 1 à la profondeur maximale pour s'assurer de pouvoir effectuer des calculs hors de ce circuit.
 
 \paragraph{}
@@ -443,15 +447,15 @@ q > 16 {(1+N)}^{L+2}.
 En injectant la valeur précédente dans $L$ et en utilisant une majoration
 grossière, on voit qu'il suffit d'avoir
 \begin{equation}
-q > {\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{90 \left(\log_2(n) +
+q > {\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{80 \left(\log_2(n) +
 \log_2(\log_2(q))\right)}.
 \end{equation}
 
 Suivant le raisonnement de Shai Halevi dans \cite{halevi}, on remarque 
-qu'il existe un $\rho > 90$ tel que 
+qu'il existe un $\rho > 80$ tel que 
 
 \begin{equation*}
-{\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{90 \left(\log_2(n) +
+{\left((n+1)(\lceil \log_2(q) \rceil + 1 )\right)}^{80 \left(\log_2(n) +
 \log_2(\log_2(q))\right)} < 
 {\left(n\log_2(q))\right)}^{\rho\:\left(\log_2(n) + \log_2(\log_2(q))\right)}.
 \end{equation*}
