@@ -256,16 +256,16 @@ Ceci nous amène à un premier jeu de contraintes:
 Nous allons encore simplifier la dernière contrainte en utilisant
 \begin{align*} (L+2) \log\left( 1 + N\right) &\leqslant (L+2) (2 + \log(N)) \\
 &\leqslant (L+2) (2 + \log(n+1) +  \log(\bnorm{q})) \\
-&\leqslant (L+2) (4 + \log(n) + \log(\log(q)) \\
-&\leqslant (L+2) (5 + \log(n) + \log(n^\epsilon) \\
+&\leqslant (L+2) (4 + \log(n) + \log(\log(q))) \\
+&\leqslant (L+2) (5 + \log(n) + \log(n^\epsilon)) \\
 &\leqslant (L+2) (5 + (1+\epsilon)\log(n)) \\
-&\leqslant 5(L+2) + (L+2)(1+\epsilon)\log(n)) \\
+&\leqslant 5(L+2) + (L+2)(1+\epsilon)\log(n) \\
 &\leqslant 3 L \log(n) \quad \text{pour $n$ assez grand}
 \end{align*}
 
 ce qui au final, nous donne:
 \[ \begin{cases}
-	\alpha  = n \cdot 2^{-n^\epsilon}=  \\
+	\alpha  = n \cdot 2^{-n^\epsilon}  \\
 	q = \lceil 2^{n^\epsilon} \rceil\\ 
 	m = 2(n+1)\bnorm{q} \\  
 	n^\epsilon > 3 L \log(n)
@@ -290,30 +290,27 @@ On en déduit le théorème suivant:
 	Pour $L$ et $\lambda$ assez grands et sous l'hypothèse sur DWLE~(page \pageref{hyp_dlwe}), les paramètres suivants permettent de faire une profondeur de \textbf{h\_NAND} de $L$
 et rendent le cryptosystème GSW IND-CPA:
 \[ \begin{cases} 
-	n = \max\left(\lambda, \lceil 6/\epsilon \log(L) \log(\log(L))
-	\rceil\right)  \\
+	n = \max\left(\lambda, \lceil {\left(6 L \log(L)
+	/\epsilon\right)}^{1/\epsilon}\rceil\right)  \\
 	\alpha  = n \cdot 2^{-n^\epsilon}  \\
 	q = \lceil 2^{n^\epsilon} \rceil\\ 
 	m = 2(n+1)\bnorm{q} \\  
 	\end{cases}  \]
 \end{thm}
 
+On remarque qu'en pratique, ces paramètres donnent des tailles irréalistes.
 \begin{figure}[!ht]
 \begin{tabular}{|l|c|c|c|}
 \hline
-& taille du secret & taille de la clé & taille d'un chiffré \\
+& taille de sk& taille de pk& taille d'un chiffré \\
 \hline
-$L = 10, \ \epsilon = 0.1$ & 131 octets & 264 Ko & 397 Ko \\
+$L = 5, \ \epsilon = 0.9$ & 7Ko & 100Mo & 2To \\
 \hline
-$L = 10, \ \epsilon = 0.5$ & 194 octets & 581 Ko & 3 Mo \\
+$L = 10, \ \epsilon = 0.9$ & 62Ko & 7Go & 590Go \\
 \hline
-$L = 100, \ \epsilon = 0.1$ & 410 octets & 3 Mo & 4 Mo \\
+$L = 5, \ \epsilon = 0.5$ & 1Mo & 7To & 340To \\
 \hline
-$L = 100, \ \epsilon = 0.5$ & 411 octets & 3 Mo & 4 Mo \\
-\hline
-$L = 1000, \ \epsilon = 0.1$ & 745 octets & 8 Mo & 13 Mo \\
-\hline
-$L = 1000, \ \epsilon = 0.5$ & 1 Ko & 15 Mo & 151 Mo \\
+$L = 10, \ \epsilon = 0.5$ & 44Mo & 3000To & 500 000To \\
 \hline
 \end{tabular}
 \caption{Taille des données suivant les paramètres présentés précédemment avec $\lambda = 128$}

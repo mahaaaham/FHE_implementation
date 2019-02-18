@@ -200,23 +200,10 @@ c_j = {G\nu(j)}_{j/\nu(j)} + c_{\theta(j)} {P\nu(j)}_{j/\nu(j)}
 
 	Ainsi, si on veut additionner $a = 00111100$ et $b = 01010101$, on obtient :
 \begin{center}
-\begin{tabular}{llllllllll}
-a  && 0&0&1&1&1&1&0&0 \\
-b  && 0&1&0&1&0&1&0&1 \\
-G1 && 0&0&0&1&0&1&0&0 \\
-P1 && 0&1&1&1&1&1&0&1 \\
-G2 && &0&&1&&1&&0 \\
-P2 && &0&&1&&1&&0 \\
-G4 && &&&1&&&&0 \\
-P4 && &&&0&&&&0 \\
-G8 && &&&&&&&0 \\
-P8 && &&&&&&&0 \\
-\end{tabular}
+      \begin{tikzpicture}[scale = 1, transform shape]
+      	\input{../pictures/clareport.tex}
+      \end{tikzpicture}
 \end{center}
-
-	et on trouve avec les formules précédentes :
-\[ (c_1, ..., c_8) = (0,0,0,1,1,1,0,0) \]
-	ce qui correspond bien aux retenues.
 
 	On va maintenant voir que cette méthode est bien plus intéressante que la méthode classique concernant la profondeur de NAND.
 \begin{prop}
